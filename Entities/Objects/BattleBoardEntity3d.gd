@@ -1,0 +1,45 @@
+#region Header
+
+@tool
+class_name BattleBoardEntity3D
+extends Entity
+
+#endregion
+
+#region Parameters
+
+@export var width: int : set = _set_grid_width
+@export var height: int : set = _set_grid_height
+
+#endregion
+
+#region Dependencies
+
+@onready var battleBoardGenerator: BattleBoardComponent3D:
+	get:
+		if battleBoardGenerator: return battleBoardGenerator
+		return self.components.get(&"BattleBoardComponent3D")
+
+#endregion
+
+#region Setter Functions
+
+func _set_grid_width(x: int) -> void:
+	width = x
+	
+	if battleBoardGenerator:
+		battleBoardGenerator.width = width
+	else:
+		battleBoardGenerator = self.components.get(&"BattleBoardComponent3D")
+		return
+		
+func _set_grid_height(y: int) -> void:
+	height = y
+	
+	if battleBoardGenerator:
+		battleBoardGenerator.height = height
+	else:
+		battleBoardGenerator = self.components.get(&"BattleBoardComponent3D")
+		return
+
+#endregion

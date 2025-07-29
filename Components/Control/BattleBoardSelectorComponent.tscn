@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=4 uid="uid://b1c4gfp8xpktc"]
+
+[ext_resource type="Script" uid="uid://0aq7m38hhr4h" path="res://Components/Control/BattleBoardSelectorComponent.gd" id="1_l7bwe"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8yb4x"]
+resource_name = "Material"
+transparency = 4
+cull_mode = 2
+albedo_color = Color(0.9063318, 0.9063318, 0.9063318, 1)
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_dxoty"]
+_surfaces = [{
+"aabb": AABB(-1, -1, -1, 2, 2, 2),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("AAABAAIAAQADAAIAAAACAAMAAQAEAAMAAwAEAAAAAAAEAAEA"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 5,
+"vertex_data": PackedByteArray("/////wAAAAAAAP////8AAAAA//8AAAAA/38AAP9/AAD///////8AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_l7bwe"]
+resource_name = "insectron_selector_Cube"
+_surfaces = [{
+"aabb": AABB(-1, -1, -1, 2, 2, 2),
+"attribute_data": PackedByteArray("/5//f//f/z//3/9//5//PwAA////n/8//5//f//f/z8AAP///9//f//f/z//n/8/AAD///+f/3//3/9/AAD//w=="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABwAIAAkACgALAAwADQAOAA8A"),
+"material": SubResource("StandardMaterial3D_8yb4x"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("/////wAA//8AAP///////wAA//8AAP//////////////fwAA/38DwP///////wPA/////wAAA8AAAP////83Af9/AAD/fzcBAAD//wAANwEAAP////8AAP///////wAA/38AAP9/AAD/////AAD//wAA//8AAP///38AAP9/////f/+//3//v/9//7//f/+/iFeBKohXgSqIV4EqYk6DaGJOg2hiToNo/3+NZ/9/jWf/f41ncZj//3GY//9xmP//")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_dxoty")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ac6i2"]
+albedo_color = Color(0.65809876, 0.65809906, 5.7756904e-07, 1)
+
+[node name="BattleBoardSelectorComponent" type="Node3D" node_paths=PackedStringArray("mesh") groups=["components"]]
+script = ExtResource("1_l7bwe")
+mesh = NodePath("Selector")
+
+[node name="Selector" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2334649, 0, 0.08400505, 0, 0.25, 0, -0.08400505, 0, 0.2334649, 0, 2.2452242, 0)
+mesh = SubResource("ArrayMesh_l7bwe")
+surface_material_override/0 = SubResource("StandardMaterial3D_ac6i2")

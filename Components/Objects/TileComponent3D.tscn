@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dqndo844fvnru"]
+
+[ext_resource type="Script" uid="uid://cbssqwrpvwnvx" path="res://Components/Objects/TileComponent3d.gd" id="1_niq6i"]
+
+[node name="TileComponent3d" type="CSGBox3D"]
+size = Vector3(1, 0, 1)
+script = ExtResource("1_niq6i")

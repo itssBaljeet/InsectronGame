@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dmp8yq33rnfsb"]
+
+[ext_resource type="Script" uid="uid://bryda6lc1suk7" path="res://Entities/Objects/BattleBoardEntity3d.gd" id="1_6exi0"]
+
+[node name="BattleBoardEntity3d" type="Node3D" groups=["entities"]]
+script = ExtResource("1_6exi0")
+isLoggingEnabled = false

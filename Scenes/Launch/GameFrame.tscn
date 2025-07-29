@@ -1,0 +1,115 @@
+[gd_scene load_steps=13 format=3 uid="uid://celt7hx1gstld"]
+
+[ext_resource type="Script" uid="uid://dw6w3lvrh2ggp" path="res://Scripts/Start.gd" id="1_jd6d7"]
+[ext_resource type="PackedScene" uid="uid://2r67te40csdi" path="res://Scenes/Debug/DebugBackground.tscn" id="1_uhj4x"]
+[ext_resource type="Texture2D" uid="uid://bkhxlpbb5fmqx" path="res://Assets/Images/Checkerboard32.png" id="2_mabn4"]
+[ext_resource type="Script" uid="uid://dlj44gyo6xh11" path="res://UI/UINavigationContainer.gd" id="2_y2sis"]
+[ext_resource type="Texture2D" uid="uid://bm41kfvwe7uby" path="res://Assets/Images/NeutralPointLight.webp" id="3_r7qai"]
+[ext_resource type="Script" uid="uid://brhfkmfe0g806" path="res://Scripts/Visual/CameraMouseTracking.gd" id="4_uf5dw"]
+[ext_resource type="Texture2D" uid="uid://cej643k1obcve" path="res://Assets/Logos/ComedotLogo.png" id="6_jd6d7"]
+[ext_resource type="PackedScene" uid="uid://mwsrn6l4gw51" path="res://UI/Menus/MainMenuButtons.tscn" id="7_wy4rx"]
+[ext_resource type="Shortcut" uid="uid://c4er757mljhl4" path="res://Resources/Shortcuts/BackShortcut.tres" id="9_t25e2"]
+
+[sub_resource type="Environment" id="Environment_ljcfk"]
+background_mode = 3
+glow_enabled = true
+glow_bloom = 0.1
+glow_blend_mode = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jd6d7"]
+texture = ExtResource("2_mabn4")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_t25e2"]
+tile_size = Vector2i(32, 32)
+sources/3 = SubResource("TileSetAtlasSource_jd6d7")
+
+[node name="GameFrame" type="Node2D"]
+editor_description = "The Main Menu"
+script = ExtResource("1_jd6d7")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ljcfk")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.5, 0.5, 0.5, 1)
+
+[node name="CleanDebugBackground" parent="." instance=ExtResource("1_uhj4x")]
+
+[node name="TileMap1Solid" parent="CleanDebugBackground/Parallax2D1" index="0"]
+tile_set = SubResource("TileSet_t25e2")
+
+[node name="TileMap2Checkered" parent="CleanDebugBackground/Parallax2D2" index="0"]
+tile_set = SubResource("TileSet_t25e2")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+process_callback = 0
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0
+editor_draw_limits = true
+script = ExtResource("4_uf5dw")
+
+[node name="PointLight2D" type="PointLight2D" parent="Camera2D"]
+shadow_filter = 1
+shadow_filter_smooth = 4.0
+texture = ExtResource("3_r7qai")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LogoMarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Logo" type="TextureRect" parent="CanvasLayer/VBoxContainer/LogoMarginContainer"]
+modulate = Color(1, 1, 1, 0.5)
+texture_filter = 2
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+texture = ExtResource("6_jd6d7")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="LogoSpacer" type="HSeparator" parent="CanvasLayer/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="UIMarginContainer" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="UINavigationContainer" type="VBoxContainer" parent="CanvasLayer/UIMarginContainer" node_paths=PackedStringArray("backButton")]
+layout_mode = 2
+script = ExtResource("2_y2sis")
+backButton = NodePath("BackButton")
+
+[node name="MainMenuButtons" parent="CanvasLayer/UIMarginContainer/UINavigationContainer" instance=ExtResource("7_wy4rx")]
+layout_mode = 2
+focus_mode = 2
+
+[node name="BackButton" type="Button" parent="CanvasLayer/UIMarginContainer/UINavigationContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+shortcut = ExtResource("9_t25e2")
+text = "< Back"
+
+[editable path="CleanDebugBackground"]

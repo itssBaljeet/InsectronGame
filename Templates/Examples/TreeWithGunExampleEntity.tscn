@@ -1,0 +1,40 @@
+[gd_scene load_steps=8 format=3 uid="uid://cfw867i3q122v"]
+
+[ext_resource type="Script" uid="uid://b3tgnb1y0hgk1" path="res://Entities/Entity.gd" id="1_3cwn3"]
+[ext_resource type="Texture2D" uid="uid://clox863hbl6dx" path="res://Assets/Tiles/Kenney1Bit-Monochrome-Transparent.png" id="2_op0dp"]
+[ext_resource type="PackedScene" uid="uid://5tvqunkoa4l7" path="res://Components/Combat/FactionComponent.tscn" id="3_frfcy"]
+[ext_resource type="PackedScene" uid="uid://dusjndm5o8ehr" path="res://Components/Combat/GunComponent.tscn" id="3_ppngh"]
+[ext_resource type="PackedScene" uid="uid://b0rq0wkce5o6l" path="res://Components/Visual/NodeFacingComponent.tscn" id="5_yl0fu"]
+[ext_resource type="PackedScene" uid="uid://cdq0dcwhcrm5p" path="res://Components/Control/InputComponent.tscn" id="6_w0eqf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8iuf5"]
+size = Vector2(14, 14)
+
+[node name="ArmedTree" type="RigidBody2D"]
+collision_layer = 64
+collision_mask = 83
+gravity_scale = 0.0
+linear_damp = 5.0
+script = ExtResource("1_3cwn3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 1, 0, 1)
+texture = ExtResource("2_op0dp")
+region_enabled = true
+region_rect = Rect2(64, 32, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_8iuf5")
+
+[node name="FactionComponent" parent="." instance=ExtResource("3_frfcy")]
+factions = 6
+
+[node name="GunComponent" parent="." instance=ExtResource("3_ppngh")]
+cooldown = 0.1
+
+[node name="NodeFacingComponent" parent="." node_paths=PackedStringArray("nodeToRotate") instance=ExtResource("5_yl0fu")]
+nodeToRotate = NodePath("../GunComponent")
+
+[node name="InputComponent" parent="." instance=ExtResource("6_w0eqf")]
+
+[editable path="GunComponent"]

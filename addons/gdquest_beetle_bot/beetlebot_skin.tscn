@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpjqcswabdtyb"]
+
+[ext_resource type="Script" uid="uid://c6e5afvd3o2ds" path="res://addons/gdquest_beetle_bot/beetlebot_skin.gd" id="1_gujli"]
+[ext_resource type="PackedScene" uid="uid://dbqoj8oam1dsg" path="res://addons/gdquest_beetle_bot/model/beetle_bot_fused.glb" id="1_r7amh"]
+
+[node name="BeetlebotSkin" type="Node3D"]
+script = ExtResource("1_gujli")
+
+[node name="beetle_bot" parent="." instance=ExtResource("1_r7amh")]

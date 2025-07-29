@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dun38r0k022n1"]
+
+[ext_resource type="Script" uid="uid://dw6w3lvrh2ggp" path="res://Scripts/Start.gd" id="1_5jdkk"]
+[ext_resource type="PackedScene" uid="uid://bq82t3qc1mxmb" path="res://Game/BattleBoard.tscn" id="2_5jdkk"]
+
+[node name="TestingGround" type="Node3D"]
+script = ExtResource("1_5jdkk")
+showDebugWindow = false
+shouldPrintDebugLogs = false
+showDebugLabels = false
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 2, 3.4124348, 7.198784)
+top_level = true
+current = true
+
+[node name="BattleBoardEntity3D" parent="." instance=ExtResource("2_5jdkk")]

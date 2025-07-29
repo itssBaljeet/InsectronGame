@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpul2g7ruucqk"]
+
+[ext_resource type="Script" uid="uid://cvewbwci5t0q" path="res://Components/Gameplay/CooldownComponent.gd" id="1_8iofe"]
+
+[node name="CooldownComponent" type="Node" groups=["components"]]
+script = ExtResource("1_8iofe")
+metadata/_edit_group_ = true
+
+[node name="CooldownTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="timeout" from="CooldownTimer" to="." method="finishCooldown"]

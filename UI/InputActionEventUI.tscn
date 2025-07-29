@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://du2pda8it2bh0"]
+
+[ext_resource type="Script" uid="uid://b3ftogb00jo8d" path="res://UI/InputActionEventUI.gd" id="1_se1fj"]
+[ext_resource type="PackedScene" uid="uid://ce5yf1g66vj4o" path="res://UI/Buttons/LongPressButton.tscn" id="2_8bfgg"]
+
+[node name="InputActionEventUI" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_se1fj")
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(80, 8)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+text = "InputEvent"
+vertical_alignment = 1
+text_overrun_behavior = 3
+visible_characters_behavior = 1
+
+[node name="DeleteButton" parent="." instance=ExtResource("2_8bfgg")]
+modulate = Color(1, 0, 0.5, 1)
+layout_mode = 2
+size_flags_horizontal = 8
+tooltip_text = "Remove this control from the action"
+text = "x"
+duration = 0.5
+
+[connection signal="longPressed" from="DeleteButton" to="." method="onDeleteButton_longPressed"]

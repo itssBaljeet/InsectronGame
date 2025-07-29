@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://dnlvdwjohh5ac"]
+
+[ext_resource type="PackedScene" uid="uid://c6x5wu22u038x" path="res://addons/gdquest_bee_bot/selector.blend" id="1_nxexx"]
+
+[node name="SelectorMesh" instance=ExtResource("1_nxexx")]

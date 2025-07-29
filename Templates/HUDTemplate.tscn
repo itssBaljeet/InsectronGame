@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://convttrcwh6rm"]
+
+[ext_resource type="Script" uid="uid://jbhhvu6py8q7" path="res://UI/Lists/ManualStatsList.gd" id="1_yk82h"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_57mah"]
+bg_color = Color(0, 0, 0, 0.392157)
+skew = Vector2(2.08165e-12, 2.08165e-12)
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 1
+
+[node name="HUDTemplate" type="CanvasLayer"]
+
+[node name="TopPanelMarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 25.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = -8
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="TopPanelMarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_57mah")
+
+[node name="LabelGridMarginContainer" type="MarginContainer" parent="TopPanelMarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="LabelGridContainer" type="GridContainer" parent="TopPanelMarginContainer/PanelContainer/LabelGridMarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+columns = 2
+script = ExtResource("1_yk82h")
+prefixes = Dictionary[StringName, String]({
+&"playerAmmo": "AMMO:",
+&"playerHealth": "HP:"
+})
+
+[node name="playerHealthLabel" type="Label" parent="TopPanelMarginContainer/PanelContainer/LabelGridMarginContainer/LabelGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "HP:10"
+vertical_alignment = 1
+
+[node name="playerAmmoLabel" type="Label" parent="TopPanelMarginContainer/PanelContainer/LabelGridMarginContainer/LabelGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "AMMO:100"
+horizontal_alignment = 2
+vertical_alignment = 1

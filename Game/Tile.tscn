@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bosn2vulugj8j"]
+
+[ext_resource type="Script" uid="uid://difqjdtkgqpru" path="res://Entities/Objects/TileEntity3d.gd" id="1_10afe"]
+[ext_resource type="PackedScene" uid="uid://dqndo844fvnru" path="res://Components/Objects/TileComponent3D.tscn" id="2_bdp2s"]
+[ext_resource type="Material" uid="uid://dq8o3ujayflov" path="res://Game/even_tile.tres" id="3_bdp2s"]
+
+[node name="Tile" type="Node3D" node_paths=PackedStringArray("label") groups=["entities"]]
+script = ExtResource("1_10afe")
+label = NodePath("Label3D")
+
+[node name="TileComponent3d" parent="." groups=["components"] instance=ExtResource("2_bdp2s")]
+material = ExtResource("3_bdp2s")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.001, 0)
+pixel_size = 0.01
+text = "1"

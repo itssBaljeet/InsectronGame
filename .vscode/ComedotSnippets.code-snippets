@@ -1,0 +1,311 @@
+{
+	"Function": {
+		"prefix": "func",
+		"body": [
+			"func ${1:name}() -> void:",
+			"\t${2:pass}$0",
+			"\n"
+		],
+		"description": "A basic function skeleton."
+	},
+
+	"Function with Return": {
+		"prefix": "func",
+		"body": [
+			"func ${1:name}() -> ${2:Variant}:",
+			"\t$0",
+			"\treturn null",
+			"\n"
+		],
+		"description": "A basic function skeleton that returns a value."
+	},
+
+	"Complex Function": {
+		"prefix": "func",
+		"body": [
+			"## ${5:Documentation}",
+			"func ${1:name}(${2:parameter: Type}) -> ${3:Variant}:",
+			"\tif not ${4:isEnabled}: return null",
+			"\t$0",
+			"\treturn false",
+			"\n"
+		],
+		"description": "A function skeleton with documentation, arguments, guard clause, and a return value."
+	},
+
+	"Ready Method": {
+		"prefix": "ready",
+		"body": [
+			"func _ready() -> void:",
+			"\t${1:pass}",
+			"$0"
+		],
+		"description": "A Node's _ready() method."
+	},
+
+	"Process Method": {
+		"prefix": "process",
+		"body": [
+			"func _process(delta: float) -> void:",
+			"\t${1|pass,if not isEnabled: return|}",
+			"$0"
+		],
+		"description": "A Node's per-frame update method."
+	},
+
+	"Physics Process Method": {
+		"prefix": ["physicsprocess", "processphysics"],
+		"body": [
+			"func _physics_process(delta: float) -> void:",
+			"\t${1|pass,if not isEnabled: return|}",
+			"$0"
+		],
+		"description": "A Node's per-frame physics update method."
+	},
+
+	"Input Method": {
+		"prefix": ["input", "unhandledinput"],
+		"body": [
+			"func ${1|_input,_unhandled_input|}(event: InputEvent) -> void:",
+			"\t${2:if not isEnabled or event is not ${3:InputEventAction}: return}",
+			"$0"
+		],
+		"description": "A Node's input handling method."
+	},
+
+	"Void": {
+		"prefix": "void",
+		"body": [
+			"-> void:",
+			"\t$0"
+		],
+		"description": "Embrace the void."
+	},
+
+	"Export": {
+		"prefix": ["@export", "export"],
+		"body": ["@export var ${1:isEnabled}: ${2:bool} = ${3:true}"],
+		"description": "A basic export parameter."
+	},
+
+	"Export Range": {
+		"prefix": ["@exportrange", "exportrange"],
+		"body": ["@export_range(${4:0.0}, ${5:100.0}, ${6:10.0}) var ${1:speed}: ${2:float} = ${3:42.0}"],
+		"description": "An export parameter with a range."
+	},
+
+	"@onready Node Reference": {
+		"prefix": ["@onready", "onready", "node"],
+		"body": ["@onready var ${1/(.)/${1:/downcase}/}: ${2:NodeType} = ${3|$,%|}${1:NodeName}"],
+		"description": "A property that references a Node with a $Name or %Unique name."
+	},
+
+	"Variable": {
+		"prefix": "var",
+		"body": ["var ${1:name}: ${2:type} = ${3:default}\n$0"],
+		"description": "A variable definition with an explicit type."
+	},
+
+	"External Property": {
+		"prefix": "varReturn",
+		"body": [
+			"var ${2:objectName}: ${3:objectType}:",
+			"\tget: return ${1:objectParent}.$0${2:objectName}",
+			"\n"
+		],
+		"description": "A property that returns another object's property."
+	},
+
+	"Property Getter": {
+		"prefix": "get",
+		"body": ["get: return $0"],
+		"description": "A property getter stub."
+	},
+
+	"Property Setter": {
+		"prefix": "set",
+		"body": [
+			"set(newValue):",
+			"\t${1:property} = newValue$0"
+		],
+		"description": "A property setter stub."
+	},
+
+	"Property Setter If New": {
+		"prefix": "setNew",
+		"body": [
+			"set(newValue):",
+			"\tif newValue != ${1:property}:",
+			"\t\t${1:property} = newValue\n\t\t$0"
+		],
+		"description": "A property setter which only updates a variable if the new value is different."
+	},
+
+	"Property Setter If New with Log": {
+		"prefix": "setNewLog",
+		"body": [
+			"set(newValue):",
+			"\tif newValue != ${1:property}:",
+			"\t\tif debugMode: Debug.printChange(\"${1:property}\", ${1:property}, newValue, self.debugModeTrace) # logAsTrace",
+			"\t\t${1:property} = newValue\n\t\t$0"
+		],
+		"description": "A property setter which only updates a variable if the new value is different and prints a log of the change."
+	},
+	
+	"Lazy Property": {
+		"prefix": "lazyVar",
+		"body": [
+			"var ${1:lazyProperty}: ${2:PackedScene}:",
+			"\tget:",
+			"\t\tif not ${1:lazyProperty}: ${1:lazyProperty} = ${3:load(\"res://$0Scene.tscn\")}",
+			"\t\treturn ${1:lazyProperty}\n"
+		],
+		"description": "A property which is initialized only when it is accessed."
+	},
+
+	"Signal Connection": {
+		"prefix": "connect",
+		"body": [ 
+			"Tools.connectSignal(${1}.${2}, self.${3:on${1/(.)/${1:/capitalize}/}_${2}})\n\n",
+			"${0:func $3() -> void:\n\tpass}"
+		],
+		"description": "A safe signal connector and a function to handle the signal."
+	},
+
+	"Component Dependency": {
+		"prefix": "coComponent",
+		"body": ["@onready var ${1/(.)/${1:/downcase}/}: ${1:ComponentType} = coComponents.${1:ComponentType}\n"],
+		"description": "A property that searches for a sibling component and caches a reference to it."
+	},
+
+	"Component Temporary Reference": {
+		"prefix": "varComponent",
+		"body": [
+			"var ${2:${1/(.)/${1:/downcase}/}}: ${1:ComponentType} = self.coComponents.${1:ComponentType}",
+			"${2}.$0"
+		],
+		"description": "A local function variable that stores a temporary reference to a sibling component."
+	},
+
+	"Component Access": {
+		"prefix": "Component",
+		"body": ["$0(${1|self.coComponents,entity.components|}.${3:ComponentType} as ${3:ComponentType}).${4:propertyOrMethod}"],
+		"description": "Quick access to an Entity's components or a Component's sibling co-components."
+	},
+
+	"Stat": {
+		"prefix": "stat",
+		"body": ["statsComponent.getStat(&\"${1:health}\").$0"],
+		"description": "Quick access to a StatsComponent."
+	},
+
+	"SelfCast": {
+		"prefix": "selfAs",
+		"body": ["var selfAs${1:Type}: ${1} = self.get_node(^\".\") as ${1}$0"],
+		"description": "Store reference to self casted as a different type."
+	},
+
+	"EnabledFlag": {
+		"prefix": "var isEnabled",
+		"body": [
+			"@export var isEnabled: bool = true:",
+				"\tset(newValue):",
+					"\t\tif newValue != isEnabled:",
+						"\t\t\tisEnabled = newValue",
+						"\t\t\tself.set_process(isEnabled)",
+						"\t\t\tself.set_physics_process(isEnabled)",
+		],
+		"description": "A flag to enable/disable a script and also set per-frame updates."
+	},
+
+	"Debug": {
+		"prefix": "debug",
+		"body": ["if debugMode: printDebug(str(\"${1:self}: \", ${1:self}))$0"],
+		"description": "Logs a message if the debugMode flag is set."
+	},
+
+	"Debug Variables": {
+		"prefix": "debugVariables",
+		"body": ["Debug.printVariables([${1:self}]) # DEBUG: DONTCOMMIT$0"],
+		"description": "Prints multiple variable values for runtime debugging."
+	},
+
+	"Debug Trace": {
+		"prefix": "trace",
+		"body": ["Debug.printTrace([${1:variables}], self) # DEBUG: DONTCOMMIT$0"],
+		"description": "Prints a list of variables and recent function calls for runtime debugging."
+	},
+
+	"Debug Bubble": {
+		"prefix": "debugBubble",
+		"body": ["emitDebugBubble(str(\"${1:self}:\", ${2:${1}}), ${3:randomDebugColor}, ${4:false}, true) # emitFromEntity, ignoreDebugMode # DEBUG: DONTCOMMIT$0"],
+		"description": "Emtis a TextBubble from a Component for quick visual debugging."
+	},
+
+	"Debug Beep": {
+		"prefix": "debugBeep",
+		"body": ["GlobalSonic.beep(${1:0.1}, ${2:440}) # DEBUG: DONTCOMMIT$0"],
+		"description": "Emtis a \"beep\" for debugging via audio cues."
+	},
+
+	"Component Debug Info": {
+		"prefix": "showDebugInfo",
+		"body": [
+			"func showDebugInfo() -> void:",
+			"\tif not debugMode: return",
+			"\tDebug.addComponentWatchList(self, {",
+			"\t\t${1:propertyName1}\t= ${1:propertyValue1},$0",
+			"\t\t})"
+		],
+		"description": "Template for a Component's showDebugInfo() method."
+	},
+	
+	"Breakpoint": {
+		"prefix": "break",
+		"body": ["Debug.printTrace([${1:self}], self); breakpoint # DEBUG: DONTCOMMIT$0"],
+		"description": "Prints a list of variables and recent function calls and pauses game execution."
+	},
+
+	"Region": {
+		"prefix": "region",
+		"body": [
+			"#region ${1:Title}",
+			"$0",
+			"#endregion\n\n"
+		],
+		"description": "A code region."
+	},
+
+	"Animation Tween": {
+		"prefix": "tween",
+		"body": ["Animations.tweenProperty(${1:node}, ^\"${2:property}\", ${3:6.9})"],
+		"description": "A property tweening animation."
+	},
+
+	"Animation Function": {
+		"prefix": "animationFunc",
+		"body": [
+			"static func ${1:animate}(node: CanvasItem, duration: float = ${2:1.0}) -> Tween:",
+			"\tvar tween: Tween = node.create_tween()",
+			"\ttween.tween_property(node, ^\"${3:modulate}\", ${4:Color.BLACK}, duration)$0",
+			"\treturn tween\n\n"
+		],
+		"description": "A function for creating a customizable animation at runtime."
+	},
+	
+	"Experimental Tag": {
+		"prefix": ["@experimental", "experimental"],
+		"body": ["## @experimental$0"],
+		"description": "Adds a comment to mark a script, method or property as experimental."
+	},
+
+	"GDScript File Template": {
+  	  "isFileTemplate": true,
+		"scope": "gdscript",
+		"prefix": "gdTemplate",
+		"body": [
+        	"## Description"
+    	],
+    	"description": "A template for new GDScript files."
+	},
+}

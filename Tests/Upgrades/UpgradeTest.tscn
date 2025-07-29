@@ -1,0 +1,148 @@
+[gd_scene load_steps=22 format=3 uid="uid://cj6ao7ju12nhg"]
+
+[ext_resource type="Script" uid="uid://dw6w3lvrh2ggp" path="res://Scripts/Start.gd" id="1_ght07"]
+[ext_resource type="PackedScene" uid="uid://b6c5d68ty35va" path="res://Templates/Entities/PlayerEntityTemplate-Overhead.tscn" id="3_udv4x"]
+[ext_resource type="PackedScene" uid="uid://5tvqunkoa4l7" path="res://Components/Combat/FactionComponent.tscn" id="4_0trfh"]
+[ext_resource type="PackedScene" uid="uid://csfqa5yos7088" path="res://Components/Gameplay/UpgradesComponent.tscn" id="5_3wt1t"]
+[ext_resource type="PackedScene" uid="uid://d06m60dgdv8ui" path="res://Components/Data/StatsComponent.tscn" id="6_3nle0"]
+[ext_resource type="Script" uid="uid://dif3dj8k5ixfw" path="res://Resources/Stat.gd" id="7_7nw6f"]
+[ext_resource type="Resource" uid="uid://drkt6rhhny6b4" path="res://Tests/Stats/TestMana.tres" id="8_157i1"]
+[ext_resource type="Resource" uid="uid://cu2cyw7oyn5ae" path="res://Tests/Stats/TestGold.tres" id="9_okulf"]
+[ext_resource type="Resource" uid="uid://hb6usrrdkrlu" path="res://Tests/Stats/TestAmmo.tres" id="10_fcijy"]
+[ext_resource type="PackedScene" uid="uid://bifi5b0gcmh1v" path="res://Components/DebugComponent.tscn" id="11_gj3d5"]
+[ext_resource type="PackedScene" uid="uid://dusjndm5o8ehr" path="res://Components/Combat/GunComponent.tscn" id="12_vmhuw"]
+[ext_resource type="PackedScene" uid="uid://qn8n4bqswnlr" path="res://Components/Control/MouseRotationComponent.tscn" id="14_8d8lk"]
+[ext_resource type="Script" uid="uid://etxev52wl7c8" path="res://UI/Lists/StatsList.gd" id="15_648xx"]
+[ext_resource type="Script" uid="uid://ditjvbfbaivqn" path="res://UI/Lists/UpgradeChoicesList.gd" id="16_xr2h1"]
+[ext_resource type="PackedScene" uid="uid://gvkx3bnathwr" path="res://UI/Views/UpgradeChoiceUI.tscn" id="17_dh703"]
+[ext_resource type="Script" uid="uid://cetucfberg5ss" path="res://Resources/Upgrade.gd" id="17_mfdhu"]
+[ext_resource type="Resource" uid="uid://qnkhwtlbroqg" path="res://Tests/Upgrades/TestSpeedUpgrade.tres" id="18_0oqoc"]
+[ext_resource type="PackedScene" uid="uid://damq04335casd" path="res://UI/Views/UpgradeUI.tscn" id="18_ft6r0"]
+[ext_resource type="Resource" uid="uid://bsmyby33ll8ok" path="res://Tests/Upgrades/TestGunUpgrade.tres" id="21_ykf3j"]
+[ext_resource type="Resource" uid="uid://btyn678insww1" path="res://Tests/Upgrades/TestCooldownUpgrade.tres" id="22_ucsfw"]
+[ext_resource type="Resource" uid="uid://dubsrpy44b7kw" path="res://Tests/Upgrades/TestAmmoUpgrade.tres" id="23_2aq68"]
+
+[node name="UpgradeTest" type="Node2D"]
+script = ExtResource("1_ght07")
+
+[node name="PlayerEntityTemplate-Overhead" parent="." instance=ExtResource("3_udv4x")]
+
+[node name="FactionComponent" parent="PlayerEntityTemplate-Overhead" instance=ExtResource("4_0trfh")]
+factions = 2
+
+[node name="UpgradesComponent" parent="PlayerEntityTemplate-Overhead" instance=ExtResource("5_3wt1t")]
+debugMode = true
+
+[node name="StatsComponent" parent="PlayerEntityTemplate-Overhead" instance=ExtResource("6_3nle0")]
+stats = Array[ExtResource("7_7nw6f")]([ExtResource("8_157i1"), ExtResource("9_okulf"), ExtResource("10_fcijy")])
+debugMode = true
+
+[node name="DebugComponent" parent="PlayerEntityTemplate-Overhead" instance=ExtResource("11_gj3d5")]
+propertiesToWatch = Array[NodePath]([NodePath("../OverheadPhysicsComponent")])
+
+[node name="GunComponent" parent="PlayerEntityTemplate-Overhead" instance=ExtResource("12_vmhuw")]
+visible = false
+ammo = ExtResource("10_fcijy")
+ammoCost = 1
+isEnabled = false
+cooldown = 2.0
+
+[node name="MouseRotationComponent" parent="PlayerEntityTemplate-Overhead" node_paths=PackedStringArray("nodeToRotate") instance=ExtResource("14_8d8lk")]
+nodeToRotate = NodePath("../GunComponent")
+isEnabled = false
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainerLeft" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+
+[node name="StatsUI" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainerLeft" node_paths=PackedStringArray("statsComponent")]
+layout_mode = 2
+script = ExtResource("15_648xx")
+statsComponent = NodePath("../../../../PlayerEntityTemplate-Overhead/StatsComponent")
+
+[node name="Spacer1" type="Control" parent="CanvasLayer/MarginContainer/VBoxContainerLeft"]
+custom_minimum_size = Vector2(4, 4)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="BuyLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainerLeft"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.5, 1, 1, 1)
+text = "___ Buy"
+
+[node name="UpgradesList" type="VBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainerLeft" node_paths=PackedStringArray("targetEntity")]
+layout_mode = 2
+size_flags_horizontal = 0
+script = ExtResource("16_xr2h1")
+upgrades = Array[ExtResource("17_mfdhu")]([ExtResource("18_0oqoc"), ExtResource("21_ykf3j"), ExtResource("22_ucsfw"), ExtResource("23_2aq68")])
+targetEntity = NodePath("../../../../PlayerEntityTemplate-Overhead")
+debugMode = true
+
+[node name="PlaceholderUpgradeChoiceUI" parent="CanvasLayer/MarginContainer/VBoxContainerLeft/UpgradesList" instance=ExtResource("17_dh703")]
+layout_mode = 2
+
+[node name="Spacer2" type="Control" parent="CanvasLayer/MarginContainer/VBoxContainerLeft"]
+visible = false
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="InstalledListContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+
+[node name="InstalledLabel" type="Label" parent="CanvasLayer/MarginContainer/InstalledListContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.5, 1, 1, 1)
+text = "___ Installed"
+
+[node name="UpgradeUISpeed" parent="CanvasLayer/MarginContainer/InstalledListContainer" instance=ExtResource("18_ft6r0")]
+layout_mode = 2
+upgrade = ExtResource("18_0oqoc")
+
+[node name="UpgradeUIGun" parent="CanvasLayer/MarginContainer/InstalledListContainer" instance=ExtResource("18_ft6r0")]
+layout_mode = 2
+upgrade = ExtResource("21_ykf3j")
+
+[node name="UpgradeUICooldown" parent="CanvasLayer/MarginContainer/InstalledListContainer" instance=ExtResource("18_ft6r0")]
+layout_mode = 2
+upgrade = ExtResource("22_ucsfw")
+
+[node name="UpgradeUIAmmo" parent="CanvasLayer/MarginContainer/InstalledListContainer" instance=ExtResource("18_ft6r0")]
+layout_mode = 2
+upgrade = ExtResource("23_2aq68")
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="RechargeButton" type="Button" parent="CanvasLayer/MarginContainer/ButtonsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "RECHARGE"
+
+[node name="LoanButton" type="Button" parent="CanvasLayer/MarginContainer/ButtonsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "GET LOAN"
+
+[connection signal="pressed" from="CanvasLayer/MarginContainer/ButtonsContainer/RechargeButton" to="PlayerEntityTemplate-Overhead/StatsComponent" method="changeStatValue" binds= [&"testMana", 50]]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/ButtonsContainer/LoanButton" to="PlayerEntityTemplate-Overhead/StatsComponent" method="changeStatValue" binds= [&"testGold", 100]]
