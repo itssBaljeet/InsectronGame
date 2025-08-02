@@ -143,16 +143,16 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if Input.is_action_just_released(Actions.windowToggleAlwaysOnTop):
 		var isAlwaysOnTop: bool = DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP)
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, not isAlwaysOnTop) # `not` because it's a toggle.
-		GlobalUI.createTemporaryLabel(str("Window Always on Top: ", not isAlwaysOnTop))
+		#GlobalUI.createTemporaryLabel(str("Window Always on Top: ", not isAlwaysOnTop))
 		get_viewport().set_input_as_handled() # TBD: Should we let these shortcuts affect other things?
 		isHandled = true
 
 	if Input.is_action_just_released(Actions.windowResizeTo720):
-		GlobalUI.setWindowSize(1280, 720)
+		#GlobalUI.setWindowSize(1280, 720)
 		get_viewport().set_input_as_handled() # TBD: Should we let these shortcuts affect other things?
 		isHandled = true
 	elif Input.is_action_just_released(Actions.windowResizeTo1080):
-		GlobalUI.setWindowSize(1920, 1080)
+		#GlobalUI.setWindowSize(1920, 1080)
 		get_viewport().set_input_as_handled() # TBD: Should we let these shortcuts affect other things?
 		isHandled = true
 

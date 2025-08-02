@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://7jcht5vta2uh"]
+
+[ext_resource type="Script" uid="uid://b54qt332e38du" path="res://Entities/TurnBased/BattleBoardSelectorEntity.gd" id="1_1mbhb"]
+
+[node name="BattleBoardSelectorEntity" type="Node3D"]
+script = ExtResource("1_1mbhb")

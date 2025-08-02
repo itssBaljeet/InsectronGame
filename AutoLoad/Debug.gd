@@ -9,7 +9,7 @@ extends Node
 
 ## Sets the visibility of "debug"-level messages in the log.
 ## NOTE: Does NOT affect normal logging.
-@export var shouldPrintDebugLogs: bool = OS.is_debug_build() # TBD: Should this be a constant to improve performance?
+@export var shouldPrintDebugLogs: bool = OS.is_debug_build() or true # TBD: Should this be a constant to improve performance?
 
 ## Sets the visibility of the debug information overlay text, as well as the [member watchList].
 ## NOTE: Does NOT affect the visibility of the framework warning label.
@@ -73,7 +73,7 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
-	Debug.printLog("_ready()", self.get_script().resource_path.get_file(), "", "WHITE")
+	#Debug.printLog("_ready()", self.get_script().resource_path.get_file(), "", "WHITE")
 	initializeLogWindow()
 	initializeDebugWindow()
 	resetLabels()
@@ -250,7 +250,7 @@ func printAutoLoadLog(message: String = "") -> void:
 func printDebug(message: String = "", object: Variant = null, _objectColor: String = "") -> void:
 	if Debug.shouldPrintDebugLogs:
 		#updateLastFrameLogged() # OMIT: Do not print frames on a separate line, to reduce clutter.
-		#print_debug(str(Engine.get_frames_drawn()) + " " + message) # OMIT: Not useful because it will always say it was called from this Debug script.
+		print_debug(str(Engine.get_frames_drawn()) + " " + message) # OMIT: Not useful because it will always say it was called from this Debug script.
 		print_rich(str("[right][color=dimgray]F", Engine.get_frames_drawn(), " ", object, " ", message)) # [/color] not necessary
 
 
@@ -274,10 +274,10 @@ func printError(message: String = "", object: Variant = null, _objectColor: Stri
 	# Don't print a duplicate line, to reduce clutter.
 	#print_rich("[indent]❗️ [color=red]" + objectName + " " + message) # [/color] not necessary
 
-	# WARNING: Crash on error if not developing in the editor.
-	if Settings.shouldAlertOnError and not OS.is_debug_build():
-		OS.alert(message, "Framework Error")
-
+	## WARNING: Crash on error if not developing in the editor.
+	#if Settings.shouldAlertOnError and not OS.is_debug_build():
+		#OS.alert(message, "Framework Error")
+#
 
 ## Prints the message in bold and a bright color, with empty lines on each side.
 ## Helpful for finding important messages quickly in the debug console.

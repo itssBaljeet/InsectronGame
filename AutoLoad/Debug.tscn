@@ -105,10 +105,10 @@ disable_3d = true
 snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
 canvas_item_default_texture_filter = 0
+oversampling_override = 1.0
 title = "Comedot Log"
 position = Vector2i(100, 100)
 size = Vector2i(1000, 400)
-visible = false
 wrap_controls = true
 transient = true
 min_size = Vector2i(80, 80)
@@ -138,6 +138,7 @@ theme_override_constants/separation = 2
 
 [node name="DebugBackground" parent="." instance=ExtResource("4_v5ev8")]
 unique_name_in_owner = true
+visible = false
 
 [connection signal="close_requested" from="DebugWindow" to="DebugWindow" method="hide"]
 [connection signal="close_requested" from="CustomLogWindow" to="CustomLogWindow" method="hide"]

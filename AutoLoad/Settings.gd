@@ -33,8 +33,8 @@ static var saveFilePath:		StringName = "user://" + ProjectSettings.get_setting("
 
 ## A [Dictionary] where the key is the name of a setting and the property via which it will be accessed, and the value is an instance of the [Setting] inner class.
 static var settingsDictionary: Dictionary[StringName, Setting] = {
-	SettingNames.windowWidth:	Setting.new(SettingNames.windowWidth,	SectionNames.projectSettings,	TYPE_INT,	1280), # A smaller default size to be safe for most systems.
-	SettingNames.windowHeight:	Setting.new(SettingNames.windowHeight,	SectionNames.projectSettings,	TYPE_INT,	720),
+	SettingNames.windowWidth:	Setting.new(SettingNames.windowWidth,	SectionNames.projectSettings,	TYPE_INT,	2560), # A smaller default size to be safe for most systems.
+	SettingNames.windowHeight:	Setting.new(SettingNames.windowHeight,	SectionNames.projectSettings,	TYPE_INT,	1440),
 
 	SettingNames.musicVolume:	Setting.new(SettingNames.musicVolume,	SectionNames.audio,	TYPE_FLOAT,	0.0), # 0 = Normal volume
 	SettingNames.sfxVolume:		Setting.new(SettingNames.sfxVolume,		SectionNames.audio,	TYPE_FLOAT,	0.0),
@@ -127,7 +127,7 @@ func _enter_tree() -> void:
 	Debug.printAutoLoadLog("_enter_tree(): Loading user preferences from configuration file…")
 	loadConfig()
 	loadProjectUserSettings()
-	loadAudioSettings()
+	#loadAudioSettings()
 
 
 static func loadConfig() -> bool:
@@ -149,11 +149,11 @@ func loadProjectUserSettings() -> void:
 	pass # Done by GlobalUI.gd: # GlobalUI.setWindowSize(self.windowWidth, self.windowHeight, false) # !showLabel
 
 
-func loadAudioSettings() -> void:
-	var musicBus: int = AudioServer.get_bus_index(Global.AudioBuses.music)
-	var sfxBus:   int = AudioServer.get_bus_index(Global.AudioBuses.sfx)
-	AudioServer.set_bus_volume_db(musicBus,	getSetting(SettingNames.musicVolume, 0.0))
-	AudioServer.set_bus_volume_db(sfxBus,	getSetting(SettingNames.sfxVolume, 0.0))
+#func loadAudioSettings() -> void:
+	#var musicBus: int = AudioServer.get_bus_index(Global.AudioBuses.music)
+	#var sfxBus:   int = AudioServer.get_bus_index(Global.AudioBuses.sfx)
+	#AudioServer.set_bus_volume_db(musicBus,	getSetting(SettingNames.musicVolume, 0.0))
+	#AudioServer.set_bus_volume_db(sfxBus,	getSetting(SettingNames.sfxVolume, 0.0))
 
 #endregion
 

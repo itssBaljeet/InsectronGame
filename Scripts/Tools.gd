@@ -140,7 +140,7 @@ static func findMethodInScript(script: Script, methodName: StringName) -> bool: 
 ## This is necessary for persistence to a [PackedScene] for save/load.
 ## NOTE: Also sets the `force_readable_name` parameter, which may slow performance if used frequently.
 static func addChildAndSetOwner(child: Node, parent: Node) -> void: # DESIGN: TBD: Should `parent` be the 1st argument or 2nd? All global functions operate on the 1st argument, the parent [Node], but this method's name has "child" as the first word, so the `child` should be the 1st argument, right? :')
-	parent.add_child(child, Debug.shouldForceReadableName) # PERFORMANCE: force_readable_name only if debugging
+	parent.add_child(child) # PERFORMANCE: force_readable_name only if debugging
 	child.owner = parent
 
 
@@ -152,7 +152,7 @@ static func addChildAtNode(child: Node2D, placementNode: Node2D, parent: Node, c
 	child.position = placementNode.position
 	if copyRotation: child.rotation	= placementNode.rotation
 	if copyScale:	 child.scale	= placementNode.scale
-	parent.add_child(child, Debug.shouldForceReadableName) # PERFORMANCE: force_readable_name only if debugging
+	parent.add_child(child) # PERFORMANCE: force_readable_name only if debugging
 	child.owner = parent
 	return child
 
@@ -226,14 +226,14 @@ static func getAllChildrenRecursively(firstNode: Node) -> Array[Node]:
 ## Returns: `true` if [param childToReplace] was found and replaced.
 static func replaceChild(parentNode: Node, childToReplace: Node, newChild: Node, copyPosition: bool = false, copyRotation: bool = false, copyScale: bool = false, freeReplacedChild: bool = false) -> bool:
 	if childToReplace.get_parent() != parentNode:
-		Debug.printWarning(str("replaceChild() childToReplace.get_parent(): ", childToReplace.get_parent(), " != parentNode: ", parentNode))
+		#Debug.printWarning(str("replaceChild() childToReplace.get_parent(): ", childToReplace.get_parent(), " != parentNode: ", parentNode))
 		return false
 
 	# Is the new child already in another parent?
 	# TODO: Option to remove new child from existing parent
 	var newChildCurrentParent: Node = newChild.get_parent()
 	if newChildCurrentParent != null and newChildCurrentParent != parentNode:
-		Debug.printWarning("replaceChild(): newChild already in another parent: " + str(newChild, " in ", newChildCurrentParent))
+		#Debug.printWarning("replaceChild(): newChild already in another parent: " + str(newChild, " in ", newChildCurrentParent))
 		return false
 
 	# Copy properties
@@ -292,10 +292,10 @@ static func reparentNodes(currentParent: Node, nodesToTransfer: Array[Node], new
 			if node.get_parent() == newParent: # TBD: Is this verification necessary?
 				transferredNodes.append(node)
 			else:
-				Debug.printWarning(str("transferNodes(): ", node, " could not be moved from ", currentParent, " to newParent: ", newParent), node)
+				#Debug.printWarning(str("transferNodes(): ", node, " could not be moved from ", currentParent, " to newParent: ", newParent), node)
 				continue
 		else:
-			Debug.printWarning(str("transferNodes(): ", node, " does not belong to currentParent: ", currentParent), node)
+			#Debug.printWarning(str("transferNodes(): ", node, " does not belong to currentParent: ", currentParent), node)
 			continue
 	return transferredNodes
 
@@ -368,7 +368,7 @@ static func getShapeBounds(node: CollisionObject2D) -> Rect2:
 	var shapeNode: CollisionShape2D = findFirstChildOfType(node, CollisionShape2D)
 
 	if not shapeNode:
-		Debug.printWarning("getShapeBounds(): Cannot find a CollisionShape2D child", node)
+		#Debug.printWarning("getShapeBounds(): Cannot find a CollisionShape2D child", node)
 		return Rect2(node.position.x, node.position.y, -1, -1) # Return an invalid negative-sized rectangle matching the node's origin.
 
 	return shapeNode.shape.get_rect()
@@ -412,7 +412,7 @@ static func getShapeBoundsInNode(node: CollisionObject2D, maximumShapeCount: int
 			if shapesAdded >= maximumShapeCount: break
 
 	if shapesAdded < 1:
-		Debug.printWarning("getShapeBoundsInNode(): Cannot find a CollisionShape2D child", node)
+		#Debug.printWarning("getShapeBoundsInNode(): Cannot find a CollisionShape2D child", node)
 		return Rect2(node.position.x, node.position.y, -1, -1)
 	else:
 		# DEBUG: Debug.printTrace([combinedShapeBounds, node.get_child_count(), shapesAdded], node)
@@ -740,74 +740,74 @@ static func setCellData(map: TileMapLayerWithCellData, coordinates: Vector2i, ke
 	map.setCellData(coordinates, key, value)
 
 
-## Uses a custom data structure to check if individual [TileMap] cells (not tiles) are occupied by an [Entity] and returns it.
-## NOTE: Does NOT check for [member Global.TileMapCustomData.isOccupied] first, only the [member Global.TileMapCustomData.occupant]
-static func getCellOccupant(data: TileMapCellData, coordinates: Vector2i) -> Entity:
-	return data.getCellData(coordinates, Global.TileMapCustomData.occupant)
+### Uses a custom data structure to check if individual [TileMap] cells (not tiles) are occupied by an [Entity] and returns it.
+### NOTE: Does NOT check for [member Global.TileMapCustomData.isOccupied] first, only the [member Global.TileMapCustomData.occupant]
+#static func getCellOccupant(data: TileMapCellData, coordinates: Vector2i) -> Entity:
+	#return data.getCellData(coordinates, Global.TileMapCustomData.occupant)
+#
+#
+### Uses a custom data structure to mark individual [TileMap] cells (not tiles) as occupied or unoccupied by an [Entity].
+#static func setCellOccupancy(data: TileMapCellData, coordinates: Vector2i, isOccupied: bool, occupant: Entity) -> void:
+	#data.setCellData(coordinates, Global.TileMapCustomData.isOccupied, isOccupied)
+	#data.setCellData(coordinates, Global.TileMapCustomData.occupant, occupant if isOccupied else null)
 
 
-## Uses a custom data structure to mark individual [TileMap] cells (not tiles) as occupied or unoccupied by an [Entity].
-static func setCellOccupancy(data: TileMapCellData, coordinates: Vector2i, isOccupied: bool, occupant: Entity) -> void:
-	data.setCellData(coordinates, Global.TileMapCustomData.isOccupied, isOccupied)
-	data.setCellData(coordinates, Global.TileMapCustomData.occupant, occupant if isOccupied else null)
+#static func checkTileAndCellVacancy(map: TileMapLayer, data: TileMapCellData, coordinates: Vector2i, ignoreEntity: Entity) -> bool:
+	## CHECK: First check the CELL data because it's quicker, right?
+	#var isCellVacant: bool = Tools.checkCellVacancy(data, coordinates, ignoreEntity)
+	#if not isCellVacant: return false # If there is an occupant, no need to check the Tile data, just scram
+#
+	## Then check the TILE data
+	#var isTileVacant: bool = Tools.checkTileVacancy(map, coordinates)
+#
+	#return isCellVacant and isTileVacant
+#
 
+### Checks if the specified tile is vacant by examining the custom tile/cell data for flags such as [constant Global.TileMapCustomData.isWalkable].
+#static func checkTileVacancy(map: TileMapLayer, coordinates: Vector2i) -> bool:
+	#var isTileVacant: bool = false
+#
+	## NOTE: DESIGN: Missing values should be considered as `true` to assist with quick prototyping
+	## TODO: Check all this in a more elegant way
+#
+	#var tileData: 	TileData = map.get_cell_tile_data(coordinates)
+	#var isWalkable:	Variant
+	#var isBlocked:	Variant
+#
+	#if tileData:
+		#isWalkable = tileData.get_custom_data(Global.TileMapCustomData.isWalkable)
+		#isBlocked  = tileData.get_custom_data(Global.TileMapCustomData.isBlocked)
+#
+	#if map is TileMapLayerWithCellData and map.debugMode: Debug.printDebug(str("tileData[isWalkable]: ", isWalkable, ", [isBlocked]: ", isBlocked))
+#
+	## If there is no data, assume the tile is always vacant.
+	#isTileVacant = (isWalkable or isWalkable == null) and (not isBlocked or isWalkable == null)
+#
+	#return isTileVacant
+#
 
-static func checkTileAndCellVacancy(map: TileMapLayer, data: TileMapCellData, coordinates: Vector2i, ignoreEntity: Entity) -> bool:
-	# CHECK: First check the CELL data because it's quicker, right?
-	var isCellVacant: bool = Tools.checkCellVacancy(data, coordinates, ignoreEntity)
-	if not isCellVacant: return false # If there is an occupant, no need to check the Tile data, just scram
-
-	# Then check the TILE data
-	var isTileVacant: bool = Tools.checkTileVacancy(map, coordinates)
-
-	return isCellVacant and isTileVacant
-
-
-## Checks if the specified tile is vacant by examining the custom tile/cell data for flags such as [constant Global.TileMapCustomData.isWalkable].
-static func checkTileVacancy(map: TileMapLayer, coordinates: Vector2i) -> bool:
-	var isTileVacant: bool = false
-
-	# NOTE: DESIGN: Missing values should be considered as `true` to assist with quick prototyping
-	# TODO: Check all this in a more elegant way
-
-	var tileData: 	TileData = map.get_cell_tile_data(coordinates)
-	var isWalkable:	Variant
-	var isBlocked:	Variant
-
-	if tileData:
-		isWalkable = tileData.get_custom_data(Global.TileMapCustomData.isWalkable)
-		isBlocked  = tileData.get_custom_data(Global.TileMapCustomData.isBlocked)
-
-	if map is TileMapLayerWithCellData and map.debugMode: Debug.printDebug(str("tileData[isWalkable]: ", isWalkable, ", [isBlocked]: ", isBlocked))
-
-	# If there is no data, assume the tile is always vacant.
-	isTileVacant = (isWalkable or isWalkable == null) and (not isBlocked or isWalkable == null)
-
-	return isTileVacant
-
-
-## Checks if the specified tile is vacant by examining the custom tile/cell data for flags such as [constant Global.TileMapCustomData.isWalkable].
-static func checkCellVacancy(mapData: TileMapCellData, coordinates: Vector2i, ignoreEntity: Entity) -> bool:
-	var isCellVacant: bool = false
-
-	# First check the CELL data because it's quicker
-
-	var cellDataOccupied: Variant = mapData.getCellData(coordinates, Global.TileMapCustomData.isOccupied) # NOTE: Should not be `bool` so it can be `null` if missing, NOT `false` if missing.
-	var cellDataOccupant: Entity  = mapData.getCellData(coordinates, Global.TileMapCustomData.occupant)
-
-	if mapData.debugMode: Debug.printDebug(str("checkCellVacancy() ", mapData, " @", coordinates, " cellData[cellDataOccupied]: ", cellDataOccupied, ", occupant: ", cellDataOccupant))
-
-	if cellDataOccupied is bool:
-		isCellVacant = not cellDataOccupied or cellDataOccupant == ignoreEntity
-	else:
-		# If there is no data, assume the cell is always unoccupied.
-		isCellVacant = true
-
-	# If there is an occupant, no need to check the Tile data, just scram
-	if not isCellVacant: return false
-
-	return isCellVacant
-
+### Checks if the specified tile is vacant by examining the custom tile/cell data for flags such as [constant Global.TileMapCustomData.isWalkable].
+#static func checkCellVacancy(mapData: TileMapCellData, coordinates: Vector2i, ignoreEntity: Entity) -> bool:
+	#var isCellVacant: bool = false
+#
+	## First check the CELL data because it's quicker
+#
+	#var cellDataOccupied: Variant = mapData.getCellData(coordinates, Global.TileMapCustomData.isOccupied) # NOTE: Should not be `bool` so it can be `null` if missing, NOT `false` if missing.
+	#var cellDataOccupant: Entity  = mapData.getCellData(coordinates, Global.TileMapCustomData.occupant)
+#
+	#if mapData.debugMode: Debug.printDebug(str("checkCellVacancy() ", mapData, " @", coordinates, " cellData[cellDataOccupied]: ", cellDataOccupied, ", occupant: ", cellDataOccupant))
+#
+	#if cellDataOccupied is bool:
+		#isCellVacant = not cellDataOccupied or cellDataOccupant == ignoreEntity
+	#else:
+		## If there is no data, assume the cell is always unoccupied.
+		#isCellVacant = true
+#
+	## If there is an occupant, no need to check the Tile data, just scram
+	#if not isCellVacant: return false
+#
+	#return isCellVacant
+#
 
 ## Verifies that the given coordinates are within the specified [TileMapLayer]'s grid.
 static func checkTileMapCoordinates(map: TileMapLayer, coordinates: Vector2i) -> bool:
@@ -879,30 +879,30 @@ static func convertCoordinatesBetweenTileMaps(sourceMap: TileMapLayer, cellCoord
 	# 4: Convert the pixel position to the destination map's cell coordinates
 	var cellCoordinatesInDestinationMap: Vector2i = destinationMap.local_to_map(pixelPositionInDestinationMap)
 
-	Debug.printDebug(str("Tools.convertCoordinatesBetweenTileMaps() ", sourceMap, " @", cellCoordinatesInSourceMap, " → sourcePixel: ", pixelPositionInSourceMap, " → globalPixel: ", globalPosition, " → destinationPixel: ", pixelPositionInDestinationMap, " → @", cellCoordinatesInDestinationMap, " ", destinationMap))
+	#Debug.printDebug(str("Tools.convertCoordinatesBetweenTileMaps() ", sourceMap, " @", cellCoordinatesInSourceMap, " → sourcePixel: ", pixelPositionInSourceMap, " → globalPixel: ", globalPosition, " → destinationPixel: ", pixelPositionInDestinationMap, " → @", cellCoordinatesInDestinationMap, " ", destinationMap))
 	return cellCoordinatesInDestinationMap
 
 
-## Damages a [TileMapLayer] Cell if it is [member Global.TileMapCustomData.isDestructible].
-## Changes the cell's tile to the [member Global.TileMapCustomData.nextTileOnDamage] if there is any,
-## or erases the cell if there is no "next tile" specified or both X & Y coordinates are below 0 i.e. (-1,-1)
-## Returns `true` if the cell was damaged.
-## @experimental
-static func damageTileMapCell(map: TileMapLayer, coordinates: Vector2i) -> bool:
-	# TODO: Variable health & damage
-	# PERFORMANCE: Do not call Tools.getTileData() to reduce calls
-	var tileData: TileData = map.get_cell_tile_data(coordinates)
-	if tileData:
-		var isDestructible: bool = tileData.get_custom_data(Global.TileMapCustomData.isDestructible)
-		if  isDestructible:
-			var nextTileOnDamage: Vector2i = tileData.get_custom_data(Global.TileMapCustomData.nextTileOnDamage)
-			if nextTileOnDamage and (nextTileOnDamage.x >= 0 or nextTileOnDamage.y >= 0): # Both negative coordinates are invalid or mean "destroy on damage"
-				map.set_cell(coordinates, 0, nextTileOnDamage)
-			else: map.erase_cell(coordinates)
-			return true
-
-	return false
-
+### Damages a [TileMapLayer] Cell if it is [member Global.TileMapCustomData.isDestructible].
+### Changes the cell's tile to the [member Global.TileMapCustomData.nextTileOnDamage] if there is any,
+### or erases the cell if there is no "next tile" specified or both X & Y coordinates are below 0 i.e. (-1,-1)
+### Returns `true` if the cell was damaged.
+### @experimental
+#static func damageTileMapCell(map: TileMapLayer, coordinates: Vector2i) -> bool:
+	## TODO: Variable health & damage
+	## PERFORMANCE: Do not call Tools.getTileData() to reduce calls
+	#var tileData: TileData = map.get_cell_tile_data(coordinates)
+	#if tileData:
+		#var isDestructible: bool = tileData.get_custom_data(Global.TileMapCustomData.isDestructible)
+		#if  isDestructible:
+			#var nextTileOnDamage: Vector2i = tileData.get_custom_data(Global.TileMapCustomData.nextTileOnDamage)
+			#if nextTileOnDamage and (nextTileOnDamage.x >= 0 or nextTileOnDamage.y >= 0): # Both negative coordinates are invalid or mean "destroy on damage"
+				#map.set_cell(coordinates, 0, nextTileOnDamage)
+			#else: map.erase_cell(coordinates)
+			#return true
+#
+	#return false
+#
 
 ## Sets all the Cells in the specified [TileMapLayer] region to random Tiles from the specified coordinates in the Map's [TileSet].
 ## The [param modificationChance] must be between 0…1 and is rolled for Cell to determine whether it will be modified.
@@ -931,19 +931,19 @@ static func populateTileMap(map: TileMapLayer, sceneToCopy: PackedScene, numberO
 	# Validation
 
 	if not sceneToCopy:
-		Debug.printWarning("No sceneToCopy specified", str(map))
+		#Debug.printWarning("No sceneToCopy specified", str(map))
 		return {}
 
 	var mapRect: Rect2i = map.get_used_rect()
 
 	if not mapRect.has_area():
-		Debug.printWarning(str("map has no area: ", mapRect.size), str(map))
+		#Debug.printWarning(str("map has no area: ", mapRect.size), str(map))
 		return {}
 
 	var totalCells: int = mapRect.size.x * mapRect.size.y
 
 	if numberOfCopies > totalCells:
-		Debug.printWarning(str("numberOfCopies: ", numberOfCopies, " > totalCells: ", totalCells), str(map))
+		#Debug.printWarning(str("numberOfCopies: ", numberOfCopies, " > totalCells: ", totalCells), str(map))
 		return {}
 
 	# Spawn
@@ -1085,7 +1085,7 @@ func rollChance(chancePercent: int) -> bool:
 static func wrapInteger(minimum: int, current: int, maximum: int) -> int:
 	# TBD: Use Godot's pingpong()?
 	if minimum > maximum:
-		Debug.printWarning(str("cycleInteger(): minimum ", minimum, " > maximum ", maximum, ", returning current: ", current))
+		#Debug.printWarning(str("cycleInteger(): minimum ", minimum, " > maximum ", maximum, ", returning current: ", current))
 		return current
 	elif minimum == maximum: # If there is no difference between the range, just return either.
 		return minimum
@@ -1152,7 +1152,7 @@ static func getFilesInFolder(folderPath: String, filter: String = "") -> PackedS
 	folderPath = Tools.addPathPrefixIfMissing(folderPath, "res://") # Use the exported/packaged resources path if omitted.
 	var folder: DirAccess = DirAccess.open(folderPath)
 	if folder == null:
-		Debug.printWarning("getFilesFromFolder() cannot open " + folderPath)
+		#Debug.printWarning("getFilesFromFolder() cannot open " + folderPath)
 		return []
 
 	folder.list_dir_begin() # CHECK: Necessary for get_files()?
@@ -1194,11 +1194,11 @@ static func getPathWithDifferentExtension(sourcePath: String, replacementExtensi
 	var sourceExtension: String = "." + sourcePath.get_extension() # Returns the file extension without the leading period
 	var replacementPath: String = sourcePath.replacen(sourceExtension, replacementExtension) # The `N` in `replacen` means case-insensitive
 
-	Debug.printDebug(str("getPathWithDifferentExtension() sourcePath: ", sourcePath, ", replacementPath: ", replacementPath))
+	#Debug.printDebug(str("getPathWithDifferentExtension() sourcePath: ", sourcePath, ", replacementPath: ", replacementPath))
 
 	if FileAccess.file_exists(replacementPath): return replacementPath
 	else:
-		Debug.printDebug(str("replacementPath does not exist: ", replacementPath))
+		#Debug.printDebug(str("replacementPath does not exist: ", replacementPath))
 		return ""
 
 #endregion

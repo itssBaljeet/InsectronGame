@@ -1,5 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://dnlvdwjohh5ac"]
+[gd_scene load_steps=3 format=3 uid="uid://dnlvdwjohh5ac"]
 
 [ext_resource type="PackedScene" uid="uid://c6x5wu22u038x" path="res://addons/gdquest_bee_bot/selector.blend" id="1_nxexx"]
+[ext_resource type="Material" uid="uid://dk05r4juhs1rr" path="res://Game/SelectorMesh.tres" id="2_q43f2"]
 
 [node name="SelectorMesh" instance=ExtResource("1_nxexx")]
+
+[node name="Plane" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_q43f2")
+
+[node name="Plane_001" parent="." index="1"]
+surface_material_override/0 = ExtResource("2_q43f2")
+
+[node name="Plane_002" parent="." index="2"]
+surface_material_override/0 = ExtResource("2_q43f2")
+
+[node name="Plane_003" parent="." index="3"]
+surface_material_override/0 = ExtResource("2_q43f2")

@@ -29,7 +29,7 @@ var associatedTileMaps: Array[TileMapLayer] ## The list of [TileMapLayer]s that 
 #region Data Interface
 
 func setCellData(coordinates: Vector2i, key: StringName, value: Variant) -> void:
-	if debugMode: Debug.printDebug(str("setCellData() @", coordinates, " ", key, " = ", value), self)
+	#if debugMode: Debug.printDebug(str("setCellData() @", coordinates, " ", key, " = ", value), self)
 
 	# NOTE: Do NOT assign an entire dictionary here or that will override all other keys!
 
@@ -48,7 +48,7 @@ func getCellData(coordinates: Vector2i, key: StringName) -> Variant:
 	else:
 		value = null
 
-	if debugMode: Debug.printDebug(str("getCellData() @", coordinates, " ", key, ": ", value), self)
+	#if debugMode: Debug.printDebug(str("getCellData() @", coordinates, " ", key, ": ", value), self)
 	return value
 
 #endregion

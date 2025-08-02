@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://qbs613nid1mk" path="res://Components/Movement/BattleBoardPositionComponent.gd" id="1_3lq6u"]
 [ext_resource type="PackedScene" uid="uid://dnlvdwjohh5ac" path="res://Game/SelectorMesh.tscn" id="2_hks7w"]
 
-[node name="BattleBoardPositionComponent" type="Node3D" node_paths=PackedStringArray("visualIndicator")]
+[node name="BattleBoardPositionComponent" type="Node3D" node_paths=PackedStringArray("visualIndicator") groups=["components"]]
 script = ExtResource("1_3lq6u")
 visualIndicator = NodePath("SelectorMesh")
 

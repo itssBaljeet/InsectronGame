@@ -11,26 +11,27 @@ extends Component
 @export var width: int:
 	set(x):
 		width = x
-		generate_board()
+		generateBoard()
 @export var height: int:
 	set(y):
 		height = y
-		generate_board()
+		generateBoard()
 @export var tile_x: float:
 	set(x):
 		tile_x = x
-		generate_mesh_library()
+		generateMeshLibrary()
 @export var tile_y: float:
 	set(y):
 		tile_y = y
-		generate_mesh_library()
+		generateMeshLibrary()
 @export var tile_z: float:
 	set(z):
 		tile_z = z
-		generate_mesh_library()
+		generateMeshLibrary()
+
 @export var even_tile_material: StandardMaterial3D
 @export var odd_tile_material: StandardMaterial3D 
-
+@export var highlight_tile_material: StandardMaterial3D
 #endregion
 
 #region State
@@ -44,10 +45,10 @@ var cells: Array[Vector3i]
 
 #region Board Gen Logic
 
-func generate_board() -> void:
+func generateBoard() -> void:
 	# Create mesh library if needed
 	if !self.mesh_library:
-		generate_mesh_library()
+		generateMeshLibrary()
 	
 	# Clear previous board cells
 	$".".clear()
@@ -64,17 +65,18 @@ func generate_board() -> void:
 			cells.append(Vector3i(x, 0, z))
 	print($".".get_used_cells())
 			
-func generate_mesh_library() -> void:
+func generateMeshLibrary() -> void:
 	# Create mesh library instance
 	mesh_lib = MeshLibrary.new()
 	
 	mesh_count = 0
 	# Generate both tile meshes and adds them to the library
-	generate_tile_mesh("EvenTile", even_tile_material)
-	generate_tile_mesh("OddTile", odd_tile_material)
+	generateTileMesh("EvenTile", even_tile_material)
+	generateTileMesh("OddTile", odd_tile_material)
+	generateTileMesh("HighlightedTile", highlight_tile_material)
 	$".".mesh_library = mesh_lib
 
-func generate_tile_mesh(tile_name: String, material: StandardMaterial3D) -> void:
+func generateTileMesh(tile_name: String, material: StandardMaterial3D) -> void:
 	# Generate mesh based on exports
 	var mesh: BoxMesh = BoxMesh.new()
 	mesh.size = Vector3(tile_x, tile_y, tile_z)
@@ -111,12 +113,23 @@ func getGlobalCellPosition(cell: Vector3i) -> Vector3i:
 	return $".".to_global(tileLocalPos)
 	
 func setCellOccupancy(cell: Vector3i, occupied: bool, occupant: Entity) -> void:
-	var data: BattleBoardCellData = self.vBoardState.get(cell)
-	
-	if data != null:
-		data.isOccupied = occupied
-		data.occupant = occupant
+	self.vBoardState.set(cell, BattleBoardCellData.new(false, false, occupied, occupant))
 
+func printCellStates() -> void:
+	for cell in vBoardState:
+		print("Location: ", cell)
+		print("Occupied?: ", vBoardState[cell].isOccupied, "Occupant: ", vBoardState[cell].occupant)
+		print("Blocked?: ", vBoardState[cell].isBlocked)
+		print("Hazard?: ", vBoardState[cell].hazardTag)
+
+func getOccupant(pos: Vector3i) -> Entity:
+	var data: BattleBoardCellData = self.vBoardState.get(pos) 
+	return data.occupant if data != null else null
+
+func getInsectorOccupant(pos: Vector3i) -> InsectronEntity3D:
+	var data: BattleBoardCellData = self.vBoardState.get(pos)
+	return data.occupant if data != null and data.occupant is InsectronEntity3D else null
+	
 #endregion
 
 

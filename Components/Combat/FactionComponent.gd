@@ -14,7 +14,8 @@ enum Factions {
 	players = 2,
 	playerAllies = 3,
 	enemies = 4,
-	hazards = 5
+	hazards = 5,
+	ai = 6
 	}
 
 const factionStrings: PackedStringArray = [
@@ -22,7 +23,8 @@ const factionStrings: PackedStringArray = [
 	"players", 
 	"playerAllies", 
 	"enemies",
-	"hazards"
+	"hazards",
+	"ai"
 	]
 
 #endregion
@@ -34,7 +36,7 @@ const factionStrings: PackedStringArray = [
 ## Entities that share ANY faction are considered implicit allies.
 ## An Entity belonging to [player, playerAllies] would be considered an ally of an Entity belonging to [playerAllies, enemies].
 ## Entities that have NO matching factions are considered implicit opponents.
-@export_flags(factionStrings[0], factionStrings[1], factionStrings[2], factionStrings[3], factionStrings[4]) var factions: int = Factions.neutral # TBD: Should the default be 0 or 1?
+@export_flags(factionStrings[0], factionStrings[1], factionStrings[2], factionStrings[3], factionStrings[4], factionStrings[5]) var factions: int = Factions.neutral # TBD: Should the default be 0 or 1?
 
 # TBD: Add `explicitAllies` and `explicitOpponents`?
 
@@ -56,3 +58,5 @@ func checkOpposition(otherFactions: int) -> bool:
 
 #endregion
 
+func _ready() -> void:
+	print("Faction Num: ", factions)

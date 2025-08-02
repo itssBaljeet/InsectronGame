@@ -2,7 +2,7 @@
 
 @tool
 class_name BattleBoardEntity3D
-extends Entity
+extends TurnBasedEntity
 
 #endregion
 
@@ -19,6 +19,11 @@ extends Entity
 	get:
 		if battleBoardGenerator: return battleBoardGenerator
 		return self.components.get(&"BattleBoardComponent3D")
+
+@onready var battleBoardUI: BattleBoardUIComponent:
+	get:
+		if battleBoardUI: return battleBoardUI
+		return self.components.get(&"BattleBoardUIComponent")
 
 #endregion
 

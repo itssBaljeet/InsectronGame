@@ -1,77 +1,115 @@
-[gd_scene load_steps=15 format=3 uid="uid://bq82t3qc1mxmb"]
+[gd_scene load_steps=20 format=3 uid="uid://bq82t3qc1mxmb"]
 
 [ext_resource type="Script" uid="uid://bryda6lc1suk7" path="res://Entities/Objects/BattleBoardEntity3d.gd" id="1_pvu71"]
 [ext_resource type="PackedScene" uid="uid://ds773iggimiek" path="res://Components/Control/BattleBoardComponent3D.tscn" id="2_s4deh"]
 [ext_resource type="Material" uid="uid://dq8o3ujayflov" path="res://Game/even_tile.tres" id="3_s4deh"]
 [ext_resource type="Material" uid="uid://c4dgtp7yfi012" path="res://Game/odd_tile.tres" id="4_eeqpy"]
-[ext_resource type="Script" uid="uid://bsyav21eu6f6" path="res://Game/CsgBox3d.gd" id="5_syahi"]
 [ext_resource type="Script" uid="uid://b3tgnb1y0hgk1" path="res://Entities/Entity.gd" id="6_lcb3f"]
 [ext_resource type="PackedScene" uid="uid://b1c4gfp8xpktc" path="res://Components/Control/BattleBoardSelectorComponent.tscn" id="7_bckac"]
 [ext_resource type="PackedScene" uid="uid://bi5k7c0a2ds8u" path="res://addons/gdquest_beetle_bot/BeetleBotFused.tscn" id="7_ucsr6"]
 [ext_resource type="PackedScene" uid="uid://ob3s2kpnk833" path="res://Components/Movement/BattleBoardPositionComponent.tscn" id="8_ucsr6"]
+[ext_resource type="PackedScene" uid="uid://bsnrllt3wjgkg" path="res://Entities/TurnBased/InsectronEntity3D.tscn" id="9_js4j1"]
+[ext_resource type="PackedScene" uid="uid://bych4wwhr30uk" path="res://Game/Bug.tscn" id="10_fya6h"]
+[ext_resource type="PackedScene" uid="uid://5tvqunkoa4l7" path="res://Components/Combat/FactionComponent.tscn" id="11_7xmvv"]
+[ext_resource type="PackedScene" uid="uid://bpxceafnntnlu" path="res://Components/Visual/BattleBoardUIComponent.tscn" id="12_yubh6"]
+[ext_resource type="PackedScene" uid="uid://7jcht5vta2uh" path="res://Entities/TurnBased/BattleBoardSelectorEntity.tscn" id="14_53p5e"]
+[ext_resource type="PackedScene" uid="uid://dc30psrpymtkr" path="res://Components/TurnBased/TurnBasedStateUIComponent.tscn" id="14_vfhsu"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_bckac"]
+[sub_resource type="BoxMesh" id="BoxMesh_js4j1"]
 material = ExtResource("3_s4deh")
 size = Vector3(1, 0.1, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ucsr6"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_yubh6"]
 size = Vector3(1, 0.1, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_lcb3f"]
+[sub_resource type="BoxMesh" id="BoxMesh_7xmvv"]
 material = ExtResource("4_eeqpy")
 size = Vector3(1, 0.1, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_fya6h"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_vfhsu"]
 size = Vector3(1, 0.1, 1)
 
-[sub_resource type="MeshLibrary" id="MeshLibrary_js4j1"]
+[sub_resource type="MeshLibrary" id="MeshLibrary_53p5e"]
 item/0/name = "EvenTile"
-item/0/mesh = SubResource("BoxMesh_bckac")
+item/0/mesh = SubResource("BoxMesh_js4j1")
 item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
 item/0/mesh_cast_shadow = 1
-item/0/shapes = [SubResource("BoxShape3D_ucsr6"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/0/shapes = [SubResource("BoxShape3D_yubh6"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/0/navigation_layers = 1
 item/1/name = "OddTile"
-item/1/mesh = SubResource("BoxMesh_lcb3f")
+item/1/mesh = SubResource("BoxMesh_7xmvv")
 item/1/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
 item/1/mesh_cast_shadow = 1
-item/1/shapes = [SubResource("BoxShape3D_fya6h"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/1/shapes = [SubResource("BoxShape3D_vfhsu"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/1/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/1/navigation_layers = 1
 
-[node name="BattleBoardEntity3D" type="Node3D" groups=["entities"]]
+[node name="BattleBoardEntity3D" type="Node3D" groups=["entities", "turnBased"]]
 script = ExtResource("1_pvu71")
 width = 11
 height = 11
+isEnabled = false
 isLoggingEnabled = false
 metadata/_custom_type_script = "uid://bryda6lc1suk7"
 
-[node name="BattleBoardComponent3D" parent="." instance=ExtResource("2_s4deh")]
-mesh_library = SubResource("MeshLibrary_js4j1")
-metadata/_editor_floor_ = Vector3(0, 0, 0)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="." node_paths=PackedStringArray("Board")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.6, 6.5)
-visible = false
-flip_faces = true
-script = ExtResource("5_syahi")
-Board = NodePath("..")
-
-[node name="Timer" type="Timer" parent="CSGBox3D"]
-
 [node name="Entity" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.15, 3.5)
 script = ExtResource("6_lcb3f")
 metadata/_custom_type_script = "uid://b3tgnb1y0hgk1"
 
-[node name="BattleBoardSelectorComponent" parent="Entity" instance=ExtResource("7_bckac")]
-bob_amplitude = 0.1
-bob_mid_height = 1.8800000000000001
+[node name="InsectronEntity3d" parent="." instance=ExtResource("9_js4j1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.15, 1.5)
+isLoggingEnabled = false
+debugMode = true
 
-[node name="BattleBoardPositionComponent" parent="Entity" groups=["components"] instance=ExtResource("8_ucsr6")]
+[node name="beetle_bot_fused" parent="InsectronEntity3d" instance=ExtResource("7_ucsr6")]
+script = null
+
+[node name="BattleBoardPositionComponent" parent="InsectronEntity3d" instance=ExtResource("8_ucsr6")]
+initialDestinationCoordinates = Vector3i(2, 0, 1)
 speed = 10.0
+debugMode = true
 
-[node name="beetle_bot_fused" parent="Entity" node_paths=PackedStringArray("Board") instance=ExtResource("7_ucsr6")]
-Board = NodePath("../..")
+[node name="FactionComponent" parent="InsectronEntity3d" instance=ExtResource("11_7xmvv")]
 
-[connection signal="timeout" from="CSGBox3D/Timer" to="CSGBox3D" method="onTimer_timeout"]
+[node name="InsectronEntity3d2" parent="." instance=ExtResource("9_js4j1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.15, 5.5)
+isLoggingEnabled = false
+debugMode = true
+
+[node name="BUG" parent="InsectronEntity3d2" instance=ExtResource("10_fya6h")]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 0, -0.15, 0)
+
+[node name="BattleBoardPositionComponent" parent="InsectronEntity3d2" instance=ExtResource("8_ucsr6")]
+initialDestinationCoordinates = Vector3i(2, 0, 5)
+shouldSnapToInitialDestination = false
+speed = 10.0
+debugMode = true
+
+[node name="FactionComponent" parent="InsectronEntity3d2" instance=ExtResource("11_7xmvv")]
+factions = 8
+
+[node name="BattleBoardComponent3D" parent="." instance=ExtResource("2_s4deh")]
+mesh_library = SubResource("MeshLibrary_53p5e")
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="BattleBoardUIComponent" parent="." instance=ExtResource("12_yubh6")]
+
+[node name="TurnBasedStateUIComponent" parent="." instance=ExtResource("14_vfhsu")]
+texture_filter = 1
+
+[node name="FactionComponent" parent="." instance=ExtResource("11_7xmvv")]
+factions = 1
+
+[node name="BattleBoardSelectorEntity" parent="." instance=ExtResource("14_53p5e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.15, 3.5)
+
+[node name="BattleBoardSelectorComponent" parent="BattleBoardSelectorEntity" instance=ExtResource("7_bckac")]
+bob_amplitude = 0.1
+bob_mid_height = 1.88
+
+[node name="BattleBoardPositionComponent" parent="BattleBoardSelectorEntity" instance=ExtResource("8_ucsr6")]
+initialDestinationCoordinates = Vector3i(2, 0, 3)
+speed = 10.0
+shouldOccupyCell = false

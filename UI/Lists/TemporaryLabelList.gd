@@ -22,7 +22,7 @@ func createTemporaryLabel(text: String) -> Label:
 		newLabel.owner = self # INFO: Necessary for persistence to a [PackedScene] for save/load.
 		return newLabel
 	else:
-		Debug.printWarning("Cannot create an instance of FadingLabel")
+		#Debug.printWarning("Cannot create an instance of FadingLabel")
 		return null
 
 

@@ -22,6 +22,11 @@ var boardPositionComponent: BattleBoardPositionComponent:
 	get:
 		if boardPositionComponent: return boardPositionComponent
 		return self.coComponents.get(&"BattleBoardPositionComponent")
+		
+var battleBoardUI: BattleBoardUIComponent:
+	get:
+		if battleBoardUI: return battleBoardUI
+		return self.parentEntity.get_parent().components.get(&"BattleBoardUIComponent")
 
 #endregion
 
@@ -29,6 +34,7 @@ var boardPositionComponent: BattleBoardPositionComponent:
 #region State
 
 var _phase := 0.0                     # running angle in radians (0‧‧‧TAU)
+var disabled: bool = false
 
 #endregion
 
@@ -46,7 +52,7 @@ func _process(delta: float) -> void:
 	mesh.rotate_y(0.01)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_echo(): return          # ignore key‑repeat noise
+	if event.is_echo() or disabled: return          # ignore key‑repeat noise
 
 	var step := Vector2i.ZERO
 	if event.is_action_pressed("moveLeft"):  step = Vector2i(-1, 0)
@@ -57,4 +63,27 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if step != Vector2i.ZERO:
 		boardPositionComponent.processMovementInput(Vector3i(step.x, 0, step.y))
-		
+	
+	if event.is_action_pressed("select"):
+		print("Select ", battleBoardUI.state)
+		var cursorCell: Vector3i = boardPositionComponent.currentCellCoordinates
+		# If UI is waiting for a target selection, delegate to UI
+		if battleBoardUI.state == BattleBoardUIComponent.UIState.MoveSelect:
+			print("Moving")
+			battleBoardUI.confirmMoveTarget(cursorCell)
+		elif battleBoardUI.state == BattleBoardUIComponent.UIState.AttackSelect:
+			print("Attacking")
+			battleBoardUI.confirmAttackTarget(cursorCell)
+		else:
+			print("else statement")
+			# Normal selection: select unit on the cell if any
+			var unit: InsectronEntity3D = boardPositionComponent.battleBoard.getInsectorOccupant(cursorCell)  # get unit at cell
+			print(unit, unit.haveMoved, unit.havePerformedAction)
+			if unit and not unit.haveMoved and not unit.havePerformedAction:
+				print("Opening Menu")
+				# Friendly unit that still can act
+				battleBoardUI.openUnitMenu(unit)
+	
+	if event.is_action_pressed("menu_close"):
+		if battleBoardUI.state == BattleBoardUIComponent.UIState.UnitMenu:
+			battleBoardUI.closeUnitMenu(true)

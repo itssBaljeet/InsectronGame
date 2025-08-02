@@ -24,7 +24,7 @@ var navigationStack: PackedStringArray # Better performance than Array[String]
 func _ready() -> void:
 	resetHistory()
 	if backButton:  connectBackButton()
-	elif debugMode: Debug.printWarning("Missing backButton", self) # Suppress warning in case there is a different way to close, such as the PauseButton.
+	#elif debugMode: Debug.printWarning("Missing backButton", self) # Suppress warning in case there is a different way to close, such as the PauseButton.
 
 
 #region History Stack Management
@@ -54,7 +54,7 @@ func addNodeToHistory(path: String) -> int:
 func goBack() -> bool:
 	# GODOT: Why is there no pop_back() for PackedArrays??
 
-	if debugMode: Debug.printTrace([self.get_children()], self)
+	#if debugMode: Debug.printTrace([self.get_children()], self)
 
 	# Have to have at least 2 nodes to be able to go back in history.
 	# NOTE: Do not store the size because it will change.
@@ -64,11 +64,11 @@ func goBack() -> bool:
 	navigationStack.remove_at(navigationStack.size() - 1)
 
 	# Pop again to get the previous node
-	var previousDestination: String = navigationStack[navigationStack.size() - 1]
+	#var previousDestination: String = navigationStack[navigationStack.size() - 1]
 	navigationStack.remove_at(navigationStack.size() - 1)
 	# It will be appended to [navigationStack] again in displayNavigationDestination()
 
-	self.displayNavigationDestination(previousDestination)
+	#self.displayNavigationDestination(previousDestination)
 	return true
 
 #endregion
@@ -84,7 +84,7 @@ func findFirstChildControl() -> Control:
 func replaceFirstChildControl(newControl: Control) -> bool:
 	var childToReplace: Control = self.findFirstChildControl()
 
-	if debugMode: Debug.printDebug(str("replaceFirstChildControl(): ", childToReplace, " → ", newControl), self)
+	#if debugMode: Debug.printDebug(str("replaceFirstChildControl(): ", childToReplace, " → ", newControl), self)
 
 	if childToReplace:
 		if Tools.replaceChild(self, childToReplace, newControl):
@@ -98,32 +98,32 @@ func replaceFirstChildControl(newControl: Control) -> bool:
 	return false
 
 
-## Replaces the current first child of this container and displays a new control and pushes it onto the [member navigationStack].
-## [param newDestination]: The path of the new sub-scene (UI container) to display in this container.
-## IMPORTANT: The root node of the new child scene MUST be a [Control].
-func displayNavigationDestination(newDestinationPath: String) -> bool:
-	if  debugMode: Debug.printDebug("displayNavigationDestination(): " + newDestinationPath, self)
-	var newDestinationScene: Node = SceneManager.instantiateSceneFromPath(newDestinationPath) #navigationDestination.instantiate()
-	var result: bool
-
-	if newDestinationScene is not Control:
-		Debug.printWarning(str("newDestinationScene is not a Control: ", newDestinationScene, " @ ", newDestinationPath), self)
-		return false
-
-	# NOTE: Clear the UI focus if the Back Button is about to disappear, so [SetInitialFocus].gd can redirect the focus.
-	if navigationStack.size() < 2: self.get_viewport().gui_release_focus()
-
-	if self.replaceFirstChildControl(newDestinationScene):
-		navigationStack.append(newDestinationPath)
-		result = true
-	else:
-		result = false
-
-	updateBackButton()
-	if debugMode:
-		showDebugInfo()
-		Debug.printDebug(str("1st Child: ", self.findFirstChildControl(), " — History: ", navigationStack), self)
-	return result
+### Replaces the current first child of this container and displays a new control and pushes it onto the [member navigationStack].
+### [param newDestination]: The path of the new sub-scene (UI container) to display in this container.
+### IMPORTANT: The root node of the new child scene MUST be a [Control].
+#func displayNavigationDestination(newDestinationPath: String) -> bool:
+	#if  debugMode: Debug.printDebug("displayNavigationDestination(): " + newDestinationPath, self)
+	#var newDestinationScene: Node = SceneManager.instantiateSceneFromPath(newDestinationPath) #navigationDestination.instantiate()
+	#var result: bool
+#
+	#if newDestinationScene is not Control:
+		#Debug.printWarning(str("newDestinationScene is not a Control: ", newDestinationScene, " @ ", newDestinationPath), self)
+		#return false
+#
+	## NOTE: Clear the UI focus if the Back Button is about to disappear, so [SetInitialFocus].gd can redirect the focus.
+	#if navigationStack.size() < 2: self.get_viewport().gui_release_focus()
+#
+	#if self.replaceFirstChildControl(newDestinationScene):
+		#navigationStack.append(newDestinationPath)
+		#result = true
+	#else:
+		#result = false
+#
+	#updateBackButton()
+	#if debugMode:
+		#showDebugInfo()
+		#Debug.printDebug(str("1st Child: ", self.findFirstChildControl(), " — History: ", navigationStack), self)
+	#return result
 
 #endregion
 
@@ -148,5 +148,5 @@ func updateBackButton() -> void:
 
 func showDebugInfo() -> void:
 	if not debugMode: return
-	Debug.watchList.navigationFirstChild = self.findFirstChildControl()
-	Debug.watchList.navigationStack = "\n⬆ ".join(self.navigationStack)
+	#Debug.watchList.navigationFirstChild = self.findFirstChildControl()
+	#Debug.watchList.navigationStack = "\n⬆ ".join(self.navigationStack)

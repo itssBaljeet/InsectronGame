@@ -12,7 +12,7 @@ extends Node
 #region Project-Specific Flags
 
 ## ATTENTION: This flag is set by the [Start] script which must be attached to the root node of the main scene of your game.
-static var hasStartScript:		bool = false
+static var hasStartScript:		bool = true
 
 #endregion
 
@@ -97,6 +97,6 @@ func screenshot(titleSuffix: String = "") -> void:  # NOTE: Cannot be `static` b
 	var screenshotImage: Image = self.get_viewport().get_texture().get_image() # Capture what the player sees
 	screenshotImage.save_jpg(screenshotPath)
 
-	GlobalUI.createTemporaryLabel(str("Screenshot ", time + " " + titleSuffix))
+	#GlobalUI.createTemporaryLabel(str("Screenshot ", time + " " + titleSuffix))
 
 #endregion

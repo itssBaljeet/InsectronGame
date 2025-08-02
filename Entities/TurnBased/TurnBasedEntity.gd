@@ -74,6 +74,7 @@ func _exit_tree() -> void:
 ## Called by the [TurnBasedCoordinator] and calls [method processTurnBegin].
 ## WARNING: Do NOT override in subclass.
 func processTurnBeginSignals() -> void:
+	print("Processing turn begin for insector: ", self)
 	if not isEnabled: return
 	if debugMode:
 		printLog(str("processTurnBeginSignals() willBeginTurn ", currentTurn))

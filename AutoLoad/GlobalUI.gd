@@ -1,4 +1,3 @@
-## AutoLoad
 ## A scene containing graphics, UI or overlays which are displayed on top of the game content at all times.
 ## Used for displaying paused-mode overlays, performing transition effects between scenes such as fade-in and fade-out.
 ## The [member process_mode] is set to [enum ProcessMode.PROCESS_MODE_ALWAYS] which ignores the [meember SceneTree.paused] flag in order to perform transition animations while the actual gameplay is paused.
@@ -59,14 +58,14 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
-	if not OS.has_feature("web"): # BUG: WORKAROUND: Running in a web browser (or at least Safari) doesn't handle window size restoration properly.
-		# Do not set the window size if we're starting in fullscreen
-		# TBD: How to handle going to windowed mode for the first time? Should the first size be read from Settings?
-		var windowMode: int = DisplayServer.window_get_mode()
-		if windowMode != DisplayServer.WINDOW_MODE_FULLSCREEN and windowMode != DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
-			GlobalUI.setWindowSize(Settings.windowWidth, Settings.windowHeight, false) # !showLabel to avoid clutter
-
-		setRetinaScaling()
+	#if not OS.has_feature("web"): # BUG: WORKAROUND: Running in a web browser (or at least Safari) doesn't handle window size restoration properly.
+		## Do not set the window size if we're starting in fullscreen
+		## TBD: How to handle going to windowed mode for the first time? Should the first size be read from Settings?
+		#var windowMode: int = DisplayServer.window_get_mode()
+		#if windowMode != DisplayServer.WINDOW_MODE_FULLSCREEN and windowMode != DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+			#GlobalUI.setWindowSize(Settings.windowWidth, Settings.windowHeight, false) # !showLabel to avoid clutter
+#
+		#setRetinaScaling()
 
 	musicLabelContainer.position.y = musicLabelContainer.get_viewport_rect().end.y
 	Tools.connectSignal(GlobalSonic.musicPlayerDidPlay, self.onGlobalSonic_musicPlayerDidPlay)

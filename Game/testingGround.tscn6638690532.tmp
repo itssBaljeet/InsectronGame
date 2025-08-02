@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://dun38r0k022n1"]
+
+[ext_resource type="PackedScene" uid="uid://bq82t3qc1mxmb" path="res://Game/BattleBoard.tscn" id="2_5jdkk"]
+[ext_resource type="Texture2D" uid="uid://bmrt8o6uvx0tq" path="res://Assets/Themes/symmetrical_garden_02_4k.exr" id="2_5r8om"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_j5y2j"]
+panorama = ExtResource("2_5r8om")
+
+[sub_resource type="Sky" id="Sky_0qr6p"]
+sky_material = SubResource("PanoramaSkyMaterial_j5y2j")
+
+[sub_resource type="Environment" id="Environment_315n7"]
+background_mode = 2
+sky = SubResource("Sky_0qr6p")
+ambient_light_source = 3
+
+[node name="TestingGround" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 2.3, 3.4124348, 7.198784)
+top_level = true
+current = true
+
+[node name="BattleBoardEntity3D" parent="." instance=ExtResource("2_5jdkk")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_315n7")

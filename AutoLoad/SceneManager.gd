@@ -77,7 +77,7 @@ func transitionToScene(nextScene: PackedScene, pauseSceneTree: bool = true, anim
 
 	# Pause
 	sceneTree.paused = pauseSceneTree
-	if animate: await GlobalUI.fadeInTintRect().finished # Fade the overlay in, fade the game out.
+	#if animate: await GlobalUI.fadeInTintRect().finished # Fade the overlay in, fade the game out.
 
 	# Transition
 	sceneTree.change_scene_to_packed(nextScene)
@@ -86,7 +86,7 @@ func transitionToScene(nextScene: PackedScene, pauseSceneTree: bool = true, anim
 	# Unpause
 	await sceneTree.create_timer(0.1).timeout # A little breath before showing the next scene
 	sceneTree.paused = false # Unpause to begin the gameplay motion before the overlay fades-out for a smoother feel, instead of an abrupt movement.
-	if animate: await GlobalUI.fadeOutTintRect().finished # Fade the overlay out, fade the game in.
+	#if animate: await GlobalUI.fadeOutTintRect().finished # Fade the overlay out, fade the game in.
 
 	ongoingTransitionScene = null # Clear the transition tracker
 	if Debug.shouldPrintDebugLogs: Debug.printDebug(str("SceneTree.current_scene: ", sceneTree.current_scene), logName)
@@ -197,7 +197,7 @@ func setPause(shouldPause: bool) -> bool:
 	willSetPause.emit(shouldPause)
 	sceneTree.paused = shouldPause
 
-	GlobalUI.showPauseVisuals(sceneTree.paused)
+	#GlobalUI.showPauseVisuals(sceneTree.paused)
 	# NOTE: Do not emit didSetPause here; let _notification() handle pause/unpause from ANY source.
 	return sceneTree.paused
 

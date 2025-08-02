@@ -1,0 +1,76 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpxceafnntnlu"]
+
+[ext_resource type="Script" uid="uid://djd0w27k8deui" path="res://Components/Visual/BattleBoardUIComponent.gd" id="1_osjf2"]
+
+[node name="BattleBoardUIComponent" type="CanvasLayer"]
+script = ExtResource("1_osjf2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InteractionMenu" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(200, 300)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="AttackButton" type="Button" parent="VBoxContainer/HBoxContainer2/InteractionMenu"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+text = "Attack"
+
+[node name="MoveButton" type="Button" parent="VBoxContainer/HBoxContainer2/InteractionMenu"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+text = "Move"
+
+[node name="WaitButton" type="Button" parent="VBoxContainer/HBoxContainer2/InteractionMenu"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Wait"
+
+[node name="ItemButton" type="Button" parent="VBoxContainer/HBoxContainer2/InteractionMenu"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+text = "Item"
+
+[node name="EndTurnButton" type="Button" parent="VBoxContainer/HBoxContainer2/InteractionMenu"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "End Turn"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StartButton" type="Button" parent="VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+text = "Start Turn"
+
+[connection signal="button_up" from="VBoxContainer/HBoxContainer3/StartButton" to="." method="onStartButton_buttonUp"]

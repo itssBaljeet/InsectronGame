@@ -4,3 +4,4 @@
 
 [node name="FactionComponent" type="Node" groups=["components"]]
 script = ExtResource("1_qwcyo")
+factions = 2

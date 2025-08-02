@@ -1,3 +1,4 @@
+@tool
 class_name BattleBoardPositionComponent
 extends Component
 
@@ -11,7 +12,7 @@ extends Component
 
 @export_group("Initial Position")
 
-@export var setInitialCoordinatesFromEntityPosition: bool = false
+@export var setInitialCoordinatesFromEntityPosition: bool = true
 @export var initialDestinationCoordinates: Vector3i
 
 ## If `false`, the entity will be instantly positioned at the initial destination, otherwise it may be animated from where it was before this component is executed if `shouldMoveInstantly` is false.
@@ -43,6 +44,8 @@ extends Component
 ## A [Sprite3D] or any other [Node3D] to temporarily display at the destination tile while moving, such as a square cursor etc.
 ## NOTE: An example cursor is provided in the component scene but not enabled by default. Enable `Editable Children` to use it.
 @export var visualIndicator: Node3D
+
+@export var mesh_height  : float = 0.55
 
 #endregion
 
@@ -135,7 +138,7 @@ func validateCoordinates(coordinates: Vector3i) -> bool:
 	var isValidBounds: bool = coordinates in battleBoard.cells
 	var data: BattleBoardCellData = battleBoard.vBoardState.get(coordinates)
 	
-	var isTileVacant:  bool = data.isOccupied if data != null else true
+	var isTileVacant:  bool = !data.isOccupied or !shouldOccupyCell if data != null else true
 
 	if debugMode: printDebug(str("@", coordinates, ": checkTileMapCoordinates(): ", isValidBounds, ", checkCellVacancy(): ", isTileVacant))
 
@@ -179,9 +182,9 @@ func applyInitialCoordinates() -> void:
 ## and set the cell's occupancy.
 func updateCurrentTileCoordinates() -> Vector3i:
 	self.currentCellCoordinates = battleBoard.local_to_map(battleBoard.to_local(parentEntity.global_position))
-	var data: BattleBoardCellData = battleBoard.vBoardState.get(self.currentCellCoordinates)
-	if shouldOccupyCell and data != null:
-			data.isOccupied = true
+	if shouldOccupyCell:
+		battleBoard.setCellOccupancy(self.currentCellCoordinates, shouldOccupyCell, self.parentEntity)
+	
 	return currentCellCoordinates
 
 
@@ -192,7 +195,7 @@ func updateCurrentTileCoordinates() -> Vector3i:
 func snapEntityPositionToTile(tileCoordinates: Vector3i = self.currentCellCoordinates) -> void:
 	if not isEnabled: return
 	
-	var tileGlobalPos: Vector3 = battleBoard.getGlobalCellPosition(tileCoordinates)
+	var tileGlobalPos: Vector3 = adjustToTile(battleBoard.getGlobalCellPosition(tileCoordinates))
 	
 	if parentEntity.global_position != tileGlobalPos:
 		parentEntity.global_position = tileGlobalPos
@@ -237,7 +240,7 @@ func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i) -> b
 
 	# Vacate the current (to-be previous) tile
 	# NOTE: Always clear the previous cell even if not `shouldOccupyCell`, in case it was toggled true→false at runtime.
-	battleBoard.setCellOccupancy(currentCellCoordinates, false, null)
+	if shouldOccupyCell: battleBoard.setCellOccupancy(currentCellCoordinates, false, null)
 
 	# TODO: TBD: Occupy each cell along the way too each frame?
 	if shouldOccupyCell: battleBoard.setCellOccupancy(newDestinationTileCoordinates, true, parentEntity)
@@ -302,12 +305,11 @@ func moveTowardsDestinationCell(delta: float) -> void:
 func adjustToTile(position: Vector3) -> Vector3:
 	position.x += battleBoard.tile_x/2
 	position.z += battleBoard.tile_z/2
-			
-	var mesh_h  : float = 0.6          # CSGBox3D has a size Vector3
+
 	var cell_h : float = battleBoard.cell_size.y
 	var tile_h : float = battleBoard.tile_y
 
-	position.y += (tile_h - cell_h * 0.5) + mesh_h
+	position.y += (tile_h - cell_h * 0.5) + mesh_height
 	
 	return position
 	
@@ -320,6 +322,10 @@ func checkForArrival() -> bool:
 		didArriveAtNewCell.emit(currentCellCoordinates)
 		previousInputVector = inputVector
 		inputVector = Vector3i.ZERO
+		
+		print("Occupied cells")
+		battleBoard.printCellStates()
+		
 		return true
 	else:
 		self.isMovingToNewCell = true
@@ -331,6 +337,31 @@ func updateIndicator() -> void:
 	visualIndicator.global_position = battleBoard.getGlobalCellPosition(self.destinationCellCoordinates)
 	visualIndicator.visible = isMovingToNewCell
 	visualIndicator.position = Vector3.ZERO # TBD: Necessary?
-	visualIndicator.visible = false
+	visualIndicator.visible = false or true
+
+#endregion
+
+
+#region Debugging
+
+func showDebugInfo() -> void:
+	if not debugMode: return
+	Debug.addComponentWatchList(self, {
+		entityPosition		= parentEntity.global_position,
+		currentCell			= currentCellCoordinates,
+		input				= inputVector,
+		previousInput		= previousInputVector,
+		isMovingToNewCell	= isMovingToNewCell,
+		destinationCell		= destinationCellCoordinates,
+		destinationPosition	= battleBoard.getGlobalCellPosition(destinationCellCoordinates),
+		})
+
+
+func onWillStartMovingToNewCell(newDestination: Vector2i) -> void:
+	if debugMode: printDebug(str("willStartMovingToNewCell(): ", newDestination))
+
+
+func onDidArriveAtNewCell(newDestination: Vector2i) -> void:
+	if debugMode: printDebug(str("onDidArriveAtNewCell(): ", newDestination))
 
 #endregion

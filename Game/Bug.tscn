@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://bych4wwhr30uk"]
+
+[ext_resource type="PackedScene" uid="uid://bnxcop8tt1vk" path="res://addons/BUG.blend" id="1_q3bie"]
+
+[node name="BUG" instance=ExtResource("1_q3bie")]

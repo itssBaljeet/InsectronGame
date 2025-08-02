@@ -22,7 +22,7 @@ extends TileMapLayer
 
 func _ready() -> void:
 	if not cellData and shouldCreateCellData:
-		if debugMode: Debug.printDebug("No TileMapCellData, creating new.", self)
+		#if debugMode: Debug.printDebug("No TileMapCellData, creating new.", self)
 		self.cellData = TileMapCellData.new()
 	
 	if cellData: # A separate `if` in case a `cellData` was created by the previous `if`
@@ -33,14 +33,14 @@ func _ready() -> void:
 
 func setCellData(coordinates: Vector2i, key: StringName, value: Variant) -> void:
 	if cellData: cellData.setCellData(coordinates, key, value)
-	else: Debug.printWarning("setCellData(): No TileMapCellData!", self)
+	#else: Debug.printWarning("setCellData(): No TileMapCellData!", self)
 
 
 func getCellData(coordinates: Vector2i, key: StringName) -> Variant:
 	if cellData: 
 		return cellData.getCellData(coordinates, key)
 	else: 
-		Debug.printWarning("getCellData(): No TileMapCellData!", self)
+		#Debug.printWarning("getCellData(): No TileMapCellData!", self)
 		return null
 
 #endregion
