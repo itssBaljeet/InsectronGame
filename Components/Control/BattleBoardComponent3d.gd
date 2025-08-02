@@ -40,6 +40,7 @@ var mesh_lib: MeshLibrary
 static var mesh_count: int = 0
 var vBoardState: Dictionary[Vector3i, BattleBoardCellData]
 var cells: Array[Vector3i]
+var highlights: Array[Vector3i]
 
 #endregion
 
@@ -129,9 +130,55 @@ func getOccupant(pos: Vector3i) -> Entity:
 func getInsectorOccupant(pos: Vector3i) -> InsectronEntity3D:
 	var data: BattleBoardCellData = self.vBoardState.get(pos)
 	return data.occupant if data != null and data.occupant is InsectronEntity3D else null
-	
+
+func highlightMoveRange(unit: InsectronEntity3D) -> void:
+	for cell in unit.move_range:
+		var new_pos: Vector3i = unit.boardPositionComponent.currentCellCoordinates + cell
+		
+		if validateCoordinates(new_pos):
+			print("Changing tiles")
+			$".".set_cell_item(new_pos, 2)
+			
+	# Tile 2 is the Highlighted tile in the mesh library
+	highlights = $".".get_used_cells_by_item(2)
+
+func clearHighlights() -> void:
+	for tile in highlights:
+		var tile_parity: int = 0
+		if (tile.x + tile.z) % 2 == 0:
+			tile_parity = 1
+		$".".set_cell_item(tile, tile_parity) 
 #endregion
 
+
+#region Validation
+
+## Ensures that the specified coordinates are within the [TileMapLayer]'s bounds
+## and also calls [method checkCellVacancy].
+## May be overridden by subclasses to perform additional checks.
+## NOTE: Subclasses MUST call super to perform common validation.
+func validateCoordinates(coordinates: Vector3i) -> bool:
+	var isValidBounds: bool = coordinates in cells
+	var data: BattleBoardCellData = vBoardState.get(coordinates)
+	
+	var isTileVacant:  bool = !data.isOccupied if data != null else true
+
+	if debugMode: printDebug(str("@", coordinates, ": checkTileMapCoordinates(): ", isValidBounds, ", checkCellVacancy(): ", isTileVacant))
+
+	return isValidBounds and isTileVacant
+
+
+## Checks if the tile may be moved into.
+## May be overridden by subclasses to perform different checks,
+## such as testing custom data on a tile, e.g. [constant Global.TileMapCustomData.isWalkable],
+## and custom data on a cell, e.g. [constant Global.TileMapCustomData.isOccupied],
+## or performing a more rigorous physics collision detection.
+func checkCellVacancy(coordinates: Vector3i) -> bool:
+	var data: BattleBoardCellData = vBoardState.get(coordinates)
+	# If no data present, that means traversable
+	return data.isTraversable if data != null else true
+
+#endregion
 
 #region Data Interface
 

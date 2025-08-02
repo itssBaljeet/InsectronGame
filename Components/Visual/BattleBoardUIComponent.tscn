@@ -72,5 +72,3 @@ layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
 text = "Start Turn"
-
-[connection signal="button_up" from="VBoxContainer/HBoxContainer3/StartButton" to="." method="onStartButton_buttonUp"]

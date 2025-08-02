@@ -22,6 +22,11 @@ var battleBoard: BattleBoardComponent3D:
 	get:
 		if battleBoard: return battleBoard
 		return self.coComponents.get(&"BattleBoardComponent3D")
+		
+var battleBoardSelector: BattleBoardSelectorComponent3D:
+	get:
+		if battleBoardSelector: return battleBoardSelector
+		return self.parentEntity.findFirstChildOfType(BattleBoardSelectorEntity).components.get(&"BattleBoardSelectorComponent3D")
 #endregion
 
 #region State
@@ -34,6 +39,9 @@ func openUnitMenu(unit: InsectronEntity3D) -> void:
 	activeUnit = unit
 	state = UIState.UnitMenu
 	# Populate menu options based on unit’s state
+	battleBoardSelector.disabled = true
+	battleBoardSelector.visible = false
+	
 	menuPanel.show()  # Assume menuPanel is a Control node with option buttons
 	moveButton.visible = !unit.haveMoved   # disable Move if already moved 
 	attackButton.visible = !unit.havePerformedAction  # disable Attack if already acted
@@ -48,28 +56,28 @@ func onMoveButtonPressed() -> void:
 	menuPanel.hide()
 	state = UIState.MoveSelect
 	# Highlight reachable tiles (pseudo-code, actual implementation may vary)
-	battleBoard.highlightMoves(activeUnit)
+	battleBoard.highlightMoveRange(activeUnit)
+	battleBoardSelector.disabled = false
+	battleBoardSelector.visible = true
 	# Optionally position a move-range indicator or allow free cursor movement within range
 
 func confirmMoveTarget(dest: Vector3i) -> void:
 	if state != UIState.MoveSelect or activeUnit == null:
 		return  # not actually selecting a move
 	# Validate the chosen dest is within range and not occupied
-	if not battleBoard.isCellMovable(dest, activeUnit):
+	if not battleBoard.checkCellVacancy(dest) and not battleBoard.validateCoordinates(dest):
 		return  # ignore invalid target (or sound feedback)
 	# Command the unit to move
-	var posComp: BattleBoardPositionComponent = activeUnit.components.get(&"BattleBoardPositionComponent")
-	posComp.setDestinationCellCoordinates(dest)
+	activeUnit.boardPositionComponent.setDestinationCellCoordinates(dest)
 	activeUnit.haveMoved = true
 	# Start turn processing for movement – ensure only this unit acts
-	TurnBasedCoordinator.setActiveUnit(activeUnit)  # hypothetical: enable only this unit
-	TurnBasedCoordinator.startTurnProcess()
-	await TurnBasedCoordinator.turnCompleted  # wait until move (one turn cycle) finishes
+	#TurnBasedCoordinator.startTurnProcess()
+	#await TurnBasedCoordinator.turnCompleted  # wait until move (one turn cycle) finishes
 	# Movement done, now bring back action menu for the unit
 	battleBoard.clearHighlights()
 	state = UIState.UnitMenu
 	menuPanel.show()
-	moveButton.disabled = true  # already moved
+	moveButton.visible = false  # already moved
 	# Attack/Item still enabled if havePerformedAction is false
 
 func onAttackButtonPressed() -> void:
@@ -117,6 +125,8 @@ func closeUnitMenu(skipUnitFinalize: bool = false) -> void:
 		# e.g., activeUnit.emit_signal("unit_turn_done")
 	activeUnit = null
 	state = UIState.Idle
+	battleBoardSelector.disabled = false
+	battleBoardSelector.visible = true
 	# Now the player can select another unit or end turn.
 
 func endPlayerTurn() -> void:
@@ -129,8 +139,18 @@ func endPlayerTurn() -> void:
 	TurnBasedCoordinator.endTeamTurn()
 #endregion
 
-#func _ready() -> void:
-	#startButton.button_up.connect(onStartButton_buttonUp)
+func _ready() -> void:
+	startButton.button_up.connect(onStartButton_buttonUp)
+	moveButton.button_up.connect(onMoveButtonPressed)
 
 func onStartButton_buttonUp() -> void:
 	TurnBasedCoordinator.startTurnProcess()
+	
+	
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("menu_close"):
+		print("State: ", state)
+		if state == UIState.UnitMenu:
+			closeUnitMenu(true)
+		#elif state == UIState.MoveSelect:
+			#

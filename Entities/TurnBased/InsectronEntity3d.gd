@@ -9,12 +9,21 @@ var factionComponent: FactionComponent:
 		if factionComponent: return factionComponent
 		return self.components.get(&"FactionComponent")
 
+var boardPositionComponent: BattleBoardPositionComponent:
+	get:
+		if boardPositionComponent: return boardPositionComponent
+		return self.components.get(&"BattleBoardPositionComponent")
+
 #endregion
 
 #region State
-
 var haveMoved: bool
 var havePerformedAction: bool
+#endregion
+
+#region Parameters
+
+@export var move_range: Array[Vector3i]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

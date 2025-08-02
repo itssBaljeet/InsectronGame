@@ -1,38 +1,30 @@
-@tool
 extends Node3D
 
-#region Dependencies
+@onready var _animation_tree : AnimationTree = $AnimationTree
+@onready var _main_state_machine : AnimationNodeStateMachinePlayback = _animation_tree.get("parameters/StateMachine/playback")
+@onready var _secondary_action_timer : Timer = $SecondaryActionTimer
 
-@export var Board: BattleBoardEntity3D
-var BattleBoardComp: BattleBoardComponent3D
-@export var iterate: bool = false
-		
-#endregion
+func _on_secondary_action_timer_timeout():
+	if _main_state_machine.get_current_node() != "Idle": return
+	_main_state_machine.travel("Shake")
+	_secondary_action_timer.start(randf_range(3.0, 8.0))
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	if !BattleBoardComp:
-		BattleBoardComp = Board.components.BattleBoardComponent3D
-	
-	if iterate:
-		iterate = false
-		for cell: Vector3i in BattleBoardComp.get_used_cells():
-			print("Iterating")
-			$"../CSGBox3D/Timer".start()
-			
-			await $"../CSGBox3D/Timer".timeout
-			var new_pos: Vector3 = cell
-			new_pos.x += BattleBoardComp.tile_x/2
-			new_pos.z += BattleBoardComp.tile_z/2
-			
-			var mesh_h  : float = 0.6          # CSGBox3D has a size Vector3
-			var cell_h : float = BattleBoardComp.cell_size.y
-			var tile_h : float = BattleBoardComp.tile_y
-			
+## Sets the model to a neutral, action-free state.
+func idle():
+	_main_state_machine.travel("Idle")
+	_secondary_action_timer.start()
 
-			new_pos.y += (tile_h - cell_h * 0.5) + mesh_h
-			#self.position = lerp(self.position, Vector3(new_pos), 1)
-			self.position = new_pos
+## Sets the model to a walking animation or forward movement.
+func walk():
+	_main_state_machine.travel("Walk")
 
-func onTimer_timeout() -> void:
-	pass # Replace with function body.
+## Plays a one-shot attack animation.
+## This animation does not play in parallel with other states.
+func attack():
+	_main_state_machine.travel("Attack")
+
+## Plays a one-shot power-off animation.
+## This animation does not play in parallel with other states.
+func power_off():
+	_main_state_machine.travel("PowerOff")
+	_secondary_action_timer.stop()
