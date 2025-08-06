@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bq82t3qc1mxmb"]
+[gd_scene load_steps=27 format=3 uid="uid://bq82t3qc1mxmb"]
 
 [ext_resource type="Script" uid="uid://bryda6lc1suk7" path="res://Entities/Objects/BattleBoardEntity3d.gd" id="1_pvu71"]
 [ext_resource type="PackedScene" uid="uid://ds773iggimiek" path="res://Components/Control/BattleBoardComponent3D.tscn" id="2_s4deh"]
@@ -6,15 +6,19 @@
 [ext_resource type="Material" uid="uid://c4dgtp7yfi012" path="res://Game/odd_tile.tres" id="4_eeqpy"]
 [ext_resource type="PackedScene" uid="uid://bpjqcswabdtyb" path="res://addons/gdquest_beetle_bot/beetlebot_skin.tscn" id="7_53p5e"]
 [ext_resource type="PackedScene" uid="uid://b1c4gfp8xpktc" path="res://Components/Control/BattleBoardSelectorComponent.tscn" id="7_bckac"]
+[ext_resource type="PackedScene" uid="uid://b3fo2mu81tcgi" path="res://addons/BUG(1).glb" id="8_q8n1u"]
 [ext_resource type="PackedScene" uid="uid://ob3s2kpnk833" path="res://Components/Movement/BattleBoardPositionComponent.tscn" id="8_ucsr6"]
 [ext_resource type="PackedScene" uid="uid://bsnrllt3wjgkg" path="res://Entities/TurnBased/InsectronEntity3D.tscn" id="9_js4j1"]
-[ext_resource type="PackedScene" uid="uid://bych4wwhr30uk" path="res://Game/Bug.tscn" id="10_fya6h"]
+[ext_resource type="PackedScene" uid="uid://tyjgdu65yj3m" path="res://addons/gdquest_round_bat/round_bat_skin.tscn" id="10_mbctc"]
 [ext_resource type="PackedScene" uid="uid://5tvqunkoa4l7" path="res://Components/Combat/FactionComponent.tscn" id="11_7xmvv"]
+[ext_resource type="PackedScene" uid="uid://ctig1j7pw0kwy" path="res://addons/bazoo(1).glb" id="11_tglbh"]
 [ext_resource type="Material" uid="uid://dqn28625vamxe" path="res://Game/highlight.tres" id="12_vfhsu"]
 [ext_resource type="PackedScene" uid="uid://bpxceafnntnlu" path="res://Components/Visual/BattleBoardUIComponent.tscn" id="12_yubh6"]
 [ext_resource type="PackedScene" uid="uid://7jcht5vta2uh" path="res://Entities/TurnBased/BattleBoardSelectorEntity.tscn" id="14_53p5e"]
 [ext_resource type="PackedScene" uid="uid://dc30psrpymtkr" path="res://Components/TurnBased/TurnBasedStateUIComponent.tscn" id="14_vfhsu"]
 [ext_resource type="PackedScene" uid="uid://482rxnrhe64v" path="res://addons/gdquest_bee_bot/bee_bot_skin.tscn" id="15_53p5e"]
+[ext_resource type="PackedScene" uid="uid://s0og8g1dnuh5" path="res://Components/Visual/BattleBoardCameraComponent.tscn" id="18_tglbh"]
+[ext_resource type="PackedScene" uid="uid://b4j7s4cobsej3" path="res://addons/herculese(1).glb" id="19_jkgq8"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_53p5e"]
 material = ExtResource("3_s4deh")
@@ -76,12 +80,14 @@ bob_amplitude = 0.1
 bob_mid_height = 1.88
 
 [node name="BattleBoardPositionComponent" parent="BattleBoardSelectorEntity" instance=ExtResource("8_ucsr6")]
+alwaysVisibleSquareOutline = true
 initialDestinationCoordinates = Vector3i(2, 0, 3)
 speed = 10.0
 shouldOccupyCell = false
 
 [node name="InsectronEntity3d" parent="." instance=ExtResource("9_js4j1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.15, 1.5)
+move_range = Array[Vector3i]([Vector3i(0, 0, 1)])
 isLoggingEnabled = false
 debugMode = true
 
@@ -91,26 +97,27 @@ speed = 10.0
 debugMode = true
 
 [node name="FactionComponent" parent="InsectronEntity3d" instance=ExtResource("11_7xmvv")]
-factions = 8
+factions = 32
 
 [node name="BeetlebotSkin" parent="InsectronEntity3d" instance=ExtResource("7_53p5e")]
 
 [node name="InsectronEntity3d2" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.15, 5.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.1, 5.5)
 move_range = Array[Vector3i]([Vector3i(1, 0, 0), Vector3i(1, 0, 1), Vector3i(1, 0, -1), Vector3i(0, 0, 1), Vector3i(0, 0, -1), Vector3i(-1, 0, 0), Vector3i(-1, 0, 1), Vector3i(-1, 0, -1)])
 isLoggingEnabled = false
 debugMode = true
-
-[node name="BUG" parent="InsectronEntity3d2" instance=ExtResource("10_fya6h")]
-transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 0, -0.15, 0)
 
 [node name="BattleBoardPositionComponent" parent="InsectronEntity3d2" instance=ExtResource("8_ucsr6")]
 initialDestinationCoordinates = Vector3i(2, 0, 5)
 shouldSnapToInitialDestination = false
 speed = 10.0
+mesh_height = 0.5
 debugMode = true
 
 [node name="FactionComponent" parent="InsectronEntity3d2" instance=ExtResource("11_7xmvv")]
+
+[node name="BUG(1)" parent="InsectronEntity3d2" instance=ExtResource("8_q8n1u")]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 0, 0, 0)
 
 [node name="InsectronEntity3d3" parent="." instance=ExtResource("9_js4j1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.15, 5.5)
@@ -120,9 +127,37 @@ move_range = Array[Vector3i]([Vector3i(1, 0, 1), Vector3i(2, 0, 2), Vector3i(3, 
 transform = Transform3D(-0.65, 0, 5.6824803e-08, 0, 0.65, 0, -5.6824803e-08, 0, -0.65, 0, 0.39999995, 0)
 
 [node name="BattleBoardPositionComponent" parent="InsectronEntity3d3" instance=ExtResource("8_ucsr6")]
+initialDestinationCoordinates = Vector3i(1, 0, 5)
 speed = 10.0
 
 [node name="FactionComponent" parent="InsectronEntity3d3" instance=ExtResource("11_7xmvv")]
+
+[node name="InsectronEntity3d4" parent="." instance=ExtResource("9_js4j1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.15, 0.5)
+move_range = Array[Vector3i]([Vector3i(1, 0, 0), Vector3i(1, 0, 1), Vector3i(1, 0, -1), Vector3i(0, 0, 1), Vector3i(0, 0, -1), Vector3i(-1, 0, 0), Vector3i(-1, 0, 1), Vector3i(-1, 0, -1)])
+
+[node name="FactionComponent" parent="InsectronEntity3d4" instance=ExtResource("11_7xmvv")]
+factions = 32
+
+[node name="BattleBoardPositionComponent" parent="InsectronEntity3d4" instance=ExtResource("8_ucsr6")]
+speed = 10.0
+
+[node name="RoundBatSkin" parent="InsectronEntity3d4" instance=ExtResource("10_mbctc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49999997, 0)
+
+[node name="InsectronEntity3d5" parent="." instance=ExtResource("9_js4j1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.1, 5.5)
+move_range = Array[Vector3i]([Vector3i(-1, 0, 0), Vector3i(1, 0, 0), Vector3i(0, 0, 1), Vector3i(1, 0, 1), Vector3i(-1, 0, 1), Vector3i(1, 0, -1), Vector3i(0, 0, -1), Vector3i(-1, 0, -1)])
+
+[node name="BattleBoardPositionComponent" parent="InsectronEntity3d5" instance=ExtResource("8_ucsr6")]
+initialDestinationCoordinates = Vector3i(3, 0, 5)
+speed = 10.0
+mesh_height = 0.5
+
+[node name="FactionComponent" parent="InsectronEntity3d5" instance=ExtResource("11_7xmvv")]
+
+[node name="bazoo(1)" parent="InsectronEntity3d5" instance=ExtResource("11_tglbh")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
 
 [node name="BattleBoardComponent3D" parent="." instance=ExtResource("2_s4deh")]
 mesh_library = SubResource("MeshLibrary_u1q8a")
@@ -130,9 +165,37 @@ highlight_tile_material = ExtResource("12_vfhsu")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="BattleBoardUIComponent" parent="." instance=ExtResource("12_yubh6")]
+debugMode = true
 
 [node name="TurnBasedStateUIComponent" parent="." instance=ExtResource("14_vfhsu")]
 texture_filter = 1
 
 [node name="FactionComponent" parent="." instance=ExtResource("11_7xmvv")]
 factions = 1
+
+[node name="BattleBoardCameraComponent" parent="." instance=ExtResource("18_tglbh")]
+transform = Transform3D(0.9999999, 0, 0, 0, 0.99999994, 0, 0, 0, 0.9999999, 2.5, 0, 3.5)
+camera_z_offset = 6.0
+camera_height = 4.0
+camera_yaw_deg = 0.0
+camera_pitch_deg = -20.0
+min_pitch_deg = -30.0
+max_pitch_deg = 15.0
+min_zoom_distance = 3.0
+max_zoom_distance = 11.0
+
+[node name="InsectronEntity3d6" parent="." instance=ExtResource("9_js4j1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.1, 1.5)
+move_range = Array[Vector3i]([Vector3i(0, 0, 1)])
+
+[node name="BattleBoardPositionComponent" parent="InsectronEntity3d6" instance=ExtResource("8_ucsr6")]
+setInitialCoordinatesFromEntityPosition = false
+initialDestinationCoordinates = Vector3i(4, 0, 1)
+speed = 10.0
+mesh_height = 0.5
+
+[node name="FactionComponent" parent="InsectronEntity3d6" instance=ExtResource("11_7xmvv")]
+factions = 32
+
+[node name="herculese(1)" parent="InsectronEntity3d6" instance=ExtResource("19_jkgq8")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0.100000024)

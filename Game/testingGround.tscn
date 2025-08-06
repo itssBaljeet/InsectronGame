@@ -16,11 +16,6 @@ ambient_light_source = 3
 
 [node name="TestingGround" type="Node3D"]
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 2.3, 3.4124348, 9.198784)
-top_level = true
-current = true
-
 [node name="BattleBoardEntity3D" parent="." instance=ExtResource("2_5jdkk")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

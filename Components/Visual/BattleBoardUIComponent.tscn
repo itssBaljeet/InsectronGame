@@ -45,6 +45,7 @@ text = "Move"
 
 [node name="WaitButton" type="Button" parent="VBoxContainer/HBoxContainer2/InteractionMenu"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 text = "Wait"

@@ -3,6 +3,7 @@ class_name BattleBoardPositionComponent
 extends Component
 
 #region Parameters
+@export var alwaysVisibleSquareOutline: bool = false
 
 @export var isEnabled: bool = true:
 	set(newValue):
@@ -71,6 +72,11 @@ var currentCellCoordinates: Vector3i:
 	set(newValue):
 		if newValue != currentCellCoordinates:
 			currentCellCoordinates = newValue
+
+var previousCellCoordinates: Vector3i:
+	set(newValue):
+		if newValue != previousCellCoordinates:
+			previousCellCoordinates = newValue
 
 var destinationCellCoordinates: Vector3i:
 	set(newValue):
@@ -233,7 +239,8 @@ func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i) -> b
 		return false
 
 	# Move Your Body ♪
-
+	
+	previousCellCoordinates = currentCellCoordinates
 	willStartMovingToNewCell.emit(newDestinationTileCoordinates)
 	self.destinationCellCoordinates = newDestinationTileCoordinates
 	self.isMovingToNewCell = true
@@ -323,8 +330,8 @@ func checkForArrival() -> bool:
 		previousInputVector = inputVector
 		inputVector = Vector3i.ZERO
 		
-		print("Occupied cells")
-		battleBoard.printCellStates()
+		#print("Occupied cells")
+		#battleBoard.printCellStates()
 		
 		return true
 	else:
@@ -335,9 +342,9 @@ func checkForArrival() -> bool:
 func updateIndicator() -> void:
 	if not visualIndicator: return
 	visualIndicator.global_position = battleBoard.getGlobalCellPosition(self.destinationCellCoordinates)
-	visualIndicator.visible = isMovingToNewCell
+	visualIndicator.visible = isMovingToNewCell or alwaysVisibleSquareOutline
 	visualIndicator.position = Vector3.ZERO # TBD: Necessary?
-	visualIndicator.visible = false or true
+	#visualIndicator.visible = false
 
 #endregion
 

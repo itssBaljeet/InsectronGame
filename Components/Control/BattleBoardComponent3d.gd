@@ -136,7 +136,6 @@ func highlightMoveRange(unit: InsectronEntity3D) -> void:
 		var new_pos: Vector3i = unit.boardPositionComponent.currentCellCoordinates + cell
 		
 		if validateCoordinates(new_pos):
-			print("Changing tiles")
 			$".".set_cell_item(new_pos, 2)
 			
 	# Tile 2 is the Highlighted tile in the mesh library
@@ -177,32 +176,5 @@ func checkCellVacancy(coordinates: Vector3i) -> bool:
 	var data: BattleBoardCellData = vBoardState.get(coordinates)
 	# If no data present, that means traversable
 	return data.isTraversable if data != null else true
-
-#endregion
-
-#region Data Interface
-
-#func setCellData(coordinates: Vector3i, key: StringName, value: Variant) -> void:
-	#if debugMode: Debug.printDebug(str("setCellData() @", coordinates, " ", key, " = ", value), self)
-#
-	## NOTE: Do NOT assign an entire dictionary here or that will override all other keys!
-#
-	## Get the data dictionary for the cell, or add an empty dictionary.
-	#var cellData: Variant = vBoardState.get_or_add(coordinates, value) # Cannot type this as a `Dictionary` if the coordinate key is missing :(
-#
-	#cellData[key] = value
-#
-#
-#func getCellData(coordinates: Vector3i, key: StringName) -> Variant:
-	#var cellData: Variant = vBoardState.get(coordinates) # Cannot type this as a `Dictionary` if the coordinate key is missing :(
-	#var value: Variant
-#
-	#if cellData is Dictionary:
-		#value = (cellData as Dictionary).get(key)
-	#else:
-		#value = null
-#
-	#if debugMode: Debug.printDebug(str("getCellData() @", coordinates, " ", key, ": ", value), self)
-	#return value
 
 #endregion

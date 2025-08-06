@@ -73,7 +73,7 @@ enum TurnBasedState { # TBD: Should this be renamed to "Phase"?
 	set(newValue):
 		match newValue:
 			FactionComponent.Factions.players: print("Player 1's Turn")
-			FactionComponent.Factions.enemies: print("Player 2's Turn")
+			FactionComponent.Factions.ai: print("Player 2's Turn")
 		currentTeam = newValue
 
 ## The number of the current ONGOING turn. The first turn is 1.
@@ -149,7 +149,7 @@ var battleBoardSelector: BattleBoardSelectorComponent3D:
 	get:
 		playerInsectors.clear()
 		for insector in turnBasedEntities:
-			if insector is InsectronEntity3D and insector.factionComponent.factions == FactionComponent.Factions.players:
+			if insector is InsectronEntity3D and insector.factionComponent.factions == pow(2, FactionComponent.Factions.players-1):
 				playerInsectors.append(insector)
 		return playerInsectors
 
@@ -157,13 +157,16 @@ var battleBoardSelector: BattleBoardSelectorComponent3D:
 	get:
 		enemyInsectors.clear()
 		for insector in turnBasedEntities:
-			if insector is InsectronEntity3D and insector.factionComponent.factions == FactionComponent.Factions.enemies:
+			if insector is InsectronEntity3D and insector.factionComponent.factions == pow(2, FactionComponent.Factions.ai-1):
 				enemyInsectors.append(insector)
 		return enemyInsectors
 
 @export_storage var currentTeamParty: Array[InsectronEntity3D]:
 	get:
 		return playerInsectors if currentTeam == FactionComponent.Factions.players else enemyInsectors
+
+# Track an active unit for single-unit turn processing
+var activeUnit: TurnBasedEntity = null
 
 ## This flag helps decide [member isReadyToStartTurn], because some the Coordiantor may be `await`ing on an Entities while still in the `turnBegin` state.
 @export_storage var isProcessingEntities: bool
@@ -219,6 +222,7 @@ signal didAddEntity(entity: TurnBasedEntity) ## Emitted by [TurnBasedEntity]
 @warning_ignore("unused_signal")
 signal didRemoveEntity(entity: TurnBasedEntity) ## Emitted by [TurnBasedEntity]
 
+signal willBeginPlayerTurn
 signal willBeginTurn
 signal didBeginTurn
 
@@ -233,6 +237,8 @@ signal didProcessEntity(entity: TurnBasedEntity) ## NOTE: Emitted BEFORE the [me
 
 signal willStartDelay(timer: Timer) ## Emitted when one of the timers between each state or entity is about to start.
 
+
+signal turnCompleted  ## Emitted when a single unit's action/turn sequence completes (mid-turn).
 #endregion
 
 func _enter_tree() -> void:
@@ -258,21 +264,45 @@ func getStateLogText(state: TurnBasedState = self.currentTurnState) -> String:
 
 #region Coordinator External Interface
 
-## The beginning of processing 1 full turn and its 3 states.
-## Called by the game-specific control system, such as player movement input or a "Next Turn" button.
+## Start processing a turn. If a turn is already in progress and an active unit is set, process that unit's action.
 func startTurnProcess() -> void:
-	if debugMode: printLog(str("[color=white][b]startTurnProcess() currentTurn: ", currentTurn))
-
-	# Ensure that this function should only be called at start of a turn, during the `Begin` state.
-
 	if not self.isReadyToStartTurn:
-		if debugMode: printWarning("startTurnProcess() called when not isReadyToStartTurn") # Not an important warning
-		return
+		if debugMode:
+			print("Warning: startTurnProcess() called when not ready (no active unit to process)")
 
-	# TBD: Should timers be reset here? How to handle game pauses during the timer?
-	#cycleStatesUntilNextTurn()
-	startTeamTurn()
+	await startTeamTurn()
 
+
+## Set the unit that will take an action (to be processed with startTurnProcess).
+func setActiveUnit(unit: TurnBasedEntity) -> void:
+	activeUnit = unit
+
+## Mark all units in the current team as having moved and performed an action.
+func setAllUnitTurnFlagsTrue() -> void:
+	for unit in currentTeamParty:
+		unit.haveMoved = true
+		unit.havePerformedAction = true
+
+func setAllUnitTurnFlagsFalse() -> void:
+	pass
+
+## Check if all units of a team (defaults to current team) have finished their moves and actions.
+func isTeamExhausted(team: int = currentTeam) -> bool:
+	var party: Array[InsectronEntity3D] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
+	for unit in party:
+		if not unit.haveMoved or not unit.havePerformedAction:
+			return false
+	return true
+
+
+## Get a list of units in a team that still have actions available (not both flags set).
+func getAvailableUnits(team: int = currentTeam) -> Array[TurnBasedEntity]:
+	var available: Array[TurnBasedEntity] = []
+	var party: Array[InsectronEntity3D] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
+	for unit in party:
+		if not (unit.haveMoved or unit.havePerformedAction):
+			available.append(unit)
+	return available
 
 ## @experimental
 func pause() -> void:
@@ -294,7 +324,6 @@ func unpause() -> void:
 
 func startTeamTurn() -> void:
 	if debugMode: printLog("[b]Starting turn for team %d" % currentTeam)
-	
 	currentTurn += 1
 	currentTurnState = TurnBasedState.turnBegin
 	self.set_process(true)  # Enable processing (for any debug draw or UI updates during turn)
@@ -302,10 +331,9 @@ func startTeamTurn() -> void:
 	willBeginTurn.emit()  # Signal start of turn (could be used to update UI, etc.)
 	
 	for insector in currentTeamParty:
-		if insector.factionComponent.factions == currentTeam:
-			insector.haveMoved = false
-			insector.havePerformedAction = false
-			await insector.processTurnBeginSignals()  # e.g. reset unit state, play "ready" animation, etc.
+		insector.haveMoved = false
+		insector.havePerformedAction = false
+		await insector.processTurnBeginSignals()  # e.g. reset unit state, play "ready" animation, etc.
 
 	didBeginTurn.emit()
 
@@ -322,13 +350,16 @@ func startTeamTurn() -> void:
 	else:
 		print("Ai turn")
 		## AI-controlled team: process all their units automatically
-		#await processAllEntitiesForTeam(currentTeam)
+		_processAITurn()
 		## After AI finishes its units, end the turn automatically
 		await endTeamTurn()  # proceed to turnEnd and then next team’s turn
+		
 
 func endTeamTurn() -> void:
 	if currentTurnState == TurnBasedState.turnEnd:
 		return  # already ending or ended
+
+	didUpdateTurn.emit()
 
 	if debugMode: printLog("[b]Ending turn for team %d[/b]" % currentTeam)
 	currentTurnState = TurnBasedState.turnEnd
@@ -347,41 +378,14 @@ func endTeamTurn() -> void:
 	self.set_process(false)  # disable per-frame processing until next turn begins
 
 	# Automatically start the next team's turn (alternate the team)
-	currentTeam  = FactionComponent.Factions.players if currentTeam == FactionComponent.Factions.enemies else FactionComponent.Factions.enemies
+	currentTeam = FactionComponent.Factions.players if currentTeam == FactionComponent.Factions.ai else FactionComponent.Factions.ai
+	
+	if currentTeam == FactionComponent.Factions.players:
+		willBeginPlayerTurn.emit()
 	
 	if debugMode: printLog("Next team to act will be team %d" % currentTeam)
 	# Start the next turn after a short delay (if you want a pause between turns)
 	startTeamTurn()
-
-## Cycles through all the [enum TurnBasedState]s until the next turn's [constant TurnBasedState.turnBegin].
-func cycleStatesUntilNextTurn() -> void:
-	# TODO: A less complex/ambiguous implementation
-	printDebug("cycleStatesUntilNextTurn()")
-
-	# If we're already at `turnBegin`, advance the state once.
-	if self.currentTurnState == TurnBasedState.turnBegin:
-		await self.processState()
-		await self.waitForStateTimer()
-		self.incrementState()
-
-	# Cycle through the states until we're at `turnBegin` again
-	while self.currentTurnState != TurnBasedState.turnBegin:
-		await self.processState()
-		await self.waitForStateTimer() # NOTE: Delay even if it's the last entity/state in the loop, because there should be a delay before the 1st entity/state of the NEXT turn too!
-		self.incrementState()
-
-
-## Calls one of the signals processing methods based on the [member currentTurnState].
-func processState() -> void:
-	printDebug(str("processState(): ", getStateLogText()))
-
-	match currentTurnState:
-		# `await` for Entity delays & animations etc.
-		TurnBasedState.turnBegin:	await processTurnBeginSignals()
-		TurnBasedState.turnUpdate:	await processTurnUpdateSignals()
-		TurnBasedState.turnEnd:		await processTurnEndSignals()
-		_:							Debug.printError("Invalid State!", self) # TBD: Should this be an Error or Warning?
-
 
 ## Increments the [member currentTurnState], warping to `turnBegin` after the `turnEnd` state.
 ## Stops the [member stateTimer] before returning to `turnBegin`
@@ -395,56 +399,6 @@ func incrementState() -> TurnBasedState:
 		stateTimer.stop()
 		currentTurnState = TurnBasedState.turnBegin
 	return currentTurnState
-
-#endregion
-
-
-#region Signals Cycle
-
-## Called by [method processState] and calls [method processTurnBegin].
-## WARNING: Do NOT override in subclass.
-func processTurnBeginSignals() -> void:
-	printDebug(str("processTurnBeginSignals() currentTurn → ", currentTurn + 1, ", ", turnBasedEntities.size(), " entities: ", getEntityNames()))
-
-	currentTurn += 1 # NOTE: Must be incremented BEFORE [willBeginTurn] so the first turn would be 1
-	currentTurnState = TurnBasedState.turnBegin
-
-	self.set_process(true) # TBD: Enable the `_process` method so it can perform per-frame updates and display the debug info.
-
-	willBeginTurn.emit()
-	@warning_ignore("redundant_await")
-	await self.processTurnBegin() # `await` for Entity animations & delays etc.
-	didBeginTurn.emit()
-
-
-## Called by [method processState] and calls [method processTurnUpdate].
-## WARNING: Do NOT override in subclass.
-func processTurnUpdateSignals() -> void:
-	printDebug(str("processTurnUpdateSignals() currentTurn: ", currentTurn, ", ", turnBasedEntities.size(), " entities: ", getEntityNames()))
-
-	currentTurnState = TurnBasedState.turnUpdate
-
-	willUpdateTurn.emit()
-	@warning_ignore("redundant_await")
-	await self.processTurnUpdate() # `await` for Entity animations & delays etc.
-	didUpdateTurn.emit()
-
-
-## Called by [method processState] and calls [method processTurnEnd].
-## WARNING: Do NOT override in subclass.
-func processTurnEndSignals() -> void:
-	printDebug(str("processTurnEndSignals() currentTurn: ", currentTurn, ", ", turnBasedEntities.size(), " entities: ", getEntityNames()))
-
-	currentTurnState = TurnBasedState.turnEnd
-
-	willEndTurn.emit()
-	@warning_ignore("redundant_await")
-	await self.processTurnEnd() # `await` for Entity animations & delays etc.
-
-	self.set_process(false) # TBD: Disable the `_process` method because we don't need per-frame updates anymore.
-
-	turnsProcessed += 1 # NOTE: Must be incremented AFTER [processTurnEnd] but BEFORE [didEndTurn]
-	didEndTurn.emit()
 
 #endregion
 
@@ -505,93 +459,19 @@ func findTurnBasedEntities() -> Array[TurnBasedEntity]:
 
 #region Entity Process Cycle
 
-# NOTE: TBD: Ensure that `await` waits for Entity delays & animations etc.
-# NOTE: Do NOT `await turnBasedEntity.did…` signals, because they are emitted within `turnBasedEntity.process…`, before the following `await`
-
-# NOTE: The `isProcessingEntities` flag affects the `isReadyToStartTurn` flag,
-# because some the Coordinator may be `await`ing on an Entities while still in the `turnBegin` state.
-# TBD: Should `isProcessingEntities` be set at a higher scope to ensure no "leaks"? e.g. starting multiple turns.
-
-
-## Calls [method TurnBasedEntity.processTurnBeginSignals] on all turn-based entities.
-func processTurnBegin() -> void:
-	await processEntities(TurnBasedState.turnBegin)
-
-
-## Calls [method TurnBasedEntity.processTurnUpdateSignals] on all turn-based entities.
-func processTurnUpdate() -> void:
-	await processEntities(TurnBasedState.turnUpdate)
-
-
-## Calls [method TurnBasedEntity.processTurnEndSignals] on all turn-based entities.
-func processTurnEnd() -> void:
-	await processEntities(TurnBasedState.turnEnd)
-
-
-## Calls one of the "processTurn…" methods on all turn-based entities based on the [param state].
-func processEntities(state: TurnBasedState) -> void:
-	# TBD: Check for invalid states?
-	self.currentEntityIndex = -1 # Let the loop start from 0
-	self.isProcessingEntities = true
-
-	for turnBasedEntity in self.turnBasedEntities:
-		self.currentEntityIndex += 1
-		recentEntityIndex = currentEntityIndex
-
-		printDebug(str("processEntities(): #", currentEntityIndex, " ", turnBasedEntity.logName, " S", getStateLogText(state)))
-
-		self.willProcessEntity.emit(turnBasedEntity)
-
-		match state:
-			TurnBasedState.turnBegin:	await turnBasedEntity.processTurnBeginSignals()
-			TurnBasedState.turnUpdate:	await turnBasedEntity.processTurnUpdateSignals()
-			TurnBasedState.turnEnd:		await turnBasedEntity.processTurnEndSignals()
-
-		self.didProcessEntity.emit(turnBasedEntity) # NOTE: Emit this signal BEFORE the delay BETWEEN entities.
-		
-		# Start the delay between entities
-		# NOTE: Delay even if it's the last entity in the loop, because there should be a delay before the 1st entity of the NEXT turn too!
-		await waitForEntityTimer()
-
-	currentEntityIndex = -1 # NOTE: Set an invalid index to specify that no entity is currently being processed.
-	self.isProcessingEntities = false
-
-## Processes a full turn for a single specified entity (from turnBegin to turnEnd for that entity).
-func processEntityTurn(entity: TurnBasedEntity) -> void:
-	if entity == null:
-		return
-	if debugMode: printLog(">> Processing turn for %s (Team %d)" % [entity.name, entity.team])
-
-	self.willProcessEntity.emit(entity)  # Signal that we're about to process this entity's turn (for UI highlight, etc.)
-
-	# 1. Entity Turn Begin phase (if needed)
-	# If not already handled in startTeamTurn, you could call any per-entity turn start logic here.
-	# For example, playing a "selected" animation or applying start-of-turn effects specific to this unit.
-	# await entity.processTurnBeginSignals()  # (Optional: if not already called globally at team start)
-
-	# 2. Entity Turn Update phase: movement and action
-	await entity.processTurnUpdateSignals() 
-	# ^ This should encompass the unit's movement and main action. For AI, this will execute AI logic.
-	# For a player-controlled entity, this function should be implemented to wait for player input:
-	# e.g., highlight movement range, wait for player to choose a destination, move the unit, 
-	# then present an action menu, wait for attack/special choice, perform that action, etc.
-	# The entity's script can emit signals like `move_completed` or `action_completed` that 
-	# processTurnUpdateSignals() would await, so this `await` will pause until the player finishes the unit's actions.
-
-	# After movement/action, update flags to reflect what was done:
-	# (Assuming the entity's own logic sets haveMoved/havePerformedAction when each action is done.
-	# If not, we can set them here based on what happened.)
-	# Ensure the unit is marked as fully done for this turn:
-	entity.haveMoved = true
-	entity.havePerformedAction = true
-
-	# 3. Entity Turn End phase: finalize the unit's turn
-	await entity.processTurnEndSignals()
-	# This can handle end-of-turn effects (e.g., poison damage, resetting temporary buffs, etc.) for this unit.
-
-	self.didProcessEntity.emit(entity)  # Signal that this entity's turn processing is complete
-
-	if debugMode: printLog("<< Finished turn for %s" % entity.name)
+func _processAITurn() -> void:
+	# Iterate through all members of the specified team
+	for insector in currentTeamParty:
+		self.willProcessEntity.emit(insector)
+		insector.boardPositionComponent.processMovementInput(Vector3i(0,0,1))
+		# Mark unit turn as completed with a move or wait
+		insector.haveMoved = true
+		insector.havePerformedAction = true
+		await insector.processTurnUpdateSignals()
+		await insector.processTurnEndSignals()
+		self.didProcessEntity.emit(insector)
+		entityTimer.start()
+		await entityTimer.timeout
 
 #endregion
 
@@ -648,7 +528,7 @@ func dummyTimerFunction() -> void:
 var logStateIndicator: String ## Text appended to log entries to indicate the current turn and state/phase.
 
 var logName: String: ## Customizes logs for the turn-based system to include the turn+phase, because it's not related to frames.
-	get: return str("TurnBasedCoordinator ", logStateIndicator, currentTurn)
+	get: return str("TurnBasedCoordinator ", logStateIndicator, turnsProcessed)
 
 
 func _process(_delta: float) -> void:

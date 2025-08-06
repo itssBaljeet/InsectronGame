@@ -28,6 +28,11 @@ var battleBoardUI: BattleBoardUIComponent:
 		if battleBoardUI: return battleBoardUI
 		return self.parentEntity.get_parent().components.get(&"BattleBoardUIComponent")
 
+var battleBoardSelector: BattleBoardCameraComponent:
+	get:
+		if battleBoardSelector: return battleBoardSelector
+		return self.parentEntity.get_parent().components.get(&"BattleBoardCameraComponent")
+
 #endregion
 
 
@@ -55,10 +60,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_echo() or disabled: return         # ignore key‑repeat noise
 
 	var step := Vector2i.ZERO
-	if event.is_action_pressed("moveLeft"):  step = Vector2i(-1, 0)
-	elif event.is_action_pressed("moveRight"):step = Vector2i( 1, 0)
-	elif event.is_action_pressed("moveUp"):   step = Vector2i( 0,-1)
-	elif event.is_action_pressed("moveDown"): step = Vector2i( 0, 1)
+	if event.is_action_pressed("moveLeft"):  step = battleBoardSelector.view_to_board(Vector3i(-1, 0, 0))
+	elif event.is_action_pressed("moveRight"):step = battleBoardSelector.view_to_board(Vector3i(1, 0, 0))
+	elif event.is_action_pressed("moveUp"):   step = battleBoardSelector.view_to_board(Vector3i( 0, 0, -1))
+	elif event.is_action_pressed("moveDown"): step = battleBoardSelector.view_to_board(Vector3i(0, 0, 1))
 
 	
 	if step != Vector2i.ZERO:
@@ -79,7 +84,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			print("else statement")
 			# Normal selection: select unit on the cell if any
 			var unit: InsectronEntity3D = boardPositionComponent.battleBoard.getInsectorOccupant(cursorCell)  # get unit at cell
-			if unit and (not unit.haveMoved or not unit.havePerformedAction) and unit.factionComponent.factions == TurnBasedCoordinator.currentTeam:
-				print("Opening Menu")
-				# Friendly unit that still can act
-				battleBoardUI.openUnitMenu(unit)
+			#if unit and (not unit.haveMoved or not unit.havePerformedAction) and unit.factionComponent.factions == TurnBasedCoordinator.currentTeam:
+			print("Opening Menu")
+			# Friendly unit that still can act
+			battleBoardUI.openUnitMenu(unit)
