@@ -24,6 +24,8 @@ extends Component
 
 ## The speed of moving between tiles. Ignored if [member shouldMoveInstantly].
 ## WARNING: If this is slower than the movement of the [member tileMap] then the component will never be able to catch up to the destination tile's position.
+@export var move_range: Array[Vector3i]
+
 @export_range(10.0, 1000.0, 1.0) var speed: float = 200.0
 
 @export var shouldMoveInstantly: bool = false
@@ -309,6 +311,9 @@ func moveTowardsDestinationCell(delta: float) -> void:
 	parentEntity.global_position = parentEntity.global_position.move_toward(destinationTileGlobalPosition, speed * delta)
 	parentEntity.reset_physics_interpolation() # CHECK: Necessary?
 
+
+## Moves the mesh to the xz center of a cell and then accounts for the height of the
+## Battle Board tiles and cell height then sets the y according to that
 func adjustToTile(position: Vector3) -> Vector3:
 	position.x += battleBoard.tile_x/2
 	position.z += battleBoard.tile_z/2
@@ -344,7 +349,6 @@ func updateIndicator() -> void:
 	visualIndicator.global_position = battleBoard.getGlobalCellPosition(self.destinationCellCoordinates)
 	visualIndicator.visible = isMovingToNewCell or alwaysVisibleSquareOutline
 	visualIndicator.position = Vector3.ZERO # TBD: Necessary?
-	#visualIndicator.visible = false
 
 #endregion
 

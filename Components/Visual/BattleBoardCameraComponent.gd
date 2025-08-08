@@ -40,7 +40,7 @@ extends Component
 # ------------------------------------------------------------
 #  Zoom parameters  (distance = length of the local cam-vector)
 # ------------------------------------------------------------
-@export var zoom_step:          float = 1.0     # metres per wheel-notch
+@export var zoom_step:          float = 0.7     # metres per wheel-notch
 @export var min_zoom_distance:  float = 2.0     # how close you may zoom-in
 @export var max_zoom_distance:  float = 20.0    # how far you may zoom-out
 

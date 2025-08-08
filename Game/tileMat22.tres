@@ -1,0 +1,19 @@
+[gd_resource type="StandardMaterial3D" load_steps=6 format=3 uid="uid://dc8sffjowdtt0"]
+
+[ext_resource type="Texture2D" uid="uid://b31xltfnjetiu" path="res://addons/TiledSurfaces (22)/TiledSurfaces (22)_BaseColor.png" id="1_3bbl4"]
+[ext_resource type="Texture2D" uid="uid://cmb4u1gfwnvls" path="res://addons/TiledSurfaces (22)/TiledSurfaces (22)_AmbientOcclusion.png" id="2_57158"]
+[ext_resource type="Texture2D" uid="uid://rluwl21yi25r" path="res://addons/TiledSurfaces (22)/TiledSurfaces (22)_Height.png" id="3_qsdl6"]
+[ext_resource type="Texture2D" uid="uid://bc4sgj8b7jpc7" path="res://addons/TiledSurfaces (22)/TiledSurfaces (22)_Normal.png" id="4_wad3u"]
+[ext_resource type="Texture2D" uid="uid://dionleee2gl53" path="res://addons/TiledSurfaces (22)/TiledSurfaces (22)_Roughness.png" id="5_l0tvi"]
+
+[resource]
+albedo_texture = ExtResource("1_3bbl4")
+albedo_texture_force_srgb = true
+roughness_texture = ExtResource("5_l0tvi")
+normal_enabled = true
+normal_texture = ExtResource("4_wad3u")
+ao_enabled = true
+ao_texture = ExtResource("2_57158")
+heightmap_enabled = true
+heightmap_texture = ExtResource("3_qsdl6")
+uv1_offset = Vector3(-0.17, 0, 0)

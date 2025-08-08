@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://s0og8g1dnuh5"]
+[gd_scene load_steps=3 format=3 uid="uid://s0og8g1dnuh5"]
 
 [ext_resource type="Script" uid="uid://bpiwsmevgyakn" path="res://Components/Visual/BattleBoardCameraComponent.gd" id="1_h2ii6"]
+[ext_resource type="Environment" uid="uid://176jft2dorry" path="res://Game/testingGroundWorld.tres" id="2_iw3fd"]
 
 [node name="BattleBoardCameraComponent" type="Node3D" node_paths=PackedStringArray("camera") groups=["components"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 3.5)
 script = ExtResource("1_h2ii6")
 camera = NodePath("PitchRig/Camera3D")
 min_pitch_deg = -90.0
@@ -11,3 +13,5 @@ min_pitch_deg = -90.0
 unique_name_in_owner = true
 
 [node name="Camera3D" type="Camera3D" parent="PitchRig"]
+transform = Transform3D(0.7071067, -0.4055798, 0.579228, 0, 0.81915206, 0.57357645, -0.7071067, -0.4055798, 0.579228, 0, 5, 0)
+environment = ExtResource("2_iw3fd")

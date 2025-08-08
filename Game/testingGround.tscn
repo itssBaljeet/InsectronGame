@@ -1,22 +1,103 @@
-[gd_scene load_steps=6 format=3 uid="uid://dun38r0k022n1"]
+[gd_scene load_steps=7 format=3 uid="uid://dun38r0k022n1"]
 
 [ext_resource type="PackedScene" uid="uid://bq82t3qc1mxmb" path="res://Game/BattleBoard.tscn" id="2_5jdkk"]
-[ext_resource type="Texture2D" uid="uid://bmrt8o6uvx0tq" path="res://Assets/Themes/symmetrical_garden_02_4k.exr" id="2_5r8om"]
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_j5y2j"]
-panorama = ExtResource("2_5r8om")
-
-[sub_resource type="Sky" id="Sky_0qr6p"]
-sky_material = SubResource("PanoramaSkyMaterial_j5y2j")
-
-[sub_resource type="Environment" id="Environment_315n7"]
-background_mode = 2
-sky = SubResource("Sky_0qr6p")
-ambient_light_source = 3
+[ext_resource type="Environment" uid="uid://176jft2dorry" path="res://Game/testingGroundWorld.tres" id="2_315n7"]
+[ext_resource type="Material" uid="uid://bjg3j4qdy6c4o" path="res://Game/tileMat23.tres" id="3_315n7"]
+[ext_resource type="PackedScene" uid="uid://cy36aygvs66pn" path="res://addons/gdquest_gobot/gobot_skin.tscn" id="3_j5y2j"]
+[ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://addons/gdquest_sophia/sophia_skin.tscn" id="4_0qr6p"]
+[ext_resource type="Material" uid="uid://dc8sffjowdtt0" path="res://Game/tileMat22.tres" id="4_m1l33"]
 
 [node name="TestingGround" type="Node3D"]
 
 [node name="BattleBoardEntity3D" parent="." instance=ExtResource("2_5jdkk")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_315n7")
+environment = ExtResource("2_315n7")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(0.70710677, -0.35355338, 0.61237246, 0, 0.86602545, 0.5, -0.70710677, -0.35355338, 0.61237246, 6.5, 6, 10)
+light_color = Color(0.99999887, 0.997951, 0.80211115, 1)
+light_energy = 16.0
+light_indirect_energy = 0.887
+light_volumetric_fog_energy = 4.631
+spot_range = 13.0
+spot_attenuation = 1.25
+spot_angle = 35.0
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="."]
+transform = Transform3D(-0.7071068, -0.35355335, 0.61237246, 8.912035e-09, 0.86602545, 0.49999994, -0.70710677, 0.35355338, -0.61237246, 6.5, 6, -3)
+light_color = Color(0.99999887, 0.997951, 0.80211115, 1)
+light_energy = 16.0
+light_indirect_energy = 0.887
+light_volumetric_fog_energy = 4.631
+shadow_enabled = true
+spot_range = 13.0
+spot_attenuation = 1.25
+spot_angle = 35.0
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="."]
+transform = Transform3D(-0.7071067, 0.35355344, -0.6123726, 8.912039e-09, 0.86602545, 0.49999994, 0.7071069, 0.3535533, -0.6123724, -1.5, 6, -3)
+light_color = Color(0.99999887, 0.997951, 0.80211115, 1)
+light_energy = 16.0
+light_indirect_energy = 0.887
+light_volumetric_fog_energy = 4.631
+spot_range = 13.0
+spot_attenuation = 1.25
+spot_angle = 35.0
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="."]
+transform = Transform3D(0.8660255, 0.24999985, -0.4330126, 8.912038e-09, 0.8660254, 0.4999999, 0.49999988, -0.43301272, 0.7500001, -1.5, 6, 10)
+light_color = Color(0.99999887, 0.997951, 0.80211115, 1)
+light_energy = 16.0
+light_indirect_energy = 0.887
+light_volumetric_fog_energy = 4.631
+shadow_enabled = true
+spot_range = 13.0
+spot_attenuation = 1.25
+spot_angle = 35.0
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 2.5, -3.7, 3.5)
+material_override = ExtResource("3_315n7")
+radius = 15.0
+height = 0.5
+sides = 10
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 2.5, -4.2, 3.5)
+material_override = ExtResource("4_m1l33")
+radius = 20.0
+height = 0.5
+sides = 10
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 2.5, -4.6, 3.5)
+material_override = ExtResource("3_315n7")
+radius = 25.0
+height = 0.5
+sides = 10
+
+[node name="GobotSkin" parent="." instance=ExtResource("3_j5y2j")]
+transform = Transform3D(5.51, 0, 0, 0, 5.51, 0, 0, 0, 5.51, 2.5, -3.4, 14)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="GobotSkin"]
+transform = Transform3D(0.1814882, 0, 0, 0, -7.933102e-09, 0.1814882, 0, -0.1814882, -7.933102e-09, 0.03629765, 2.5655746, 0)
+light_color = Color(0.99917, 0.9999998, 0.90195644, 1)
+light_energy = 1.119
+shadow_enabled = true
+spot_range = 15.458
+spot_attenuation = -0.78
+spot_angle = 25.0
+
+[node name="SophiaSkin" parent="." instance=ExtResource("4_0qr6p")]
+transform = Transform3D(5.5, 0, 0, 0, 5.5, 0, 0, 0, 5.5, 2.4999998, -3.5, -7.6)
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="SophiaSkin"]
+transform = Transform3D(0.18181819, 0, 0, 0, -7.947526e-09, 0.18181819, 0, -0.18181819, -7.947526e-09, 0, 2.5454545, 0)
+light_color = Color(0.99917, 0.9999998, 0.90195644, 1)
+light_energy = 1.119
+shadow_enabled = true
+spot_range = 15.458
+spot_attenuation = -0.78
+spot_angle = 25.0
+spot_angle_attenuation = 0.36602044

@@ -470,6 +470,7 @@ func _processAITurn() -> void:
 		await insector.processTurnUpdateSignals()
 		await insector.processTurnEndSignals()
 		self.didProcessEntity.emit(insector)
+		willStartDelay.emit()
 		entityTimer.start()
 		await entityTimer.timeout
 
