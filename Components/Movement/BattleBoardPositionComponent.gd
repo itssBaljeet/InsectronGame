@@ -24,7 +24,7 @@ extends Component
 
 ## The speed of moving between tiles. Ignored if [member shouldMoveInstantly].
 ## WARNING: If this is slower than the movement of the [member tileMap] then the component will never be able to catch up to the destination tile's position.
-@export var move_range: Array[Vector3i]
+@export var moveRange: BoardPattern
 
 @export_range(10.0, 1000.0, 1.0) var speed: float = 200.0
 
@@ -61,6 +61,7 @@ var battleBoard: BattleBoardComponent3D:
 		if battleBoard:
 			return battleBoard
 		# The entity [BattleBoardPositionComponent] is a child of should be a child itself of a BattleBoardEntity3D which holds the component we need.
+		if not self.parentEntity.get_parent(): return null
 		return self.parentEntity.get_parent().find_child("BattleBoardComponent3D").get_node(^".") as BattleBoardComponent3D
 
 #endregion

@@ -8,8 +8,8 @@ extends TurnBasedEntity
 
 #region Parameters
 
-@export var width: int : set = _set_grid_width
-@export var height: int : set = _set_grid_height
+@export var width: int : set = _setGridWidth
+@export var height: int : set = _setGridHeight
 
 #endregion
 
@@ -29,7 +29,7 @@ extends TurnBasedEntity
 
 #region Setter Functions
 
-func _set_grid_width(x: int) -> void:
+func _setGridWidth(x: int) -> void:
 	width = x
 	
 	if battleBoardGenerator:
@@ -38,7 +38,7 @@ func _set_grid_width(x: int) -> void:
 		battleBoardGenerator = self.components.get(&"BattleBoardComponent3D")
 		return
 		
-func _set_grid_height(y: int) -> void:
+func _setGridHeight(y: int) -> void:
 	height = y
 	
 	if battleBoardGenerator:

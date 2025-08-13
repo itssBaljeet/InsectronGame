@@ -463,7 +463,34 @@ func _processAITurn() -> void:
 	# Iterate through all members of the specified team
 	for insector in currentTeamParty:
 		self.willProcessEntity.emit(insector)
-		insector.boardPositionComponent.processMovementInput(Vector3i(0,0,1))
+		
+		var posComponent: BattleBoardPositionComponent = insector.boardPositionComponent
+		var dest: Vector3i = posComponent.moveRange.offsets[randi_range(0, len(posComponent.moveRange.offsets)-1)]
+		while not posComponent.battleBoard.validateCoordinates(posComponent.currentCellCoordinates + dest):
+			dest = posComponent.moveRange.offsets[randi_range(0, len(posComponent.moveRange.offsets)-1)]
+		
+		
+				# --- NEW: face the movement direction before starting the move.
+		var anim: InsectorAnimationComponent = insector.components.get(&"InsectorAnimationComponent")
+		if anim:
+			var from_cell: Vector3i = posComponent.currentCellCoordinates
+			var from_world: Vector3 = posComponent.adjustToTile(
+			posComponent.battleBoard.getGlobalCellPosition(from_cell)
+			)
+			var to_world: Vector3 = posComponent.adjustToTile(
+			posComponent.battleBoard.getGlobalCellPosition(from_cell + dest)
+			)
+			var move_dir_world: Vector3 = to_world - from_world
+			if move_dir_world.length_squared() > 0.0:
+				await anim.face_move_direction(move_dir_world)
+
+
+		posComponent.processMovementInput(dest)
+		
+		# --- NEW: wait for arrival, then restore “home” facing.
+		await posComponent.didArriveAtNewCell
+		if anim:
+			await anim.face_home_orientation()
 		# Mark unit turn as completed with a move or wait
 		insector.haveMoved = true
 		insector.havePerformedAction = true

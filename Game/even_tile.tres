@@ -1,5 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://dq8o3ujayflov"]
-
-[resource]
-stencil_flags = 2
-stencil_outline_thickness = 0.048

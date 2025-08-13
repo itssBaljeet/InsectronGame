@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwewnvs5kt1o3"]
+
+[ext_resource type="Script" uid="uid://ued2x7kbv3m0" path="res://Components/Visual/InsectorAnimationComponent.gd" id="1_suyl3"]
+
+[node name="InsectorAnimationComponent" type="Node3D"]
+script = ExtResource("1_suyl3")
