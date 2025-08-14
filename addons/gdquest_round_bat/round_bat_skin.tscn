@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://tyjgdu65yj3m"]
 
 [ext_resource type="PackedScene" uid="uid://h2we7rb772hy" path="res://addons/gdquest_round_bat/model/bat.glb" id="1_tt0gg"]
-[ext_resource type="Script" path="res://addons/gdquest_round_bat/round_bat_skin.gd" id="1_vbemd"]
+[ext_resource type="Script" uid="uid://cmp13fxd1d7ro" path="res://addons/gdquest_round_bat/round_bat_skin.gd" id="1_vbemd"]
 [ext_resource type="AnimationLibrary" uid="uid://c1irgai81674w" path="res://addons/gdquest_round_bat/model/custom/custom_lib.res" id="2_er7fn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u0xry"]
@@ -137,8 +137,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sqho5"]
 _data = {
-"Idle": SubResource("Animation_tk2r3"),
-"RESET": SubResource("Animation_rjhsk")
+&"Idle": SubResource("Animation_tk2r3"),
+&"RESET": SubResource("Animation_rjhsk")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_448ki"]
@@ -151,15 +151,15 @@ mix_mode = 1
 animation = &"Idle"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_omnlg"]
-graph_offset = Vector2(-336.1, 81.1)
+graph_offset = Vector2(-562.1, 31.099998)
+nodes/output/position = Vector2(280, 160)
 nodes/Hurt/node = SubResource("AnimationNodeAnimation_448ki")
 nodes/Hurt/position = Vector2(-151, 282.818)
 nodes/HurtShot/node = SubResource("AnimationNodeOneShot_41mbd")
 nodes/HurtShot/position = Vector2(60, 140)
 nodes/Idle/node = SubResource("AnimationNodeAnimation_v8u50")
-nodes/Idle/position = Vector2(-160, 160)
-nodes/output/position = Vector2(280, 160)
-node_connections = [&"HurtShot", 0, &"Idle", &"HurtShot", 1, &"Hurt", &"output", 0, &"HurtShot"]
+nodes/Idle/position = Vector2(-140, 120)
+node_connections = [&"output", 0, &"HurtShot", &"HurtShot", 0, &"Idle", &"HurtShot", 1, &"Hurt"]
 
 [node name="RoundBatSkin" type="Node3D"]
 script = ExtResource("1_vbemd")
@@ -167,35 +167,40 @@ script = ExtResource("1_vbemd")
 [node name="RoundBat" parent="." instance=ExtResource("1_tt0gg")]
 
 [node name="Skeleton3D" parent="RoundBat/Armature" index="0"]
-bones/0/position = Vector3(0, 0.010638, 0)
-bones/1/rotation = Quaternion(0.0571692, 0.103257, -0.685665, 0.718285)
-bones/2/rotation = Quaternion(0.0789605, 0.0278072, 0.327109, 0.941271)
-bones/3/rotation = Quaternion(0.147926, 0.100356, 0.315374, 0.931979)
-bones/4/rotation = Quaternion(0.0571692, -0.103257, 0.685665, 0.718285)
-bones/5/rotation = Quaternion(0.0789605, -0.0278072, -0.327109, 0.941271)
-bones/6/rotation = Quaternion(0.147926, -0.100356, -0.315374, 0.931979)
-bones/7/position = Vector3(0.130992, -0.227392, -0.0878515)
-bones/7/rotation = Quaternion(0.261968, 0.0834551, 0.265751, 0.924004)
-bones/8/rotation = Quaternion(3.85357e-08, 0.702774, 0.711413, 2.27787e-08)
-bones/10/position = Vector3(-0.130992, -0.227392, -0.0878515)
-bones/10/rotation = Quaternion(0.261968, -0.0834551, -0.265751, 0.924004)
-bones/11/rotation = Quaternion(2.12564e-08, 0.702774, 0.711413, 3.51344e-08)
+bones/0/position = Vector3(0, 0.0073866197, 0)
+bones/1/rotation = Quaternion(0.19058861, 0.000111744455, -0.59003246, 0.78456205)
+bones/2/rotation = Quaternion(0.053175483, 0.023564408, 0.40442723, 0.91271895)
+bones/3/rotation = Quaternion(-0.067834795, 0.026583971, 0.31918666, 0.94488716)
+bones/4/rotation = Quaternion(0.19058861, -0.000111744455, 0.59003246, 0.78456205)
+bones/5/rotation = Quaternion(0.053175483, -0.023564408, -0.40442723, 0.91271895)
+bones/6/rotation = Quaternion(-0.067834795, -0.026583971, -0.31918666, 0.94488716)
+bones/7/position = Vector3(0.130992, -0.227392, -0.087851495)
+bones/7/rotation = Quaternion(0.26196814, 0.08345515, 0.26575115, 0.92400455)
+bones/8/rotation = Quaternion(3.4040525e-08, 0.5562707, 0.83100116, 2.088169e-08)
+bones/10/position = Vector3(-0.130992, -0.227392, -0.087851495)
+bones/10/rotation = Quaternion(0.26196814, -0.08345515, -0.26575115, 0.92400455)
+bones/11/rotation = Quaternion(2.314538e-08, 0.55627126, 0.8310008, 3.549964e-08)
 
 [node name="Bat" parent="RoundBat/Armature/Skeleton3D" index="0"]
 material_overlay = SubResource("StandardMaterial3D_u0xry")
 
 [node name="AnimationPlayer" parent="RoundBat" index="1"]
 libraries = {
-"": SubResource("AnimationLibrary_sqho5"),
-"custom": ExtResource("2_er7fn")
+&"": SubResource("AnimationLibrary_sqho5"),
+&"custom": ExtResource("2_er7fn")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 unique_name_in_owner = true
+root_node = NodePath("%AnimationTree/../RoundBat")
+libraries = {
+&"": SubResource("AnimationLibrary_sqho5"),
+&"custom": ExtResource("2_er7fn")
+}
 tree_root = SubResource("AnimationNodeBlendTree_omnlg")
 anim_player = NodePath("../RoundBat/AnimationPlayer")
-active = true
 parameters/HurtShot/active = false
+parameters/HurtShot/internal_active = false
 parameters/HurtShot/request = 0
 
 [editable path="RoundBat"]

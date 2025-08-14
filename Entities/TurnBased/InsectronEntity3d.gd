@@ -14,6 +14,11 @@ var boardPositionComponent: BattleBoardPositionComponent:
 		if boardPositionComponent: return boardPositionComponent
 		return self.components.get(&"BattleBoardPositionComponent")
 
+var attackComponent: InsectorAttackComponent:
+	get:
+		if attackComponent: return attackComponent
+		return self.components.get(&"InsectorAttackComponent")
+
 #endregion
 
 #region State

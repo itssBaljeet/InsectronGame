@@ -350,7 +350,7 @@ func startTeamTurn() -> void:
 	else:
 		print("Ai turn")
 		## AI-controlled team: process all their units automatically
-		_processAITurn()
+		await _processAITurn()
 		## After AI finishes its units, end the turn automatically
 		await endTeamTurn()  # proceed to turnEnd and then next team’s turn
 		
@@ -459,6 +459,8 @@ func findTurnBasedEntities() -> Array[TurnBasedEntity]:
 
 #region Entity Process Cycle
 
+## This will eventually be in its own component so that the service can orchestrate it
+## without us needing to use service level logic in the TurnBasedCoordinator
 func _processAITurn() -> void:
 	# Iterate through all members of the specified team
 	for insector in currentTeamParty:
@@ -470,7 +472,7 @@ func _processAITurn() -> void:
 			dest = posComponent.moveRange.offsets[randi_range(0, len(posComponent.moveRange.offsets)-1)]
 		
 		
-				# --- NEW: face the movement direction before starting the move.
+		# face the movement direction before starting the move.
 		var anim: InsectorAnimationComponent = insector.components.get(&"InsectorAnimationComponent")
 		if anim:
 			var from_cell: Vector3i = posComponent.currentCellCoordinates
@@ -483,21 +485,60 @@ func _processAITurn() -> void:
 			var move_dir_world: Vector3 = to_world - from_world
 			if move_dir_world.length_squared() > 0.0:
 				await anim.face_move_direction(move_dir_world)
+			
+			print("About to walk")
+			await anim.walkAnimation()
 
-
+		
 		posComponent.processMovementInput(dest)
 		
-		# --- NEW: wait for arrival, then restore “home” facing.
+		# wait for arrival, then restore “home” facing.
 		await posComponent.didArriveAtNewCell
 		if anim:
+			await anim.idleAnimation()
 			await anim.face_home_orientation()
 		# Mark unit turn as completed with a move or wait
 		insector.haveMoved = true
+		
+		# Attack Time!! Try attacking 8 times within attack range
+		print("Looking for enemy to attack")
+		insector.boardPositionComponent.battleBoard.highlightRange(
+			insector.attackComponent.attackRange,
+			insector.boardPositionComponent.battleBoard.attackHighlightTileID,
+			insector.boardPositionComponent.currentCellCoordinates,
+			true
+		)
+
+		var attackTarget: Vector3i = insector.attackComponent.attackRange.offsets[randi_range(0, len(insector.attackComponent.attackRange.offsets)-1)]
+		var count: int = 0
+		print("Checking first dest..")
+
+		var board := insector.boardPositionComponent.battleBoard
+		var occupant: Entity = board.getOccupant(insector.boardPositionComponent.currentCellCoordinates + attackTarget)
+
+		# NEW: use the acting unit's faction bitmask (not the enum/currentTeam)
+		var myMask: int = insector.factionComponent.factions
+
+		# Keep trying until we find an occupant that shares NO bits with us (i.e., a true enemy)
+		while (occupant == null or (myMask & occupant.factionComponent.factions) != 0) and count < 8:
+			attackTarget = insector.attackComponent.attackRange.offsets[randi_range(0, len(insector.attackComponent.attackRange.offsets)-1)]
+			occupant = board.getOccupant(insector.boardPositionComponent.currentCellCoordinates + attackTarget)
+			count += 1
+
+		# Attack only if the occupant is an enemy: bitwise AND must be zero
+		if occupant != null and (myMask & occupant.factionComponent.factions) == 0:
+			print("Found enemy for attack!!")
+			print("Location: ", occupant.boardPositionComponent.currentCellCoordinates)
+			insector.attackComponent.boardService.confirmAttackTarget(insector.boardPositionComponent.currentCellCoordinates + attackTarget, insector, true)
+		else:
+			print(occupant, attackTarget)
+			print("No enemy found")
+			
 		insector.havePerformedAction = true
 		await insector.processTurnUpdateSignals()
 		await insector.processTurnEndSignals()
 		self.didProcessEntity.emit(insector)
-		willStartDelay.emit()
+		willStartDelay.emit(entityTimer)
 		entityTimer.start()
 		await entityTimer.timeout
 

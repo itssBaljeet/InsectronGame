@@ -220,6 +220,8 @@ func generateMeshLibrary() -> void:
 	generateTileMesh("BorderBox", borderMaterial, 1)
 	slopeTileCornerID = meshCount
 	registerCustomMesh("res://addons/outerTileSlantedCornerlLayer2New_Cube_002.res", "SlopeDownCorner", borderMaterial)
+	attackHighlightTileID = meshCount
+	generateTileMesh("AttackHighlightTile", attackHighlightMaterial)
 	
 	$".".mesh_library = meshLib
 
@@ -318,11 +320,14 @@ func getInsectorOccupant(cell: Vector3i) -> InsectronEntity3D:
 	var data: BattleBoardCellData = self.vBoardState.get(cell)
 	return data.occupant if data != null and data.occupant is InsectronEntity3D else null
 
-func highlightRange(pattern: BoardPattern, highlightTileID: int, originalPos: Vector3i) -> void:
+func highlightRange(pattern: BoardPattern, highlightTileID: int, originalPos: Vector3i, shouldHighlightEnemies: bool = false) -> void:
 	for cell in pattern.offsets:
 		var newPos: Vector3i = originalPos + cell
+		var occupant: Entity = getOccupant(newPos)
+		if shouldHighlightEnemies and occupant != null and occupant is InsectronEntity3D:
+			$".".set_cell_item(newPos, highlightTileID)
 		
-		if validateCoordinates(newPos):
+		if not shouldHighlightEnemies and validateCoordinates(newPos):
 			$".".set_cell_item(newPos, highlightTileID)
 			
 	# Tile 2 is the Highlighted tile in the mesh library

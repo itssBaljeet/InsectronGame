@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://bq82t3qc1mxmb"]
+[gd_scene load_steps=54 format=3 uid="uid://bq82t3qc1mxmb"]
 
 [ext_resource type="Script" uid="uid://bryda6lc1suk7" path="res://Entities/Objects/BattleBoardEntity3d.gd" id="1_pvu71"]
 [ext_resource type="PackedScene" uid="uid://ds773iggimiek" path="res://Components/Control/BattleBoardComponent3D.tscn" id="2_s4deh"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://ob3s2kpnk833" path="res://Components/Movement/BattleBoardPositionComponent.tscn" id="8_ucsr6"]
 [ext_resource type="Texture2D" uid="uid://bpe0fycittc87" path="res://Game/mana_bar.png" id="9_06tvy"]
 [ext_resource type="PackedScene" uid="uid://bsnrllt3wjgkg" path="res://Entities/TurnBased/InsectronEntity3D.tscn" id="9_js4j1"]
+[ext_resource type="PackedScene" uid="uid://darr88we23ou4" path="res://Components/Combat/InsectorAttackComponent.tscn" id="9_lo71g"]
 [ext_resource type="PackedScene" uid="uid://tyjgdu65yj3m" path="res://addons/gdquest_round_bat/round_bat_skin.tscn" id="10_mbctc"]
 [ext_resource type="PackedScene" uid="uid://bwewnvs5kt1o3" path="res://Components/Visual/InsectorAnimationComponent.tscn" id="11_0qtex"]
 [ext_resource type="PackedScene" uid="uid://5tvqunkoa4l7" path="res://Components/Combat/FactionComponent.tscn" id="11_7xmvv"]
@@ -32,37 +33,33 @@
 [ext_resource type="ArrayMesh" uid="uid://cfhtoriqvgamd" path="res://addons/edgeTileOuterSlantDownLayer2_Cube_003.res" id="21_qca53"]
 [ext_resource type="PackedScene" uid="uid://cge3ofhdkhiuu" path="res://Components/Control/BattleBoardServiceComponent.tscn" id="21_u1q8a"]
 [ext_resource type="Material" uid="uid://dhuweh83sxgur" path="res://Game/Resources/border.tres" id="23_io2sp"]
+[ext_resource type="Material" uid="uid://coe8jaea7ien5" path="res://Game/Resources/attack_highlight.tres" id="24_sukre"]
 [ext_resource type="ArrayMesh" uid="uid://071s0swisg4h" path="res://addons/outerTileSlantedCornerlLayer2New_Cube_002.res" id="24_tm5g8"]
 [ext_resource type="PackedScene" uid="uid://i67tqdwogkba" path="res://addons/models/dung_roller_-_sj_day_11.glb" id="29_06tvy"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_0qtex"]
-material = ExtResource("3_s4deh")
-size = Vector3(1, 0.3, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_lo71g"]
-size = Vector3(1, 0.3, 1)
-
 [sub_resource type="BoxMesh" id="BoxMesh_sukre"]
-material = ExtResource("4_eeqpy")
+material = ExtResource("3_s4deh")
 size = Vector3(1, 0.3, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gd4cs"]
 size = Vector3(1, 0.3, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_82am4"]
-material = ExtResource("12_vfhsu")
+material = ExtResource("4_eeqpy")
 size = Vector3(1, 0.3, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c3fbh"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_j60e1"]
+[sub_resource type="BoxMesh" id="BoxMesh_j60e1"]
+material = ExtResource("24_sukre")
 size = Vector3(1, 0.3, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x54pr"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_2gfsc"]
+[sub_resource type="BoxMesh" id="BoxMesh_2gfsc"]
+material = ExtResource("12_vfhsu")
 size = Vector3(1, 0.3, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_txsxw"]
@@ -71,8 +68,8 @@ size = Vector3(1, 0.3, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_s38d0"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_bepmc"]
-material = ExtResource("23_io2sp")
+[sub_resource type="BoxShape3D" id="BoxShape3D_bepmc"]
+size = Vector3(1, 0.3, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xavqw"]
 size = Vector3(1, 0.3, 1)
@@ -80,77 +77,96 @@ size = Vector3(1, 0.3, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_vepu4"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="MeshLibrary" id="MeshLibrary_qpwfo"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_qpwfo"]
+size = Vector3(1, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ylsgn"]
+material = ExtResource("23_io2sp")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7cmyx"]
+size = Vector3(1, 0.3, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2y7ne"]
+size = Vector3(1, 0.3, 1)
+
+[sub_resource type="MeshLibrary" id="MeshLibrary_0vo83"]
 item/0/name = "EvenTile"
-item/0/mesh = SubResource("BoxMesh_0qtex")
+item/0/mesh = SubResource("BoxMesh_sukre")
 item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/0/mesh_cast_shadow = 1
-item/0/shapes = [SubResource("BoxShape3D_lo71g"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/0/shapes = [SubResource("BoxShape3D_gd4cs"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/0/navigation_layers = 1
 item/1/name = "OddTile"
-item/1/mesh = SubResource("BoxMesh_sukre")
+item/1/mesh = SubResource("BoxMesh_82am4")
 item/1/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/1/mesh_cast_shadow = 1
-item/1/shapes = [SubResource("BoxShape3D_gd4cs"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/1/shapes = [SubResource("BoxShape3D_c3fbh"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/1/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/1/navigation_layers = 1
 item/2/name = "HighlightedTile"
-item/2/mesh = SubResource("BoxMesh_82am4")
+item/2/mesh = SubResource("BoxMesh_2gfsc")
 item/2/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/2/mesh_cast_shadow = 1
-item/2/shapes = [SubResource("BoxShape3D_c3fbh"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/2/shapes = [SubResource("BoxShape3D_txsxw"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/2/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/2/navigation_layers = 1
 item/3/name = "Edge"
 item/3/mesh = ExtResource("18_jhjrj")
 item/3/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/3/mesh_cast_shadow = 1
-item/3/shapes = [SubResource("BoxShape3D_j60e1"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/3/shapes = [SubResource("BoxShape3D_s38d0"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/3/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/3/navigation_layers = 1
 item/4/name = "Corner"
 item/4/mesh = ExtResource("19_fakjh")
 item/4/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/4/mesh_cast_shadow = 1
-item/4/shapes = [SubResource("BoxShape3D_x54pr"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/4/shapes = [SubResource("BoxShape3D_bepmc"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/4/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/4/navigation_layers = 1
 item/5/name = "OuterEdge"
 item/5/mesh = ExtResource("20_gw2tf")
 item/5/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/5/mesh_cast_shadow = 1
-item/5/shapes = [SubResource("BoxShape3D_2gfsc"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/5/shapes = [SubResource("BoxShape3D_xavqw"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/5/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/5/navigation_layers = 1
 item/6/name = "OuterCorner"
 item/6/mesh = ExtResource("21_lvoms")
 item/6/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/6/mesh_cast_shadow = 1
-item/6/shapes = [SubResource("BoxShape3D_txsxw"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/6/shapes = [SubResource("BoxShape3D_vepu4"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/6/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/6/navigation_layers = 1
 item/7/name = "SlopeDown"
 item/7/mesh = ExtResource("21_qca53")
 item/7/mesh_transform = Transform3D(1, 8.742278e-08, -8.742278e-08, 8.742278e-08, -1, 0, -8.742278e-08, -7.642742e-15, -1, 0, 0, 0)
 item/7/mesh_cast_shadow = 1
-item/7/shapes = [SubResource("BoxShape3D_s38d0"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/7/shapes = [SubResource("BoxShape3D_qpwfo"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/7/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/7/navigation_layers = 1
 item/8/name = "BorderBox"
-item/8/mesh = SubResource("BoxMesh_bepmc")
+item/8/mesh = SubResource("BoxMesh_ylsgn")
 item/8/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/8/mesh_cast_shadow = 1
-item/8/shapes = [SubResource("BoxShape3D_xavqw"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/8/shapes = [SubResource("BoxShape3D_7cmyx"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/8/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/8/navigation_layers = 1
 item/9/name = "SlopeDownCorner"
 item/9/mesh = ExtResource("24_tm5g8")
 item/9/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/9/mesh_cast_shadow = 1
-item/9/shapes = [SubResource("BoxShape3D_vepu4"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/9/shapes = [SubResource("BoxShape3D_2y7ne"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/9/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/9/navigation_layers = 1
+item/10/name = "AttackHighlightTile"
+item/10/mesh = SubResource("BoxMesh_j60e1")
+item/10/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
+item/10/mesh_cast_shadow = 1
+item/10/shapes = [SubResource("BoxShape3D_x54pr"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/10/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/10/navigation_layers = 1
 
 [node name="BattleBoardEntity3D" type="Node3D" groups=["entities", "turnBased"]]
 script = ExtResource("1_pvu71")
@@ -188,6 +204,12 @@ debugMode = true
 [node name="FactionComponent" parent="InsectronEntity3d" instance=ExtResource("11_7xmvv")]
 factions = 32
 
+[node name="InsectorAnimationComponent" parent="InsectronEntity3d" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
+skin = NodePath("../BeetlebotSkin")
+
+[node name="InsectorAttackComponent" parent="InsectronEntity3d" instance=ExtResource("9_lo71g")]
+attackRange = ExtResource("6_tm5g8")
+
 [node name="BeetlebotSkin" parent="InsectronEntity3d" instance=ExtResource("7_53p5e")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
 
@@ -196,9 +218,6 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.75, 0)
 billboard = 1
 texture_filter = 0
 texture = ExtResource("9_06tvy")
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
-skin = NodePath("../BeetlebotSkin")
 
 [node name="InsectronEntity3d2" parent="." instance=ExtResource("9_js4j1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.3, 5.5)
@@ -219,6 +238,9 @@ debugMode = true
 [node name="InsectorAnimationComponent" parent="InsectronEntity3d2" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
 skin = NodePath("../BUG(1)")
 
+[node name="InsectorAttackComponent" parent="InsectronEntity3d2" instance=ExtResource("9_lo71g")]
+attackRange = ExtResource("6_tm5g8")
+
 [node name="BUG(1)" parent="InsectronEntity3d2" instance=ExtResource("8_q8n1u")]
 transform = Transform3D(-1.7484556e-08, 0, -0.4, 0, 0.4, 0, 0.4, 0, -1.7484556e-08, 0, 0, 0)
 
@@ -231,9 +253,6 @@ texture = ExtResource("9_06tvy")
 [node name="InsectronEntity3d3" parent="." instance=ExtResource("9_js4j1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.35, 5.5)
 
-[node name="BeebotSkin" parent="InsectronEntity3d3" instance=ExtResource("15_53p5e")]
-transform = Transform3D(-0.65, 0, 9.814727e-08, 0, 0.65, 0, -9.814727e-08, 0, -0.65, 0, 0.39999995, 0)
-
 [node name="BattleBoardPositionComponent" parent="InsectronEntity3d3" instance=ExtResource("8_ucsr6")]
 initialDestinationCoordinates = Vector3i(1, 0, 5)
 moveRange = ExtResource("12_bbq4c")
@@ -241,28 +260,37 @@ speed = 10.0
 
 [node name="FactionComponent" parent="InsectronEntity3d3" instance=ExtResource("11_7xmvv")]
 
+[node name="InsectorAnimationComponent" parent="InsectronEntity3d3" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
+skin = NodePath("../BeebotSkin")
+
+[node name="InsectorAttackComponent" parent="InsectronEntity3d3" instance=ExtResource("9_lo71g")]
+attackRange = ExtResource("6_tm5g8")
+
+[node name="BeebotSkin" parent="InsectronEntity3d3" instance=ExtResource("15_53p5e")]
+transform = Transform3D(-0.65, 0, 9.814727e-08, 0, 0.65, 0, -9.814727e-08, 0, -0.65, 0, 0.39999995, 0)
+
 [node name="Sprite3D" type="Sprite3D" parent="InsectronEntity3d3"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.25, 0)
 billboard = 1
 texture_filter = 0
 texture = ExtResource("9_06tvy")
 
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d3" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
-skin = NodePath("../BeebotSkin")
-
 [node name="InsectronEntity3d4" parent="." instance=ExtResource("9_js4j1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.35, 0.5)
 move_range = Array[Vector3i]([Vector3i(1, 0, 0), Vector3i(1, 0, 1), Vector3i(1, 0, -1), Vector3i(0, 0, 1), Vector3i(0, 0, -1), Vector3i(-1, 0, 0), Vector3i(-1, 0, 1), Vector3i(-1, 0, -1)])
-
-[node name="FactionComponent" parent="InsectronEntity3d4" instance=ExtResource("11_7xmvv")]
-factions = 32
 
 [node name="BattleBoardPositionComponent" parent="InsectronEntity3d4" instance=ExtResource("8_ucsr6")]
 moveRange = ExtResource("12_bbq4c")
 speed = 10.0
 
+[node name="FactionComponent" parent="InsectronEntity3d4" instance=ExtResource("11_7xmvv")]
+factions = 32
+
 [node name="InsectorAnimationComponent" parent="InsectronEntity3d4" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
 skin = NodePath("../RoundBatSkin")
+
+[node name="InsectorAttackComponent" parent="InsectronEntity3d4" instance=ExtResource("9_lo71g")]
+attackRange = ExtResource("6_tm5g8")
 
 [node name="RoundBatSkin" parent="InsectronEntity3d4" instance=ExtResource("10_mbctc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49999997, 0)
@@ -285,6 +313,12 @@ mesh_height = 0.5
 
 [node name="FactionComponent" parent="InsectronEntity3d5" instance=ExtResource("11_7xmvv")]
 
+[node name="InsectorAnimationComponent" parent="InsectronEntity3d5" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
+skin = NodePath("../bazoo(1)")
+
+[node name="InsectorAttackComponent" parent="InsectronEntity3d5" instance=ExtResource("9_lo71g")]
+attackRange = ExtResource("6_tm5g8")
+
 [node name="bazoo(1)" parent="InsectronEntity3d5" instance=ExtResource("11_tglbh")]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
@@ -293,9 +327,6 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.75, 0)
 billboard = 1
 texture_filter = 0
 texture = ExtResource("9_06tvy")
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d5" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
-skin = NodePath("../bazoo(1)")
 
 [node name="InsectronEntity3d6" parent="." instance=ExtResource("9_js4j1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.3, 1.5)
@@ -311,6 +342,12 @@ mesh_height = 0.5
 [node name="FactionComponent" parent="InsectronEntity3d6" instance=ExtResource("11_7xmvv")]
 factions = 32
 
+[node name="InsectorAnimationComponent" parent="InsectronEntity3d6" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
+skin = NodePath("../herculese(1)")
+
+[node name="InsectorAttackComponent" parent="InsectronEntity3d6" instance=ExtResource("9_lo71g")]
+attackRange = ExtResource("6_tm5g8")
+
 [node name="herculese(1)" parent="InsectronEntity3d6" instance=ExtResource("19_jkgq8")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0.100000024)
 
@@ -320,14 +357,9 @@ billboard = 1
 texture_filter = 0
 texture = ExtResource("9_06tvy")
 
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d6" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
-skin = NodePath("../herculese(1)")
-
 [node name="InsectronEntity3d7" parent="." instance=ExtResource("9_js4j1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.3, 6.5)
 move_range = Array[Vector3i]([Vector3i(1, 0, 0), Vector3i(-1, 0, 0), Vector3i(1, 0, 1), Vector3i(-1, 0, 1), Vector3i(0, 0, 1), Vector3i(1, 0, -1), Vector3i(-1, 0, -1), Vector3i(0, 0, -1)])
-
-[node name="FactionComponent" parent="InsectronEntity3d7" instance=ExtResource("11_7xmvv")]
 
 [node name="BattleBoardPositionComponent" parent="InsectronEntity3d7" instance=ExtResource("8_ucsr6")]
 setInitialCoordinatesFromEntityPosition = false
@@ -335,6 +367,14 @@ initialDestinationCoordinates = Vector3i(2, 0, 6)
 moveRange = ExtResource("6_tm5g8")
 speed = 10.0
 mesh_height = 0.5
+
+[node name="FactionComponent" parent="InsectronEntity3d7" instance=ExtResource("11_7xmvv")]
+
+[node name="InsectorAnimationComponent" parent="InsectronEntity3d7" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
+skin = NodePath("../leafhopper2")
+
+[node name="InsectorAttackComponent" parent="InsectronEntity3d7" instance=ExtResource("9_lo71g")]
+attackRange = ExtResource("6_tm5g8")
 
 [node name="leafhopper2" parent="InsectronEntity3d7" instance=ExtResource("20_ara6e")]
 
@@ -344,14 +384,8 @@ billboard = 1
 texture_filter = 0
 texture = ExtResource("9_06tvy")
 
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d7" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
-skin = NodePath("../leafhopper2")
-
 [node name="InsectronEntity3d8" parent="." instance=ExtResource("9_js4j1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.3, 6.5)
-
-[node name="Sketchfab_Scene" parent="InsectronEntity3d8" instance=ExtResource("29_06tvy")]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.18, 0, 0, 0.12)
 
 [node name="BattleBoardPositionComponent" parent="InsectronEntity3d8" instance=ExtResource("8_ucsr6")]
 setInitialCoordinatesFromEntityPosition = false
@@ -362,14 +396,20 @@ mesh_height = 0.5
 
 [node name="FactionComponent" parent="InsectronEntity3d8" instance=ExtResource("11_7xmvv")]
 
+[node name="InsectorAnimationComponent" parent="InsectronEntity3d8" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
+skin = NodePath("../Sketchfab_Scene")
+
+[node name="InsectorAttackComponent" parent="InsectronEntity3d8" instance=ExtResource("9_lo71g")]
+attackRange = ExtResource("6_tm5g8")
+
+[node name="Sketchfab_Scene" parent="InsectronEntity3d8" instance=ExtResource("29_06tvy")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.18, 0, 0, 0.119999886)
+
 [node name="Sprite3D" type="Sprite3D" parent="InsectronEntity3d8"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.75, 0)
 billboard = 1
 texture_filter = 0
 texture = ExtResource("9_06tvy")
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d8" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
-skin = NodePath("../Sketchfab_Scene")
 
 [node name="InsectronEntity3d9" parent="." instance=ExtResource("9_js4j1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.3, 1.5)
@@ -384,6 +424,12 @@ mesh_height = 0.5
 [node name="FactionComponent" parent="InsectronEntity3d9" instance=ExtResource("11_7xmvv")]
 factions = 32
 
+[node name="InsectorAnimationComponent" parent="InsectronEntity3d9" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
+skin = NodePath("../Sketchfab_Scene")
+
+[node name="InsectorAttackComponent" parent="InsectronEntity3d9" instance=ExtResource("9_lo71g")]
+attackRange = ExtResource("6_tm5g8")
+
 [node name="Sketchfab_Scene" parent="InsectronEntity3d9" instance=ExtResource("15_io2sp")]
 transform = Transform3D(-3.934025e-09, 0, -0.09, 0, 0.09, 0, 0.09, 0, -3.934025e-09, 0, 0, 0)
 
@@ -393,11 +439,8 @@ billboard = 1
 texture_filter = 0
 texture = ExtResource("9_06tvy")
 
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d9" node_paths=PackedStringArray("skin") instance=ExtResource("11_0qtex")]
-skin = NodePath("../Sketchfab_Scene")
-
 [node name="BattleBoardComponent3D" parent="." instance=ExtResource("2_s4deh")]
-mesh_library = SubResource("MeshLibrary_qpwfo")
+mesh_library = SubResource("MeshLibrary_0vo83")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="BattleBoardUIComponent" parent="." instance=ExtResource("12_yubh6")]

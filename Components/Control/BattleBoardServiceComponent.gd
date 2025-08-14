@@ -87,19 +87,11 @@ func confirmMoveTarget(dest: Vector3i) -> bool:
 	if not positionComponent.validateCoordinates(dest):
 		return false
 
-	# --- NEW: face the movement direction before starting the move.
+	await _rotateTargetToCell(activeUnit, dest)
+	
 	var anim: InsectorAnimationComponent = activeUnit.components.get(&"InsectorAnimationComponent")
 	if anim:
-		var from_cell: Vector3i = positionComponent.currentCellCoordinates
-		var from_world: Vector3 = positionComponent.adjustToTile(
-			battleBoard.getGlobalCellPosition(from_cell)
-		)
-		var to_world: Vector3 = positionComponent.adjustToTile(
-			battleBoard.getGlobalCellPosition(dest)
-		)
-		var move_dir_world: Vector3 = to_world - from_world
-		if move_dir_world.length_squared() > 0.0:
-			await anim.face_move_direction(move_dir_world)
+		anim.walkAnimation()
 
 	# Execute move.
 	if not positionComponent.setDestinationCellCoordinates(dest):
@@ -107,8 +99,8 @@ func confirmMoveTarget(dest: Vector3i) -> bool:
 
 	# --- NEW: wait for arrival, then restore “home” facing.
 	await positionComponent.didArriveAtNewCell
-	if anim:
-		await anim.face_home_orientation()
+	await anim.idleAnimation()
+	await anim.face_home_orientation()
 
 	activeUnit.haveMoved = true
 	battleBoard.clearHighlights()
@@ -126,34 +118,22 @@ func confirmMoveTarget(dest: Vector3i) -> bool:
 ## @return true if undo succeeded; false if there is nothing to undo.
 func undoLastMove() -> bool:
 	if not _unitReady(): return false
-	var pos: BattleBoardPositionComponent = activeUnit.boardPositionComponent
-	if not pos: return false
-	if pos.previousCellCoordinates == Vector3i(): return false
-	
+
 	var positionComponent: BattleBoardPositionComponent = activeUnit.boardPositionComponent
 	if not positionComponent: return false
+	if positionComponent.previousCellCoordinates == Vector3i(): return false
 	
 	# --- NEW: face the movement direction before starting the move.
-	var anim: InsectorAnimationComponent = activeUnit.components.get(&"InsectorAnimationComponent")
-	if anim:
-		var from_cell: Vector3i = positionComponent.currentCellCoordinates
-		var from_world: Vector3 = positionComponent.adjustToTile(
-			battleBoard.getGlobalCellPosition(from_cell)
-		)
-		var to_world: Vector3 = positionComponent.adjustToTile(
-			battleBoard.getGlobalCellPosition(pos.previousCellCoordinates)
-		)
-		var move_dir_world: Vector3 = to_world - from_world
-		if move_dir_world.length_squared() > 0.0:
-			await anim.face_move_direction(move_dir_world)
+	await _rotateTargetToCell(activeUnit, positionComponent.previousCellCoordinates)
 
-	var validMove: bool = pos.setDestinationCellCoordinates(pos.previousCellCoordinates)
+	var validMove: bool = positionComponent.setDestinationCellCoordinates(positionComponent.previousCellCoordinates)
 	if validMove:
 		activeUnit.haveMoved = false
 		state = ServiceState.IDLE
 
 	# --- NEW: wait for arrival, then restore “home” facing.
 	await positionComponent.didArriveAtNewCell
+	var anim: InsectorAnimationComponent = activeUnit.components.get(&"InsectorAnimationComponent")
 	if anim:
 		await anim.face_home_orientation()
 
@@ -166,33 +146,55 @@ func beginAttackSelect() -> void:
 	if not _unitReady() or activeUnit.havePerformedAction: return
 	state = ServiceState.ATTACK_SELECT
 	_selectorEnabled(true)
-	#_highlightAttackRange(activeUnit)
+	battleBoard.highlightRange(activeUnit.attackComponent.attackRange, battleBoard.attackHighlightTileID, activeUnit.boardPositionComponent.currentCellCoordinates, true)
 
 ## Attempts to confirm and execute an attack against the occupant at the given cell.
 ## Validates target (must exist and be hostile), triggers attack placeholder, updates flags,
 ## clears highlights, and may end the team turn if exhausted.
 ## @param cell Target cell coordinates.
 ## @return true if the attack step was accepted; false otherwise.
-func confirmAttackTarget(cell: Vector3i) -> bool:
-	if state != ServiceState.ATTACK_SELECT or not _unitReady(): return false
-
-	var target: Entity = battleBoard.getOccupant(cell)
-	if target == null: return false
-
-	# Can't attack allies.
-	if target.factionComponent and activeUnit.factionComponent \
-	and target.factionComponent.checkAlliance(activeUnit.factionComponent.factions):
+func confirmAttackTarget(cell: Vector3i, attacker: InsectronEntity3D = activeUnit, aiTurn: bool = false) -> bool:
+	if (state != ServiceState.ATTACK_SELECT and not aiTurn):
+		print("Failed initial guard clause")
 		return false
 
+	var target: Entity = battleBoard.getOccupant(cell)
+	if target == null:
+		print("Failed null check")
+		return false
+
+	# Can't attack allies.
+	print(target.factionComponent.factions)
+	print(attacker.factionComponent.factions)
+	if target.factionComponent and attacker.factionComponent \
+	and target.factionComponent.checkAlliance(attacker.factionComponent.factions):
+		print("Failed faction bitwise")
+		return false
+
+	_rotateTargetToCell(attacker, cell)
+	await _rotateTargetToCell(target, attacker.boardPositionComponent.currentCellCoordinates)
+	
 	# TODO: plug your actual attack resolution here
 	print("Attacked!")
-	activeUnit.havePerformedAction = true
-
+	attacker.havePerformedAction = true
 	battleBoard.clearHighlights()
 	state = ServiceState.IDLE
 	
+	var anim: InsectorAnimationComponent = attacker.components.get(&"InsectorAnimationComponent")
+	var anim2: InsectorAnimationComponent = target.components.get(&"InsectorAnimationComponent")
+	if anim:
+		await anim.attackAnimation()
+		await anim2.hurtAnimation()
+		await anim2.attackAnimation()
+		await anim.hurtAnimation()
+		await anim.idleAnimation()
+		await anim2.idleAnimation()
+		anim.face_home_orientation()
+		await anim2.face_home_orientation()
+	
+	
 	# If the team is done after this attack, end turn.
-	if TurnBasedCoordinator.isTeamExhausted():
+	if TurnBasedCoordinator.isTeamExhausted() and not aiTurn:
 		endPlayerTurn()
 
 	return true
@@ -238,5 +240,21 @@ func _selectorEnabled(enable: bool) -> void:
 	if not selector: return
 	selector.disabled = not enable
 	selector.visible = enable
+
+func _rotateTargetToCell(target: InsectronEntity3D, cell: Vector3i) -> void:
+	if not _unitReady(): return
+	var pos: BattleBoardPositionComponent = target.boardPositionComponent
+	var anim: InsectorAnimationComponent = target.components.get(&"InsectorAnimationComponent")
+	if not anim or not pos: return
+
+	var from_world: Vector3 = pos.adjustToTile(
+		battleBoard.getGlobalCellPosition(pos.currentCellCoordinates)
+	)
+	var to_world: Vector3 = pos.adjustToTile(
+		battleBoard.getGlobalCellPosition(cell)
+	)
+	var dir: Vector3 = to_world - from_world
+	if dir.length_squared() > 0.0:
+		await anim.face_move_direction(dir)
 
 #endregion

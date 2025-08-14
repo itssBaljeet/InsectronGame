@@ -73,18 +73,19 @@ func _unhandled_input(event: InputEvent) -> void:
 		print("Select ", battleBoardUI.state)
 		var cursorCell: Vector3i = boardPositionComponent.currentCellCoordinates
 		# If UI is waiting for a target selection, delegate to UI
-		if battleBoardUI.state == BattleBoardUIComponent.UIState.MoveSelect:
-			print("Moving")
-			if cursorCell in boardPositionComponent.battleBoard.highlights:
-				battleBoardUI.confirmMoveTarget(cursorCell)
-		elif battleBoardUI.state == BattleBoardUIComponent.UIState.AttackSelect:
-			print("Attacking")
-			battleBoardUI.confirmAttackTarget(cursorCell)
-		else:
-			print("else statement")
-			# Normal selection: select unit on the cell if any
-			var unit: InsectronEntity3D = boardPositionComponent.battleBoard.getInsectorOccupant(cursorCell)  # get unit at cell
-			#if unit and (not unit.haveMoved or not unit.havePerformedAction) and unit.factionComponent.factions == TurnBasedCoordinator.currentTeam:
-			print("Opening Menu")
-			# Friendly unit that still can act
-			battleBoardUI.openUnitMenu(unit)
+		match battleBoardUI.state:
+			BattleBoardUIComponent.UIState.MoveSelect:
+				print("Moving")
+				if cursorCell in boardPositionComponent.battleBoard.highlights:
+					battleBoardUI.confirmMoveTarget(cursorCell)
+			BattleBoardUIComponent.UIState.AttackSelect:
+				print("Attacking")
+				battleBoardUI.confirmAttackTarget(cursorCell)
+			_:
+				print("else statement")
+				# Normal selection: select unit on the cell if any
+				var unit: InsectronEntity3D = boardPositionComponent.battleBoard.getInsectorOccupant(cursorCell)  # get unit at cell
+				#if unit and (not unit.haveMoved or not unit.havePerformedAction) and unit.factionComponent.factions == TurnBasedCoordinator.currentTeam:
+				print("Opening Menu")
+				# Friendly unit that still can act
+				battleBoardUI.openUnitMenu(unit)

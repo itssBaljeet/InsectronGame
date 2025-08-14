@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://darr88we23ou4"]
+
+[ext_resource type="Script" uid="uid://t6l0eay7rc7y" path="res://Components/Combat/InsectorAttackComponent.gd" id="1_oh2ih"]
+
+[node name="InsectorAttackComponent" type="Node3D"]
+script = ExtResource("1_oh2ih")

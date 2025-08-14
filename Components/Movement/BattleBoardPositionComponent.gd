@@ -280,6 +280,7 @@ func cancelDestination(snapToCurrentCell: bool = true) -> void:
 
 
 func vacateCurrentCell() -> void:
+	if battleBoard == null: return
 	battleBoard.setCellOccupancy(currentCellCoordinates, false, null)
 
 #endregion
@@ -314,7 +315,7 @@ func moveTowardsDestinationCell(delta: float) -> void:
 
 
 ## Moves the mesh to the xz center of a cell and then accounts for the height of the
-## Battle Board tiles and cell height then sets the y according to that
+## battle board tiles and cell height then sets the y according to that
 func adjustToTile(position: Vector3) -> Vector3:
 	position.x += battleBoard.tile_x/2
 	position.z += battleBoard.tile_z/2

@@ -31,6 +31,7 @@ var battleBoardService: BattleBoardServiceComponent:
 #region State
 
 var state: UIState = UIState.Idle
+var prevState: UIState = UIState.Idle
 var activeUnit: InsectronEntity3D
 
 #endregion
@@ -69,6 +70,7 @@ func _updateButtonsVisibility(unit: InsectronEntity3D) -> void:
 
 func onMoveButtonPressed() -> void:
 	menuPanel.hide()
+	prevState = state
 	state = UIState.MoveSelect
 	battleBoardService.beginMoveSelect()
 
@@ -86,12 +88,14 @@ func undoMoveTarget() -> void:
 	if state != UIState.UnitMenuPostMove or activeUnit == null:
 		return
 	if await battleBoardService.undoLastMove():
+		prevState = state
 		state = UIState.UnitMenu
 		moveButton.visible = true
 
 
 func onAttackButtonPressed() -> void:
 	menuPanel.hide()
+	prevState = state
 	state = UIState.AttackSelect
 	battleBoardService.beginAttackSelect()
 
@@ -99,7 +103,7 @@ func onAttackButtonPressed() -> void:
 func confirmAttackTarget(target_cell: Vector3i) -> void:
 	if state != UIState.AttackSelect or activeUnit == null:
 		return
-	if battleBoardService.confirmAttackTarget(target_cell):
+	if await battleBoardService.confirmAttackTarget(target_cell):
 		closeUnitMenu() # unit turn is over after attacking
 
 
@@ -137,6 +141,7 @@ func _ready() -> void:
 	moveButton.button_up.connect(onMoveButtonPressed)
 	waitButton.button_up.connect(onWaitButtonPressed)
 	endTurnButton.button_up.connect(onEndTurnButtonPressed)
+	attackButton.button_up.connect(onAttackButtonPressed)
 	TurnBasedCoordinator.willBeginPlayerTurn.connect(_onWillBeginPlayerTurn)
 
 
@@ -187,6 +192,10 @@ func _input(event: InputEvent) -> void:
 				battleBoardService.battleBoard.clearHighlights()
 			UIState.UnitMenuPostMove:
 				undoMoveTarget()
+			UIState.AttackSelect:
+				openUnitMenu(activeUnit, UIState.UnitMenuPostMove if prevState == UIState.UnitMenuPostMove else UIState.UnitMenu)
+				# Second edge case
+				battleBoardService.battleBoard.clearHighlights()
 
 #region Debug
 
