@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dun38r0k022n1"]
+[gd_scene load_steps=9 format=3 uid="uid://dun38r0k022n1"]
 
 [ext_resource type="PackedScene" uid="uid://bq82t3qc1mxmb" path="res://Game/BattleBoard.tscn" id="2_5jdkk"]
 [ext_resource type="Environment" uid="uid://176jft2dorry" path="res://Game/testingGroundWorld.tres" id="2_315n7"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://cy36aygvs66pn" path="res://addons/gdquest_gobot/gobot_skin.tscn" id="3_j5y2j"]
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://addons/gdquest_sophia/sophia_skin.tscn" id="4_0qr6p"]
 [ext_resource type="Material" uid="uid://dc8sffjowdtt0" path="res://Game/Resources/tileMat22.tres" id="4_m1l33"]
+[ext_resource type="PackedScene" uid="uid://ba6pjbml0igrx" path="res://Assets/PolyBlocks/EffectBlocks/assets/other/dust.tscn" id="7_jveuj"]
+[ext_resource type="PackedScene" uid="uid://dftx2rlgbrpiq" path="res://Assets/PolyBlocks/EffectBlocks/assets/other/fireflies.tscn" id="8_x8ilj"]
 
 [node name="TestingGround" type="Node3D"]
 
@@ -78,7 +80,7 @@ height = 0.5
 sides = 10
 
 [node name="GobotSkin" parent="." instance=ExtResource("3_j5y2j")]
-transform = Transform3D(5.51, 0, 0, 0, 5.51, 0, 0, 0, 5.51, 2.5, -3.4, 14)
+transform = Transform3D(-5.51, 0, -4.8169954e-07, 0, 5.51, 0, 4.8169954e-07, 0, -5.51, 2.5, -3.4, 14)
 
 [node name="SpotLight3D" type="SpotLight3D" parent="GobotSkin"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.03629765, 2.5655746, 0)
@@ -90,13 +92,22 @@ spot_attenuation = -0.34
 spot_angle = 25.0
 
 [node name="SophiaSkin" parent="." instance=ExtResource("4_0qr6p")]
-transform = Transform3D(5.5, 0, 0, 0, 5.5, 0, 0, 0, 5.5, 2.4999998, -3.5, -7.6)
+transform = Transform3D(5.5, 0, 0, 0, 5.5, 0, 0, 0, 5.5, 2.5, -3.475, -7.6)
 
-[node name="SpotLight3D2" type="SpotLight3D" parent="SophiaSkin"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 2.5454545, 0)
+[node name="SpotLight3D" type="SpotLight3D" parent="SophiaSkin"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.036, 3.281, 0)
 light_color = Color(0.99917, 0.9999998, 0.90195644, 1)
+light_energy = 1.119
+light_size = 0.023
 shadow_enabled = true
-spot_range = 15.458
-spot_attenuation = -0.04
+spot_range = 19.176
+spot_attenuation = -0.34
 spot_angle = 25.0
-spot_angle_attenuation = 0.36602044
+
+[node name="Dust" parent="." instance=ExtResource("7_jveuj")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.5, 1, 4)
+
+[node name="Fireflies" parent="." instance=ExtResource("8_x8ilj")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.5, 1, 4)
+visible = false
+amount = 32

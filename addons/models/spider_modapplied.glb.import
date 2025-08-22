@@ -1,0 +1,100 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://qgpejppspisl"
+path="res://.godot/imported/spider_modapplied.glb-6d036ad0939879892ebd0489a525c580.scn"
+
+[deps]
+
+source_file="res://addons/models/spider_modapplied.glb"
+dest_files=["res://.godot/imported/spider_modapplied.glb-6d036ad0939879892ebd0489a525c580.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
+_subresources={
+"materials": {
+"Material": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/models/Material.tres",
+"use_external/path": "uid://4dpetwu2c3r7"
+},
+"Material.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/models/Material.001.tres",
+"use_external/path": "uid://crw311mu4kluw"
+},
+"Material.002": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/models/Material.002.tres",
+"use_external/path": "uid://b71nd6umqiaqd"
+},
+"Material.003": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/models/Material.003.tres",
+"use_external/path": "uid://eu3yej5ui0qf"
+},
+"Material.004": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/models/Material.004.tres",
+"use_external/path": "uid://cyqnskrpri0ob"
+},
+"Material.005": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/models/Material.005.tres",
+"use_external/path": "uid://bq2tp84ibss7c"
+},
+"Material.006": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/models/Material.006.tres",
+"use_external/path": "uid://ppjjf50q5jyq"
+},
+"Material.007": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/models/Material.007.tres",
+"use_external/path": "uid://cvdy18tvmd8oa"
+},
+"Material.008": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/models/Material.008.tres",
+"use_external/path": "uid://bt4cvtwsabwv6"
+},
+"Material.009": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/models/Material.009.tres",
+"use_external/path": "uid://df3qi0bll8alj"
+},
+"Material.010": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/models/Material.010.tres",
+"use_external/path": "uid://d31veddkb7rnr"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=1

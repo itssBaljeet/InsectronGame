@@ -37,6 +37,54 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={}
+_subresources={
+"materials": {
+"Material": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/Material.tres",
+"use_external/path": "uid://ddt60lktdgm85"
+},
+"Material.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/Material.001.tres",
+"use_external/path": "uid://frvsnq0bqt3q"
+},
+"Material.002": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/Material.002.tres",
+"use_external/path": "uid://dfnjht8mcnh80"
+},
+"Material.003": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/Material.003.tres",
+"use_external/path": "uid://b1r1sembe2wno"
+},
+"Material.004": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/Material.004.tres",
+"use_external/path": "uid://cwgl86tuyxram"
+},
+"Material.005": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/Material.005.tres",
+"use_external/path": "uid://b233mi8r4ioy4"
+},
+"Material.006": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/Material.006.tres",
+"use_external/path": "uid://y438nvw2xans"
+},
+"Material.007": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/Material.007.tres",
+"use_external/path": "uid://b1cddttlcp6v1"
+},
+"Material.008": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/Material.008.tres",
+"use_external/path": "uid://bmuafayrjvj45"
+}
+}
+}
 gltf/naming_version=2
 gltf/embedded_image_handling=1

@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dtboa77rxs073"
+path="res://.godot/imported/m1-ship5.obj-562aae61f59ea26e9b2295bb200026a8.mesh"
+
+[deps]
+
+files=["res://.godot/imported/m1-ship5.obj-562aae61f59ea26e9b2295bb200026a8.mesh"]
+
+source_file="res://addons/LowPoly-Spaceships-By-Majadroid/obj-files/obj-ships/material-01/m1-ship5.obj"
+dest_files=["res://.godot/imported/m1-ship5.obj-562aae61f59ea26e9b2295bb200026a8.mesh", "res://.godot/imported/m1-ship5.obj-562aae61f59ea26e9b2295bb200026a8.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

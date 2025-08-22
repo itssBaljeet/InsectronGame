@@ -1,0 +1,6 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://dlowssv8kmxjm"]
+
+[ext_resource type="Texture2D" uid="uid://calm02llhsv7w" path="res://addons/UI Pack Kenney/Vector/Grey/button_square_gradient.svg" id="1_h4cw0"]
+
+[resource]
+texture = ExtResource("1_h4cw0")

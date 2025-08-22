@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bnjoullvn2c2c"]
+
+[resource]
+resource_name = "dung_stem"
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.37168142, 0.32854322, 0.243402, 1)
+roughness = 0.7627883

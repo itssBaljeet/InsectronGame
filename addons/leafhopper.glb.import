@@ -41,8 +41,18 @@ _subresources={
 "materials": {
 "leafHopperMat": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://addons/body.tres",
-"use_external/path": "uid://clxcdiiyt2mgb"
+"use_external/fallback_path": "res://addons/leafHopperMat.tres",
+"use_external/path": "uid://cowc0hnth4878"
+},
+"spike": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/spike.tres",
+"use_external/path": "uid://bd744rt1i2gp0"
+},
+"wing": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/wing.tres",
+"use_external/path": "uid://dkgrdbeigeiqs"
 }
 }
 }

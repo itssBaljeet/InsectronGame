@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cowc0hnth4878"]
+
+[ext_resource type="Texture2D" uid="uid://cbpqg8ex3yafl" path="res://addons/leafhopper.png" id="1_d8dr7"]
+
+[resource]
+resource_name = "leafHopperMat"
+cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_d8dr7")

@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bsnrllt3wjgkg"]
-
-[ext_resource type="Script" uid="uid://dcgkh3lvv0v4w" path="res://Entities/TurnBased/InsectronEntity3d.gd" id="1_j265w"]
-
-[node name="InsectronEntity3d" type="Node3D"]
-script = ExtResource("1_j265w")

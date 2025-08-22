@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://frvsnq0bqt3q"]
+
+[ext_resource type="Texture2D" uid="uid://cy5h6eit34xns" path="res://addons/BUG(1)_Eye base.png" id="1_r40vt"]
+
+[resource]
+resource_name = "Material.001"
+cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_r40vt")
+roughness = 0.5

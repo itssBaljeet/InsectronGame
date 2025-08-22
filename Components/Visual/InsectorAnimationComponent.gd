@@ -24,9 +24,12 @@ extends Component
 ## Dependencies
 var faction_component: FactionComponent:
 	get:
-		if faction_component:
-			return faction_component
 		return parentEntity.components.get(&"FactionComponent")
+		
+## Dependencies
+var board_position_component: BattleBoardPositionComponent:
+	get:
+		return parentEntity.components.get(&"BattleBoardPositionComponent")
 
 #region State
 var _home_yaw_cached: float = 0.0
@@ -46,6 +49,165 @@ const HURT_FLASH_ENERGY    := 1.8
 const HURT_FLASH_DURATION  := 0.0
 
 #endregion
+
+## -------------------------
+## Status FX: Poison (3D)
+## -------------------------
+
+@export_group("Status FX / Poison")
+
+@export var sphere_mat: StandardMaterial3D = preload("res://Game/Resources/poison.tres")
+
+## Start with poison on by default?
+@export var poison_enabled_default: bool = true
+
+## Local offset (relative to the skin's origin) where particles will appear.
+@export var poison_offset: Vector3 = Vector3(0.0, 0.9, 0.0)
+
+## Total concurrent particles (higher = denser).
+@export_range(1, 512, 1) var poison_amount: int = 6
+
+## Lifetime of each particle (seconds).
+@export_range(0.2, 6.0, 0.1) var poison_lifetime: float = 1.2
+
+## Should the particle node chase the skin every frame?
+@export var poison_follow_skin: bool = true
+
+## Snap to tile instead of following the skin?
+@export var poison_snap_to_tile: bool = true
+
+## Y offset above the snapped tile (tune for tall/flying creatures).
+@export_range(-5.0, 5.0, 0.01) var poison_tile_y: float = 0.9
+
+## Radius of the spawn pad at the bottom (XZ). Particles pick a random point here.
+@export_range(0.0, 2.0, 0.01) var poison_spawn_radius: float = 0.25
+
+
+
+## Reference to the GPU particles (created on-demand as this node's child).
+@export var _poison_fx: GPUParticles3D
+
+
+## Ensure the poison FX node exists and is configured.
+func _setup_poison_fx() -> void:
+	if not _poison_fx:
+		return
+
+	_poison_fx.name = "PoisonFX"
+	_poison_fx.one_shot = false
+	_poison_fx.amount = poison_amount
+	_poison_fx.lifetime = poison_lifetime
+	_poison_fx.local_coords = true  # particles move in emitter's local space
+	_poison_fx.emitting = false     # we’ll toggle below
+	
+	
+	var ppm := ParticleProcessMaterial.new()
+
+	# Spawn from a thin box (a “pad”) on the XZ plane; height is tiny so all points are “bottom”.
+	ppm.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
+	ppm.emission_box_extents = Vector3(poison_spawn_radius, 0.02, poison_spawn_radius)
+
+	# Float straight up (no angular spread).
+	ppm.direction = Vector3.UP
+	ppm.spread = 0.0
+	ppm.initial_velocity_min = 0.6
+	ppm.initial_velocity_max = 1.2
+	ppm.gravity = Vector3.ZERO
+
+	# Keep them tidy (little to no drift).
+	ppm.damping_min = 0.0
+	ppm.damping_max = 0.05
+
+	# Size variance
+	ppm.scale_min = 0.0
+	ppm.scale_max = 0.5
+
+	# Optional: ease size over life.
+	var scale_curve := Curve.new()
+	scale_curve.add_point(Vector2(0.0, 1.0))
+	scale_curve.add_point(Vector2(0.6, 0.7))
+	scale_curve.add_point(Vector2(1.0, 0.0))
+	var scale_tex := CurveTexture.new()
+	scale_tex.curve = scale_curve
+	ppm.scale_curve = scale_tex
+
+	# Purple → transparent over lifetime.
+	var grad := Gradient.new()
+	grad.add_point(0.00, Color(0.70, 0.30, 0.95, 0.90))
+	grad.add_point(0.60, Color(0.651, 0.251, 0.851, 0.71))
+	grad.add_point(1.00, Color(0.65, 0.25, 0.85, 0.00))
+	var ramp := GradientTexture1D.new()
+	ramp.gradient = grad
+	ppm.color_ramp = ramp
+
+	_poison_fx.process_material = ppm
+
+	# Parent to THIS component (as requested), not the skin.
+	add_child(_poison_fx)
+	_poison_fx.owner = self
+
+	# Place it relative to the skin once here; per-frame follow happens in _process().
+	_update_poison_anchor()
+
+	# Default state
+	if poison_enabled_default:
+		_poison_fx.emitting = true
+
+## Keep poison FX sitting at the current grid cell (center) + adjustable Y.
+func _update_poison_anchor() -> void:
+	if not _poison_fx or (not _is_valid_skin() and not board_position_component):
+		return
+
+	# Prefer snapping to the battle board tile; fall back to skin if not available.
+	if poison_snap_to_tile and board_position_component and board_position_component.battleBoard:
+		var cell: Vector3i = board_position_component.currentCellCoordinates  # current tile coords 
+		var board := board_position_component.battleBoard
+
+		# Base world position of the cell (GridMap-space → global) 
+		var base: Vector3 = board.getGlobalCellPosition(cell)
+
+		# Center on the tile in X/Z and compute a stable baseline Y like your mover does:
+		#    y += (tile_y - cell_height/2)  then add our adjustable poison_tile_y.
+		# (This mirrors the adjustToTile() logic without using mesh_height) 
+		var pos := base
+		pos.x += board.tile_x * 0.5
+		pos.z += board.tile_z * 0.5
+		pos.y += (board.tile_y - board.cell_size.y * 0.5) + poison_tile_y
+
+		_poison_fx.global_position = pos
+		_poison_fx.global_rotation = Vector3.ZERO
+	else:
+		# Fallback: ride the skin with a local offset
+		_poison_fx.global_position = skin.to_global(poison_offset)
+		_poison_fx.global_rotation = Vector3.ZERO
+
+
+## Public: turn looping poison aura on/off (persists until changed).
+func set_poisoned(enabled: bool) -> void:
+	_setup_poison_fx()
+	_poison_fx.emitting = enabled
+	if debugMode:
+		printDebug("set_poisoned(): %s" % [str(enabled)])
+
+
+## Public: emit a short one-shot puff (useful when applying the status).
+func play_poison_puff(particle_count: int = 18) -> void:
+	_setup_poison_fx()
+	_poison_fx.one_shot = true
+	_poison_fx.amount = particle_count
+	_poison_fx.emitting = false
+	_update_poison_anchor()
+	_poison_fx.restart()
+	_poison_fx.emitting = true
+	# return to looping mode if it was previously on
+	_poison_fx.one_shot = false
+
+
+## Optional cleanup if you want to fully remove FX node at runtime.
+func clear_poison_fx() -> void:
+	if _poison_fx and is_instance_valid(_poison_fx):
+		_poison_fx.queue_free()
+	_poison_fx = null
 
 
 #region Animations
@@ -129,6 +291,10 @@ func _ready() -> void:
 		var initial := skin.rotation.y
 		_home_yaw_cached = initial
 		_home_yaw_ready = true
+		
+	# Poison FX init
+	_setup_poison_fx()
+
 
 ## Public API
 ## Rotate to face the given direction (WORLD XZ), snapped to 45°.

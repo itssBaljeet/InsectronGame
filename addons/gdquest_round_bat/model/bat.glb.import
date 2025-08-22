@@ -2095,6 +2095,13 @@ _subresources={
 "slice_99/start_frame": 0,
 "slices/amount": null
 }
+},
+"materials": {
+"bat_mat": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/gdquest_round_bat/model/bat_mat.tres",
+"use_external/path": "uid://cgyu54b0rm2tk"
+}
 }
 }
 gltf/naming_version=0

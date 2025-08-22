@@ -6207,6 +6207,28 @@ _subresources={
 "slice_99/start_frame": 0,
 "slices/amount": null
 }
+},
+"materials": {
+"FaceMat": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/gdquest_bee_bot/materials/FaceMat.tres",
+"use_external/path": "uid://dlajhhslurjua"
+},
+"Lights": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/gdquest_bee_bot/materials/Lights.tres",
+"use_external/path": "uid://cipxcecekasxw"
+},
+"WingMat": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/gdquest_bee_bot/materials/WingMat.tres",
+"use_external/path": "uid://dhc3u62vytyj3"
+},
+"bee_mat": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/gdquest_bee_bot/materials/bee_mat.tres",
+"use_external/path": "uid://dqf6jjfdxsgee"
+}
 }
 }
 gltf/naming_version=0

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BoardPattern" load_steps=2 format=3 uid="uid://dv35cy0cd23g7"]
+
+[ext_resource type="Script" uid="uid://ce4wydgnkq3s" path="res://Resources/BoardPattern.gd" id="1_ryc5w"]
+
+[resource]
+script = ExtResource("1_ryc5w")
+offsets = Array[Vector3i]([Vector3i(0, 0, 1), Vector3i(0, 0, 2), Vector3i(0, 0, 3), Vector3i(0, 0, -1), Vector3i(0, 0, -2), Vector3i(0, 0, -3), Vector3i(1, 0, 0), Vector3i(2, 0, 0), Vector3i(3, 0, 0), Vector3i(-1, 0, 0), Vector3i(-2, 0, 0), Vector3i(-3, 0, 0)])
+metadata/_custom_type_script = "uid://ce4wydgnkq3s"

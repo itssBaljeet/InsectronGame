@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://df6twxol4ua56"]
+
+[ext_resource type="Texture2D" uid="uid://bn611dbb24utg" path="res://addons/herculese(1)_body.png" id="1_715ck"]
+
+[resource]
+resource_name = "Material"
+cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_715ck")
+roughness = 0.5

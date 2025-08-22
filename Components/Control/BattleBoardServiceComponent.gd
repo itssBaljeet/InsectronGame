@@ -19,14 +19,16 @@ enum ServiceState {
 
 var battleBoard: BattleBoardComponent3D:
 	get:
-		if battleBoard: return battleBoard
 		return coComponents.get(&"BattleBoardComponent3D")
 
 var selector: BattleBoardSelectorComponent3D:
 	get:
-		if selector: return selector
 		var selectorEntity := parentEntity.findFirstChildOfType(BattleBoardSelectorEntity)
 		return selectorEntity.components.get(&"BattleBoardSelectorComponent3D") if selectorEntity else null
+
+var rules: BattleBoardRulesComponent:
+	get:
+		return coComponents.get(&"BattleBoardRulesComponent")
 
 #endregion
 
@@ -34,7 +36,7 @@ var selector: BattleBoardSelectorComponent3D:
 #region State
 
 var state: ServiceState = ServiceState.IDLE
-var activeUnit: InsectronEntity3D
+var activeUnit: BattleBoardUnitEntity
 
 #endregion
 
@@ -44,19 +46,19 @@ var activeUnit: InsectronEntity3D
 ## Sets the unit this service will operate on for subsequent actions.
 ## Does not change state or visuals.
 ## @param unit The unit to become the active actor.
-func setActiveUnit(unit: InsectronEntity3D) -> void:
+func setActiveUnit(unit: BattleBoardUnitEntity) -> void:
 	activeUnit = unit
 
 ## Computes which UI actions should be enabled for the provided unit.
 ## Use this to drive button visibility without duplicating rules in the UI.
 ## @param unit The unit to query.
 ## @return Dictionary with keys: "move_enabled", "attack_enabled", "item_enabled", "wait_enabled".
-func getActionsFor(unit: InsectronEntity3D) -> Dictionary:
+func getActionsFor(unit: BattleBoardUnitEntity) -> Dictionary:
 	# Lets UI decide button visibility without duplicating rules.
 	return {
-		"move_enabled":   unit != null and not unit.haveMoved,
-		"attack_enabled": unit != null and not unit.havePerformedAction,
-		"item_enabled":   unit != null and not unit.havePerformedAction,
+		"move_enabled":   unit != null and unit.stateComponent.canMove(),
+		"attack_enabled": unit != null and unit.stateComponent.canAct()	,
+		"item_enabled":   unit != null and unit.stateComponent.canAct(),
 		"wait_enabled":   unit != null,
 	}
 
@@ -66,7 +68,7 @@ func beginMoveSelect() -> void:
 	if not _unitReady(): return
 	state = ServiceState.MOVE_SELECT
 	_selectorEnabled(true)
-	battleBoard.highlightRange(activeUnit.boardPositionComponent.moveRange, battleBoard.moveHighlightTileID, activeUnit.boardPositionComponent.currentCellCoordinates)
+	battleBoard.highlightRange(activeUnit.boardPositionComponent.moveRange, battleBoard.moveHighlightTileID, activeUnit.boardPositionComponent)
 
 ## Attempts to confirm and execute a move to the given destination.
 ## Validates coordinates, constrains to highlighted range, commits movement,
@@ -84,7 +86,7 @@ func confirmMoveTarget(dest: Vector3i) -> bool:
 		return false
 
 	# Validate via position component (bounds + vacancy).
-	if not positionComponent.validateCoordinates(dest):
+	if not rules.isValidMove(positionComponent, positionComponent.currentCellCoordinates, dest):
 		return false
 
 	await _rotateTargetToCell(activeUnit, dest)
@@ -102,7 +104,7 @@ func confirmMoveTarget(dest: Vector3i) -> bool:
 	await anim.idleAnimation()
 	await anim.face_home_orientation()
 
-	activeUnit.haveMoved = true
+	activeUnit.stateComponent.markMoved()
 	battleBoard.clearHighlights()
 	_selectorEnabled(true)
 	state = ServiceState.IDLE
@@ -128,7 +130,8 @@ func undoLastMove() -> bool:
 
 	var validMove: bool = positionComponent.setDestinationCellCoordinates(positionComponent.previousCellCoordinates)
 	if validMove:
-		activeUnit.haveMoved = false
+		# Updates unit state
+		activeUnit.stateComponent.undoMove()
 		state = ServiceState.IDLE
 
 	# --- NEW: wait for arrival, then restore “home” facing.
@@ -143,31 +146,34 @@ func undoLastMove() -> bool:
 ## Highlights valid targets and enables the selector for user input.
 ## Does nothing if the unit has already performed an action.
 func beginAttackSelect() -> void:
-	if not _unitReady() or activeUnit.havePerformedAction: return
+	if not _unitReady() or activeUnit.stateComponent.isExhausted(): return
 	state = ServiceState.ATTACK_SELECT
 	_selectorEnabled(true)
-	battleBoard.highlightRange(activeUnit.attackComponent.attackRange, battleBoard.attackHighlightTileID, activeUnit.boardPositionComponent.currentCellCoordinates, true)
+	# TODO: Change after updated highlihgt range component impl
+	battleBoard.highlightRange(activeUnit.attackComponent.attackRange, battleBoard.attackHighlightTileID, activeUnit.boardPositionComponent)
 
 ## Attempts to confirm and execute an attack against the occupant at the given cell.
 ## Validates target (must exist and be hostile), triggers attack placeholder, updates flags,
 ## clears highlights, and may end the team turn if exhausted.
 ## @param cell Target cell coordinates.
 ## @return true if the attack step was accepted; false otherwise.
-func confirmAttackTarget(cell: Vector3i, attacker: InsectronEntity3D = activeUnit, aiTurn: bool = false) -> bool:
+func confirmAttackTarget(cell: Vector3i, attacker: BattleBoardUnitEntity = activeUnit, aiTurn: bool = false) -> bool:
 	if (state != ServiceState.ATTACK_SELECT and not aiTurn):
-		print("Failed initial guard clause")
+		return false
+	
+	# TODO: Update rules to handle below
+	
+	if cell - attacker.boardPositionComponent.currentCellCoordinates not in attacker.attackComponent.attackRange.offsets:
 		return false
 
 	var target: Entity = battleBoard.getOccupant(cell)
 	if target == null:
-		print("Failed null check")
 		return false
-
+	
+	
+	
 	# Can't attack allies.
-	print(target.factionComponent.factions)
-	print(attacker.factionComponent.factions)
-	if target.factionComponent and attacker.factionComponent \
-	and target.factionComponent.checkAlliance(attacker.factionComponent.factions):
+	if not rules.isHostile(target, attacker):
 		print("Failed faction bitwise")
 		return false
 
@@ -176,17 +182,22 @@ func confirmAttackTarget(cell: Vector3i, attacker: InsectronEntity3D = activeUni
 	
 	# TODO: plug your actual attack resolution here
 	print("Attacked!")
-	attacker.havePerformedAction = true
+	attacker.stateComponent.markExhausted()
 	battleBoard.clearHighlights()
 	state = ServiceState.IDLE
 	
+	# Handle animations for attacking
 	var anim: InsectorAnimationComponent = attacker.components.get(&"InsectorAnimationComponent")
 	var anim2: InsectorAnimationComponent = target.components.get(&"InsectorAnimationComponent")
 	if anim:
 		await anim.attackAnimation()
 		await anim2.hurtAnimation()
+		if attacker.attackComponent.venemous:
+			anim2.play_poison_puff(6)
 		await anim2.attackAnimation()
 		await anim.hurtAnimation()
+		if target.attackComponent.venemous:
+			anim.play_poison_puff(6)
 		await anim.idleAnimation()
 		await anim2.idleAnimation()
 		anim.face_home_orientation()
@@ -194,7 +205,8 @@ func confirmAttackTarget(cell: Vector3i, attacker: InsectronEntity3D = activeUni
 	
 	
 	# If the team is done after this attack, end turn.
-	if TurnBasedCoordinator.isTeamExhausted() and not aiTurn:
+	if TurnBasedCoordinator.isTeamExhausted():
+		print("Ended turn by exhastion")
 		endPlayerTurn()
 
 	return true
@@ -203,12 +215,12 @@ func confirmAttackTarget(cell: Vector3i, attacker: InsectronEntity3D = activeUni
 ## Marks move and action as consumed and may end the team turn if exhausted.
 func chooseWait() -> void:
 	if not _unitReady(): return
-	activeUnit.haveMoved = true
-	activeUnit.havePerformedAction = true
+	activeUnit.stateComponent.markExhausted()
 	state = ServiceState.IDLE
-	_selectorEnabled(true)
-	if TurnBasedCoordinator.isTeamExhausted():
+	if rules.isTeamExhausted(activeUnit.currentTurnState):
 		endPlayerTurn()
+	else:
+		_selectorEnabled(true)
 
 ## Ends the current player's team turn.
 ## Sets all remaining unit flags, hides the selector, and notifies the coordinator.
@@ -241,8 +253,7 @@ func _selectorEnabled(enable: bool) -> void:
 	selector.disabled = not enable
 	selector.visible = enable
 
-func _rotateTargetToCell(target: InsectronEntity3D, cell: Vector3i) -> void:
-	if not _unitReady(): return
+func _rotateTargetToCell(target: BattleBoardUnitEntity, cell: Vector3i) -> void:
 	var pos: BattleBoardPositionComponent = target.boardPositionComponent
 	var anim: InsectorAnimationComponent = target.components.get(&"InsectorAnimationComponent")
 	if not anim or not pos: return

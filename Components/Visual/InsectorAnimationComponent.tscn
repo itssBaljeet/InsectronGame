@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://bwewnvs5kt1o3"]
+[gd_scene load_steps=3 format=3 uid="uid://bwewnvs5kt1o3"]
 
 [ext_resource type="Script" uid="uid://ued2x7kbv3m0" path="res://Components/Visual/InsectorAnimationComponent.gd" id="1_suyl3"]
+[ext_resource type="SphereMesh" uid="uid://6k62qgj8keuq" path="res://Components/Visual/InsectorAnimationComponent.tres" id="2_muxne"]
 
-[node name="InsectorAnimationComponent" type="Node3D"]
+[node name="InsectorAnimationComponent" type="Node3D" node_paths=PackedStringArray("_poison_fx")]
 script = ExtResource("1_suyl3")
+poison_enabled_default = false
+_poison_fx = NodePath("GPUParticles3D")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+amount = 6
+draw_pass_1 = ExtResource("2_muxne")

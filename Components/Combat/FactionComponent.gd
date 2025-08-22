@@ -57,6 +57,3 @@ func checkOpposition(otherFactions: int) -> bool:
 	return not (self.factions & otherFactions) # Bitwise `AND` means `true` if ANY bits match.
 
 #endregion
-
-func _ready() -> void:
-	print("Faction Num: ", factions)

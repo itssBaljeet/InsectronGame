@@ -4,7 +4,7 @@ extends RefCounted
 
 #region State
 
-var isTraversable: bool
+var isTraversable: bool = true
 var isBlocked: bool = false
 var isOccupied: bool = false
 var occupant: Entity

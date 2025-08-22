@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dkgrdbeigeiqs"]
+
+[ext_resource type="Texture2D" uid="uid://byachg3gmj7fq" path="res://addons/leafhopper_wing.png" id="1_phn4k"]
+
+[resource]
+resource_name = "wing"
+transparency = 4
+cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_phn4k")
+roughness = 0.0
+texture_filter = 2

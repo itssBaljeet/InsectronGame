@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://wn3431a5qyxj"]
+
+[ext_resource type="Script" uid="uid://ns7tfjvty6n1" path="res://Components/TurnBased/UnitTurnStateComponent.gd" id="1_3fx5l"]
+
+[node name="UnitTurnStateComponent" type="Node3D"]
+script = ExtResource("1_3fx5l")

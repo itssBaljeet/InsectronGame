@@ -8,6 +8,7 @@ resource_name = "eye_mat_L"
 transparency = 2
 alpha_scissor_threshold = 0.5
 alpha_antialiasing_mode = 0
+diffuse_mode = 3
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_puhan")
 roughness = 0.5

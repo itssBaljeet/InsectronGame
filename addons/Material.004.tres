@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cwgl86tuyxram"]
+
+[ext_resource type="Texture2D" uid="uid://pblhevvy64yh" path="res://addons/BUG(1)_Front feet base.png" id="1_0806a"]
+
+[resource]
+resource_name = "Material.004"
+cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_0806a")
+roughness = 0.5

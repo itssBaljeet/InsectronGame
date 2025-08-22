@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://df3qi0bll8alj"]
+
+[ext_resource type="Texture2D" uid="uid://div4q3l586y8q" path="res://addons/models/spider_modapplied_back.png" id="1_cr4ix"]
+
+[resource]
+resource_name = "Material.009"
+cull_mode = 2
+diffuse_mode = 3
+albedo_texture = ExtResource("1_cr4ix")
+roughness = 0.13

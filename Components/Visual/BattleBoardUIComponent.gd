@@ -12,18 +12,21 @@ enum UIState {
 
 #region Dependencies
 
-@onready var menuPanel: VBoxContainer = %InteractionMenu
-@onready var attackButton: Button = %AttackButton
-@onready var moveButton:   Button = %MoveButton
-@onready var itemButton:   Button = %ItemButton
-@onready var endTurnButton:Button = %EndTurnButton
-@onready var waitButton:   Button = %WaitButton
-@onready var startButton:  Button = %StartButton
+@onready var menuPanel:    VBoxContainer = 	%InteractionMenu
+@onready var attackButton: Button = 		%AttackButton
+@onready var moveButton:   Button = 		%MoveButton
+@onready var itemButton:   Button = 		%ItemButton
+@onready var endTurnButton:Button = 		%EndTurnButton
+@onready var waitButton:   Button = 		%WaitButton
+@onready var startButton:  Button = 		%StartButton
+@onready var panel:        PanelContainer = %PanelContainer
 
 var battleBoardService: BattleBoardServiceComponent:
 	get:
-		if battleBoardService: return battleBoardService
 		return coComponents.get(&"BattleBoardServiceComponent")
+
+func getRequiredComponents() -> Array[Script]:
+	return [BattleBoardServiceComponent]
 
 #endregion
 
@@ -32,28 +35,29 @@ var battleBoardService: BattleBoardServiceComponent:
 
 var state: UIState = UIState.Idle
 var prevState: UIState = UIState.Idle
-var activeUnit: InsectronEntity3D
+var activeUnit: BattleBoardUnitEntity
 
 #endregion
 
 
 #region UI Logic
 
-func openUnitMenu(unit: InsectronEntity3D, new_state: UIState = UIState.UnitMenu) -> void:
+func openUnitMenu(unit: BattleBoardUnitEntity, new_state: UIState = UIState.UnitMenu) -> void:
 	activeUnit = unit
 	state = new_state
 	battleBoardService.activeUnit = unit
 	battleBoardService._selectorEnabled(false)
 
 	# Hide the selector while the menu is open (service handles enabling later)
-	menuPanel.show()
+	panel.show()
+	menuPanel.grab_focus()
 	_updateButtonsVisibility(unit)
 
 	_currentButtonIndex = 0
 	_focus(_currentButtonIndex)
 
 
-func _updateButtonsVisibility(unit: InsectronEntity3D) -> void:
+func _updateButtonsVisibility(unit: BattleBoardUnitEntity) -> void:
 	moveButton.visible  = false
 	attackButton.visible= false
 	itemButton.visible  = false
@@ -61,15 +65,15 @@ func _updateButtonsVisibility(unit: InsectronEntity3D) -> void:
 
 	if unit == null:
 		return
-
-	moveButton.visible   = not unit.haveMoved
-	attackButton.visible = not unit.havePerformedAction
-	itemButton.visible   = not unit.havePerformedAction
-	waitButton.visible   = not unit.haveMoved or not unit.havePerformedAction
+	
+	moveButton.visible   = unit.stateComponent.canMove()
+	attackButton.visible = unit.stateComponent.canAct()
+	itemButton.visible   = unit.stateComponent.canAct()
+	waitButton.visible   = not unit.stateComponent.isExhausted()
 
 
 func onMoveButtonPressed() -> void:
-	menuPanel.hide()
+	panel.hide()
 	prevState = state
 	state = UIState.MoveSelect
 	battleBoardService.beginMoveSelect()
@@ -94,7 +98,7 @@ func undoMoveTarget() -> void:
 
 
 func onAttackButtonPressed() -> void:
-	menuPanel.hide()
+	panel.hide()
 	prevState = state
 	state = UIState.AttackSelect
 	battleBoardService.beginAttackSelect()
@@ -115,19 +119,12 @@ func onWaitButtonPressed() -> void:
 
 
 func onEndTurnButtonPressed() -> void:
-	closeUnitMenu(true)
+	closeUnitMenu()
 	battleBoardService.endPlayerTurn()
 
 
-func closeUnitMenu(skipUnitFinalize: bool = false) -> void:
-	menuPanel.hide()
-
-	if not skipUnitFinalize and activeUnit != null:
-		# Safety: if UI is closing without a move/act, ensure flags are set.
-		if not activeUnit.haveMoved:
-			activeUnit.haveMoved = true
-		if not activeUnit.havePerformedAction:
-			activeUnit.havePerformedAction = true
+func closeUnitMenu() -> void:
+	panel.hide()
 
 	activeUnit = null
 	state = UIState.Idle
@@ -185,7 +182,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("menu_close"):
 		match state:
 			UIState.UnitMenu:
-				closeUnitMenu(true)
+				closeUnitMenu()
 			UIState.MoveSelect:
 				openUnitMenu(activeUnit)
 				# Edge case where we need to do this weirdness

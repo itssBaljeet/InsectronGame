@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7ndnf2wo5hr4"]
+
+[ext_resource type="Script" uid="uid://n88om7soafix" path="res://Components/Data/InsectorGrowthComponent.gd" id="1_sxlgy"]
+
+[node name="InsectorGrowthComponent" type="Node3D"]
+script = ExtResource("1_sxlgy")
+shouldCheckGrandparentsForEntity = null
+allowNonEntityParent = null
+debugMode = null
+debugModeTrace = null

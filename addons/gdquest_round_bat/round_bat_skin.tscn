@@ -167,19 +167,19 @@ script = ExtResource("1_vbemd")
 [node name="RoundBat" parent="." instance=ExtResource("1_tt0gg")]
 
 [node name="Skeleton3D" parent="RoundBat/Armature" index="0"]
-bones/0/position = Vector3(0, 0.0073866197, 0)
-bones/1/rotation = Quaternion(0.19058861, 0.000111744455, -0.59003246, 0.78456205)
-bones/2/rotation = Quaternion(0.053175483, 0.023564408, 0.40442723, 0.91271895)
-bones/3/rotation = Quaternion(-0.067834795, 0.026583971, 0.31918666, 0.94488716)
-bones/4/rotation = Quaternion(0.19058861, -0.000111744455, 0.59003246, 0.78456205)
-bones/5/rotation = Quaternion(0.053175483, -0.023564408, -0.40442723, 0.91271895)
-bones/6/rotation = Quaternion(-0.067834795, -0.026583971, -0.31918666, 0.94488716)
+bones/0/position = Vector3(0, -0.020480817, 0)
+bones/1/rotation = Quaternion(-0.06037061, 0.2139343, -0.6643032, 0.7136447)
+bones/2/rotation = Quaternion(-0.1551844, -0.04157541, 0.25529382, 0.9534224)
+bones/3/rotation = Quaternion(-0.08293414, 0.028561644, 0.22605133, 0.9701583)
+bones/4/rotation = Quaternion(-0.06037061, -0.2139343, 0.6643032, 0.7136447)
+bones/5/rotation = Quaternion(-0.1551844, 0.04157541, -0.25529382, 0.9534224)
+bones/6/rotation = Quaternion(-0.08293414, -0.028561644, -0.22605133, 0.9701583)
 bones/7/position = Vector3(0.130992, -0.227392, -0.087851495)
 bones/7/rotation = Quaternion(0.26196814, 0.08345515, 0.26575115, 0.92400455)
-bones/8/rotation = Quaternion(3.4040525e-08, 0.5562707, 0.83100116, 2.088169e-08)
+bones/8/rotation = Quaternion(3.9688857e-08, 0.64637107, 0.7630234, 2.5019277e-08)
 bones/10/position = Vector3(-0.130992, -0.227392, -0.087851495)
 bones/10/rotation = Quaternion(0.26196814, -0.08345515, -0.26575115, 0.92400455)
-bones/11/rotation = Quaternion(2.314538e-08, 0.55627126, 0.8310008, 3.549964e-08)
+bones/11/rotation = Quaternion(2.603565e-08, 0.64637107, 0.7630234, 3.3689314e-08)
 
 [node name="Bat" parent="RoundBat/Armature/Skeleton3D" index="0"]
 material_overlay = SubResource("StandardMaterial3D_u0xry")

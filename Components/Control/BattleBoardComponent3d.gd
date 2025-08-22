@@ -1,5 +1,5 @@
 #region Headers
-
+## This component generates the 3D physical board you see including the table and keeps track of the state of the tiles on the board
 @tool
 class_name BattleBoardComponent3D
 extends Component
@@ -62,10 +62,24 @@ extends Component
 
 #endregion
 
+#region Dependencies
+
+var rules: BattleBoardRulesComponent:
+	get:
+		return coComponents.get(&"BattleBoardRulesComponent")
+
+func getRequiredComponents() -> Array[Script]:
+	return [BattleBoardRulesComponent]
+
+#endregion
+
 #region State
 
 var meshLib: MeshLibrary
 static var meshCount: int = 0
+
+## Records data on the generated board in a dictionary with the key being the cell position
+## and the value being a [BattleBoardCellData] 
 var vBoardState: Dictionary[Vector3i, BattleBoardCellData]
 var cells: Array[Vector3i]
 var highlights: Array[Vector3i]
@@ -99,10 +113,10 @@ func generateBoard() -> void:
 	# Generate tiles in GridMap3D
 	for z in range(height):
 		for x in range(width):
-			var tileParityID: int = 0
+			var tileParityID: int = oddTileID
 			
 			if (x + z) % 2 == 0:
-				tileParityID = 1
+				tileParityID = evenTileID
 			
 			$".".set_cell_item(Vector3i(x, 0, z), tileParityID)
 			cells.append(Vector3i(x, 0, z))
@@ -156,7 +170,7 @@ func addFrame(offset:int, y:int, edge_id:int, corner_id:int) -> void:
 	placeRotated(Vector3i(min_x, y, max_z), corner_id, 180)
 	placeRotated(Vector3i(max_x, y, max_z), corner_id,   270)
 
-
+## Adds the ring of sloped tile pieces
 func addSlopeRing(offset:int, y:int) -> void:
 	# 1) straight edges (slopeTileID)
 	addFrame(offset, y, slopeTileID, slopeTileID)	
@@ -229,7 +243,7 @@ func generateTileMesh(tileName: String, material: StandardMaterial3D, heightOver
 	# Generate mesh based on exports
 	var mesh: BoxMesh = BoxMesh.new()
 	mesh.size = Vector3(tile_x, heightOverride, tile_z)
-	mesh.surface_set_material(0, material)
+	mesh.surface_set_material(0, _applyToonShadingTo(material))
 
 	meshLib.create_item(meshCount)
 	meshLib.set_item_mesh(meshCount, mesh)
@@ -261,7 +275,7 @@ func registerCustomMesh(meshPath: String, tileName: String, material: Material, 
 
 	if material:
 		print(meshPath)
-		mesh.surface_set_material(0, material)
+		mesh.surface_set_material(0, _applyToonShadingTo(material))
 	
 	meshLib.create_item(meshCount)
 	meshLib.set_item_mesh(meshCount, mesh)
@@ -290,10 +304,25 @@ func registerCustomMesh(meshPath: String, tileName: String, material: Material, 
 func placeRotated(cell: Vector3i, itemID: int, rotationDegree: int) -> void:
 	var rotationBasis := Basis(Vector3.UP, deg_to_rad(rotationDegree))
 	var orientation: int = $".".get_orthogonal_index_from_basis(rotationBasis)
-	print("Placing rotated, CellID: ", itemID)
 	$".".set_cell_item(cell, itemID, orientation)
 #endregion
 
+#region Material Helpers
+func _applyToonShadingTo(mat: Material) -> Material:
+	var m := mat as StandardMaterial3D
+	if m == null:
+		# Not a StandardMaterial3D (or null) — just return as-is.
+		return mat
+	
+	# Duplicate so edits don’t affect the original resource elsewhere.
+	m = (m.duplicate() as StandardMaterial3D)
+	m.resource_local_to_scene = true
+
+	# Shading → Diffuse/Specular: Toon
+	m.diffuse_mode  = BaseMaterial3D.DIFFUSE_TOON
+	m.specular_mode = BaseMaterial3D.SPECULAR_TOON
+	return m
+#endregion
 
 
 #region Cell State Management
@@ -316,61 +345,29 @@ func getOccupant(cell: Vector3i) -> Entity:
 	var data: BattleBoardCellData = self.vBoardState.get(cell) 
 	return data.occupant if data != null else null
 
-func getInsectorOccupant(cell: Vector3i) -> InsectronEntity3D:
+func getInsectorOccupant(cell: Vector3i) -> BattleBoardUnitEntity:
 	var data: BattleBoardCellData = self.vBoardState.get(cell)
-	return data.occupant if data != null and data.occupant is InsectronEntity3D else null
+	return data.occupant if data != null and data.occupant is BattleBoardUnitEntity else null
 
-func highlightRange(pattern: BoardPattern, highlightTileID: int, originalPos: Vector3i, shouldHighlightEnemies: bool = false) -> void:
+func highlightRange(pattern: BoardPattern, highlightTileID: int, positionComponent: BattleBoardPositionComponent) -> void:
 	for cell in pattern.offsets:
-		var newPos: Vector3i = originalPos + cell
-		var occupant: Entity = getOccupant(newPos)
-		if shouldHighlightEnemies and occupant != null and occupant is InsectronEntity3D:
+		var newPos: Vector3i = positionComponent.currentCellCoordinates + cell
+		if $".".get_cell_item(newPos) == evenTileID or $".".get_cell_item(newPos) == oddTileID:
 			$".".set_cell_item(newPos, highlightTileID)
-		
-		if not shouldHighlightEnemies and validateCoordinates(newPos):
-			$".".set_cell_item(newPos, highlightTileID)
+
 			
 	# Tile 2 is the Highlighted tile in the mesh library
 	highlights = $".".get_used_cells_by_item(highlightTileID)
 
 func clearHighlights() -> void:
 	for tile in highlights:
-		var tileParity: int = evenTileID
+		var tileParity: int = oddTileID
 		if (tile.x + tile.z) % 2 == 0:
-			tileParity = oddTileID
+			tileParity = evenTileID
 		$".".set_cell_item(tile, tileParity) 
 
 #endregion
 
-
-#region Validation
-
-## Ensures that the specified coordinates are within the [TileMapLayer]'s bounds
-## and also calls [method checkCellVacancy].
-## May be overridden by subclasses to perform additional checks.
-## NOTE: Subclasses MUST call super to perform common validation.
-func validateCoordinates(coordinates: Vector3i) -> bool:
-	var isValidBounds: bool = coordinates in cells
-	var data: BattleBoardCellData = vBoardState.get(coordinates)
-	
-	var isTileVacant:  bool = !data.isOccupied if data != null else true
-
-	if debugMode: printDebug(str("@", coordinates, ": checkTileMapCoordinates(): ", isValidBounds, ", checkCellVacancy(): ", isTileVacant))
-
-	return isValidBounds and isTileVacant
-
-
-## Checks if the tile may be moved into.
-## May be overridden by subclasses to perform different checks,
-## such as testing custom data on a tile, e.g. [constant Global.TileMapCustomData.isWalkable],
-## and custom data on a cell, e.g. [constant Global.TileMapCustomData.isOccupied],
-## or performing a more rigorous physics collision detection.
-func checkCellVacancy(coordinates: Vector3i) -> bool:
-	var data: BattleBoardCellData = vBoardState.get(coordinates)
-	# If no data present, that means traversable
-	return data.isTraversable if data != null else true
-
-#endregion
 
 func _ready() -> void:
 	generateMeshLibrary()    # materials are now guaranteed to be set

@@ -1,0 +1,18 @@
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://ncsrrl35fw3l"]
+
+[ext_resource type="Texture2D" uid="uid://bt5o0sr6peltq" path="res://addons/gdquest_gobot/model/gobot_gobot_diffuse.png" id="1_80oc2"]
+[ext_resource type="Texture2D" uid="uid://cgkj45d67dalm" path="res://addons/gdquest_gobot/model/gobot_gobot_roughness.png" id="2_nuvbt"]
+[ext_resource type="Texture2D" uid="uid://d28w5bql3g21l" path="res://addons/gdquest_gobot/model/gobot_gobot_normal.png" id="3_uvvu8"]
+
+[resource]
+resource_name = "GobotMat"
+cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_80oc2")
+metallic_texture = ExtResource("2_nuvbt")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_nuvbt")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("3_uvvu8")

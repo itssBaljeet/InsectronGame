@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://csm5dc381voi4"]
+
+[resource]
+resource_name = "dung_rocks"
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.33628318, 0.29480416, 0.24254054, 1)
+roughness = 0.8445493

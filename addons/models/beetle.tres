@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://5ao3looe1j1g"]
+
+[resource]
+resource_name = "beetle"
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.3761062, 0.35084885, 0.29456103, 1)
+metallic = 0.25
+roughness = 0.63700217

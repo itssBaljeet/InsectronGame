@@ -37,6 +37,39 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={}
+_subresources={
+"materials": {
+"Material": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/textures/Material.tres",
+"use_external/path": "uid://df6twxol4ua56"
+},
+"Material.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/textures/Material.001.tres",
+"use_external/path": "uid://b7pr5i63eam1n"
+},
+"Material.002": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/textures/Material.002.tres",
+"use_external/path": "uid://bdeye2lt5by2a"
+},
+"Material.003": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/textures/Material.003.tres",
+"use_external/path": "uid://cyfv3ex28wtux"
+},
+"Material.004": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/textures/Material.004.tres",
+"use_external/path": "uid://bvh4h0qnefvxo"
+},
+"Material.005": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/textures/Material.005.tres",
+"use_external/path": "uid://bvo4b0ntg252m"
+}
+}
+}
 gltf/naming_version=2
 gltf/embedded_image_handling=1

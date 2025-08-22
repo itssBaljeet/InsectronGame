@@ -1,0 +1,41 @@
+class_name InsectronEntity3D
+extends TurnBasedEntity
+
+
+#region Dependencies
+
+var factionComponent: FactionComponent: 
+	get:
+		if factionComponent: return factionComponent
+		return self.components.get(&"FactionComponent")
+
+var boardPositionComponent: BattleBoardPositionComponent:
+	get:
+		if boardPositionComponent: return boardPositionComponent
+		return self.components.get(&"BattleBoardPositionComponent")
+
+var attackComponent: InsectorAttackComponent:
+	get:
+		if attackComponent: return attackComponent
+		return self.components.get(&"InsectorAttackComponent")
+
+#endregion
+
+#region State
+
+# Personalization State
+## The name given to the entity by the player
+var nickname: String:
+	set(name):
+		if len(name) >= 3:
+			nickname = name
+
+# Turn Related State
+var haveMoved: bool
+var havePerformedAction: bool
+
+#endregion
+
+#region Parameters
+
+@export var move_range: Array[Vector3i]

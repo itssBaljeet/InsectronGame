@@ -20,17 +20,14 @@ extends Component
 
 var boardPositionComponent: BattleBoardPositionComponent:
 	get:
-		if boardPositionComponent: return boardPositionComponent
 		return self.coComponents.get(&"BattleBoardPositionComponent")
 		
 var battleBoardUI: BattleBoardUIComponent:
 	get:
-		if battleBoardUI: return battleBoardUI
 		return self.parentEntity.get_parent().components.get(&"BattleBoardUIComponent")
 
 var battleBoardSelector: BattleBoardCameraComponent:
 	get:
-		if battleBoardSelector: return battleBoardSelector
 		return self.parentEntity.get_parent().components.get(&"BattleBoardCameraComponent")
 
 #endregion
@@ -84,8 +81,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			_:
 				print("else statement")
 				# Normal selection: select unit on the cell if any
-				var unit: InsectronEntity3D = boardPositionComponent.battleBoard.getInsectorOccupant(cursorCell)  # get unit at cell
-				#if unit and (not unit.haveMoved or not unit.havePerformedAction) and unit.factionComponent.factions == TurnBasedCoordinator.currentTeam:
+				var unit: BattleBoardUnitEntity = boardPositionComponent.battleBoard.getInsectorOccupant(cursorCell)  # get unit at cell
 				print("Opening Menu")
 				# Friendly unit that still can act
+				print(unit)
 				battleBoardUI.openUnitMenu(unit)

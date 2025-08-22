@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b7pr5i63eam1n"]
+
+[ext_resource type="Texture2D" uid="uid://cxjqorwnxlg7e" path="res://addons/herculese(1)_foreheadSpike.png" id="1_huufx"]
+
+[resource]
+resource_name = "Material.001"
+cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_huufx")
+roughness = 0.5

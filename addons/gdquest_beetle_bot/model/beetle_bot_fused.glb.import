@@ -6207,6 +6207,23 @@ _subresources={
 "slice_99/start_frame": 0,
 "slices/amount": null
 }
+},
+"materials": {
+"BeetleMat": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/gdquest_beetle_bot/model/BeetleMat.tres",
+"use_external/path": "uid://bisy3s3xkvcwf"
+},
+"FaceMat": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/gdquest_beetle_bot/model/FaceMat.tres",
+"use_external/path": "uid://bpux8uou0aai7"
+},
+"Led": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://addons/gdquest_beetle_bot/model/Led.tres",
+"use_external/path": "uid://dcs0khycqiti4"
+}
 }
 }
 gltf/naming_version=0

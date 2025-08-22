@@ -145,23 +145,23 @@ var battleBoardSelector: BattleBoardSelectorComponent3D:
 				return entity.components.get(&"BattleBoardSelectorComponent3D")
 		return null
 
-@export_storage var playerInsectors: Array[InsectronEntity3D]:
+@export_storage var playerInsectors: Array[BattleBoardUnitEntity]:
 	get:
 		playerInsectors.clear()
 		for insector in turnBasedEntities:
-			if insector is InsectronEntity3D and insector.factionComponent.factions == pow(2, FactionComponent.Factions.players-1):
+			if insector is BattleBoardUnitEntity and insector.factionComponent.factions == pow(2, FactionComponent.Factions.players-1):
 				playerInsectors.append(insector)
 		return playerInsectors
 
-@export_storage var enemyInsectors: Array[InsectronEntity3D]:
+@export_storage var enemyInsectors: Array[BattleBoardUnitEntity]:
 	get:
 		enemyInsectors.clear()
 		for insector in turnBasedEntities:
-			if insector is InsectronEntity3D and insector.factionComponent.factions == pow(2, FactionComponent.Factions.ai-1):
+			if insector is BattleBoardUnitEntity and insector.factionComponent.factions == pow(2, FactionComponent.Factions.ai-1):
 				enemyInsectors.append(insector)
 		return enemyInsectors
 
-@export_storage var currentTeamParty: Array[InsectronEntity3D]:
+@export_storage var currentTeamParty: Array[BattleBoardUnitEntity]:
 	get:
 		return playerInsectors if currentTeam == FactionComponent.Factions.players else enemyInsectors
 
@@ -280,17 +280,16 @@ func setActiveUnit(unit: TurnBasedEntity) -> void:
 ## Mark all units in the current team as having moved and performed an action.
 func setAllUnitTurnFlagsTrue() -> void:
 	for unit in currentTeamParty:
-		unit.haveMoved = true
-		unit.havePerformedAction = true
+		unit.stateComponent.markExhausted()
 
 func setAllUnitTurnFlagsFalse() -> void:
 	pass
 
 ## Check if all units of a team (defaults to current team) have finished their moves and actions.
 func isTeamExhausted(team: int = currentTeam) -> bool:
-	var party: Array[InsectronEntity3D] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
+	var party: Array[BattleBoardUnitEntity] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
 	for unit in party:
-		if not unit.haveMoved or not unit.havePerformedAction:
+		if not unit.stateComponent.isExhausted():
 			return false
 	return true
 
@@ -298,9 +297,9 @@ func isTeamExhausted(team: int = currentTeam) -> bool:
 ## Get a list of units in a team that still have actions available (not both flags set).
 func getAvailableUnits(team: int = currentTeam) -> Array[TurnBasedEntity]:
 	var available: Array[TurnBasedEntity] = []
-	var party: Array[InsectronEntity3D] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
+	var party: Array[BattleBoardUnitEntity] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
 	for unit in party:
-		if not (unit.haveMoved or unit.havePerformedAction):
+		if not unit.stateComponent.isExhausted():
 			available.append(unit)
 	return available
 
@@ -327,12 +326,11 @@ func startTeamTurn() -> void:
 	currentTurn += 1
 	currentTurnState = TurnBasedState.turnBegin
 	self.set_process(true)  # Enable processing (for any debug draw or UI updates during turn)
-
+	if currentTeam & FactionComponent.Factions.players: willBeginPlayerTurn.emit()
 	willBeginTurn.emit()  # Signal start of turn (could be used to update UI, etc.)
 	
 	for insector in currentTeamParty:
-		insector.haveMoved = false
-		insector.havePerformedAction = false
+		insector.stateComponent.resetForNewTeamTurn()
 		await insector.processTurnBeginSignals()  # e.g. reset unit state, play "ready" animation, etc.
 
 	didBeginTurn.emit()
@@ -356,6 +354,7 @@ func startTeamTurn() -> void:
 		
 
 func endTeamTurn() -> void:
+	print("ATTEMPTING TO END TURN")
 	if currentTurnState == TurnBasedState.turnEnd:
 		return  # already ending or ended
 
@@ -368,7 +367,7 @@ func endTeamTurn() -> void:
 	# Process turn-end signals for any units of the team that didn't get a chance to act
 	for insector in currentTeamParty:
 			# If an entity was never activated this turn (did not move or act), process its turnEnd now
-			if not insector.haveMoved and not insector.havePerformedAction:
+			if not insector.stateComponent.isExhausted():
 				await insector.processTurnEndSignals()
 			# (If the entity was activated, its turnEnd was already processed in processEntityTurn)
 
@@ -378,14 +377,11 @@ func endTeamTurn() -> void:
 	self.set_process(false)  # disable per-frame processing until next turn begins
 
 	# Automatically start the next team's turn (alternate the team)
-	currentTeam = FactionComponent.Factions.players if currentTeam == FactionComponent.Factions.ai else FactionComponent.Factions.ai
-	
-	if currentTeam == FactionComponent.Factions.players:
-		willBeginPlayerTurn.emit()
+	currentTeam = FactionComponent.Factions.players if currentTeam == 6 else FactionComponent.Factions.ai
 	
 	if debugMode: printLog("Next team to act will be team %d" % currentTeam)
 	# Start the next turn after a short delay (if you want a pause between turns)
-	startTeamTurn()
+	await startTeamTurn()
 
 ## Increments the [member currentTurnState], warping to `turnBegin` after the `turnEnd` state.
 ## Stops the [member stateTimer] before returning to `turnBegin`
@@ -488,30 +484,22 @@ func _processAITurn() -> void:
 			
 			print("About to walk")
 			await anim.walkAnimation()
+			
 
 		
 		posComponent.processMovementInput(dest)
-		
+		await anim.idleAnimation()
 		# wait for arrival, then restore “home” facing.
 		await posComponent.didArriveAtNewCell
 		if anim:
 			await anim.idleAnimation()
 			await anim.face_home_orientation()
 		# Mark unit turn as completed with a move or wait
-		insector.haveMoved = true
+		insector.stateComponent.markMoved()
 		
 		# Attack Time!! Try attacking 8 times within attack range
-		print("Looking for enemy to attack")
-		insector.boardPositionComponent.battleBoard.highlightRange(
-			insector.attackComponent.attackRange,
-			insector.boardPositionComponent.battleBoard.attackHighlightTileID,
-			insector.boardPositionComponent.currentCellCoordinates,
-			true
-		)
-
 		var attackTarget: Vector3i = insector.attackComponent.attackRange.offsets[randi_range(0, len(insector.attackComponent.attackRange.offsets)-1)]
 		var count: int = 0
-		print("Checking first dest..")
 
 		var board := insector.boardPositionComponent.battleBoard
 		var occupant: Entity = board.getOccupant(insector.boardPositionComponent.currentCellCoordinates + attackTarget)
@@ -521,26 +509,23 @@ func _processAITurn() -> void:
 
 		# Keep trying until we find an occupant that shares NO bits with us (i.e., a true enemy)
 		while (occupant == null or (myMask & occupant.factionComponent.factions) != 0) and count < 8:
+			print("Straight Buggin Yo!")
 			attackTarget = insector.attackComponent.attackRange.offsets[randi_range(0, len(insector.attackComponent.attackRange.offsets)-1)]
 			occupant = board.getOccupant(insector.boardPositionComponent.currentCellCoordinates + attackTarget)
 			count += 1
 
 		# Attack only if the occupant is an enemy: bitwise AND must be zero
 		if occupant != null and (myMask & occupant.factionComponent.factions) == 0:
-			print("Found enemy for attack!!")
-			print("Location: ", occupant.boardPositionComponent.currentCellCoordinates)
+			print("Attacking!")
 			insector.attackComponent.boardService.confirmAttackTarget(insector.boardPositionComponent.currentCellCoordinates + attackTarget, insector, true)
-		else:
-			print(occupant, attackTarget)
-			print("No enemy found")
 			
-		insector.havePerformedAction = true
 		await insector.processTurnUpdateSignals()
 		await insector.processTurnEndSignals()
 		self.didProcessEntity.emit(insector)
 		willStartDelay.emit(entityTimer)
 		entityTimer.start()
 		await entityTimer.timeout
+	willEndTurn.emit()
 
 #endregion
 

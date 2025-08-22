@@ -39,7 +39,7 @@ func idleAwait():
 
 func walkAwait():
 	# If Walk loops, only await one cycle length; callers can choose to not await.
-	_playStateAwaitable("Walk", "walk", 1.0)
+	await _playStateAwaitable("Walk", "walk", 0.27)
 
 func attackAwait():
 	_secondary_action_timer.stop()

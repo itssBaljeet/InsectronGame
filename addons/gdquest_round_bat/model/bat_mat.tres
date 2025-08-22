@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://cgyu54b0rm2tk"]
+
+[ext_resource type="Texture2D" uid="uid://dqt3cyb0h0isw" path="res://addons/gdquest_round_bat/model/bat_albedo.png" id="1_2ujwq"]
+[ext_resource type="Texture2D" uid="uid://b1pq1cajdhkwv" path="res://addons/gdquest_round_bat/model/bat_roughness.png" id="2_n3vau"]
+
+[resource]
+resource_name = "bat_mat"
+cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_2ujwq")
+metallic_texture = ExtResource("2_n3vau")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_n3vau")
+roughness_texture_channel = 1

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2bq2o7sskowf"]
+
+[ext_resource type="Script" uid="uid://sfaho4nylh51" path="res://Components/Movement/BattleBoardPathfindingComponent.gd" id="1_8uihq"]
+
+[node name="BattleBoardPathfindingComponent" type="Node3D"]
+script = ExtResource("1_8uihq")

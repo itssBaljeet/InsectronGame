@@ -58,11 +58,14 @@ extends Component
 # The battle board component attached to the BattleBoardEntity3D. Shitty way of getting it
 var battleBoard: BattleBoardComponent3D:
 	get:
-		if battleBoard:
-			return battleBoard
 		# The entity [BattleBoardPositionComponent] is a child of should be a child itself of a BattleBoardEntity3D which holds the component we need.
 		if not self.parentEntity.get_parent(): return null
 		return self.parentEntity.get_parent().find_child("BattleBoardComponent3D").get_node(^".") as BattleBoardComponent3D
+
+var rules: BattleBoardRulesComponent:
+	get:
+		if not self.parentEntity.get_parent(): return null
+		return self.parentEntity.get_parent().find_child("BattleBoardRulesComponent").get_node(^".") as BattleBoardRulesComponent
 
 #endregion
 
@@ -137,36 +140,6 @@ func onWillRemoveFromEntity() -> void:
 #endregion
 
 
-#region Validation
-
-## Ensures that the specified coordinates are within the [TileMapLayer]'s bounds
-## and also calls [method checkCellVacancy].
-## May be overridden by subclasses to perform additional checks.
-## NOTE: Subclasses MUST call super to perform common validation.
-func validateCoordinates(coordinates: Vector3i) -> bool:
-	var isValidBounds: bool = coordinates in battleBoard.cells
-	var data: BattleBoardCellData = battleBoard.vBoardState.get(coordinates)
-	
-	var isTileVacant:  bool = !data.isOccupied or !shouldOccupyCell if data != null else true
-
-	if debugMode: printDebug(str("@", coordinates, ": checkTileMapCoordinates(): ", isValidBounds, ", checkCellVacancy(): ", isTileVacant))
-
-	return isValidBounds and isTileVacant
-
-
-## Checks if the tile may be moved into.
-## May be overridden by subclasses to perform different checks,
-## such as testing custom data on a tile, e.g. [constant Global.TileMapCustomData.isWalkable],
-## and custom data on a cell, e.g. [constant Global.TileMapCustomData.isOccupied],
-## or performing a more rigorous physics collision detection.
-func checkCellVacancy(coordinates: Vector3i) -> bool:
-	var data: BattleBoardCellData = battleBoard.vBoardState.get(coordinates)
-	# If no data present, that means traversable
-	return data.isTraversable if data != null else true
-
-#endregion
-
-
 #endregion Positioning
 
 func applyInitialCoordinates() -> void:
@@ -190,7 +163,8 @@ func applyInitialCoordinates() -> void:
 ## Set the tile coordinates corresponding to the parent Entity's [member Node2D.global_position]
 ## and set the cell's occupancy.
 func updateCurrentTileCoordinates() -> Vector3i:
-	self.currentCellCoordinates = battleBoard.local_to_map(battleBoard.to_local(parentEntity.global_position))
+	print(self)
+	self.currentCellCoordinates = battleBoard.local_to_map(battleBoard.to_local(self.parentEntity.global_position))
 	if shouldOccupyCell:
 		battleBoard.setCellOccupancy(self.currentCellCoordinates, shouldOccupyCell, self.parentEntity)
 	
@@ -202,7 +176,7 @@ func updateCurrentTileCoordinates() -> Vector3i:
 ## TIP: May be useful for UI elements like cursors etc.
 ## If [param destinationOverride] is omitted then [member currentCellCoordinates] is used.
 func snapEntityPositionToTile(tileCoordinates: Vector3i = self.currentCellCoordinates) -> void:
-	if not isEnabled: return
+	if not isEnabled or Engine.is_editor_hint(): return
 	
 	var tileGlobalPos: Vector3 = adjustToTile(battleBoard.getGlobalCellPosition(tileCoordinates))
 	
@@ -238,7 +212,10 @@ func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i) -> b
 
 	# Validate the new destination?
 
-	if not validateCoordinates(newDestinationTileCoordinates):
+	if shouldOccupyCell and not rules.isValidMove(self, currentCellCoordinates, newDestinationTileCoordinates):
+		return false
+	
+	if not shouldOccupyCell and not rules.isInBounds(newDestinationTileCoordinates):
 		return false
 
 	# Move Your Body ♪

@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cg2yfpp4wg7ij"
+path="res://.godot/imported/m3-part07.obj-0d4b4a4a9f0726f474ac7a5d6b61ccad.mesh"
+
+[deps]
+
+files=["res://.godot/imported/m3-part07.obj-0d4b4a4a9f0726f474ac7a5d6b61ccad.mesh"]
+
+source_file="res://addons/LowPoly-Spaceships-By-Majadroid/obj-files/obj-components/material-03/m3-part07.obj"
+dest_files=["res://.godot/imported/m3-part07.obj-0d4b4a4a9f0726f474ac7a5d6b61ccad.mesh", "res://.godot/imported/m3-part07.obj-0d4b4a4a9f0726f474ac7a5d6b61ccad.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://d0kf1h5lrob4k"]
+
+[resource]
+resource_name = "dung"
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.30530974, 0.19312294, 0.11888167, 1)
+roughness = 0.7816562

@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bnmfxn3flgog5"]
+
+[resource]
+resource_name = "HULL_Outline"
+diffuse_mode = 3
+specular_mode = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0, 0, 0, 1)
+emission_energy_multiplier = 10.0

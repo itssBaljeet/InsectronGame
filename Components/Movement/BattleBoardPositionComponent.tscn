@@ -8,3 +8,4 @@ script = ExtResource("1_3lq6u")
 visualIndicator = NodePath("SelectorMesh")
 
 [node name="SelectorMesh" parent="." instance=ExtResource("2_hks7w")]
+visible = false

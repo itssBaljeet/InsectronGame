@@ -49,6 +49,6 @@ script = ExtResource("1_l7bwe")
 mesh = NodePath("Selector")
 
 [node name="Selector" type="MeshInstance3D" parent="."]
-transform = Transform3D(-0.24490497, 0, -0.036235575, 0, 0.25, 0, 0.036235575, 0, -0.24490497, 0, 2.2409852, 0)
+transform = Transform3D(-0.24145536, 0, 0.05466995, 0, 0.25, 0, -0.05466995, 0, -0.24145536, 0, 2.0797613, 0)
 mesh = SubResource("ArrayMesh_l7bwe")
 surface_material_override/0 = SubResource("StandardMaterial3D_ac6i2")

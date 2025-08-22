@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b233mi8r4ioy4"]
+
+[ext_resource type="Texture2D" uid="uid://dl44v3x4gxnp1" path="res://addons/BUG(1)_Nose base.png" id="1_eewk5"]
+
+[resource]
+resource_name = "Material.005"
+cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_eewk5")
+roughness = 0.5

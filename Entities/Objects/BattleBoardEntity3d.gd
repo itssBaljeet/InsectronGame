@@ -25,6 +25,8 @@ extends TurnBasedEntity
 		if battleBoardUI: return battleBoardUI
 		return self.components.get(&"BattleBoardUIComponent")
 
+func getRequiredComponents() -> Array[Script]:
+	return [BattleBoardComponent3D, BattleBoardUIComponent]
 #endregion
 
 #region Setter Functions

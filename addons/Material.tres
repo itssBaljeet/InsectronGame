@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://ddt60lktdgm85"]
+
+[ext_resource type="Texture2D" uid="uid://dq02s58hkdciv" path="res://addons/BUG(1)_body texture.png" id="1_uydpk"]
+
+[resource]
+resource_name = "Material"
+cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_uydpk")
+roughness = 0.5

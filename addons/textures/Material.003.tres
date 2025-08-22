@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cyfv3ex28wtux"]
+
+[ext_resource type="Texture2D" uid="uid://gy4uqt5wpy85" path="res://addons/herculese(1)_frontAndBackLegs.png" id="1_u1nso"]
+
+[resource]
+resource_name = "Material.003"
+cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_u1nso")

@@ -6,7 +6,6 @@ signal foot_step
 ## Gobot's MeshInstance3D model.
 @export var gobot_model: MeshInstance3D
 ## Determines whether blinking is enabled or disabled.
-@export var blink = false : set = _set_blink
 @export var _left_eye_mat_override: String
 @export var _right_eye_mat_override: String
 @export var _open_eye: CompressedTexture2D
@@ -20,8 +19,10 @@ signal foot_step
 @onready var _flip_shot_path: String = "parameters/FlipShot/request"
 @onready var _hurt_shot_path: String = "parameters/HurtShot/request"
 
-@onready var _blink_timer = %BlinkTimer
-@onready var _closed_eyes_timer = %ClosedEyesTimer
+@onready var _blink_timer: Timer = %BlinkTimer
+@onready var _closed_eyes_timer: Timer = %ClosedEyesTimer
+
+@onready var blink = false
 
 @onready var _left_eye_mat: StandardMaterial3D = gobot_model.get(_left_eye_mat_override)
 @onready var _right_eye_mat: StandardMaterial3D = gobot_model.get(_right_eye_mat_override)
@@ -33,7 +34,7 @@ func _ready():
 			func():
 				_left_eye_mat.albedo_texture = _close_eye
 				_right_eye_mat.albedo_texture = _close_eye
-				_closed_eyes_timer.start(0.2)
+				_closed_eyes_timer.start(1.2)
 	)
 
 	_closed_eyes_timer.connect(
@@ -43,15 +44,21 @@ func _ready():
 				_right_eye_mat.albedo_texture = _open_eye
 				_blink_timer.start(randf_range(1.0, 8.0))
 	)
+	print("FUCKING STATE: ", blink)
+	_set_blink(true)
 
 
 func _set_blink(state: bool):
 	if blink == state:
+		print("Same state return")
 		return
 	blink = state
 	if blink:
+		print("Starting blinker timer!")
 		_blink_timer.start(0.2)
 	else:
+		print()
+		print(%BlinkTimer)
 		_blink_timer.stop()
 		_closed_eyes_timer.stop()
 
@@ -62,9 +69,6 @@ func idle():
 ## Sets the model to a running animation or forward movement.
 func run():
 	_state_machine.travel("Run")
-
-func walk():
-	_state_machine.travel("Walk")
 
 ## Sets the model to an upward-leaping animation, simulating a jump.
 func jump():
@@ -86,6 +90,10 @@ func wall_slide():
 ## This animation does not play in parallel with other states.
 func flip():
 	_animation_tree.set(_flip_shot_path, true)
+
+## Makes a victory sign.
+func victory_sign():
+	_state_machine.travel("VictorySign")
 
 ## Plays a one-shot hurt animation.
 ## This animation plays in parallel with other states.
