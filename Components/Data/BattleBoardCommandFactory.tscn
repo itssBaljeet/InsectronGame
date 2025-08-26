@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ce7rtgsbhab7m"]
+
+[ext_resource type="Script" uid="uid://c7ptfkc3h8awb" path="res://Components/Data/BattleBoardCommandFactory.gd" id="1_dcmtx"]
+
+[node name="BattleBoardCommandFactory" type="Node3D"]
+script = ExtResource("1_dcmtx")

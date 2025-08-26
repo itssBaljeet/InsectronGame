@@ -55,6 +55,11 @@ extends Component
 		attackHighlightMaterial = mat
 		generateMeshLibrary()
 
+@export var specialAttackHighlightMaterial: StandardMaterial3D:
+	set(mat):
+		specialAttackHighlightMaterial = mat
+		generateMeshLibrary()
+
 @export var borderMaterial: StandardMaterial3D:
 	set(mat):
 		borderMaterial = mat
@@ -68,8 +73,6 @@ var rules: BattleBoardRulesComponent:
 	get:
 		return coComponents.get(&"BattleBoardRulesComponent")
 
-func getRequiredComponents() -> Array[Script]:
-	return [BattleBoardRulesComponent]
 
 #endregion
 
@@ -91,6 +94,7 @@ var oddTileID: int
 var evenTileID: int
 var moveHighlightTileID: int
 var attackHighlightTileID: int
+var specialAttackHighlightTileID: int
 var outerEdgeTileID   : int
 var outerCornerTileID : int
 var slopeTileID       : int
@@ -236,6 +240,8 @@ func generateMeshLibrary() -> void:
 	registerCustomMesh("res://addons/outerTileSlantedCornerlLayer2New_Cube_002.res", "SlopeDownCorner", borderMaterial)
 	attackHighlightTileID = meshCount
 	generateTileMesh("AttackHighlightTile", attackHighlightMaterial)
+	specialAttackHighlightTileID = meshCount
+	generateTileMesh("SpecialAttackHighlightTile", specialAttackHighlightMaterial)
 	
 	$".".mesh_library = meshLib
 
@@ -348,23 +354,6 @@ func getOccupant(cell: Vector3i) -> Entity:
 func getInsectorOccupant(cell: Vector3i) -> BattleBoardUnitEntity:
 	var data: BattleBoardCellData = self.vBoardState.get(cell)
 	return data.occupant if data != null and data.occupant is BattleBoardUnitEntity else null
-
-func highlightRange(pattern: BoardPattern, highlightTileID: int, positionComponent: BattleBoardPositionComponent) -> void:
-	for cell in pattern.offsets:
-		var newPos: Vector3i = positionComponent.currentCellCoordinates + cell
-		if $".".get_cell_item(newPos) == evenTileID or $".".get_cell_item(newPos) == oddTileID:
-			$".".set_cell_item(newPos, highlightTileID)
-
-			
-	# Tile 2 is the Highlighted tile in the mesh library
-	highlights = $".".get_used_cells_by_item(highlightTileID)
-
-func clearHighlights() -> void:
-	for tile in highlights:
-		var tileParity: int = oddTileID
-		if (tile.x + tile.z) % 2 == 0:
-			tileParity = evenTileID
-		$".".set_cell_item(tile, tileParity) 
 
 #endregion
 

@@ -17,7 +17,13 @@ extends Component
 @export var initialDestinationCoordinates: Vector3i
 
 ## If `false`, the entity will be instantly positioned at the initial destination, otherwise it may be animated from where it was before this component is executed if `shouldMoveInstantly` is false.
-@export var shouldSnapToInitialDestination: bool = true
+@export var shouldSnapToInitialDestination: bool = true:
+	set(val):
+		if val != shouldSnapToInitialDestination and val == true:
+			shouldSnapToInitialDestination = val
+			_ready()
+		else:
+			shouldSnapToInitialDestination = val
 
 
 @export_group("Movement")
@@ -155,6 +161,7 @@ func applyInitialCoordinates() -> void:
 	# because the functions check for a change between coordinates.
 
 	if shouldSnapToInitialDestination:
+		print("Snapping to init dest")
 		snapEntityPositionToTile(initialDestinationCoordinates)
 	else:
 		setDestinationCellCoordinates(initialDestinationCoordinates)
@@ -176,7 +183,7 @@ func updateCurrentTileCoordinates() -> Vector3i:
 ## TIP: May be useful for UI elements like cursors etc.
 ## If [param destinationOverride] is omitted then [member currentCellCoordinates] is used.
 func snapEntityPositionToTile(tileCoordinates: Vector3i = self.currentCellCoordinates) -> void:
-	if not isEnabled or Engine.is_editor_hint(): return
+	if not isEnabled: return
 	
 	var tileGlobalPos: Vector3 = adjustToTile(battleBoard.getGlobalCellPosition(tileCoordinates))
 	
@@ -203,23 +210,28 @@ func processMovementInput(inputVectorOverride: Vector3i = self.inputVector) -> v
 func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i) -> bool:
 
 	# Is the new destination the same as the current destination? Then there's nothing to change.
-	if newDestinationTileCoordinates == self.destinationCellCoordinates: return true
+	if newDestinationTileCoordinates == self.destinationCellCoordinates:
+		print("Same coords as last current")
+		return true
 
 	# Is the new destination the same as the current tile? i.e. was the previous move cancelled?
 	if newDestinationTileCoordinates == self.currentCellCoordinates:
+		print("Dest the same as current")
 		cancelDestination()
 		return true # NOTE: Return true because arriving at the specified coordinates should be considered a success, even if already there. :)
 
 	# Validate the new destination?
 
 	if shouldOccupyCell and not rules.isValidMove(self, currentCellCoordinates, newDestinationTileCoordinates):
+		print("Invalid move")
 		return false
 	
 	if not shouldOccupyCell and not rules.isInBounds(newDestinationTileCoordinates):
+		print("Whack ass fourth reason")
 		return false
 
 	# Move Your Body ♪
-	
+	print("Made it past guard clauses and actually moved")
 	previousCellCoordinates = currentCellCoordinates
 	willStartMovingToNewCell.emit(newDestinationTileCoordinates)
 	self.destinationCellCoordinates = newDestinationTileCoordinates
@@ -234,7 +246,7 @@ func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i) -> b
 
 	# Should we teleport?
 	if shouldMoveInstantly: snapEntityPositionToTile(self.destinationCellCoordinates)
-
+	
 	return true
 
 

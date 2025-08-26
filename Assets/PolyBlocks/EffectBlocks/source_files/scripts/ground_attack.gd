@@ -19,6 +19,9 @@ func _process(delta):
 	elif Input.is_action_just_pressed("ui_accept"):
 		ground_attack()
 
+func play() -> void:
+	ground_attack()
+
 func ground_attack():
 	spikes.restart()
 	sparks.restart()

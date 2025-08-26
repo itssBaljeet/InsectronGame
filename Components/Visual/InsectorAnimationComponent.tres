@@ -1,6 +1,6 @@
 [gd_resource type="SphereMesh" load_steps=2 format=3 uid="uid://6k62qgj8keuq"]
 
-[ext_resource type="Material" uid="uid://c4eiai08uqqv8" path="res://Game/Resources/poison.tres" id="1_ha4cw"]
+[ext_resource type="Material" uid="uid://c4eiai08uqqv8" path="res://Game/Resources/Materials/poison.tres" id="1_ha4cw"]
 
 [resource]
 material = ExtResource("1_ha4cw")

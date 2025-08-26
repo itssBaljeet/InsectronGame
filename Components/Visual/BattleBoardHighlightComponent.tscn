@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bb4joyvy32i0e"]
+
+[ext_resource type="Script" uid="uid://sdgaraf5r1do" path="res://Components/Visual/BattleBoardHighlightComponent.gd" id="1_3486r"]
+
+[node name="BattleBoardHighlightComponent" type="Node3D"]
+script = ExtResource("1_3486r")

@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=4 uid="uid://cs1xx60os0dkm"]
 
-[ext_resource type="Material" uid="uid://dhuweh83sxgur" path="res://Game/Resources/border.tres" id="1_5833r"]
-[ext_resource type="Material" uid="uid://bjg3j4qdy6c4o" path="res://Game/Resources/tileMat23.tres" id="2_goxja"]
-[ext_resource type="Material" uid="uid://dc8sffjowdtt0" path="res://Game/Resources/tileMat22.tres" id="3_1b2kb"]
+[ext_resource type="Material" uid="uid://dhuweh83sxgur" path="res://Game/Resources/Materials/border.tres" id="1_5833r"]
+[ext_resource type="Material" uid="uid://bjg3j4qdy6c4o" path="res://Game/Resources/Materials/tileMat23.tres" id="2_goxja"]
+[ext_resource type="Material" uid="uid://dc8sffjowdtt0" path="res://Game/Resources/Materials/tileMat22.tres" id="3_1b2kb"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gwjy3"]
 resource_name = "aiStandardSurface1SG"

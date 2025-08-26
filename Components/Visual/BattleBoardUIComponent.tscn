@@ -1,11 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://bpxceafnntnlu"]
+[gd_scene load_steps=6 format=3 uid="uid://bpxceafnntnlu"]
 
 [ext_resource type="Script" uid="uid://djd0w27k8deui" path="res://Components/Visual/BattleBoardUIComponent.gd" id="1_osjf2"]
 [ext_resource type="StyleBox" uid="uid://dlowssv8kmxjm" path="res://addons/UI Pack Kenney/background.tres" id="2_5g7u7"]
 [ext_resource type="StyleBox" uid="uid://df6yi77q1dvws" path="res://addons/UI Pack Kenney/button.tres" id="2_v3yla"]
 [ext_resource type="StyleBox" uid="uid://fiqf8lkjjdvb" path="res://addons/UI Pack Kenney/button_depressed.tres" id="3_f165g"]
+[ext_resource type="StyleBox" uid="uid://b8pkdacubrysc" path="res://addons/UI Pack Kenney/hover_button.tres" id="5_w4dv7"]
 
-[node name="BattleBoardUIComponent" type="CanvasLayer"]
+[node name="BattleBoardUIComponent" type="CanvasLayer" groups=["components"]]
 script = ExtResource("1_osjf2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -25,7 +26,7 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer2"]
+[node name="UnitMenu" type="PanelContainer" parent="VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
 visible = false
 texture_filter = 1
@@ -33,26 +34,25 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/panel = ExtResource("2_5g7u7")
 
-[node name="InteractionMenu" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2/PanelContainer"]
+[node name="InteractionMenu" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2/UnitMenu"]
 unique_name_in_owner = true
 texture_filter = 1
-custom_minimum_size = Vector2(200, 300)
+custom_minimum_size = Vector2(230, 350)
 layout_mode = 2
 size_flags_vertical = 4
 alignment = 1
 
-[node name="AttackButton" type="Button" parent="VBoxContainer/HBoxContainer2/PanelContainer/InteractionMenu"]
+[node name="AttackButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/InteractionMenu"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/normal = ExtResource("2_v3yla")
-theme_override_styles/pressed = ExtResource("3_f165g")
-theme_override_styles/focus = ExtResource("3_f165g")
+theme_override_styles/focus = ExtResource("5_w4dv7")
 text = "Attack"
 
-[node name="MoveButton" type="Button" parent="VBoxContainer/HBoxContainer2/PanelContainer/InteractionMenu"]
+[node name="MoveButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/InteractionMenu"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
@@ -60,10 +60,13 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/normal = ExtResource("2_v3yla")
 theme_override_styles/pressed = ExtResource("3_f165g")
-theme_override_styles/focus = ExtResource("3_f165g")
+theme_override_styles/pressed_mirrored = ExtResource("3_f165g")
+theme_override_styles/hover = ExtResource("5_w4dv7")
+theme_override_styles/hover_pressed = ExtResource("3_f165g")
+theme_override_styles/focus = ExtResource("5_w4dv7")
 text = "Move"
 
-[node name="WaitButton" type="Button" parent="VBoxContainer/HBoxContainer2/PanelContainer/InteractionMenu"]
+[node name="WaitButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/InteractionMenu"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
@@ -71,10 +74,12 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/normal = ExtResource("2_v3yla")
 theme_override_styles/pressed = ExtResource("3_f165g")
-theme_override_styles/focus = ExtResource("3_f165g")
+theme_override_styles/hover = ExtResource("5_w4dv7")
+theme_override_styles/hover_pressed = ExtResource("3_f165g")
+theme_override_styles/focus = ExtResource("5_w4dv7")
 text = "Wait"
 
-[node name="ItemButton" type="Button" parent="VBoxContainer/HBoxContainer2/PanelContainer/InteractionMenu"]
+[node name="ItemButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/InteractionMenu"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
@@ -82,10 +87,12 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/normal = ExtResource("2_v3yla")
 theme_override_styles/pressed = ExtResource("3_f165g")
-theme_override_styles/focus = ExtResource("3_f165g")
+theme_override_styles/hover = ExtResource("5_w4dv7")
+theme_override_styles/hover_pressed = ExtResource("3_f165g")
+theme_override_styles/focus = ExtResource("5_w4dv7")
 text = "Item"
 
-[node name="EndTurnButton" type="Button" parent="VBoxContainer/HBoxContainer2/PanelContainer/InteractionMenu"]
+[node name="EndTurnButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/InteractionMenu"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
@@ -93,8 +100,26 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/normal = ExtResource("2_v3yla")
 theme_override_styles/pressed = ExtResource("3_f165g")
-theme_override_styles/focus = ExtResource("3_f165g")
+theme_override_styles/hover = ExtResource("5_w4dv7")
+theme_override_styles/hover_pressed = ExtResource("3_f165g")
+theme_override_styles/focus = ExtResource("5_w4dv7")
 text = "End Turn"
+
+[node name="AttackMenu" type="PanelContainer" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = ExtResource("2_5g7u7")
+
+[node name="AttackOptions" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2/AttackMenu"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(230, 350)
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 1
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
 texture_filter = 1
@@ -108,4 +133,11 @@ layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
 theme_override_styles/normal = ExtResource("2_v3yla")
+theme_override_styles/pressed = ExtResource("3_f165g")
+theme_override_styles/hover = ExtResource("5_w4dv7")
+theme_override_styles/focus = ExtResource("5_w4dv7")
 text = "Start Turn"
+
+[node name="Timer" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true

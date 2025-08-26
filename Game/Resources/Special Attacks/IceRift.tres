@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AttackResource" load_steps=4 format=3 uid="uid://5i5k7aqubtml"]
+
+[ext_resource type="Resource" uid="uid://dv35cy0cd23g7" path="res://Game/Resources/patterns/wazir3.tres" id="1_ydlxl"]
+[ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="2_m6xqa"]
+[ext_resource type="PackedScene" uid="uid://dsdew01c6b137" path="res://Assets/PolyBlocks/EffectBlocks/assets/attacks/attack_crystal.tscn" id="3_ydlxl"]
+
+[resource]
+script = ExtResource("2_m6xqa")
+attackName = "Ice Rift"
+attackType = 1
+effectRange = 3
+attackPattern = ExtResource("1_ydlxl")
+hitsAllies = true
+vfxScene = ExtResource("3_ydlxl")
+vfxScale = 0.75
+metadata/_custom_type_script = "uid://b2s3r8l3dbtqw"

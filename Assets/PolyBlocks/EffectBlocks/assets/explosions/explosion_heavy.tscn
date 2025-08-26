@@ -1,6 +1,6 @@
 [gd_scene load_steps=54 format=4 uid="uid://ddl2u52th0ebh"]
 
-[ext_resource type="Script" uid="uid://b6e5rmyqf8qus" path="res://PolyBlocks/EffectBlocks/source_files/scripts/explosion_heavy.gd" id="1_ou48d"]
+[ext_resource type="Script" uid="uid://b6e5rmyqf8qus" path="res://Assets/PolyBlocks/EffectBlocks/source_files/scripts/explosion_heavy.gd" id="1_ou48d"]
 
 [sub_resource type="Curve" id="Curve_4o2wr"]
 _data = [Vector2(0.0634328, 1), 0.0, 0.0, 0, 0, Vector2(0.697761, 0), 0.0, 0.0, 0, 0]

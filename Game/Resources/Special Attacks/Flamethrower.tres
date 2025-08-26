@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AttackResource" load_steps=3 format=3 uid="uid://btm1udvs2lr5o"]
+
+[ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="1_djq1j"]
+[ext_resource type="PackedScene" uid="uid://bw5rix0opmpn2" path="res://Assets/PolyBlocks/EffectBlocks/assets/muzzle_flash/flamethrower.tscn" id="2_17nyy"]
+
+[resource]
+script = ExtResource("1_djq1j")
+attackName = "Flamethrower"
+attackType = 2
+effectRange = 3
+hitsAllies = true
+pierces = true
+burns = true
+vfxScene = ExtResource("2_17nyy")
+vfxScale = 0.75
+vfxOrientation = 0
+vfxRotationOffset = Vector3(0, 180, 0)
+metadata/_custom_type_script = "uid://b2s3r8l3dbtqw"

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AttackResource" load_steps=4 format=3 uid="uid://bs853y3vn3abe"]
+
+[ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="1_4r4bt"]
+[ext_resource type="Resource" uid="uid://ct3ya4dfo83pe" path="res://Game/Resources/patterns/mannguard.tres" id="1_ihyff"]
+[ext_resource type="PackedScene" uid="uid://bypo155gcm3lj" path="res://Assets/PolyBlocks/EffectBlocks/assets/other/shockwave.tscn" id="3_j0xo8"]
+
+[resource]
+script = ExtResource("1_4r4bt")
+attackName = "Shockwave"
+attackType = 3
+damage = 20
+attackPattern = ExtResource("1_ihyff")
+hitsAllies = true
+vfxScene = ExtResource("3_j0xo8")
+metadata/_custom_type_script = "uid://b2s3r8l3dbtqw"

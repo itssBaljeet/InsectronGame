@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://dcgkh3lvv0v4w" path="res://Entities/TurnBased/BattleBoardUnitEntity.gd" id="1_d6mgc"]
 
-[node name="BattleBoardUnitEntity" type="Node3D"]
+[node name="BattleBoardUnitEntity" type="Node3D" groups=["entities", "turnBased"]]
 script = ExtResource("1_d6mgc")

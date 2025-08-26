@@ -10,11 +10,11 @@ var rotation_h: float = 0.0
 var rotation_v: float = 0.0
 var is_mouse_captured: bool = true
 
-func _ready():
+func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 
-func _input(event):
+func _input(event) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		toggle_mouse_capture()
 		return
@@ -31,7 +31,7 @@ func _input(event):
 		rotate_object_local(Vector3.UP, rotation_h)
 		rotate_object_local(Vector3.RIGHT, rotation_v)
 
-func _process(delta):
+func _process(delta) -> void:
 	if not is_mouse_captured:
 		return
 		
@@ -46,9 +46,9 @@ func _process(delta):
 	var movement = transform.basis * input_dir.normalized() * current_speed * delta
 	var new_position = transform.origin + movement
 	
-	new_position.x = clamp(new_position.x, -10.0, 80.0)
-	new_position.y = clamp(new_position.y, 1.0, 15.0)
-	new_position.z = clamp(new_position.z, -15.0, 15.0)
+	#new_position.x = clamp(new_position.x, -10.0, 80.0)
+	#new_position.y = clamp(new_position.y, 1.0, 15.0)
+	#new_position.z = clamp(new_position.z, -15.0, 15.0)
 	
 	transform.origin = new_position
 
@@ -65,14 +65,14 @@ func toggle_mouse_capture():
 func get_input_direction() -> Vector3:
 	var input_dir = Vector3.ZERO
 	
-	if Input.is_action_pressed("ui_up") or Input.is_action_pressed("w"):
+	if Input.is_action_pressed("ui_up") or Input.is_action_pressed("moveForward"):
 		input_dir.z -= 1
-	if Input.is_action_pressed("ui_down") or Input.is_action_pressed("s"):
+	if Input.is_action_pressed("ui_down") or Input.is_action_pressed("moveBackward"):
 		input_dir.z += 1
 	
-	if Input.is_action_pressed("ui_left") or Input.is_action_pressed("a"):
+	if Input.is_action_pressed("ui_left") or Input.is_action_pressed("moveLeft"):
 		input_dir.x -= 1
-	if Input.is_action_pressed("ui_right") or Input.is_action_pressed("d"):
+	if Input.is_action_pressed("ui_right") or Input.is_action_pressed("moveRight"):
 		input_dir.x += 1
 	
 	if Input.is_action_pressed("q"):

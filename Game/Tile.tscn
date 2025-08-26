@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://difqjdtkgqpru" path="res://Entities/Objects/TileEntity3d.gd" id="1_10afe"]
 [ext_resource type="PackedScene" uid="uid://dqndo844fvnru" path="res://Components/Objects/TileComponent3D.tscn" id="2_bdp2s"]
-[ext_resource type="Material" uid="uid://dq8o3ujayflov" path="res://Game/Resources/even_tile.tres" id="3_bdp2s"]
+[ext_resource type="Material" uid="uid://dq8o3ujayflov" path="res://Game/Resources/Materials/even_tile.tres" id="3_bdp2s"]
 
 [node name="Tile" type="Node3D" node_paths=PackedStringArray("label") groups=["entities"]]
 script = ExtResource("1_10afe")

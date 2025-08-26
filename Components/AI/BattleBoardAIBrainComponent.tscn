@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bqemhqwmhfxvr"]
+
+[ext_resource type="Script" uid="uid://blo16plmwnos3" path="res://Components/AI/BattleBoardAIBrainComponent.gd" id="1_amvjn"]
+
+[node name="BattleBoardAIBrainComponent" type="Node3D"]
+script = ExtResource("1_amvjn")

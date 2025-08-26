@@ -272,7 +272,6 @@ func startTurnProcess() -> void:
 
 	await startTeamTurn()
 
-
 ## Set the unit that will take an action (to be processed with startTurnProcess).
 func setActiveUnit(unit: TurnBasedEntity) -> void:
 	activeUnit = unit
@@ -366,10 +365,9 @@ func endTeamTurn() -> void:
 
 	# Process turn-end signals for any units of the team that didn't get a chance to act
 	for insector in currentTeamParty:
-			# If an entity was never activated this turn (did not move or act), process its turnEnd now
-			if not insector.stateComponent.isExhausted():
-				await insector.processTurnEndSignals()
-			# (If the entity was activated, its turnEnd was already processed in processEntityTurn)
+		# If an entity was never activated this turn (did not move or act), process its turnEnd now
+		await insector.processTurnEndSignals()
+		# (If the entity was activated, its turnEnd was already processed in processEntityTurn)
 
 	turnsProcessed += 1  # increment count of turns processed (each team turn counts as one turn now)
 	didEndTurn.emit()
@@ -462,63 +460,8 @@ func _processAITurn() -> void:
 	for insector in currentTeamParty:
 		self.willProcessEntity.emit(insector)
 		
-		var posComponent: BattleBoardPositionComponent = insector.boardPositionComponent
-		var dest: Vector3i = posComponent.moveRange.offsets[randi_range(0, len(posComponent.moveRange.offsets)-1)]
-		while not posComponent.battleBoard.validateCoordinates(posComponent.currentCellCoordinates + dest):
-			dest = posComponent.moveRange.offsets[randi_range(0, len(posComponent.moveRange.offsets)-1)]
+		insector.AIComponent.decideNextAction()
 		
-		
-		# face the movement direction before starting the move.
-		var anim: InsectorAnimationComponent = insector.components.get(&"InsectorAnimationComponent")
-		if anim:
-			var from_cell: Vector3i = posComponent.currentCellCoordinates
-			var from_world: Vector3 = posComponent.adjustToTile(
-			posComponent.battleBoard.getGlobalCellPosition(from_cell)
-			)
-			var to_world: Vector3 = posComponent.adjustToTile(
-			posComponent.battleBoard.getGlobalCellPosition(from_cell + dest)
-			)
-			var move_dir_world: Vector3 = to_world - from_world
-			if move_dir_world.length_squared() > 0.0:
-				await anim.face_move_direction(move_dir_world)
-			
-			print("About to walk")
-			await anim.walkAnimation()
-			
-
-		
-		posComponent.processMovementInput(dest)
-		await anim.idleAnimation()
-		# wait for arrival, then restore “home” facing.
-		await posComponent.didArriveAtNewCell
-		if anim:
-			await anim.idleAnimation()
-			await anim.face_home_orientation()
-		# Mark unit turn as completed with a move or wait
-		insector.stateComponent.markMoved()
-		
-		# Attack Time!! Try attacking 8 times within attack range
-		var attackTarget: Vector3i = insector.attackComponent.attackRange.offsets[randi_range(0, len(insector.attackComponent.attackRange.offsets)-1)]
-		var count: int = 0
-
-		var board := insector.boardPositionComponent.battleBoard
-		var occupant: Entity = board.getOccupant(insector.boardPositionComponent.currentCellCoordinates + attackTarget)
-
-		# NEW: use the acting unit's faction bitmask (not the enum/currentTeam)
-		var myMask: int = insector.factionComponent.factions
-
-		# Keep trying until we find an occupant that shares NO bits with us (i.e., a true enemy)
-		while (occupant == null or (myMask & occupant.factionComponent.factions) != 0) and count < 8:
-			print("Straight Buggin Yo!")
-			attackTarget = insector.attackComponent.attackRange.offsets[randi_range(0, len(insector.attackComponent.attackRange.offsets)-1)]
-			occupant = board.getOccupant(insector.boardPositionComponent.currentCellCoordinates + attackTarget)
-			count += 1
-
-		# Attack only if the occupant is an enemy: bitwise AND must be zero
-		if occupant != null and (myMask & occupant.factionComponent.factions) == 0:
-			print("Attacking!")
-			insector.attackComponent.boardService.confirmAttackTarget(insector.boardPositionComponent.currentCellCoordinates + attackTarget, insector, true)
-			
 		await insector.processTurnUpdateSignals()
 		await insector.processTurnEndSignals()
 		self.didProcessEntity.emit(insector)

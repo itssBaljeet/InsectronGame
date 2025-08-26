@@ -4,4 +4,5 @@
 
 [node name="TurnBasedEntity" type="Node2D" groups=["entities", "turnBased"]]
 script = ExtResource("1_t32ic")
+isLoggingEnabled = false
 metadata/_edit_group_ = true

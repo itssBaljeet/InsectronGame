@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AttackResource" load_steps=3 format=3 uid="uid://c6g62ech1o3ua"]
+
+[ext_resource type="Resource" uid="uid://ct3ya4dfo83pe" path="res://Game/Resources/patterns/mannguard.tres" id="1_pa8nx"]
+[ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="1_vodca"]
+
+[resource]
+script = ExtResource("1_vodca")
+attackPattern = ExtResource("1_pa8nx")
+metadata/_custom_type_script = "uid://b2s3r8l3dbtqw"

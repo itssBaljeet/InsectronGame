@@ -2,7 +2,7 @@ class_name InsectorGrowthComponnet
 extends Component
 
 #region Exports
-@export var species: InsectorSpecies
+#@export var species: InsectorSpecies
 @export_range(1, 100, 1) var level: int = 5
 
 # IVs [0..31]-style
@@ -42,9 +42,9 @@ func getRequiredComponents() -> Array[Script]:
 
 
 
-func _ready() -> void:
-	# Ensure we have unique stat resources (if not already Local-to-Scene)
-	recomputeFinalStats()
+#func _ready() -> void:
+	## Ensure we have unique stat resources (if not already Local-to-Scene)
+	#recomputeFinalStats()
 
 
 ## Pokémon-like non-HP stat formula (simple version).
@@ -54,16 +54,16 @@ static func _calcNonHP(base: int, iv: int, ev: int, lvl: int, nature: float) -> 
 	var core := int(floor(((2.0 * base + iv + int(ev / 4)) * lvl) / 100.0) + 5.0)
 	return int(round(core * nature))
 
-func recomputeFinalStats() -> void:
-	if not species or not stats_component: return
-
-	_setStat(&"atk", _calcNonHP(species.base_atk, iv_atk, ev_atk, level, nat_atk))
-	_setStat(&"def", _calcNonHP(species.base_def, iv_def, ev_def, level, nat_def))
-	_setStat(&"sp_atk", _calcNonHP(species.base_sp_atk, iv_sp_atk, ev_sp_atk, level, nat_sp_atk))
-	_setStat(&"sp_def", _calcNonHP(species.base_sp_def, iv_sp_def, ev_sp_def, level, nat_sp_def))
-	_setStat(&"spd", _calcNonHP(species.base_spd, iv_spd, ev_spd, level, nat_spd))
-	# Accuracy might be better additive or clamped 0..100 — choose your scale:
-	_setStat(&"acc", _calcNonHP(species.base_acc, iv_acc, ev_acc, level, nat_acc))
+#func recomputeFinalStats() -> void:
+	#if not species or not stats_component: return
+#
+	#_setStat(&"atk", _calcNonHP(species.base_atk, iv_atk, ev_atk, level, nat_atk))
+	#_setStat(&"def", _calcNonHP(species.base_def, iv_def, ev_def, level, nat_def))
+	#_setStat(&"sp_atk", _calcNonHP(species.base_sp_atk, iv_sp_atk, ev_sp_atk, level, nat_sp_atk))
+	#_setStat(&"sp_def", _calcNonHP(species.base_sp_def, iv_sp_def, ev_sp_def, level, nat_sp_def))
+	#_setStat(&"spd", _calcNonHP(species.base_spd, iv_spd, ev_spd, level, nat_spd))
+	## Accuracy might be better additive or clamped 0..100 — choose your scale:
+	#_setStat(&"acc", _calcNonHP(species.base_acc, iv_acc, ev_acc, level, nat_acc))
 
 func _setStat(stat_name: StringName, new_value: int) -> void:
 	var s: Stat = stats_component.getStat(stat_name)

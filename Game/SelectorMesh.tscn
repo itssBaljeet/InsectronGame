@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dnlvdwjohh5ac"]
 
 [ext_resource type="PackedScene" uid="uid://c6x5wu22u038x" path="res://addons/gdquest_bee_bot/selector.blend" id="1_nxexx"]
-[ext_resource type="Material" uid="uid://dk05r4juhs1rr" path="res://Game/Resources/SelectorMesh.tres" id="2_q43f2"]
+[ext_resource type="Material" uid="uid://dk05r4juhs1rr" path="res://Game/Resources/Materials/SelectorMesh.tres" id="2_q43f2"]
 
 [node name="SelectorMesh" instance=ExtResource("1_nxexx")]
 

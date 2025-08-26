@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cge3ofhdkhiuu"]
-
-[ext_resource type="Script" uid="uid://cyve8fvr5o6x2" path="res://Components/Control/BattleBoardServiceComponent.gd" id="1_8fpbv"]
-
-[node name="BattleBoardServiceComponent" type="Node3D"]
-script = ExtResource("1_8fpbv")

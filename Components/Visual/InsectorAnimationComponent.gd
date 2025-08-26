@@ -10,7 +10,7 @@
 ## vector into the parent's local space and then computes the snapped yaw
 ## relative to that forward axis.  For enemies, we flip the local Z component
 ## before computing the snapped yaw to account for their opposite handedness.
-
+@tool
 class_name InsectorAnimationComponent
 extends Component
 
@@ -20,6 +20,13 @@ extends Component
 @export_range(0.01, 1.0, 0.01) var post_rotate_time := 0.33
 @export var easing_trans := Tween.TRANS_QUAD
 @export var easing_ease := Tween.EASE_OUT
+
+#region Animation durations
+@export_range(0.1, 2.0, 0.1) var move_animation_time := 0.5
+@export_range(0.1, 2.0, 0.1) var attack_animation_time := 0.8
+@export_range(0.1, 2.0, 0.1) var hurt_animation_time := 0.5
+@export_range(0.1, 2.0, 0.1) var die_animation_time := 1.0
+#endregion
 
 ## Dependencies
 var faction_component: FactionComponent:
@@ -56,7 +63,7 @@ const HURT_FLASH_DURATION  := 0.0
 
 @export_group("Status FX / Poison")
 
-@export var sphere_mat: StandardMaterial3D = preload("res://Game/Resources/poison.tres")
+@export var sphere_mat: StandardMaterial3D = preload("res://Game/Resources/Materials/poison.tres")
 
 ## Start with poison on by default?
 @export var poison_enabled_default: bool = true
@@ -210,152 +217,173 @@ func clear_poison_fx() -> void:
 	_poison_fx = null
 
 
-#region Animations
+#region Command Animation Sequences
+## Main entry point for move animations from commands
+func playMoveSequence(dest: Vector3i) -> void:
+	# Face the first step direction
+	var from: Vector3i = parentEntity.boardPositionComponent.currentCellCoordinates
+	await faceDirection(parentEntity, from, dest)
+	
+	# Play walk animation
+	walkAnimation()
+	print("walking done")
+	
+	# Could animate through each cell in path if desired
+	# for cell in path:
+	#     await animateStepToCell(unit, cell)
 
+## Main entry point for attack animations from commands
+func playAttackSequence(attacker: BattleBoardUnitEntity, target: Entity, damage: int) -> void:
+	if not attacker or not target:
+		return
+	
+	# Both units face each other
+	await faceTargets(attacker, target)
+	
+	# Attacker performs attack
+	await attackAnimation()
+	
+	# Target reacts
+	var targetAnim: InsectorAnimationComponent = target.components.get(&"InsectorAnimationComponent")
+	if targetAnim:
+		await targetAnim.hurtAnimation()
+	
+	# Show damage number (optional)
+	if damage > 0:
+		await showDamageNumber(target, damage)
+		if attacker.attackComponent.venemous:
+			targetAnim.play_poison_puff(6)
+	
+	# Return to idle
+	await idleAnimation()
+
+## Makes two units face each other
+func faceTargets(unit1: BattleBoardUnitEntity, unit2: Entity) -> void:
+	if not unit1 or not unit2:
+		return
+	
+	# Get positions
+	var pos1 := unit1.global_position
+	var pos2 := unit2.global_position
+	
+	# Unit 1 faces unit 2
+	var dir1 := (pos2 - pos1).normalized()
+	face_move_direction(dir1)
+	
+	# Unit 2 faces unit 1 (if it has animation component)
+	var anim2: InsectorAnimationComponent = unit2.components.get(&"InsectorAnimationComponent")
+	if anim2:
+		var dir2 := (pos1 - pos2).normalized()
+		await anim2.face_move_direction(dir2)
+
+func faceTargetsHome(unit1: Entity, unit2: Entity) -> void:
+	if (not unit1 or unit2) and not (unit1 is BattleBoardUnitEntity and unit2 is BattleBoardUnitEntity):
+		return
+	
+	unit1.animComponent.face_home_orientation()
+	unit2.animComponent.face_home_orientation()
+
+## Helper to face from one cell to another
+func faceDirection(_unit: BattleBoardUnitEntity, fromCell: Vector3i, toCell: Vector3i) -> void:
+	if not board_position_component or not board_position_component.battleBoard:
+		return
+	
+	var board := board_position_component.battleBoard
+	var from_world := board.getGlobalCellPosition(fromCell)
+	var to_world := board.getGlobalCellPosition(toCell)
+	var dir := (to_world - from_world) as Vector3
+	
+	dir = dir.normalized()
+	
+	await face_move_direction(dir)
+#endregion
+
+#region Core Animations
 func attackAnimation() -> void:
-	if skin.has_method("attack"):
+	if skin and skin.has_method("attack"):
 		await skin.attack()
+	else:
+		# Fallback animation
+		await _genericAttackAnimation()
 
 func idleAnimation() -> void:
-	if skin.has_method("idle"):
+	if skin and skin.has_method("idle"):
 		await skin.idle()
+	else:
+		# Just wait a moment
+		await get_tree().create_timer(0.1).timeout
 
 func walkAnimation() -> void:
-	if skin.has_method("walk"):
+	if skin and skin.has_method("walk"):
 		await skin.walk()
+	else:
+		# Fallback animation
+		await _genericWalkAnimation()
 
 func hurtAnimation() -> void:
 	if not _is_valid_skin():
 		return
-
-	# Capture the "pre-hurt" scale only once per burst so we can restore it,
-	# even if the animation is retriggered while still in progress.
+	
+	# Capture the pre-hurt scale
 	if not _hurt_in_progress:
 		_saved_scale = skin.scale
 	_hurt_in_progress = true
-
-	# If a previous hurt tween exists, stop it cleanly so we can restart.
+	
+	# Stop previous hurt tween if running
 	if _hurt_tween and _hurt_tween.is_running():
 		_hurt_tween.kill()
-
-	# Ensure we have red-emission flash materials ready and mapped.
+	
+	# Prepare flash materials
 	_prepare_flash_materials()
-
-	# Build the tween: grow to peak relative to the saved base, then return
-	# exactly to the saved base. We start from the *current* scale so it feels
-	# responsive if retriggered mid-bounce.
+	
+	# Build the tween
 	var peak_scale: Vector3 = _saved_scale * HURT_SCALE_PEAK
 	var tw := create_tween()
 	_hurt_tween = tw
-
-	# Scale track (sequential): up then down.
+	
+	# Scale animation
 	tw.tween_property(skin, "scale", peak_scale, HURT_UP_TIME) \
 		.set_trans(Tween.TRANS_QUAD) \
 		.set_ease(Tween.EASE_OUT)
 	tw.tween_property(skin, "scale", _saved_scale, HURT_DOWN_TIME) \
 		.set_trans(Tween.TRANS_BACK) \
 		.set_ease(Tween.EASE_OUT)
-
-	# Emission flash (parallel).
+	
+	# Flash effect
 	var flash_tw := tw.parallel()
 	for mat in _flash_mats:
 		flash_tw.tween_property(mat, "emission_energy_multiplier", HURT_FLASH_ENERGY, HURT_FLASH_DURATION * 0.5) \
 			.from(0.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		flash_tw.tween_property(mat, "emission_energy_multiplier", 0.0, HURT_FLASH_DURATION * 0.5) \
 			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-
+	
 	await tw.finished
-
-	# Restore material overrides exactly as they were.
+	
+	# Cleanup
 	for gi: GeometryInstance3D in _original_overrides.keys():
 		gi.material_override = _original_overrides[gi]
-
+	
 	_original_overrides.clear()
 	_flash_mats.clear()
 	_flash_prepared = false
 	_hurt_in_progress = false
-
-
-func dieAnimation() -> void:
-	if skin.has_method("power_off"):
-		await skin.power_off()
-
 #endregion
 
-## Life cycle
-func _ready() -> void:
-	# Cache the model's *actual* starting yaw as "home".  Players use their
-	# initial yaw directly, while enemies add 180° so that their +Z-facing
-	# meshes are treated as -Z facing.
-	if skin:
-		var initial := skin.rotation.y
-		_home_yaw_cached = initial
-		_home_yaw_ready = true
-		
-	# Poison FX init
-	_setup_poison_fx()
-
-
-## Public API
-## Rotate to face the given direction (WORLD XZ), snapped to 45°.
-## `dir_world` should be (to_world - from_world).
-func face_move_direction(dir_world: Vector3) -> void:
-	if not _is_valid_skin():
-		return
-	_ensure_home_cached()
-
-	# Convert WORLD dir → PARENT‑LOCAL dir using ONLY the parent's rotation.
-	var dir_local := dir_world
-	var parent := skin.get_parent() as Node3D
-	if parent:
-		# Strip out scale and mirroring from the parent's basis by using its
-		# rotation quaternion.  This produces a pure rotation basis that we can
-		# invert to convert world vectors into the parent's local space.
-		var rot_only := Basis(parent.global_transform.basis.get_rotation_quaternion())
-		dir_local = rot_only.inverse() * dir_world
-
-	# Enemies are authored facing +Z instead of -Z.  To treat their forward
-	# direction consistently with players, flip the Z component before
-	# computing the snapped yaw.  This effectively mirrors forward/backwards
-	# so that positive world Z becomes forward for enemies.
-	if _is_enemy_or_ai():
-		dir_local = -dir_local
-
-	# Snap relative to -Z, then offset by the unit’s home yaw.  The helper
-	# returns multiples of 45° in radians with -Z → 0, +X → +π/2, etc.
-	var yaw_rel := _snapped_yaw_from_local_dir(dir_local)
-	var target_yaw := _home_yaw_cached + yaw_rel
-
-	await _tween_yaw(target_yaw, pre_rotate_time)
-
-## Rotate back to the unit’s "home" yaw (cached from startup; enemies = +PI).
-func face_home_orientation() -> void:
-	if not _is_valid_skin():
-		return
-	if not _home_yaw_ready:
-		# Fallback, in case _ready() hasn’t run (e.g. late wiring).
-		var initial := skin.rotation.y
-		_home_yaw_cached = initial # + (PI if _is_enemy() else 0.0)
-		_home_yaw_ready = true
-	await _tween_yaw(_home_yaw_cached, post_rotate_time)
-
-## Helpers
+#region Helper Methods
 func _ensure_home_cached() -> void:
 	if _home_yaw_ready:
 		return
 	var initial := skin.rotation.y
-	_home_yaw_cached = initial # + (PI if _is_enemy() else 0.0)
+	_home_yaw_cached = initial
 	_home_yaw_ready = true
 
-## LOCAL-space dir → relative yaw (radians) with -Z = 0, snapped to 45°.
 func _snapped_yaw_from_local_dir(dir_local: Vector3) -> float:
 	var x := dir_local.x
 	var z := dir_local.z
 	if absf(x) < 0.000001 and absf(z) < 0.000001:
 		return 0.0
-
-	# Fix: board/model handedness mismatch → mirror X once.  Forward/back stay
-	# the same; left/right and diagonals become correct.
+	
+	# Fix: board/model handedness mismatch
 	var raw := atan2(-x, -z)  # (-Z)->0, (+X)->+π/2, (-X)->-π/2
 	var step := PI / 4.0
 	return round(raw / step) * step
@@ -363,23 +391,14 @@ func _snapped_yaw_from_local_dir(dir_local: Vector3) -> float:
 func _is_valid_skin() -> bool:
 	if skin:
 		return true
-	push_warning("%s: No 'skin' assigned; cannot rotate." % [logFullName])
+	push_warning("%s: No 'skin' assigned; cannot animate." % [logFullName])
 	return false
 
-# Treat either “enemies” or “ai” flags as non-player.
 func _is_enemy_or_ai() -> bool:
-	return true if faction_component.factions == 8 or faction_component.factions == 32 else false
+	if not faction_component:
+		return false
+	return faction_component.factions == 8 or faction_component.factions == 32
 
-## Convert a WORLD dir to an absolute yaw (radians) with -Z=0, snapped to 45°.
-func _snapped_yaw_from_world_dir(dir_world: Vector3) -> float:
-	var v := Vector2(dir_world.x, dir_world.z)
-	if v == Vector2.ZERO:
-		return skin.rotation.y
-	var raw_yaw := atan2(v.x, -v.y)    # -Z -> 0
-	var step := PI / 4.0               # 45°
-	return round(raw_yaw / step) * step
-
-## Tween Y-rotation using the shortest arc.
 func _tween_yaw(target_yaw: float, duration: float) -> void:
 	var start := skin.rotation.y
 	var delta := wrapf(target_yaw - start, -PI, PI)
@@ -393,34 +412,33 @@ func _tween_yaw(target_yaw: float, duration: float) -> void:
 func _prepare_flash_materials() -> void:
 	if _flash_prepared:
 		return
-
+	
 	var meshes := _collect_geometry_instances(skin)
 	if meshes.is_empty():
 		_flash_prepared = true
 		return
-
+	
 	_original_overrides.clear()
 	_flash_mats.clear()
-
+	
 	for gi: GeometryInstance3D in meshes:
 		_original_overrides[gi] = gi.material_override
-
+		
 		var mat: StandardMaterial3D
 		if gi.material_override is StandardMaterial3D:
 			mat = (gi.material_override as StandardMaterial3D).duplicate()
 		else:
 			mat = StandardMaterial3D.new()
-
+		
 		mat.emission_enabled = true
 		mat.emission = HURT_FLASH_COLOR
 		mat.emission_energy_multiplier = 0.0
 		mat.albedo_color = HURT_FLASH_COLOR
-
+		
 		gi.material_override = mat
 		_flash_mats.append(mat)
-
+	
 	_flash_prepared = true
-
 
 func _collect_geometry_instances(root: Node) -> Array[GeometryInstance3D]:
 	var found: Array[GeometryInstance3D] = []
@@ -429,3 +447,112 @@ func _collect_geometry_instances(root: Node) -> Array[GeometryInstance3D]:
 	for child in root.get_children():
 		found.append_array(_collect_geometry_instances(child))
 	return found
+#endregion
+	
+
+
+func dieAnimation() -> void:
+	if skin and skin.has_method("power_off"):
+		await skin.power_off()
+	else:
+		# Fallback death animation
+		await _genericDeathAnimation()
+#endregion
+
+#region Rotation System (from your code)
+## Rotate to face the given direction (WORLD XZ), snapped to 45°
+func face_move_direction(dir_world: Vector3) -> void:
+	if not _is_valid_skin():
+		return
+	_ensure_home_cached()
+	
+	# Convert WORLD dir → PARENT-LOCAL dir
+	var dir_local := dir_world
+	var parent := skin.get_parent() as Node3D
+	if parent:
+		var rot_only := Basis(parent.global_transform.basis.get_rotation_quaternion())
+		dir_local = rot_only.inverse() * dir_world
+	
+	# Handle enemy facing
+	if _is_enemy_or_ai():
+		dir_local = -dir_local
+	
+	# Snap to 45° increments
+	var yaw_rel := _snapped_yaw_from_local_dir(dir_local)
+	var target_yaw := _home_yaw_cached + yaw_rel
+	
+	await _tween_yaw(target_yaw, pre_rotate_time)
+
+## Return to home orientation
+func face_home_orientation() -> void:
+	if not _is_valid_skin():
+		return
+	if not _home_yaw_ready:
+		var initial := skin.rotation.y
+		_home_yaw_cached = initial
+		_home_yaw_ready = true
+	await _tween_yaw(_home_yaw_cached, post_rotate_time)
+#endregion
+
+#region Fallback Animations
+## Lunges along the mesh's current facing (–Z) instead of world –Z.
+func _genericAttackAnimation(
+		lunge_distance: float = 0.30,
+		windup_ratio: float = 0.20,
+		in_time: float = 0.18,
+		out_time: float = 0.16
+	) -> void:
+	var tw := create_tween()
+	var start_pos: Vector3 = skin.position
+	
+	# Forward in parent space: –Z of the mesh's current basis.
+	var f: Vector3 = -(skin.transform.basis.z).normalized()
+	
+	# Optional: small wind-up opposite the lunge.
+	var windup_pos: Vector3 = start_pos - f * (lunge_distance * windup_ratio)
+	var lunge_pos:  Vector3 = start_pos + f * lunge_distance
+	
+	tw.tween_property(skin, "position", windup_pos, in_time * 0.35) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(skin, "position", lunge_pos, in_time * 0.65) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(skin, "position", start_pos, out_time) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	
+	await tw.finished
+
+func _genericWalkAnimation() -> void:
+	# Simple bob animation
+	var tw := create_tween()
+	var original_y := skin.position.y
+	tw.tween_property(skin, "position:y", original_y + 0.1, 0.25)
+	tw.tween_property(skin, "position:y", original_y, 0.25)
+	await tw.finished
+
+func _genericDeathAnimation() -> void:
+	# Fall over and fade
+	var tw := create_tween()
+	tw.tween_property(skin, "rotation:z", deg_to_rad(90), die_animation_time)
+	tw.parallel().tween_property(skin, "modulate:a", 0.0, die_animation_time)
+	await tw.finished
+#endregion
+
+#region Visual Effects
+## Shows floating damage number
+func showDamageNumber(target: Entity, damage: int) -> void:
+	# Create a 3D label that floats up and fades
+	var label := Label3D.new()
+	label.text = str(damage)
+	label.font_size = 96
+	label.modulate = Color.RED if damage > 0 else Color.GREEN
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.position = target.global_position + Vector3(0, 1, 0)
+	
+	get_tree().current_scene.add_child(label)
+	
+	var tw := create_tween()
+	tw.tween_property(label, "position:y", label.position.y + 1.0, 0.8)
+	tw.parallel().tween_property(label, "modulate:a", 0.0, 0.8)
+	await tw.finished
+	
+	label.queue_free()

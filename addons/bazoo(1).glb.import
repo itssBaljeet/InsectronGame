@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/bazoo(1).glb-f095cb5cd10943c0113e642d882c1746
 
 [params]
 
-nodes/root_type=""
+nodes/root_type="Node3D"
 nodes/root_name=""
 nodes/root_script=null
 nodes/apply_root_scale=true

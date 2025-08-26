@@ -1,4 +1,5 @@
 ## Pathfinding Component - pure algorithms, no state mutation
+@tool
 class_name BattleBoardPathfindingComponent
 extends Component
 
@@ -10,11 +11,7 @@ var board: BattleBoardComponent3D:
 
 ## Finds shortest path between two cells within movement range
 func findPath(fromCell: Vector3i, toCell: Vector3i, positionComponent: BattleBoardPositionComponent) -> Array[Vector3i]:
-	print("FIND PATH:")
-	
-	print(fromCell, toCell)
 	if not positionComponent or fromCell == toCell:
-		print("early return")
 		return []
 	
 	# BFS pathfinding
@@ -30,7 +27,6 @@ func findPath(fromCell: Vector3i, toCell: Vector3i, positionComponent: BattleBoa
 		
 		if current == toCell:
 			# Reconstruct path
-			print("Found final cell!")
 			return _reconstructPath(parent, fromCell, toCell)
 		
 		# Check neighbors
@@ -39,19 +35,14 @@ func findPath(fromCell: Vector3i, toCell: Vector3i, positionComponent: BattleBoa
 			
 			# Skip if already visited or invalid
 			if visited.has(neighbor):
-				print("Skip visit")
 				continue
 			
 			if not _isWalkable(neighbor):
-				print("not walkable")
 				continue
 			
 			visited[neighbor] = true
 			parent[neighbor] = current
 			queue.append(neighbor)
-	print("no path found??")
-	print(parent)
-	print(visited)
 	return [] # No path found
 
 ## Reconstructs path from parent map
@@ -68,11 +59,9 @@ func _reconstructPath(parent: Dictionary, start: Vector3i, end: Vector3i) -> Arr
 ## Checks if a cell can be moved through
 func _isWalkable(cell: Vector3i) -> bool:
 	if not cell in board.cells:
-		print("Not in cells: ", cell)
 		return false
 	
 	var data := board.vBoardState.get(cell) as BattleBoardCellData
-	print("Data: ", data)
 	return data == null or not data.isOccupied
 
 ## Gets movement cost for a cell (for A* if needed)

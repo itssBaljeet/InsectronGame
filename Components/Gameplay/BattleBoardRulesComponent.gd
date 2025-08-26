@@ -1,5 +1,6 @@
 ## Pure business logic queries - no state mutation
 ## Single source of truth for game rules validation
+@tool
 class_name BattleBoardRulesComponent
 extends Component
 
@@ -17,18 +18,22 @@ var pathfinding: BattleBoardPathfindingComponent:
 ## Validates if a unit can move from one cell to another
 func isValidMove(posComp: BattleBoardPositionComponent, fromCell: Vector3i, toCell: Vector3i) -> bool:
 	if not posComp:
+		print("No bitches?!?!")
 		return false
 
 	# Check bounds
 	if not isInBounds(toCell):
+		print("Not in bounds")
 		return false
 	
 	# Check if destination is vacant and if we should occupy
 	if not isCellVacant(toCell):
+		print("Cell not vacant")
 		return false
 	
 	# Check movement range
 	if not isInRange(fromCell, toCell, posComp.moveRange):
+		print("not in range")
 		return false
 	
 	# Check if path exists
@@ -43,6 +48,8 @@ func isInBounds(cell: Vector3i) -> bool:
 ## Checks if a cell is unoccupied
 func isCellVacant(cell: Vector3i) -> bool:
 	var data := board.vBoardState.get(cell) as BattleBoardCellData
+	if data != null:
+		print(board.vBoardState.get(cell).isOccupied)
 	return data == null or not data.isOccupied
 
 ## Checks if target cell is within range pattern

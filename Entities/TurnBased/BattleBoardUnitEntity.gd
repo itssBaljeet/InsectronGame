@@ -1,3 +1,4 @@
+@tool
 class_name BattleBoardUnitEntity
 extends TurnBasedEntity
 
@@ -12,14 +13,21 @@ var boardPositionComponent: BattleBoardPositionComponent:
 	get:
 		return components.get(&"BattleBoardPositionComponent")
 
-var attackComponent: InsectorAttackComponent:
+var attackComponent: BattleBoardUnitAttackComponent:
 	get:
-		return components.get(&"InsectorAttackComponent")
+		return components.get(&"BattleBoardUnitAttackComponent")
 
 var stateComponent: UnitTurnStateComponent:
 	get:
 		return components.get(&"UnitTurnStateComponent")
 
+var animComponent: InsectorAnimationComponent:
+	get:
+		return components.get(&"InsectorAnimationComponent")
+
+var AIComponent: BattleBoardAIBrainComponent:
+	get:
+		return components.get(&"BattleBoardAIBrainComponent")
 #endregion
 
 #region State
