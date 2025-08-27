@@ -1,6 +1,6 @@
 [gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://df6yi77q1dvws"]
 
-[ext_resource type="Texture2D" uid="uid://cjk3xa5ij7gbu" path="res://addons/UI Pack Kenney/Adventure/Tiles/Large tiles/Thin outline/tile_0016.png" id="1_v0fnk"]
+[ext_resource type="Texture2D" uid="uid://0ebjylyrvs72" path="res://addons/Noah UI/button_gray(1).png" id="1_v0fnk"]
 
 [resource]
 texture = ExtResource("1_v0fnk")

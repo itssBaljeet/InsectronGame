@@ -9,6 +9,7 @@ attackName = "Fire Rift"
 attackType = 1
 effectRange = 3
 hitsAllies = true
+knockback = true
 vfxScene = ExtResource("3_6j52s")
 vfxScale = 0.75
 metadata/_custom_type_script = "uid://b2s3r8l3dbtqw"

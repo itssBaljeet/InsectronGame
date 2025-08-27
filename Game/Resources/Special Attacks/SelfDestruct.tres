@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AttackResource" load_steps=3 format=3 uid="uid://cvors1av6bt3b"]
+
+[ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="1_1647i"]
+[ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://Assets/PolyBlocks/EffectBlocks/assets/explosions/explosion_heavy.tscn" id="2_swvru"]
+
+[resource]
+script = ExtResource("1_1647i")
+attackName = "Self Destruct"
+attackType = 3
+hitsAllies = true
+burns = true
+knockback = true
+vfxScene = ExtResource("2_swvru")
+vfxScale = 7.0
+vfxOrientation = 0
+metadata/_custom_type_script = "uid://b2s3r8l3dbtqw"

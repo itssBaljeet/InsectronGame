@@ -207,7 +207,7 @@ func processMovementInput(inputVectorOverride: Vector3i = self.inputVector) -> v
 
 
 ## Returns: `false if the new destination coordinates are not valid within the TileMap bounds.
-func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i) -> bool:
+func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i, knockback: bool = false) -> bool:
 
 	# Is the new destination the same as the current destination? Then there's nothing to change.
 	if newDestinationTileCoordinates == self.destinationCellCoordinates:
@@ -222,7 +222,7 @@ func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i) -> b
 
 	# Validate the new destination?
 
-	if shouldOccupyCell and not rules.isValidMove(self, currentCellCoordinates, newDestinationTileCoordinates):
+	if (shouldOccupyCell and not rules.isValidMove(self, currentCellCoordinates, newDestinationTileCoordinates)) and not knockback:
 		print("Invalid move")
 		return false
 	

@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=3 uid="uid://dhymc5sl3j0vy"]
+
+[ext_resource type="PackedScene" uid="uid://df6xb17iyf86a" path="res://addons/Kenney Assets/Model/characterMedium.fbx" id="1_7mp8m"]
+[ext_resource type="Texture2D" uid="uid://dplosote8eqyf" path="res://addons/Kenney Assets/Skins/survivorMaleB.png" id="2_etm33"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cqgkp"]
+albedo_texture = ExtResource("2_etm33")
+
+[node name="characterMedium" instance=ExtResource("1_7mp8m")]
+
+[node name="characterMedium" parent="Root/Skeleton3D" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_cqgkp")

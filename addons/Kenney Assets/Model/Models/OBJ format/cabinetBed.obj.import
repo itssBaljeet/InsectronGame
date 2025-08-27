@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://oim4yb3dyt1x"
+path="res://.godot/imported/cabinetBed.obj-3520edea38e01fc91b3594796d6e908f.mesh"
+
+[deps]
+
+files=["res://.godot/imported/cabinetBed.obj-3520edea38e01fc91b3594796d6e908f.mesh"]
+
+source_file="res://addons/Kenney Assets/Model/Models/OBJ format/cabinetBed.obj"
+dest_files=["res://.godot/imported/cabinetBed.obj-3520edea38e01fc91b3594796d6e908f.mesh", "res://.godot/imported/cabinetBed.obj-3520edea38e01fc91b3594796d6e908f.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

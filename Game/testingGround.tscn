@@ -1,86 +1,119 @@
-[gd_scene load_steps=7 format=3 uid="uid://dun38r0k022n1"]
+[gd_scene load_steps=37 format=3 uid="uid://dun38r0k022n1"]
 
 [ext_resource type="PackedScene" uid="uid://bq82t3qc1mxmb" path="res://Game/BattleBoard.tscn" id="2_5jdkk"]
 [ext_resource type="Environment" uid="uid://176jft2dorry" path="res://Game/testingGroundWorld.tres" id="2_315n7"]
-[ext_resource type="Material" uid="uid://bjg3j4qdy6c4o" path="res://Game/Resources/Materials/tileMat23.tres" id="3_315n7"]
 [ext_resource type="PackedScene" uid="uid://cy36aygvs66pn" path="res://addons/gdquest_gobot/gobot_skin.tscn" id="3_j5y2j"]
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://addons/gdquest_sophia/sophia_skin.tscn" id="4_0qr6p"]
-[ext_resource type="Material" uid="uid://dc8sffjowdtt0" path="res://Game/Resources/Materials/tileMat22.tres" id="4_m1l33"]
+[ext_resource type="Texture2D" uid="uid://bqj04nx0p14l7" path="res://addons/17-32/Asset 16.png" id="7_3bp17"]
+[ext_resource type="Texture2D" uid="uid://cdnohvv0js2yw" path="res://addons/Prototype/PNG/Dark/texture_07.png" id="7_j63n1"]
+[ext_resource type="Texture2D" uid="uid://ccpqa5o7afslq" path="res://addons/17-32/Asset 8.png" id="8_faldt"]
+[ext_resource type="Texture2D" uid="uid://dijuxbbnkqswh" path="res://addons/Prototype/PNG/Orange/texture_01.png" id="8_j63n1"]
+[ext_resource type="Texture2D" uid="uid://vvq0l0rgityc" path="res://addons/17-32/Asset 12.png" id="8_ydwu5"]
+[ext_resource type="PackedScene" uid="uid://bxnoigyvc8jf6" path="res://addons/models/brownchar.tscn" id="10_ydwu5"]
+[ext_resource type="AnimationLibrary" uid="uid://dg88y2d55fhuf" path="res://addons/Kenney Assets/Animations/idle.fbx" id="11_gjnab"]
+[ext_resource type="PackedScene" uid="uid://dhymc5sl3j0vy" path="res://addons/models/whitechar.tscn" id="12_tub48"]
+[ext_resource type="PackedScene" uid="uid://k5ck0qfbuxlw" path="res://addons/UI Pack Kenney/Furniture/Models/GLTF format/rugRectangle.glb" id="14_ydwu5"]
+[ext_resource type="PackedScene" uid="uid://c3ychrc1inccx" path="res://addons/models/38edb92dd60f40228e04d151a975750c.glb" id="15_8ppd4"]
+[ext_resource type="PackedScene" uid="uid://5d8h2qehb7tk" path="res://addons/UI Pack Kenney/Furniture/Models/GLTF format/speakerSmall.glb" id="15_gjnab"]
+[ext_resource type="Script" uid="uid://eybwm5enm74a" path="res://Game/TvCameraController.gd" id="16_82lh0"]
+[ext_resource type="PackedScene" uid="uid://8d6gbpri4riq" path="res://addons/UI Pack Kenney/Furniture/Models/GLTF format/doorwayFront.glb" id="16_gjnab"]
+[ext_resource type="PackedScene" uid="uid://dvajdiv0g42hk" path="res://addons/UI Pack Kenney/Furniture/Models/GLTF format/bookcaseClosedDoors.glb" id="17_tub48"]
+[ext_resource type="PackedScene" uid="uid://cqafnhc2xg8y0" path="res://addons/UI Pack Kenney/Furniture/Models/GLTF format/pottedPlant.glb" id="18_8ppd4"]
+[ext_resource type="Material" uid="uid://cxsdw41qqhghd" path="res://Game/Resources/Materials/wood.tres" id="20_ce242"]
+[ext_resource type="PackedScene" uid="uid://ba6pjbml0igrx" path="res://Assets/PolyBlocks/EffectBlocks/assets/other/dust.tscn" id="20_ugfpa"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ugfpa"]
+albedo_texture = ExtResource("7_3bp17")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tub48"]
+albedo_texture = ExtResource("7_j63n1")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_47b1f"]
+albedo_texture = ExtResource("7_3bp17")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ppd4"]
+albedo_texture = ExtResource("7_j63n1")
+texture_filter = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ce242"]
+albedo_texture = ExtResource("7_3bp17")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2gjfp"]
+albedo_texture = ExtResource("7_3bp17")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l7ylh"]
+albedo_texture = ExtResource("7_3bp17")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jyyyb"]
+albedo_texture = ExtResource("8_ydwu5")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rer52"]
+albedo_texture = ExtResource("7_3bp17")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yslpy"]
+albedo_texture = ExtResource("8_faldt")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3otw2"]
+transparency = 1
+albedo_color = Color(0.60634255, 1, 1, 0.171)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_82lh0"]
+albedo_texture = ExtResource("7_j63n1")
+texture_filter = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ydwu5"]
+albedo_texture = ExtResource("8_j63n1")
+texture_filter = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gjnab"]
+albedo_texture = ExtResource("8_j63n1")
+texture_filter = 0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_82lh0"]
+viewport_path = NodePath("Blockout/Deco/SubViewport")
 
 [node name="TestingGround" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.455545, 0.4261376, -0.78159165, 0, 0.877983, 0.47869185, 0.8902128, -0.21806568, 0.39996076, 0, 0, 0)
+light_color = Color(0.9999998, 0.8714853, 0.6481367, 1)
+light_energy = 1.9
+shadow_enabled = true
 
 [node name="BattleBoardEntity3D" parent="." instance=ExtResource("2_5jdkk")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("2_315n7")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(0.70710677, -0.35355338, 0.61237246, 0, 0.86602545, 0.5, -0.70710677, -0.35355338, 0.61237246, 6.5, 6, 10)
-light_color = Color(0.99999887, 0.997951, 0.80211115, 1)
-light_energy = 16.0
-light_indirect_energy = 0.887
-light_volumetric_fog_energy = 4.631
-spot_range = 13.0
-spot_attenuation = 1.25
-spot_angle = 35.0
+[node name="Blockout" type="Node3D" parent="."]
 
-[node name="SpotLight3D2" type="SpotLight3D" parent="."]
-transform = Transform3D(-0.7071068, -0.35355335, 0.61237246, 8.912035e-09, 0.86602545, 0.49999994, -0.70710677, 0.35355338, -0.61237246, 6.5, 6, -3)
-light_color = Color(0.99999887, 0.997951, 0.80211115, 1)
-light_energy = 16.0
-light_indirect_energy = 0.887
-light_volumetric_fog_energy = 4.631
-shadow_enabled = true
-spot_range = 13.0
-spot_attenuation = 1.25
-spot_angle = 35.0
-
-[node name="SpotLight3D3" type="SpotLight3D" parent="."]
-transform = Transform3D(-0.7071067, 0.35355344, -0.6123726, 8.912039e-09, 0.86602545, 0.49999994, 0.7071069, 0.3535533, -0.6123724, -1.5, 6, -3)
-light_color = Color(0.99999887, 0.997951, 0.80211115, 1)
-light_energy = 16.0
-light_indirect_energy = 0.887
-light_volumetric_fog_energy = 4.631
-spot_range = 13.0
-spot_attenuation = 1.25
-spot_angle = 35.0
-
-[node name="SpotLight3D4" type="SpotLight3D" parent="."]
-transform = Transform3D(0.8660255, 0.24999985, -0.4330126, 8.912038e-09, 0.8660254, 0.4999999, 0.49999988, -0.43301272, 0.7500001, -1.5, 6, 10)
-light_color = Color(0.99999887, 0.997951, 0.80211115, 1)
-light_energy = 16.0
-light_indirect_energy = 0.887
-light_volumetric_fog_energy = 4.631
-shadow_enabled = true
-spot_range = 13.0
-spot_attenuation = 1.25
-spot_angle = 35.0
-
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Blockout"]
 transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 2.5, -3.7, 3.5)
-material_override = ExtResource("3_315n7")
+material_override = SubResource("StandardMaterial3D_ugfpa")
 radius = 15.0
 height = 0.5
 sides = 10
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="."]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Blockout"]
 transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 2.5, -4.2, 3.5)
-material_override = ExtResource("4_m1l33")
+material_override = SubResource("StandardMaterial3D_tub48")
 radius = 20.0
 height = 0.5
 sides = 10
 
-[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="."]
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Blockout"]
 transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 2.5, -4.6, 3.5)
-material_override = ExtResource("3_315n7")
+material_override = SubResource("StandardMaterial3D_47b1f")
 radius = 25.0
 height = 0.5
 sides = 10
 
-[node name="GobotSkin" parent="." instance=ExtResource("3_j5y2j")]
+[node name="Characters" type="Node3D" parent="Blockout"]
+
+[node name="GobotSkin" parent="Blockout/Characters" instance=ExtResource("3_j5y2j")]
 transform = Transform3D(-5.51, 0, -4.8169954e-07, 0, 5.51, 0, 4.8169954e-07, 0, -5.51, 2.5, -3.4, 14)
 
-[node name="SpotLight3D" type="SpotLight3D" parent="GobotSkin"]
+[node name="SpotLight3D" type="SpotLight3D" parent="Blockout/Characters/GobotSkin"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.03629765, 2.5655746, 0)
 light_color = Color(0.99917, 0.9999998, 0.90195644, 1)
 light_energy = 1.119
@@ -89,11 +122,11 @@ spot_range = 15.458
 spot_attenuation = -0.34
 spot_angle = 25.0
 
-[node name="SophiaSkin" parent="." instance=ExtResource("4_0qr6p")]
+[node name="SophiaSkin" parent="Blockout/Characters" instance=ExtResource("4_0qr6p")]
 transform = Transform3D(5.5, 0, 0, 0, 5.5, 0, 0, 0, 5.5, 2.5, -3.475, -7.6)
 visible = false
 
-[node name="SpotLight3D" type="SpotLight3D" parent="SophiaSkin"]
+[node name="SpotLight3D" type="SpotLight3D" parent="Blockout/Characters/SophiaSkin"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.036, 3.281, 0)
 light_color = Color(0.99917, 0.9999998, 0.90195644, 1)
 light_energy = 1.119
@@ -103,10 +136,10 @@ spot_range = 19.176
 spot_attenuation = -0.34
 spot_angle = 25.0
 
-[node name="GobotSkin2" parent="." instance=ExtResource("3_j5y2j")]
+[node name="GobotSkin2" parent="Blockout/Characters" instance=ExtResource("3_j5y2j")]
 transform = Transform3D(5.5100007, 0, 0, 0, 5.5100007, 0, 0, 0, 5.5100007, 2.5, -3.475, -7.6)
 
-[node name="SpotLight3D" type="SpotLight3D" parent="GobotSkin2"]
+[node name="SpotLight3D" type="SpotLight3D" parent="Blockout/Characters/GobotSkin2"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.03629765, 2.5655746, 0)
 light_color = Color(0.99917, 0.9999998, 0.90195644, 1)
 light_energy = 1.119
@@ -114,3 +147,625 @@ shadow_enabled = true
 spot_range = 15.458
 spot_attenuation = -0.34
 spot_angle = 25.0
+
+[node name="Lighting" type="Node3D" parent="Blockout"]
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Blockout/Lighting"]
+transform = Transform3D(0.7071068, -0.35355338, 0.61237246, 0, 0.86602545, 0.5, -0.7071068, -0.35355338, 0.61237246, 6.5, 6, 10)
+light_color = Color(0.99999887, 0.997951, 0.80211115, 1)
+light_energy = 16.0
+light_indirect_energy = 0.887
+light_volumetric_fog_energy = 4.631
+spot_range = 13.0
+spot_attenuation = 1.25
+spot_angle = 35.0
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="Blockout/Lighting"]
+transform = Transform3D(-0.7071068, -0.35355335, 0.61237246, 8.912035e-09, 0.86602545, 0.49999997, -0.70710677, 0.35355338, -0.61237246, 6.5, 6, -3)
+light_color = Color(0.99999887, 0.997951, 0.80211115, 1)
+light_energy = 16.0
+light_indirect_energy = 0.887
+light_volumetric_fog_energy = 4.631
+shadow_enabled = true
+spot_range = 13.0
+spot_attenuation = 1.25
+spot_angle = 35.0
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="Blockout/Lighting"]
+transform = Transform3D(-0.7071067, 0.35355344, -0.6123726, 8.912039e-09, 0.86602545, 0.49999997, 0.7071069, 0.3535533, -0.6123724, -1.5, 6, -3)
+light_color = Color(0.99999887, 0.997951, 0.80211115, 1)
+light_energy = 16.0
+light_indirect_energy = 0.887
+light_volumetric_fog_energy = 4.631
+spot_range = 13.0
+spot_attenuation = 1.25
+spot_angle = 35.0
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="Blockout/Lighting"]
+transform = Transform3D(0.8660255, 0.24999991, -0.43301257, 8.912038e-09, 0.86602545, 0.49999997, 0.49999988, -0.43301272, 0.75000006, -1.5, 6, 10)
+light_color = Color(0.99999887, 0.997951, 0.80211115, 1)
+light_energy = 16.0
+light_indirect_energy = 0.887
+light_volumetric_fog_energy = 4.631
+shadow_enabled = true
+spot_range = 13.0
+spot_attenuation = 1.25
+spot_angle = 35.0
+
+[node name="Floor" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(135.63268, 0, 0, 0, 1.4, 0, 0, 0, 136.08887, 2.5, -5.2, 3.5000002)
+material_override = SubResource("StandardMaterial3D_8ppd4")
+
+[node name="Wall" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(-2.2232596e-06, -1.3999999, 0, 50.862247, -6.119594e-08, 0, 0, 0, 136.08885, -65.5, 20.899998, 3.5000002)
+material_override = SubResource("StandardMaterial3D_ce242")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Blockout/Wall"]
+transform = Transform3D(-3.5235717e-09, 0.3632514, 0, -2.9285727, -5.768587e-07, 0, 0, 0, 0.092057504, 0.070789814, -0.9328308, 0.26085904)
+operation = 2
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Blockout/Wall"]
+transform = Transform3D(-3.5235717e-09, 0.3632514, 0, -2.9285727, -5.768587e-07, 0, 0, 0, 0.092057504, 0.070789814, -0.9328308, 0.1359406)
+operation = 2
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Blockout/Wall"]
+transform = Transform3D(-3.5235717e-09, 0.3632514, 0, -2.9285727, -5.768587e-07, 0, 0, 0, 0.092057504, 0.070789814, -0.9328308, 0.0036740694)
+operation = 2
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Blockout/Wall"]
+transform = Transform3D(-3.5235717e-09, 0.3632514, 0, -2.9285727, -5.768587e-07, 0, 0, 0, 0.092057504, 0.070789814, -0.9328308, -0.12124434)
+operation = 2
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Blockout/Wall"]
+transform = Transform3D(-3.5235717e-09, 0.3632514, 0, -2.9285727, -5.768587e-07, 0, 0, 0, 0.092057504, 0.070789814, -0.9328308, -0.24616271)
+operation = 2
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="Blockout/Wall"]
+transform = Transform3D(-3.5235717e-09, 0.3632514, 0, -2.9285727, -5.768587e-07, 0, 0, 0, 0.092057504, 0.070789814, -0.9328308, -0.37108108)
+operation = 2
+
+[node name="Floor4" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(9.718177e-14, 6.119594e-08, 136.08887, 50.862255, -6.119595e-08, 0, 2.2232596e-06, 1.3999999, -5.948633e-06, 3.3, 20.899998, 65.5)
+material_override = SubResource("StandardMaterial3D_2gjfp")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Blockout/Floor4"]
+transform = Transform3D(0.39999995, 8.881784e-16, -1.0587912e-22, -6.252776e-13, 3.299998, 1.1368684e-13, 5.293956e-23, 5.551115e-16, 0.19999991, -0.29491395, 0.7142639, -9.313226e-10)
+operation = 2
+
+[node name="Floor5" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(9.718177e-14, 6.119594e-08, 136.08887, 50.862255, -6.119595e-08, 0, 2.2232596e-06, 1.3999999, -5.948633e-06, 3.5, 20.899998, -63.5)
+material_override = SubResource("StandardMaterial3D_l7ylh")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Blockout/Floor5"]
+transform = Transform3D(0.39999998, 4.440892e-16, -1.0587912e-22, -2.842171e-13, 3.2999985, 1.1368684e-13, 0, 3.330669e-16, 0.19999991, -0.2949141, 0, 0)
+material_override = SubResource("StandardMaterial3D_jyyyb")
+operation = 2
+
+[node name="Floor3" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(-2.2232596e-06, -1.3999999, 0, 50.862247, -6.119594e-08, 0, 0, 0, 136.08885, 69.5, 21.099998, 3.5000002)
+material_override = SubResource("StandardMaterial3D_rer52")
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Blockout/Floor3"]
+transform = Transform3D(-3.523574e-09, 0.36325154, 0, -2.9285738, -5.7685895e-07, 0, 0, 0, 0.092057504, 0.047196716, -0.21853638, 0.26085916)
+operation = 2
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="Blockout/Floor3"]
+transform = Transform3D(-3.523574e-09, 0.36325154, 0, -2.9285738, -5.7685895e-07, 0, 0, 0, 0.092057504, 0.047196716, -0.21853638, 0.1359406)
+operation = 2
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="Blockout/Floor3"]
+transform = Transform3D(-3.523574e-09, 0.36325154, 0, -2.9285738, -5.7685895e-07, 0, 0, 0, 0.092057504, 0.047196716, -0.21853638, 0.0036740694)
+operation = 2
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="Blockout/Floor3"]
+transform = Transform3D(-3.523574e-09, 0.36325154, 0, -2.9285738, -5.7685895e-07, 0, 0, 0, 0.092057504, 0.047196716, -0.21853638, -0.12124436)
+operation = 2
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="Blockout/Floor3"]
+transform = Transform3D(-3.523574e-09, 0.36325154, 0, -2.9285738, -5.7685895e-07, 0, 0, 0, 0.092057504, 0.047196716, -0.21853638, -0.24616271)
+operation = 2
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="Blockout/Floor3"]
+transform = Transform3D(-3.523574e-09, 0.36325154, 0, -2.9285738, -5.7685895e-07, 0, 0, 0, 0.092057504, 0.047196716, -0.21853638, -0.37108108)
+material_override = SubResource("StandardMaterial3D_yslpy")
+operation = 2
+
+[node name="Windows" type="Node3D" parent="Blockout/Floor3"]
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="Blockout/Floor3/Windows"]
+transform = Transform3D(-3.523576e-10, 0.36325178, 0, -0.2928574, -5.7685924e-07, 0, 0, 0, 0.092057504, 0.047196746, 0.13862228, 0.26085916)
+material_override = SubResource("StandardMaterial3D_3otw2")
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="Blockout/Floor3/Windows"]
+transform = Transform3D(-3.5235762e-10, 0.3632518, 0, -0.29285744, -5.768593e-07, 0, 0, 0, 0.092057504, 0.047196746, 0.13862228, 0.13594078)
+material_override = SubResource("StandardMaterial3D_3otw2")
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="Blockout/Floor3/Windows"]
+transform = Transform3D(-3.5235764e-10, 0.36325184, 0, -0.29285747, -5.7685935e-07, 0, 0, 0, 0.092057504, 0.047196746, 0.13862228, 0.003674252)
+material_override = SubResource("StandardMaterial3D_3otw2")
+
+[node name="CSGBox3D16" type="CSGBox3D" parent="Blockout/Floor3/Windows"]
+transform = Transform3D(-3.5235767e-10, 0.36325186, 0, -0.2928575, -5.768594e-07, 0, 0, 0, 0.092057504, 0.047196746, 0.13862228, -0.12124414)
+material_override = SubResource("StandardMaterial3D_3otw2")
+
+[node name="CSGBox3D17" type="CSGBox3D" parent="Blockout/Floor3/Windows"]
+transform = Transform3D(-3.523577e-10, 0.36325192, 0, -0.29285753, -5.7685946e-07, 0, 0, 0, 0.092057504, 0.047196746, 0.13862228, -0.24616253)
+material_override = SubResource("StandardMaterial3D_3otw2")
+
+[node name="CSGBox3D18" type="CSGBox3D" parent="Blockout/Floor3/Windows"]
+transform = Transform3D(-3.5235775e-10, 0.36325195, 0, -0.29285756, -5.768595e-07, 0, 0, 0, 0.092057504, 0.047196746, 0.13862228, -0.37108094)
+material_override = SubResource("StandardMaterial3D_3otw2")
+
+[node name="Windows2" type="Node3D" parent="Blockout/Floor3"]
+transform = Transform3D(1.0000004, 0, 0, 1.1368684e-13, 1.0000001, 0, 0, 0, 1, 0.019661069, 96.14289, 0)
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="Blockout/Floor3/Windows2"]
+transform = Transform3D(-3.523576e-10, 0.36325178, 0, -0.2928574, -5.7685924e-07, 0, 0, 0, 0.092057504, 0.047196746, 0.13862228, 0.26085916)
+material_override = SubResource("StandardMaterial3D_3otw2")
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="Blockout/Floor3/Windows2"]
+transform = Transform3D(-3.5235762e-10, 0.3632518, 0, -0.29285744, -5.768593e-07, 0, 0, 0, 0.092057504, 0.047196746, 0.13862228, 0.13594078)
+material_override = SubResource("StandardMaterial3D_3otw2")
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="Blockout/Floor3/Windows2"]
+transform = Transform3D(-3.5235764e-10, 0.36325184, 0, -0.29285747, -5.7685935e-07, 0, 0, 0, 0.092057504, 0.047196746, 0.13862228, 0.003674252)
+material_override = SubResource("StandardMaterial3D_3otw2")
+
+[node name="CSGBox3D16" type="CSGBox3D" parent="Blockout/Floor3/Windows2"]
+transform = Transform3D(-3.5235767e-10, 0.36325186, 0, -0.2928575, -5.768594e-07, 0, 0, 0, 0.092057504, 0.047196746, 0.13862228, -0.12124414)
+material_override = SubResource("StandardMaterial3D_3otw2")
+
+[node name="CSGBox3D17" type="CSGBox3D" parent="Blockout/Floor3/Windows2"]
+transform = Transform3D(-3.523577e-10, 0.36325192, 0, -0.29285753, -5.7685946e-07, 0, 0, 0, 0.092057504, 0.047196746, 0.13862228, -0.24616253)
+material_override = SubResource("StandardMaterial3D_3otw2")
+
+[node name="CSGBox3D18" type="CSGBox3D" parent="Blockout/Floor3/Windows2"]
+transform = Transform3D(-3.5235775e-10, 0.36325195, 0, -0.29285756, -5.768595e-07, 0, 0, 0, 0.092057504, 0.047196746, 0.13862228, -0.37108094)
+material_override = SubResource("StandardMaterial3D_3otw2")
+
+[node name="Bleachers" type="Node3D" parent="Blockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Blockout/Bleachers"]
+transform = Transform3D(5.8, 0, 0, 0, 7.3600006, 0, 0, 0, 59.8, -36.382164, -4, 0)
+material_override = SubResource("StandardMaterial3D_82lh0")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Blockout/Bleachers"]
+transform = Transform3D(9.860001, 0, 0, 0, 0.5887999, 0, 0, 0, 59.8, -36.382164, 0, 0)
+material_override = SubResource("StandardMaterial3D_ydwu5")
+
+[node name="characterMedium2" parent="Blockout/Bleachers" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -44, -4.4, -24)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers/characterMedium2"]
+root_node = NodePath("../../characterMedium2")
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium3" parent="Blockout/Bleachers" instance=ExtResource("12_tub48")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.748245, -4, -15.57325)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers/characterMedium3"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium4" parent="Blockout/Bleachers" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, -8)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers/characterMedium4"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium5" parent="Blockout/Bleachers" instance=ExtResource("12_tub48")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers/characterMedium5"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium6" parent="Blockout/Bleachers" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 8)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers/characterMedium6"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium7" parent="Blockout/Bleachers" instance=ExtResource("12_tub48")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 16)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers/characterMedium7"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium8" parent="Blockout/Bleachers" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 24)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers/characterMedium8"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="Bleachers3" type="Node3D" parent="Blockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 5, 3)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Blockout/Bleachers3"]
+transform = Transform3D(5.8, 0, 0, 0, 7.3600006, 0, 0, 0, 59.8, -36.382164, -4, 0)
+material_override = SubResource("StandardMaterial3D_82lh0")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Blockout/Bleachers3"]
+transform = Transform3D(9.860001, 0, 0, 0, 0.5887999, 0, 0, 0, 59.8, -36.382164, 0, 0)
+material_override = SubResource("StandardMaterial3D_ydwu5")
+
+[node name="characterMedium2" parent="Blockout/Bleachers3" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -44, -4.4, -24)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers3/characterMedium2"]
+root_node = NodePath("../../characterMedium2")
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium3" parent="Blockout/Bleachers3" instance=ExtResource("12_tub48")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.748245, -4, -15.57325)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers3/characterMedium3"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium4" parent="Blockout/Bleachers3" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, -8)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers3/characterMedium4"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium5" parent="Blockout/Bleachers3" instance=ExtResource("12_tub48")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers3/characterMedium5"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium6" parent="Blockout/Bleachers3" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 8)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers3/characterMedium6"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium7" parent="Blockout/Bleachers3" instance=ExtResource("12_tub48")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 16)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers3/characterMedium7"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium8" parent="Blockout/Bleachers3" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 24)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers3/characterMedium8"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="Bleachers2" type="Node3D" parent="Blockout"]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 3)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Blockout/Bleachers2"]
+transform = Transform3D(5.8, 0, 0, 0, 7.3600006, 0, 0, 0, 59.8, -36.382164, -4, 0)
+material_override = SubResource("StandardMaterial3D_82lh0")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Blockout/Bleachers2"]
+transform = Transform3D(9.860001, 0, 0, 0, 0.5887999, 0, 0, 0, 59.8, -36.382164, 0, 0)
+material_override = SubResource("StandardMaterial3D_gjnab")
+
+[node name="characterMedium2" parent="Blockout/Bleachers2" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -44, -4.4, -24)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers2/characterMedium2"]
+root_node = NodePath("../../characterMedium2")
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium3" parent="Blockout/Bleachers2" instance=ExtResource("12_tub48")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.748245, -4, -15.57325)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers2/characterMedium3"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium4" parent="Blockout/Bleachers2" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, -8)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers2/characterMedium4"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium5" parent="Blockout/Bleachers2" instance=ExtResource("12_tub48")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers2/characterMedium5"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium6" parent="Blockout/Bleachers2" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 8)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers2/characterMedium6"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium7" parent="Blockout/Bleachers2" instance=ExtResource("12_tub48")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 16)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers2/characterMedium7"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium8" parent="Blockout/Bleachers2" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 24)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers2/characterMedium8"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="Bleachers4" type="Node3D" parent="Blockout"]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 16, 5, 3)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Blockout/Bleachers4"]
+transform = Transform3D(5.8, 0, 0, 0, 7.3600006, 0, 0, 0, 59.8, -36.382164, -4, 0)
+material_override = SubResource("StandardMaterial3D_82lh0")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Blockout/Bleachers4"]
+transform = Transform3D(9.860001, 0, 0, 0, 0.5887999, 0, 0, 0, 59.8, -36.382164, 0, 0)
+material_override = SubResource("StandardMaterial3D_gjnab")
+
+[node name="characterMedium2" parent="Blockout/Bleachers4" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -44, -4.4, -24)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers4/characterMedium2"]
+root_node = NodePath("../../characterMedium2")
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium3" parent="Blockout/Bleachers4" instance=ExtResource("12_tub48")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.748245, -4, -15.57325)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers4/characterMedium3"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium4" parent="Blockout/Bleachers4" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, -8)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers4/characterMedium4"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium5" parent="Blockout/Bleachers4" instance=ExtResource("12_tub48")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers4/characterMedium5"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium6" parent="Blockout/Bleachers4" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 8)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers4/characterMedium6"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium7" parent="Blockout/Bleachers4" instance=ExtResource("12_tub48")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 16)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers4/characterMedium7"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="characterMedium8" parent="Blockout/Bleachers4" instance=ExtResource("10_ydwu5")]
+transform = Transform3D(-1.3113416e-07, 0, 3, 0, 3, 0, -3, 0, -1.3113416e-07, -43.999996, -4.4, 24)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blockout/Bleachers4/characterMedium8"]
+libraries = {
+&"idle": ExtResource("11_gjnab")
+}
+autoplay = "idle/Root|Idle"
+
+[node name="Windows" type="Node3D" parent="Blockout"]
+
+[node name="Deco" type="Node3D" parent="Blockout"]
+
+[node name="rugRectangle" parent="Blockout/Deco" instance=ExtResource("14_ydwu5")]
+transform = Transform3D(-8.5237207e-07, 0, -15, 0, 15, 0, 19.5, 0, -6.556708e-07, -4.3, -4.6, 32)
+
+[node name="rugRectangle2" parent="Blockout/Deco" instance=ExtResource("14_ydwu5")]
+transform = Transform3D(-8.5237207e-07, 0, -15, 0, 15, 0, 19.5, 0, -6.556708e-07, -4.3, -4.6, -57)
+
+[node name="speakerSmall" parent="Blockout/Deco" instance=ExtResource("15_gjnab")]
+transform = Transform3D(35.02858, 20.501493, 29.20081, -1.4617127, 41.711674, -27.531765, -35.649147, 18.434305, 29.821373, -63, 29, -57)
+
+[node name="speakerSmall2" parent="Blockout/Deco" instance=ExtResource("15_gjnab")]
+transform = Transform3D(35.649147, -18.434305, -29.821375, -1.4617138, 41.711674, -27.531765, 35.028576, 20.501493, 29.200802, 64, 29, -63)
+
+[node name="speakerSmall3" parent="Blockout/Deco" instance=ExtResource("15_gjnab")]
+transform = Transform3D(-35.028572, -20.50149, -29.200802, -1.4617164, 41.711674, -27.531763, 35.649155, -18.434309, -29.821377, 69, 29, 59)
+
+[node name="speakerSmall4" parent="Blockout/Deco" instance=ExtResource("15_gjnab")]
+transform = Transform3D(-35.649155, 18.434309, 29.821373, -1.461717, 41.71167, -27.53176, -35.028572, -20.501486, -29.200802, -59, 29, 64)
+
+[node name="Sketchfab_Scene" parent="Blockout/Deco" instance=ExtResource("15_8ppd4")]
+transform = Transform3D(9, 0, 0, 0, 8.258666, -2.3293715, 0, 2.2129028, 8.693333, 0, -29, -5)
+
+[node name="Sprite3D" type="Sprite3D" parent="Blockout/Deco/Sketchfab_Scene"]
+transform = Transform3D(0.8677777, 0, 0, 0, 0.5010699, 4.656613e-10, 0, 1.4901161e-08, 0.013335015, 0.22222221, 4.9440475, -7.585203)
+texture = SubResource("ViewportTexture_82lh0")
+
+[node name="Sprite3D2" type="Sprite3D" parent="Blockout/Deco/Sketchfab_Scene"]
+transform = Transform3D(-0.8677774, 2.0901883e-08, 1.0245104e-09, -3.5527137e-15, 0.4403483, -0.006362917, -7.586352e-08, -0.23908968, -0.011719033, 0.42222202, 8.625895, 5.4686217)
+texture = SubResource("ViewportTexture_82lh0")
+
+[node name="Sketchfab_Scene2" parent="Blockout/Deco" instance=ExtResource("15_8ppd4")]
+transform = Transform3D(-8.999999, 1.9345808e-07, 7.599952e-07, 0, 8.258665, -2.329371, -7.8680495e-07, -2.2129023, -8.693332, 6, -29, 7)
+
+[node name="SubViewport" type="SubViewport" parent="Blockout/Deco"]
+msaa_3d = 1
+
+[node name="TVCameraController" type="Node3D" parent="Blockout/Deco/SubViewport"]
+transform = Transform3D(-0.8782488, 8.317377e-16, -0.44268432, 0, 1, 0, 0.44268432, 1.5362684e-15, -0.8782488, 2.456693, 0.29999924, 3.4999995)
+script = ExtResource("16_82lh0")
+
+[node name="Camera3D" type="Camera3D" parent="Blockout/Deco/SubViewport/TVCameraController"]
+transform = Transform3D(0.029342202, 0.49976337, -0.86561555, 0, 0.8660254, 0.5, 0.99952674, -0.014671101, 0.025411092, -9.50597, 7.7, -0.077772856)
+fov = 85.0
+
+[node name="doorwayFront" parent="Blockout" instance=ExtResource("16_gjnab")]
+transform = Transform3D(26.58125, 0, 0, 0, 20.095423, 0, 0, 0, 21.265, -10, -4.4, -62.6)
+
+[node name="doorwayFront3" parent="Blockout" instance=ExtResource("16_gjnab")]
+transform = Transform3D(26.58125, 0, 0, 0, 20.095423, 0, 0, 0, 21.265, -10, -4, 66.4)
+
+[node name="doorwayFront2" parent="Blockout" instance=ExtResource("16_gjnab")]
+transform = Transform3D(-29.239374, 0, -1.8590453e-06, 0, 20.09542, 0, 2.5561872e-06, 0, -21.264997, 17, -4.4, -64.5)
+
+[node name="doorwayFront4" parent="Blockout" instance=ExtResource("16_gjnab")]
+transform = Transform3D(-29.239374, 0, -1.8590453e-06, 0, 20.09542, 0, 2.5561872e-06, 0, -21.264997, 17, -4, 64.5)
+
+[node name="bookcaseClosedDoors" parent="Blockout" instance=ExtResource("17_tub48")]
+transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, 32, -4, 60)
+
+[node name="bookcaseClosedDoors2" parent="Blockout" instance=ExtResource("17_tub48")]
+transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, 45.2, -4, 60)
+
+[node name="bookcaseClosedDoors3" parent="Blockout" instance=ExtResource("17_tub48")]
+transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, 58.4, -4, 60)
+
+[node name="bookcaseClosedDoors4" parent="Blockout" instance=ExtResource("17_tub48")]
+transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, -39, -4, 60)
+
+[node name="bookcaseClosedDoors5" parent="Blockout" instance=ExtResource("17_tub48")]
+transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, -25.8, -4, 60)
+
+[node name="bookcaseClosedDoors6" parent="Blockout" instance=ExtResource("17_tub48")]
+transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, -12.599998, -4, 60)
+
+[node name="bookcaseClosedDoors7" parent="Blockout" instance=ExtResource("17_tub48")]
+transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, -25.600002, -4, -59)
+
+[node name="bookcaseClosedDoors8" parent="Blockout" instance=ExtResource("17_tub48")]
+transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, -38.800003, -4, -59)
+
+[node name="bookcaseClosedDoors9" parent="Blockout" instance=ExtResource("17_tub48")]
+transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, -52.000004, -4, -59)
+
+[node name="bookcaseClosedDoors10" parent="Blockout" instance=ExtResource("17_tub48")]
+transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, 46.399998, -4, -59)
+
+[node name="bookcaseClosedDoors11" parent="Blockout" instance=ExtResource("17_tub48")]
+transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, 33.199997, -4, -59)
+
+[node name="bookcaseClosedDoors12" parent="Blockout" instance=ExtResource("17_tub48")]
+transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, 19.999996, -4, -59)
+
+[node name="pottedPlant" parent="Blockout" instance=ExtResource("18_8ppd4")]
+transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, -62, -5, -60)
+
+[node name="pottedPlant2" parent="Blockout" instance=ExtResource("18_8ppd4")]
+transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 66, -5, -60)
+
+[node name="pottedPlant3" parent="Blockout" instance=ExtResource("18_8ppd4")]
+transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 66, -5, 61)
+
+[node name="pottedPlant4" parent="Blockout" instance=ExtResource("18_8ppd4")]
+transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, -61, -5, 61)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(170.17, 0, 0, 0, 1, 0, 0, 0, 4.446, 0, 47.05818, 0)
+visible = false
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(170.17, 0, 0, 0, 1, 0, 0, 0, 4.446, 0, 47.05818, 17)
+visible = false
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(170.17, 0, 0, 0, 1, 0, 0, 0, 4.446, 0, 47.05818, 34)
+material_override = ExtResource("20_ce242")
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(170.17, 0, 0, 0, 1, 0, 0, 0, 4.446, 0, 47.05818, 50)
+material_override = ExtResource("20_ce242")
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(170.17, 0, 0, 0, 1, 0, 0, 0, 4.446, 0, 47.05818, 66)
+material_override = ExtResource("20_ce242")
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(170.17, 0, 0, 0, 1, 0, 0, 0, 4.446, 0, 47.05818, -51)
+material_override = ExtResource("20_ce242")
+
+[node name="CSGBox3D17" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(170.17, 0, 0, 0, 1, 0, 0, 0, 4.446, 0, 47.05818, -67)
+material_override = ExtResource("20_ce242")
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(170.17, 0, 0, 0, 1, 0, 0, 0, 4.446, 0, 47.05818, -34)
+material = ExtResource("20_ce242")
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="Blockout"]
+transform = Transform3D(170.17, 0, 0, 0, 1, 0, 0, 0, 4.446, 0, 47.05818, -17)
+visible = false
+
+[node name="Dust" parent="." instance=ExtResource("20_ugfpa")]
+transform = Transform3D(16, 0, 0, 0, 16, 0, 0, 0, 16, 2.5, 0, 3.4)
+amount = 128

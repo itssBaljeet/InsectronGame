@@ -1,0 +1,4 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cxsdw41qqhghd"]
+
+[resource]
+albedo_color = Color(0.59687006, 0.44020274, 0.26313242, 1)

@@ -9,6 +9,7 @@ attackName = "Flamethrower"
 attackType = 2
 effectRange = 3
 hitsAllies = true
+duration = 2.0
 pierces = true
 burns = true
 vfxScene = ExtResource("2_17nyy")

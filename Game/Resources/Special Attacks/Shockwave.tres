@@ -11,5 +11,7 @@ attackType = 3
 damage = 20
 attackPattern = ExtResource("1_ihyff")
 hitsAllies = true
+duration = 1.0
+superKnockback = true
 vfxScene = ExtResource("3_j0xo8")
 metadata/_custom_type_script = "uid://b2s3r8l3dbtqw"

@@ -28,6 +28,7 @@ enum VFXOrientation {
 @export var effectRange: int = 1  # Range in tiles
 @export var attackPattern: BoardPattern  # Custom range pattern if needed
 @export var hitsAllies: bool = false  # Whether attack can damage allies
+@export var duration: float = 1.5
 
 @export_group("Status FX")
 @export var pierces: bool = false  # Whether attack goes through enemies
@@ -35,6 +36,8 @@ enum VFXOrientation {
 @export var burns: bool = false
 @export var freezes: bool = false
 @export var stuns: bool = false
+@export var knockback: bool = false
+@export var superKnockback: bool = false
 
 @export_group("VFX")
 @export var vfxScene: PackedScene  # Visual effect scene
@@ -125,13 +128,24 @@ func getAffectedCells(origin: Vector3i, targetCell: Vector3i, board: BattleBoard
 					
 		
 		AttackType.AREA:
-			# All cells around target point
-			var areaRange := 1  # Could be configurable as areaSize parameter
-			for x in range(-areaRange, areaRange + 1):
-				for z in range(-areaRange, areaRange + 1):
-					var cell := targetCell + Vector3i(x, 0, z)
+			# Use custom pattern if available, otherwise use effectRange
+			if attackPattern:
+				# Use the custom pattern centered on target cell
+				for offset in attackPattern.offsets:
+					var cell := origin + offset
 					if cell in board.cells and cell != origin:
 						affected.append(cell)
+			else:
+				# Use effectRange to create square area around target
+				for x in range(-effectRange, effectRange + 1):
+					for z in range(-effectRange, effectRange + 1):
+						# Skip center cell (origin) but include target
+						if x == 0 and z == 0:
+							continue
+						var cell := origin + Vector3i(x, 0, z)
+						if cell in board.cells and cell != origin:
+							affected.append(cell)
+			print(affected)
 		
 		AttackType.CONE:
 			# All cells in cone spreading from origin in target direction

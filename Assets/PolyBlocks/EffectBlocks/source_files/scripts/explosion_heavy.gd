@@ -22,6 +22,9 @@ func _process(delta: float) -> void:
 	elif Input.is_action_just_pressed("ui_accept"):
 		explosion()
 
+func play() -> void:
+	explosion()
+
 func explosion() -> void:
 	fire.restart()
 	sparks.restart()

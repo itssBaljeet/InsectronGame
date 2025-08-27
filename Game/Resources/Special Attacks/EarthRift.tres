@@ -11,6 +11,7 @@ attackType = 1
 effectRange = 3
 attackPattern = ExtResource("1_q2o0l")
 hitsAllies = true
+knockback = true
 vfxScene = ExtResource("2_dkclb")
 vfxScale = 0.75
 metadata/_custom_type_script = "uid://b2s3r8l3dbtqw"
