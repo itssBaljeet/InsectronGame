@@ -12,6 +12,7 @@ enum UIState {
 	basicAttackTargetSelect = 5,
 	disabled = 6,
 	unitMenuPostMove = 7,
+	unitInfoMenu = 8,
 }
 
 #region Parameters
@@ -22,10 +23,20 @@ enum UIState {
 @onready var endTurnButton: Button = %EndTurnButton
 @onready var waitButton: Button = %WaitButton
 @onready var startButton: Button = %StartButton
+@onready var infoButton: Button = %InfoButton
 @onready var panel: PanelContainer = %UnitMenu
 
 @onready var attackMenu: PanelContainer = %AttackMenu
 @onready var attackOptions: VBoxContainer = %AttackOptions
+
+@onready var infoMenu: PanelContainer = %InfoMenu
+@onready var nicknameLabel: Label = %Nickname
+@onready var HPButton: Button = %HPButton
+@onready var ATKButton: Button = %ATKButton
+@onready var DEFButton: Button = %DEFButton
+@onready var SpeedButton: Button = %SpeedButton
+@onready var SpAtkButton: Button = %SpATKButton
+@onready var SpDefButton: Button = %SpDEFButton
 
 @onready var timer: Timer = %Timer
 #endregion
@@ -91,6 +102,7 @@ func _ready() -> void:
 	waitButton.button_up.connect(onWaitButtonPressed)
 	endTurnButton.button_up.connect(onEndTurnButtonPressed)
 	attackButton.button_up.connect(onAttackButtonPressed)
+	infoButton.button_up.connect(onInfoButtonPressed)  # NEW CONNECTION
 	
 	# Connect to coordinator signals
 	TurnBasedCoordinator.willBeginPlayerTurn.connect(_onWillBeginPlayerTurn)
@@ -110,12 +122,9 @@ func _ready() -> void:
 #endregion
 
 #region Public Interface
-## Opens the unit menu for the specified unit
+## Opens the unit menu for the specified unit (or empty cell if null)
 func openUnitMenu(unit: BattleBoardUnitEntity, newState: UIState = UIState.unitMenu) -> void:
-	if not unit:
-		return
-	
-	activeUnit = unit
+	activeUnit = unit  # Can be null for empty cells
 	state = newState
 	
 	# Disable selector while menu is open
@@ -145,31 +154,41 @@ func closeUnitMenu(keepUnitSelected: bool = false) -> void:
 	
 	menuClosed.emit()
 
+
+## Opens the info menu for the active unit
+func openInfoMenu() -> void:
+	if not activeUnit:
+		return
+	
+	# Hide unit menu, show info menu
+	panel.hide()
+	infoMenu.show()
+	
+	# Update stats display
+	_updateStatsDisplay()
+	
+	state = UIState.unitInfoMenu
+	
 ## Attempts to select a unit at the given cell
 func trySelectUnit(cell: Vector3i) -> bool:
-	print("Trying to select unit")
+	# Always try to open menu when selecting any cell during player's turn
+	if TurnBasedCoordinator.currentTeam != FactionComponent.Factions.players:
+		return false  # Don't open menu if not player's turn
+	
 	var occupant := board.getOccupant(cell)
 	
+	# Empty cell - just show end turn button
 	if not occupant or not occupant is BattleBoardUnitEntity:
-		print("No unit found")
-		return false
+		activeUnit = null
+		openUnitMenu(null, UIState.unitMenu)
+		return true
 	
 	var unit := occupant as BattleBoardUnitEntity
-	print("Found unit: ", unit)
-	
-	# Check if it's the player's unit and can still act
-	if unit.factionComponent.factions == pow(2, FactionComponent.Factions.players - 1):
-		if not unit.stateComponent.isExhausted():
-			print("Opening unit menu")
-			openUnitMenu(unit)
-			return true
-	else:
-		print("Didn't make it through pow check")
-	
 	activeUnit = unit
-	print("Just made activeUnit the selected unit")
-	return false
-
+	
+	# Always open menu regardless of unit faction or state
+	openUnitMenu(unit)
+	return true
 #endregion
 
 #region Button Handlers
@@ -180,11 +199,6 @@ func onMoveButtonPressed() -> void:
 	highlighter.requestMoveHighlights(activeUnit)
 
 func onAttackButtonPressed() -> void:
-	## Old Logic; Uncomment when needed
-	#panel.hide()
-	#selector.setEnabled(true)
-	#highlighter.requestAttackHighlights(activeUnit)
-
 	if not activeUnit:
 		return
 	
@@ -196,6 +210,12 @@ func onAttackButtonPressed() -> void:
 	panel.hide()
 	_showAttackSelectionMenu()
 	state = UIState.attackSelect
+
+func onInfoButtonPressed() -> void:
+	if not activeUnit:
+		return
+	
+	openInfoMenu()
 
 func onWaitButtonPressed() -> void:
 	if not activeUnit:
@@ -350,8 +370,18 @@ func _input(event: InputEvent) -> void:
 			UIState.attackTargetSelect, UIState.basicAttackTargetSelect:
 				print("Clearing highlights")
 				attackSelectionState.currentMode = attackSelectionState.SelectionMode.CHOOSING_ATTACK
+				var menuState := UIState.unitMenuPostMove if not activeUnit.stateComponent.canMove() else UIState.unitMenu
 				highlighter.clearHighlights()
-				openUnitMenu(activeUnit, UIState.attackSelect)
+				openUnitMenu(activeUnit, menuState)
+			UIState.unitInfoMenu:
+				# Return to unit menu from info menu
+				infoMenu.hide()
+				var menuState: UIState
+				if not activeUnit.stateComponent.canMove() and activeUnit.stateComponent.canAct():
+					menuState = UIState.unitMenuPostMove
+				else:
+					menuState = UIState.unitMenu
+				openUnitMenu(activeUnit, menuState)
 #endregion
 
 #region Event Handlers
@@ -384,7 +414,8 @@ func _onCommandEnqueued(command: BattleBoardCommand) -> void:
 func _onCommandProcessed(command: BattleBoardCommand) -> void:
 	match command.commandName:
 		"Move":
-			openUnitMenu(activeUnit, UIState.unitMenuPostMove)
+			if activeUnit and activeUnit.factionComponent.factions == FactionComponent.Factions.players:
+				openUnitMenu(activeUnit, UIState.unitMenuPostMove)
 		"SpecialAttack":
 			closeUnitMenu()
 
@@ -401,6 +432,81 @@ func _onValidationFailed(reason: String) -> void:
 
 #region Private Helpers
 
+## Updates the stats buttons with current creature stats using the summary
+func _updateStatsDisplay() -> void:
+	if not activeUnit:
+		return
+	
+	# Get the creature's stats component
+	var statsComponent := activeUnit.components.get(&"MeteormyteStatsComponent") as MeteormyteStatsComponent
+	var healthComponent := activeUnit.components.get(&"MeteormyteHealthComponent") as MeteormyteHealthComponent
+	
+	if not statsComponent:
+		print("No MeteormyteStatsComponent found on unit")
+		return
+	
+	# Get the stats summary
+	var summary := statsComponent.getStatsSummary()
+	
+	# Update nickname
+	if statsComponent.nickname != "":
+		nicknameLabel.text = statsComponent.nickname
+	else:
+		nicknameLabel.text = activeUnit.name
+	
+	# Update HP (current/max) from health component
+	if healthComponent:
+		HPButton.text = "HP: %d/%d" % [healthComponent.currentHealth, healthComponent.maxHealth]
+	else:
+		# Fallback to HP stat from summary
+		var hpData: Dictionary = summary.get(&"HP")
+		HPButton.text = "HP: %d" % hpData.get("current")
+	
+	# Update other stats from summary
+	var atkData : Dictionary = summary.get(&"Attack")
+	ATKButton.text = "ATK: %d" % atkData.get("current")
+	
+	var defData : Dictionary = summary.get(&"Defense")
+	DEFButton.text = "DEF: %d" % defData.get("current")
+	
+	var spAtkData : Dictionary= summary.get(&"SpAttack")
+	SpAtkButton.text = "Sp.ATK: %d" % spAtkData.get("current")
+	
+	var spDefData : Dictionary = summary.get(&"SpDefense")
+	SpDefButton.text = "Sp.DEF: %d" % spDefData.get("current")
+	
+	var speedData : Dictionary = summary.get(&"Speed")
+	SpeedButton.text = "Speed: %d" % speedData.get("current")
+	
+	# Add level and XP info if you have labels for them
+	if has_node("%LevelLabel"):
+		var levelLabel := get_node("%LevelLabel") as Label
+		levelLabel.text = "Lv. %d" % summary.get("level", 1)
+	
+	if has_node("%XPBar"):
+		var xpBar := get_node("%XPBar") as ProgressBar
+		xpBar.value = summary.get("xp", 0)
+		xpBar.max_value = summary.get("xp_next", 100)
+	
+	# Optional: Add tooltips with more detailed info
+	if debugMode:
+		_addDetailedTooltips(statsComponent)
+
+## Adds detailed tooltips to stat buttons (optional)
+func _addDetailedTooltips(statsComponent: MeteormyteStatsComponent) -> void:
+	var summary := statsComponent.getStatsSummary()
+	
+	for statName in summary:
+		if statName == "HP" and HPButton:
+			var statData: MeteormyteStat = summary[statName]
+			HPButton.tooltip_text = "Base: %d\nIV: %d (%s)\nModifiers: %d" % [
+				statData.get("base"),
+				statData.get("iv"),
+				statData.get("iv_quality"),
+				statData.get("modifiers")
+			]
+		# Add similar tooltips for other stats...
+
 func _getStateName(s: UIState) -> String:
 	match s:
 		UIState.idle: return "Idle"
@@ -413,22 +519,53 @@ func _getStateName(s: UIState) -> String:
 
 func _updateButtonsVisibility(unit: BattleBoardUnitEntity) -> void:
 	print("Updating button visibility")
+	
+	# Hide all buttons by default
 	moveButton.visible = false
 	attackButton.visible = false
 	itemButton.visible = false
 	waitButton.visible = false
+	infoButton.visible = false
+	endTurnButton.visible = true  # Always show end turn during player's turn
 	
+	# No unit selected (empty cell)
 	if not unit:
+		# Only show end turn button
 		return
 	
+	# Check if it's an enemy unit
+	var isPlayerUnit := unit.factionComponent.factions == pow(2, FactionComponent.Factions.players - 1)
+	
+	if not isPlayerUnit:
+		# Enemy unit - show info and end turn only
+		infoButton.visible = true
+		return
+	
+	# Player's unit - check state
 	var stateComp := unit.stateComponent
 	if not stateComp:
 		return
 	
-	moveButton.visible = stateComp.canMove()
-	attackButton.visible = stateComp.canAct()
-	itemButton.visible = stateComp.canAct()
-	waitButton.visible = not stateComp.isExhausted()
+	# Always show info for player units
+	infoButton.visible = true
+	
+	# Check what the unit can do
+	if stateComp.isExhausted():
+		# Exhausted unit - only info and end turn
+		return
+	
+	# Unit can still act
+	if stateComp.canMove():
+		# Can do everything
+		moveButton.visible = true
+		attackButton.visible = true
+		itemButton.visible = true
+		waitButton.visible = true
+	elif stateComp.canAct():
+		# Has moved but can still act
+		attackButton.visible = true
+		itemButton.visible = true
+		waitButton.visible = true
 
 func _visibleButtons() -> Array[Button]:
 	var list: Array[Button] = []

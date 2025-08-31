@@ -8,6 +8,7 @@
 script = ExtResource("2_m6xqa")
 attackName = "Ice Rift"
 attackType = 1
+damage = 50
 effectRange = 3
 attackPattern = ExtResource("1_ydlxl")
 hitsAllies = true

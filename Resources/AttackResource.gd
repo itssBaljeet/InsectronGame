@@ -29,6 +29,7 @@ enum VFXOrientation {
 @export var attackPattern: BoardPattern  # Custom range pattern if needed
 @export var hitsAllies: bool = false  # Whether attack can damage allies
 @export var duration: float = 1.5
+ 
 
 @export_group("Status FX")
 @export var pierces: bool = false  # Whether attack goes through enemies

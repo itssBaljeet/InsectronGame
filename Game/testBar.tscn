@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://dabfhob2re65y"]
+
+[ext_resource type="Texture2D" uid="uid://bjdjj0pq5v6wd" path="res://addons/Noah UI/bar_under.png" id="1_4if4n"]
+[ext_resource type="Texture2D" uid="uid://cjt35uficgu74" path="res://addons/Noah UI/bar_over.png" id="2_dnk68"]
+[ext_resource type="Texture2D" uid="uid://dh8ncbt4ajwgl" path="res://addons/Noah UI/bar_fill.png" id="3_52s55"]
+[ext_resource type="Texture2D" uid="uid://dp15ksxmpwnkf" path="res://addons/Noah UI/bar_under_transparent.png" id="3_dnk68"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UnderBar" type="TextureProgressBar" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_right = 128.0
+offset_bottom = 40.0
+value = 88.0
+texture_under = ExtResource("1_4if4n")
+texture_progress = ExtResource("2_dnk68")
+
+[node name="OverBar" type="TextureProgressBar" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_right = 128.0
+offset_bottom = 40.0
+value = 78.0
+texture_under = ExtResource("3_dnk68")
+texture_progress = ExtResource("3_52s55")

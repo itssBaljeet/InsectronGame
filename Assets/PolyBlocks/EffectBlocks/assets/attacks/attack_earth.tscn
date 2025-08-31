@@ -242,6 +242,7 @@ emitting = false
 amount = 32
 lifetime = 2.0
 one_shot = true
+speed_scale = 3.0
 explosiveness = 1.0
 randomness = 1.0
 fixed_fps = 60
@@ -269,7 +270,7 @@ draw_pass_1 = SubResource("ArrayMesh_0hkbl")
 [node name="Crack" parent="." instance=ExtResource("2_0oa50")]
 transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766045, 0, -0.766045, 0.642788, 0, 0.2, 4.4)
 texture_emission = ExtResource("3_2yewi")
-emission_energy = 15.2
+emission_energy = 0.8
 modulate = Color(0.0531851, 0.0564594, 0.063126, 1)
 albedo_mix = 0.0
 cull_mask = 1048571

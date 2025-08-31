@@ -25,7 +25,7 @@ extends Component
 @export_range(0.1, 2.0, 0.1) var move_animation_time := 0.5
 @export_range(0.1, 2.0, 0.1) var attack_animation_time := 0.8
 @export_range(0.1, 2.0, 0.1) var hurt_animation_time := 0.5
-@export_range(0.1, 2.0, 0.1) var die_animation_time := 1.0
+@export_range(0.1, 2.0, 0.1) var die_animation_time := 0.6
 #endregion
 
 ## Dependencies
@@ -240,22 +240,19 @@ func playAttackSequence(attacker: BattleBoardUnitEntity, target: Entity, damage:
 	# Both units face each other
 	await faceTargets(attacker, target)
 	
-	# Attacker performs attack
-	await attackAnimation()
+	# Get target's world position
+	var targetWorldPos: Vector3 = target.global_position
+	
+	# Pass target position to the animation
+	await attackAnimation(targetWorldPos)
 	
 	# Target reacts
 	var targetAnim: InsectorAnimationComponent = target.components.get(&"InsectorAnimationComponent")
 	if targetAnim:
 		await targetAnim.hurtAnimation()
 	
-	# Show damage number (optional)
-	if damage > 0:
-		await showDamageNumber(target, damage)
-		if attacker.attackComponent.venemous:
-			targetAnim.play_poison_puff(6)
-	
 	# Return to idle
-	await idleAnimation()
+	idleAnimation()
 
 ## Makes two units face each other
 func faceTargets(unit1: BattleBoardUnitEntity, unit2: Entity) -> void:
@@ -299,7 +296,7 @@ func faceDirection(_unit: BattleBoardUnitEntity, fromCell: Vector3i, toCell: Vec
 #endregion
 
 #region Core Animations
-func attackAnimation() -> void:
+func attackAnimation(targetPos: Vector3i) -> void:
 	if skin and skin.has_method("attack"):
 		await skin.attack()
 	else:
@@ -495,31 +492,54 @@ func face_home_orientation() -> void:
 #endregion
 
 #region Fallback Animations
-## Lunges along the mesh's current facing (–Z) instead of world –Z.
-func _genericAttackAnimation(
-		lunge_distance: float = 0.30,
-		windup_ratio: float = 0.20,
-		in_time: float = 0.18,
-		out_time: float = 0.16
-	) -> void:
+# Snap a WORLD-space vector to the nearest 8-way direction
+# (0° = world -Z, 90° = world +X).
+func _snap_world_eight(dir_world: Vector3) -> Vector3:
+	var v := dir_world
+	v.y = 0.0
+	if v.length_squared() == 0.0:
+		return Vector3(0, 0, -1)
+	var angle := atan2(v.x, -v.z)   # world -Z is 0
+	var step := PI / 4.0            # 45°
+	var snapped : float = round(angle / step) * step
+	return Vector3(sin(snapped), 0.0, -cos(snapped))
+
+# Build a rotation-only inverse for a node (ignores scale/shear).
+func _inv_parent_rotation_only(n: Node3D) -> Basis:
+	var q := n.global_transform.basis.get_rotation_quaternion()
+	return Basis(q).inverse()
+
+## Lunges toward faced direction; rotate 90° CCW for player faction only (naive)
+func _genericAttackAnimation() -> void:
+	var start_pos: Vector3 = skin.global_position
+	
+	# Base direction from current facing
+	var lunge_dir: Vector3 = _snap_world_eight(skin.global_transform.basis.z)
+	lunge_dir.y = 0.0
+	
+	# Simple correction: players are 90° CW off → rotate CCW by 90°
+	if not _is_enemy_or_ai():
+		# 90° CCW around +Y: (x, z) -> (-z, x)
+		lunge_dir = Vector3(lunge_dir.z, 0.0, -lunge_dir.x)
+	
+	lunge_dir = lunge_dir.normalized()
+	
+	var lunge_distance: float = 0.5
+	var end_pos: Vector3 = start_pos + lunge_dir * lunge_distance
+	end_pos.y = start_pos.y
+	
+	if debugMode:
+		print("GenericAttackAnimation(B): ", start_pos, " → ", end_pos, " dir=", lunge_dir)
+	
 	var tw := create_tween()
-	var start_pos: Vector3 = skin.position
-	
-	# Forward in parent space: –Z of the mesh's current basis.
-	var f: Vector3 = -(skin.transform.basis.z).normalized()
-	
-	# Optional: small wind-up opposite the lunge.
-	var windup_pos: Vector3 = start_pos - f * (lunge_distance * windup_ratio)
-	var lunge_pos:  Vector3 = start_pos + f * lunge_distance
-	
-	tw.tween_property(skin, "position", windup_pos, in_time * 0.35) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tw.tween_property(skin, "position", lunge_pos, in_time * 0.65) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tw.tween_property(skin, "position", start_pos, out_time) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	
+	tw.tween_property(skin, "global_position", end_pos, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(skin, "global_position", start_pos, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	await tw.finished
+
+
+
+
+
 
 func _genericWalkAnimation() -> void:
 	# Simple bob animation
@@ -547,12 +567,19 @@ func showDamageNumber(target: Entity, damage: int) -> void:
 	label.modulate = Color.RED if damage > 0 else Color.GREEN
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.position = target.global_position + Vector3(0, 1, 0)
+	label.font = preload("res://Assets/Fonts/Godot-Fontpack-d244bf6170b399a6d4d26a0d906058ddf2dafdf1/fonts/poco/Poco.ttf")
 	
+	# Add to the scene root instead of target to avoid orphaning
 	get_tree().current_scene.add_child(label)
 	
-	var tw := create_tween()
-	tw.tween_property(label, "position:y", label.position.y + 1.0, 0.8)
-	tw.parallel().tween_property(label, "modulate:a", 0.0, 0.8)
-	await tw.finished
+	# Create tween that won't be interrupted by target death
+	var tw := get_tree().create_tween()  # Use scene tree's tween instead of target's
+	tw.set_parallel(true)
+	tw.tween_property(label, "position:y", label.position.y + 1.0, 1.0)
+	tw.tween_property(label, "modulate:a", 0.0, 1.0)
 	
-	label.queue_free()
+	# Clean up the label after animation completes
+	tw.finished.connect(func(): 
+		if is_instance_valid(label):
+			label.queue_free()
+	)

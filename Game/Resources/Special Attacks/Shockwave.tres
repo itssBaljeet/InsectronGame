@@ -8,7 +8,7 @@
 script = ExtResource("1_4r4bt")
 attackName = "Shockwave"
 attackType = 3
-damage = 20
+damage = 38
 attackPattern = ExtResource("1_ihyff")
 hitsAllies = true
 duration = 1.0

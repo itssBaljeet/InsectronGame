@@ -85,8 +85,26 @@ func execute(context: BattleBoardContext) -> void:
 		#await attacker.animComponent.playAnimation(attack.animationName)
 	
 	# Apply damage to all affected targets
+	var dying_units: Array = []  # Track units that will die
+	var dying_animations: Array = []  # Track their animation components
+
 	for target in affectedTargets:
-		var damage := _calculateDamage(target)
+		var attackerStats := attacker.components.get(&"MeteormyteStatsComponent") as MeteormyteStatsComponent
+		var targetUnit := target as BattleBoardUnitEntity
+		var targetStats := targetUnit.components.get(&"MeteormyteStatsComponent") as MeteormyteStatsComponent if targetUnit else null
+
+		var damage: int
+		if attackerStats and targetStats:
+			var isSpecial := attack.attackType in [AttackResource.AttackType.PROJECTILE, AttackResource.AttackType.AREA, AttackResource.AttackType.PIERCING]
+			var defenseStat := targetStats.getMeteormyteStat(
+				MeteormyteStat.StatType.SP_DEFENSE if isSpecial else MeteormyteStat.StatType.DEFENSE
+			)
+			var defenseValue := defenseStat.getCurrentValue() if defenseStat else 0
+		
+			damage = attackerStats.calculateDamage(defenseValue, attack.damage, isSpecial)
+		else:
+			damage = attack.damage  # Fallback to base attack damage
+
 		damageDealt[target] = damage
 		
 		# Calculate knockback BEFORE applying damage
@@ -100,11 +118,43 @@ func execute(context: BattleBoardContext) -> void:
 			if kb_pos != Vector3i.ZERO:
 				knockbackResults[target] = kb_pos
 		
-		## Apply damage through health component if available
-		#var healthComp: = target.components.get(&"HealthComponent")
-		#if healthComp and healthComp.has_method("takeDamage"):
-			#await healthComp.takeDamage(damage, attacker)
+		# Apply damage through health component
+		var healthComp := target.components.get(&"MeteormyteHealthComponent") as MeteormyteHealthComponent
+		var targetAnim: InsectorAnimationComponent = target.components.get(&"InsectorAnimationComponent")
 		
+		if healthComp:
+			print("Taking Damage! ", damage)
+			healthComp.takeDamage(damage)
+			
+			# DEATH CHECK: if target is not alive after damage, add to dying list
+			if not healthComp.isAlive():
+				# Dead units shouldn't be knocked back
+				if knockbackResults.has(target):
+					knockbackResults.erase(target)
+				
+				# Show damage number immediately
+				if targetAnim:
+					targetAnim.showDamageNumber(target, damage)
+				
+				# Add to dying units list instead of playing animation now
+				dying_units.append(target as BattleBoardUnitEntity)
+				dying_animations.append(targetAnim)
+			else:
+				# Survived -> play hit reaction immediately
+				if targetAnim:
+					targetAnim.hurtAnimation()
+					targetAnim.showDamageNumber(target, damage)
+		else:
+			# No health component -> just show hit feedback
+			if targetAnim:
+				targetAnim.hurtAnimation()
+				targetAnim.showDamageNumber(target, damage)
+
+	# Handle all deaths in parallel
+	if not dying_units.is_empty():
+		await _handleAllDeaths(context, dying_units, dying_animations)
+
+# Continue with knockback and rest of function...
 		# Apply status effects
 		#if attack.poisons:
 			#_applyStatusEffect(target, "poison")
@@ -114,12 +164,6 @@ func execute(context: BattleBoardContext) -> void:
 			#_applyStatusEffect(target, "freeze")
 		#if attack.stuns:
 			#_applyStatusEffect(target, "stun")
-		
-		# Play hit reaction
-		var targetAnim: InsectorAnimationComponent = target.components.get(&"InsectorAnimationComponent")
-		if targetAnim:
-			targetAnim.hurtAnimation()
-			targetAnim.showDamageNumber(target, randi_range(10, 30))
 	
 	# Apply knockback after all damage is dealt
 	if (attack.superKnockback or attack.knockback) and not knockbackResults.is_empty():
@@ -277,16 +321,46 @@ func _isValidTarget(target: Entity) -> bool:
 	else:
 		return attackerFaction.checkOpposition(targetFaction.factions)
 
-func _calculateDamage(_target: Entity) -> int:
-	var baseDamage := attack.damage
+## Handle multiple unit deaths in parallel
+func _handleAllDeaths(context: BattleBoardContext, units: Array, animations: Array) -> void:
+	var death_tweens: Array = []
 	
-	# Add any damage modifiers here
-	# Could check for elemental weaknesses, armor, etc.
-	#var defenseComp := target.components.get(&"DefenseComponent")
-	#if defenseComp and defenseComp.has_method("calculateDamageReduction"):
-		#baseDamage -= defenseComp.calculateDamageReduction(baseDamage, attack.attackType)
+	# Start all death animations simultaneously
+	for i in range(units.size()):
+		var unit := units[i] as BattleBoardUnitEntity
+		var anim := animations[i] as InsectorAnimationComponent
+		
+		if anim and anim.has_method("_genericDeathAnimation"):
+			# Start the animation without awaiting
+			var tween := _startDeathAnimation(anim)
+			if tween:
+				death_tweens.append(tween)
+		
+		# Clear board occupancy immediately
+		var pos := unit.boardPositionComponent.currentCellCoordinates
+		context.board.setCellOccupancy(pos, false, null)
 	
-	return max(1, baseDamage)  # Minimum 1 damage
+	# Wait for all death animations to complete
+	for tween in death_tweens:
+		if tween and tween.is_valid():
+			await tween.finished
+	
+	# Free all dead units after animations complete
+	for unit in units:
+		if is_instance_valid(unit):
+			unit.queue_free()
+
+## Start a death animation and return the tween (don't await)
+func _startDeathAnimation(anim: InsectorAnimationComponent) -> Tween:
+	if not anim or not anim.skin:
+		return null
+	
+	# Create the death animation tween
+	var tw := anim.create_tween()
+	tw.tween_property(anim.skin, "rotation:z", deg_to_rad(90), anim.die_animation_time)
+	tw.parallel().tween_property(anim.skin, "modulate:a", 0.0, anim.die_animation_time)
+	
+	return tw
 
 #func _applyStatusEffect(target: Entity, effectType: String) -> void:
 	#var statusComp := target.components.get(&"StatusEffectComponent")
@@ -327,11 +401,6 @@ func _playVFX(context: BattleBoardContext, origin: Vector3i, target: Vector3i) -
 			# Scale to cover area
 			var areaSize := affectedCells.size()
 			vfx.scale = Vector3.ONE * attack.vfxScale
-			match attack.attackName:
-				"Shockwave":
-					vfx = vfx as GPUParticles3D
-					vfx.emitting = true
-					vfx.restart()
 
 		AttackResource.AttackType.PIERCING:
 			match attack.attackName:

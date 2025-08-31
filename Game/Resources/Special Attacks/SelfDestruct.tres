@@ -7,7 +7,9 @@
 script = ExtResource("1_1647i")
 attackName = "Self Destruct"
 attackType = 3
+damage = 70
 hitsAllies = true
+duration = 1.0
 burns = true
 knockback = true
 vfxScene = ExtResource("2_swvru")

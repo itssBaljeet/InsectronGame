@@ -460,7 +460,7 @@ func _processAITurn() -> void:
 	for insector in currentTeamParty:
 		self.willProcessEntity.emit(insector)
 		
-		insector.AIComponent.decideNextAction()
+		await insector.AIComponent.decideNextAction()
 		
 		await insector.processTurnUpdateSignals()
 		await insector.processTurnEndSignals()

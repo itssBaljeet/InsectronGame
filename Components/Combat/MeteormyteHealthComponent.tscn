@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcp27ybg2naqq"]
+
+[ext_resource type="Script" uid="uid://db21kkctnimn3" path="res://Components/Combat/MeteormyteHealthComponent.gd" id="1_msyyt"]
+
+[node name="MeteormyteHealthComponent" type="Node3D"]
+script = ExtResource("1_msyyt")

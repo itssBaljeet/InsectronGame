@@ -7,6 +7,7 @@
 script = ExtResource("1_djq1j")
 attackName = "Flamethrower"
 attackType = 2
+damage = 51
 effectRange = 3
 hitsAllies = true
 duration = 2.0

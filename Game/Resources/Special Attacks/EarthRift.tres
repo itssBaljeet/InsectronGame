@@ -8,9 +8,11 @@
 script = ExtResource("1_dkclb")
 attackName = "Earth Rift"
 attackType = 1
+damage = 50
 effectRange = 3
 attackPattern = ExtResource("1_q2o0l")
 hitsAllies = true
+duration = 0.75
 knockback = true
 vfxScene = ExtResource("2_dkclb")
 vfxScale = 0.75

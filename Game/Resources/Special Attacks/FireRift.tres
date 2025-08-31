@@ -7,8 +7,10 @@
 script = ExtResource("2_b25pp")
 attackName = "Fire Rift"
 attackType = 1
+damage = 60
 effectRange = 3
 hitsAllies = true
+duration = 0.75
 knockback = true
 vfxScene = ExtResource("3_6j52s")
 vfxScale = 0.75

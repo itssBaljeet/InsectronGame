@@ -663,7 +663,7 @@ transform = Transform3D(-8.999999, 1.9345808e-07, 7.599952e-07, 0, 8.258665, -2.
 msaa_3d = 1
 
 [node name="TVCameraController" type="Node3D" parent="Blockout/Deco/SubViewport"]
-transform = Transform3D(-0.8782488, 8.317377e-16, -0.44268432, 0, 1, 0, 0.44268432, 1.5362684e-15, -0.8782488, 2.456693, 0.29999924, 3.4999995)
+transform = Transform3D(0.4057707, 1.3166656e-15, -0.7534678, 0, 1, 0, 0.7534678, -7.5964366e-16, 0.4057707, 2.456693, 0.29999924, 3.4999995)
 script = ExtResource("16_82lh0")
 
 [node name="Camera3D" type="Camera3D" parent="Blockout/Deco/SubViewport/TVCameraController"]
@@ -671,10 +671,10 @@ transform = Transform3D(0.029342202, 0.49976337, -0.86561555, 0, 0.8660254, 0.5,
 fov = 85.0
 
 [node name="doorwayFront" parent="Blockout" instance=ExtResource("16_gjnab")]
-transform = Transform3D(26.58125, 0, 0, 0, 20.095423, 0, 0, 0, 21.265, -10, -4.4, -62.6)
+transform = Transform3D(29.239374, 0, 0, 0, 20.095423, 0, 0, 0, 21.265, -10, -4.4, -62.6)
 
 [node name="doorwayFront3" parent="Blockout" instance=ExtResource("16_gjnab")]
-transform = Transform3D(26.58125, 0, 0, 0, 20.095423, 0, 0, 0, 21.265, -10, -4, 66.4)
+transform = Transform3D(29.239374, 0, 0, 0, 20.095423, 0, 0, 0, 21.265, -10, -4, 66.4)
 
 [node name="doorwayFront2" parent="Blockout" instance=ExtResource("16_gjnab")]
 transform = Transform3D(-29.239374, 0, -1.8590453e-06, 0, 20.09542, 0, 2.5561872e-06, 0, -21.264997, 17, -4.4, -64.5)
@@ -683,40 +683,40 @@ transform = Transform3D(-29.239374, 0, -1.8590453e-06, 0, 20.09542, 0, 2.5561872
 transform = Transform3D(-29.239374, 0, -1.8590453e-06, 0, 20.09542, 0, 2.5561872e-06, 0, -21.264997, 17, -4, 64.5)
 
 [node name="bookcaseClosedDoors" parent="Blockout" instance=ExtResource("17_tub48")]
-transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, 32, -4, 60)
+transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, 32, -4.5, 60)
 
 [node name="bookcaseClosedDoors2" parent="Blockout" instance=ExtResource("17_tub48")]
-transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, 45.2, -4, 60)
+transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, 45.2, -4.5, 60)
 
 [node name="bookcaseClosedDoors3" parent="Blockout" instance=ExtResource("17_tub48")]
-transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, 58.4, -4, 60)
+transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, 58.4, -4.5, 60)
 
 [node name="bookcaseClosedDoors4" parent="Blockout" instance=ExtResource("17_tub48")]
-transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, -39, -4, 60)
+transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, -39, -4.5, 60)
 
 [node name="bookcaseClosedDoors5" parent="Blockout" instance=ExtResource("17_tub48")]
-transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, -25.8, -4, 60)
+transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, -25.8, -4.5, 60)
 
 [node name="bookcaseClosedDoors6" parent="Blockout" instance=ExtResource("17_tub48")]
-transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, -12.599998, -4, 60)
+transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, -12.599998, -4.5, 60)
 
 [node name="bookcaseClosedDoors7" parent="Blockout" instance=ExtResource("17_tub48")]
-transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, -25.600002, -4, -59)
+transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, -25.600002, -4.5, -59)
 
 [node name="bookcaseClosedDoors8" parent="Blockout" instance=ExtResource("17_tub48")]
-transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, -38.800003, -4, -59)
+transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, -38.800003, -4.5, -59)
 
 [node name="bookcaseClosedDoors9" parent="Blockout" instance=ExtResource("17_tub48")]
-transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, -52.000004, -4, -59)
+transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, -52.000004, -4.5, -59)
 
 [node name="bookcaseClosedDoors10" parent="Blockout" instance=ExtResource("17_tub48")]
-transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, 46.399998, -4, -59)
+transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, 46.399998, -4.5, -59)
 
 [node name="bookcaseClosedDoors11" parent="Blockout" instance=ExtResource("17_tub48")]
-transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, 33.199997, -4, -59)
+transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, 33.199997, -4.5, -59)
 
 [node name="bookcaseClosedDoors12" parent="Blockout" instance=ExtResource("17_tub48")]
-transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, 19.999996, -4, -59)
+transform = Transform3D(32.999996, 0, -1.1368684e-13, 0, 14.999999, 0, 2.2737368e-13, 0, 15.000001, 19.999996, -4.5, -59)
 
 [node name="pottedPlant" parent="Blockout" instance=ExtResource("18_8ppd4")]
 transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, -62, -5, -60)

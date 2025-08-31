@@ -24,6 +24,10 @@ var rules: BattleBoardRulesComponent:
 var commandFactory: BattleBoardCommandFactory:
 	get:
 		return parentEntity.get_parent().find_child("BattleBoardCommandFactory")
+
+var commandQueue: BattleBoardCommandQueueComponent:
+	get:
+		return parentEntity.get_parent().find_child("BattleBoardCommandQueueComponent")
 #endregion
 
 #region Signals
@@ -47,73 +51,113 @@ func decideNextAction() -> void:
 		thinkingCompleted.emit()
 		return
 	
-	var command: BattleBoardCommand = null
-	
-	# Decision priority based on strategy
+	# Execute full turn sequence based on strategy
 	match strategy:
 		AIStrategy.AGGRESSIVE:
-			print("AI AGRESSIVE")
-			_tryAttackFirst(unit, state)
+			print("AI AGGRESSIVE")
+			await _executeAggressiveTurn(unit)
 		AIStrategy.DEFENSIVE:
-			_tryMoveToSafety(unit, state)
+			await _executeDefensiveTurn(unit)
 		AIStrategy.OBJECTIVE:
-			_tryObjective(unit, state)
+			await _executeObjectiveTurn(unit)
 		AIStrategy.SUPPORT:
-			_trySupport(unit, state)
-	
-	# Fallback: wait if no action found
-	if not command and not state.isExhausted():
-		command = _createWaitCommand(unit)
+			await _executeSupportTurn(unit)
 	
 	thinkingCompleted.emit()
-	if command:
-		decisionMade.emit(command)
 
-## Aggressive AI - attack if possible, then move closer
-func _tryAttackFirst(unit: BattleBoardUnitEntity, state: UnitTurnStateComponent) -> void:
-	# Can we attack?
+## Aggressive AI - attack if possible, then move closer, then attack again
+func _executeAggressiveTurn(unit: BattleBoardUnitEntity) -> void:
+	var state := unit.stateComponent
+	if not state:
+		return
+	
+	# Try to attack first if we can
 	if state.canAct():
-		print("ATTACK ATTEMPT")
+		print("ATTACK ATTEMPT (pre-move)")
 		var targets := rules.getValidAttackTargets(unit)
 		if not targets.is_empty():
-			# Pick closest or weakest target
 			var bestTarget := _selectBestTarget(unit, targets)
-			_createAttackCommand(unit, bestTarget)
+			if _createAttackCommand(unit, bestTarget):
+				# Wait for attack to complete
+				await _waitForCommandCompletion()
+				# Re-check state after command
+				state = unit.stateComponent
 	
-	# Can we move closer to an enemy?
+	# Try to move closer to an enemy if we can still move
 	if state.canMove():
 		print("MOVE ATTEMPT")
 		var moveTarget := _findMoveTowardsEnemy(unit)
 		if moveTarget != Vector3i.ZERO:
-			_createMoveCommand(unit, moveTarget)
-
+			if _createMoveCommand(unit, moveTarget):
+				# Wait for move to complete
+				await _waitForCommandCompletion()
+				# Re-check state after move
+				state = unit.stateComponent
+				
+				# After moving, try to attack again if we can still act
+				if state.canAct():
+					print("ATTACK ATTEMPT (post-move)")
+					# Small delay to ensure position is fully updated
+					await parentEntity.get_tree().create_timer(0.1).timeout
+					
+					# Get new valid targets from new position
+					var postMoveTargets := rules.getValidAttackTargets(unit)
+					if not postMoveTargets.is_empty():
+						var bestTarget := _selectBestTarget(unit, postMoveTargets)
+						if _createAttackCommand(unit, bestTarget):
+							await _waitForCommandCompletion()
 	
-## Defensive AI - move away from threats
-func _tryMoveToSafety(unit: BattleBoardUnitEntity, state: UnitTurnStateComponent) -> void:
-	if not state.canMove():
+	# If we still haven't exhausted our actions, wait
+	state = unit.stateComponent
+	if not state.isExhausted():
+		print("WAIT COMMAND")
+		_createWaitCommand(unit)
+		await _waitForCommandCompletion()
+
+## Defensive AI - move away from threats, attack if cornered
+func _executeDefensiveTurn(unit: BattleBoardUnitEntity) -> void:
+	var state := unit.stateComponent
+	if not state:
 		return
 	
-	var safestCell := _findSafestCell(unit)
-	if safestCell != Vector3i.ZERO:
-		_createMoveCommand(unit, safestCell)
+	# Move to safety first if possible
+	if state.canMove():
+		var safestCell := _findSafestCell(unit)
+		if safestCell != Vector3i.ZERO:
+			if _createMoveCommand(unit, safestCell):
+				await _waitForCommandCompletion()
+				# Re-check state
+				state = unit.stateComponent
 	
-	# Attack if cornered
+	# Attack if we can (either couldn't move to safety or after moving)
 	if state.canAct():
 		var targets := rules.getValidAttackTargets(unit)
 		if not targets.is_empty():
-			_createAttackCommand(unit, targets[0])
+			if _createAttackCommand(unit, targets[0]):
+				await _waitForCommandCompletion()
+				state = unit.stateComponent
+	
+	# Wait if not exhausted
+	if not state.isExhausted():
+		_createWaitCommand(unit)
+		await _waitForCommandCompletion()
 
 ## Mission-focused AI
-func _tryObjective(unit: BattleBoardUnitEntity, state: UnitTurnStateComponent) -> void:
+func _executeObjectiveTurn(unit: BattleBoardUnitEntity) -> void:
 	# This would check mission-specific goals
 	# For now, default to aggressive
-	_tryAttackFirst(unit, state)
+	await _executeAggressiveTurn(unit)
 
 ## Support AI - help allies
-func _trySupport(unit: BattleBoardUnitEntity, state: UnitTurnStateComponent) -> void:
+func _executeSupportTurn(unit: BattleBoardUnitEntity) -> void:
 	# Move towards injured allies or provide buffs
 	# For now, default to defensive
-	_tryMoveToSafety(unit, state)
+	await _executeDefensiveTurn(unit)
+
+## Wait for the command queue to finish processing
+func _waitForCommandCompletion() -> void:
+	if commandQueue and commandQueue.isProcessing:
+		await commandQueue.queueCompleted
 
 #region Helper Methods
 func _selectBestTarget(unit: BattleBoardUnitEntity, targets: Array[Vector3i]) -> Vector3i:
@@ -153,6 +197,7 @@ func _findMoveTowardsEnemy(unit: BattleBoardUnitEntity) -> Vector3i:
 		if distance < bestDistance:
 			bestDistance = distance
 			bestMove = move
+	
 	print("Best Move: ", bestMove)
 	return bestMove
 
@@ -222,9 +267,7 @@ func _createAttackCommand(unit: BattleBoardUnitEntity, targetCell: Vector3i) -> 
 	print("MAKING ATTACK COMMAND")
 	return commandFactory.intentAttack(unit, targetCell)
 
-
-func _createWaitCommand(unit: BattleBoardUnitEntity) -> WaitCommand:
-	var command := WaitCommand.new()
-	command.unit = unit
-	return command
+func _createWaitCommand(unit: BattleBoardUnitEntity) -> bool:
+	print("MAKING WAIT COMMAND")
+	return commandFactory.intentWait(unit)
 #endregion

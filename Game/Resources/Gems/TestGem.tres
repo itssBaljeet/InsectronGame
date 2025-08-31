@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="GemData" load_steps=2 format=3 uid="uid://31nf35k2aap6"]
+
+[ext_resource type="Script" uid="uid://mmwvdleuh0i6" path="res://Resources/GemData.gd" id="1_5jiti"]
+
+[resource]
+script = ExtResource("1_5jiti")
+metadata/_custom_type_script = "uid://mmwvdleuh0i6"

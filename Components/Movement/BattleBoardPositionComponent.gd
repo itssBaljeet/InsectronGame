@@ -231,7 +231,6 @@ func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i, knoc
 		return false
 
 	# Move Your Body ♪
-	print("Made it past guard clauses and actually moved")
 	previousCellCoordinates = currentCellCoordinates
 	willStartMovingToNewCell.emit(newDestinationTileCoordinates)
 	self.destinationCellCoordinates = newDestinationTileCoordinates

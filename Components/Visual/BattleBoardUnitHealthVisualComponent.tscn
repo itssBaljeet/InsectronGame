@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=3 uid="uid://cmgqp7rfco4ga"]
+
+[ext_resource type="Script" uid="uid://dy63o0w8s0bt3" path="res://Components/Visual/BattleBoardUnitHealthVisualComponent.gd" id="1_8sksn"]
+[ext_resource type="Texture2D" uid="uid://bjdjj0pq5v6wd" path="res://addons/Noah UI/bar_under.png" id="2_bol8s"]
+[ext_resource type="Texture2D" uid="uid://c3f5su8n4h8c3" path="res://addons/Noah UI/bar_fill_white.png" id="3_lky0k"]
+[ext_resource type="Texture2D" uid="uid://dp15ksxmpwnkf" path="res://addons/Noah UI/bar_under_transparent.png" id="4_0hwjq"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_3c1ip"]
+viewport_path = NodePath("SubViewport")
+
+[node name="BattleBoardUnitHealthVisualComponent" type="Sprite3D" groups=["components"]]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, 0)
+billboard = 1
+texture_filter = 2
+texture = SubResource("ViewportTexture_3c1ip")
+region_enabled = true
+region_rect = Rect2(0, 3.557273, 128.52373, 25.418053)
+script = ExtResource("1_8sksn")
+enemy_over_main = Color(0.9499975, 0, 0.12835406, 1)
+enemy_over_critical = Color(1, 1, 1, 1)
+enemy_under_main = Color(1, 1, 1, 1)
+enemy_under_critical = Color(1, 1, 1, 1)
+critical_start_ratio = 0.75
+crit_tween_damage = null
+crit_tween_heal = null
+lag_delay = 0.25
+
+[node name="SubViewport" type="SubViewport" parent="."]
+unique_name_in_owner = true
+transparent_bg = true
+
+[node name="UnderBar" type="TextureProgressBar" parent="SubViewport"]
+unique_name_in_owner = true
+texture_filter = 1
+anchors_preset = -1
+offset_right = 128.0
+offset_bottom = 40.0
+value = 100.0
+texture_under = ExtResource("2_bol8s")
+texture_over = ExtResource("3_lky0k")
+texture_progress = ExtResource("3_lky0k")
+tint_over = Color(0.95, 0.16, 0.16, 0)
+tint_progress = Color(0.768627, 0.105882, 0.207843, 1)
+
+[node name="OverBar" type="TextureProgressBar" parent="SubViewport"]
+unique_name_in_owner = true
+texture_filter = 1
+anchors_preset = -1
+offset_right = 128.0
+offset_bottom = 40.0
+value = 100.0
+texture_under = ExtResource("4_0hwjq")
+texture_over = ExtResource("3_lky0k")
+texture_progress = ExtResource("3_lky0k")
+tint_over = Color(0.95, 0.16, 0.16, 0)
+tint_progress = Color(0.329412, 0.784314, 0.0745098, 1)

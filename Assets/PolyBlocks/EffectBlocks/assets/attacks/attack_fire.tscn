@@ -1,10 +1,10 @@
 [gd_scene load_steps=58 format=4 uid="uid://36bi6h03os4j"]
 
-[ext_resource type="Script" uid="uid://cjp705fv2gnal" path="res://PolyBlocks/EffectBlocks/source_files/scripts/ground_attack.gd" id="1_yffm0"]
-[ext_resource type="PackedScene" uid="uid://jxxrhl6d3xyv" path="res://PolyBlocks/EffectBlocks/assets/decals/decal_crack_1.tscn" id="2_hd6w4"]
-[ext_resource type="Texture2D" uid="uid://bridv3whv2mwc" path="res://PolyBlocks/EffectBlocks/source_files/textures/decals/decal_crack_1.png" id="3_6gbl5"]
-[ext_resource type="Material" uid="uid://cjgoj12p3pb0g" path="res://PolyBlocks/EffectBlocks/source_files/materials/fire_billboard.material" id="4_nxqm3"]
-[ext_resource type="Material" uid="uid://ks1kly3dfqvc" path="res://PolyBlocks/EffectBlocks/source_files/materials/smoke_billboard.material" id="5_rx6iy"]
+[ext_resource type="Script" uid="uid://cjp705fv2gnal" path="res://Assets/PolyBlocks/EffectBlocks/source_files/scripts/ground_attack.gd" id="1_yffm0"]
+[ext_resource type="PackedScene" uid="uid://jxxrhl6d3xyv" path="res://Assets/PolyBlocks/EffectBlocks/assets/decals/decal_crack_1.tscn" id="2_hd6w4"]
+[ext_resource type="Texture2D" uid="uid://bridv3whv2mwc" path="res://Assets/PolyBlocks/EffectBlocks/source_files/textures/decals/decal_crack_1.png" id="3_6gbl5"]
+[ext_resource type="Material" uid="uid://cjgoj12p3pb0g" path="res://Assets/PolyBlocks/EffectBlocks/source_files/materials/fire_billboard.material" id="4_nxqm3"]
+[ext_resource type="Material" uid="uid://ks1kly3dfqvc" path="res://Assets/PolyBlocks/EffectBlocks/source_files/materials/smoke_billboard.material" id="5_rx6iy"]
 
 [sub_resource type="Curve" id="Curve_dhctu"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.868583, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -441,6 +441,7 @@ emitting = false
 amount = 32
 lifetime = 2.0
 one_shot = true
+speed_scale = 3.0
 explosiveness = 1.0
 randomness = 1.0
 fixed_fps = 60
@@ -469,7 +470,7 @@ draw_pass_1 = SubResource("ArrayMesh_0hkbl")
 [node name="Crack" parent="." instance=ExtResource("2_hd6w4")]
 transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766045, 0, -0.766045, 0.642788, 0, 0.2, 4.4)
 texture_emission = ExtResource("3_6gbl5")
-emission_energy = 8.0
+emission_energy = 0.8
 modulate = Color(0.862745, 0.352941, 0.0235294, 1)
 albedo_mix = 0.0
 cull_mask = 1048571

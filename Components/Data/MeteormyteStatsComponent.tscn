@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://est6gfbiyko4"]
+
+[ext_resource type="Script" uid="uid://bwsgct5di47c" path="res://Components/Data/MeteormyteStatsComponent.gd" id="1_rt2f8"]
+
+[node name="MeteormyteStatsComponent" type="Node3D"]
+script = ExtResource("1_rt2f8")

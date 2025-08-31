@@ -1,10 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://bpxceafnntnlu"]
+[gd_scene load_steps=13 format=3 uid="uid://bpxceafnntnlu"]
 
 [ext_resource type="Script" uid="uid://djd0w27k8deui" path="res://Components/Visual/BattleBoardUIComponent.gd" id="1_osjf2"]
 [ext_resource type="StyleBox" uid="uid://dlowssv8kmxjm" path="res://addons/UI Pack Kenney/background.tres" id="2_5g7u7"]
 [ext_resource type="StyleBox" uid="uid://df6yi77q1dvws" path="res://addons/UI Pack Kenney/button.tres" id="2_v3yla"]
 [ext_resource type="StyleBox" uid="uid://fiqf8lkjjdvb" path="res://addons/UI Pack Kenney/button_depressed.tres" id="3_f165g"]
 [ext_resource type="StyleBox" uid="uid://b8pkdacubrysc" path="res://addons/UI Pack Kenney/hover_button.tres" id="5_w4dv7"]
+[ext_resource type="StyleBox" uid="uid://b26o85325eklb" path="res://addons/UI Pack Kenney/statBackground.tres" id="6_3oeah"]
+[ext_resource type="Texture2D" uid="uid://boj3kudsw5im3" path="res://addons/UI Pack Kenney/PNG/Yellow/Default/PNG/Default (64px)/suit_hearts.png" id="6_ejkb8"]
+[ext_resource type="Texture2D" uid="uid://fuxilcvej3ba" path="res://addons/UI Pack Kenney/PNG/Yellow/Default/PNG/Default (64px)/sword.png" id="7_3oeah"]
+[ext_resource type="Texture2D" uid="uid://cwbvj0s1mo4ur" path="res://addons/UI Pack Kenney/PNG/Yellow/Default/PNG/Default (64px)/shield.png" id="8_867n7"]
+[ext_resource type="Texture2D" uid="uid://bstj0rc2knmp0" path="res://addons/UI Pack Kenney/PNG/Yellow/Default/PNG/Default (64px)/arrow_right_curve.png" id="9_gw7fc"]
+[ext_resource type="Texture2D" uid="uid://04jt4tv1184l" path="res://addons/UI Pack Kenney/PNG/Yellow/Default/PNG/Default (64px)/dice_sword.png" id="10_vl266"]
+[ext_resource type="Texture2D" uid="uid://cxumbohx7fy4k" path="res://addons/UI Pack Kenney/PNG/Yellow/Default/PNG/Default (64px)/dice_shield.png" id="11_4beih"]
 
 [node name="BattleBoardUIComponent" type="CanvasLayer" groups=["components"]]
 script = ExtResource("1_osjf2")
@@ -34,15 +41,22 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/panel = ExtResource("2_5g7u7")
 
-[node name="InteractionMenu" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2/UnitMenu"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/UnitMenu"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 30
+
+[node name="InteractionMenu" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2/UnitMenu/MarginContainer"]
 unique_name_in_owner = true
 texture_filter = 1
-custom_minimum_size = Vector2(230, 350)
 layout_mode = 2
 size_flags_vertical = 4
+theme_override_constants/separation = 4
 alignment = 1
 
-[node name="AttackButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/InteractionMenu"]
+[node name="AttackButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/MarginContainer/InteractionMenu"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
@@ -52,7 +66,7 @@ theme_override_styles/normal = ExtResource("2_v3yla")
 theme_override_styles/focus = ExtResource("5_w4dv7")
 text = "Attack"
 
-[node name="MoveButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/InteractionMenu"]
+[node name="MoveButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/MarginContainer/InteractionMenu"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
@@ -66,7 +80,7 @@ theme_override_styles/hover_pressed = ExtResource("3_f165g")
 theme_override_styles/focus = ExtResource("5_w4dv7")
 text = "Move"
 
-[node name="WaitButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/InteractionMenu"]
+[node name="WaitButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/MarginContainer/InteractionMenu"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
@@ -79,7 +93,7 @@ theme_override_styles/hover_pressed = ExtResource("3_f165g")
 theme_override_styles/focus = ExtResource("5_w4dv7")
 text = "Wait"
 
-[node name="ItemButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/InteractionMenu"]
+[node name="ItemButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/MarginContainer/InteractionMenu"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
@@ -92,7 +106,21 @@ theme_override_styles/hover_pressed = ExtResource("3_f165g")
 theme_override_styles/focus = ExtResource("5_w4dv7")
 text = "Item"
 
-[node name="EndTurnButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/InteractionMenu"]
+[node name="InfoButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/MarginContainer/InteractionMenu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/normal = ExtResource("2_v3yla")
+theme_override_styles/pressed = ExtResource("3_f165g")
+theme_override_styles/hover = ExtResource("5_w4dv7")
+theme_override_styles/hover_pressed = ExtResource("3_f165g")
+theme_override_styles/focus = ExtResource("5_w4dv7")
+text = "Info
+"
+
+[node name="EndTurnButton" type="Button" parent="VBoxContainer/HBoxContainer2/UnitMenu/MarginContainer/InteractionMenu"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
@@ -120,6 +148,121 @@ custom_minimum_size = Vector2(230, 350)
 layout_mode = 2
 size_flags_vertical = 4
 alignment = 1
+
+[node name="InfoMenu" type="PanelContainer" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(750, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_styles/panel = ExtResource("2_5g7u7")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/InfoMenu"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/margin_top = 40
+
+[node name="Nickname" type="Label" parent="VBoxContainer/HBoxContainer2/InfoMenu/MarginContainer"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = ExtResource("6_3oeah")
+text = "Nickname Here"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HFlowContainer" type="HFlowContainer" parent="VBoxContainer/HBoxContainer2/InfoMenu"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HPButton" type="Button" parent="VBoxContainer/HBoxContainer2/InfoMenu/HFlowContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_styles/normal = ExtResource("6_3oeah")
+theme_override_styles/hover = ExtResource("6_3oeah")
+theme_override_styles/focus = ExtResource("6_3oeah")
+text = "HP:"
+icon = ExtResource("6_ejkb8")
+autowrap_mode = 3
+
+[node name="ATKButton" type="Button" parent="VBoxContainer/HBoxContainer2/InfoMenu/HFlowContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_styles/normal = ExtResource("6_3oeah")
+theme_override_styles/hover = ExtResource("6_3oeah")
+theme_override_styles/disabled = ExtResource("2_v3yla")
+theme_override_styles/focus = ExtResource("6_3oeah")
+text = "Attack: "
+icon = ExtResource("7_3oeah")
+autowrap_mode = 3
+
+[node name="DEFButton" type="Button" parent="VBoxContainer/HBoxContainer2/InfoMenu/HFlowContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_styles/normal = ExtResource("6_3oeah")
+theme_override_styles/hover = ExtResource("6_3oeah")
+theme_override_styles/disabled = ExtResource("2_v3yla")
+theme_override_styles/focus = ExtResource("6_3oeah")
+text = "DEF:"
+icon = ExtResource("8_867n7")
+autowrap_mode = 3
+
+[node name="SpeedButton" type="Button" parent="VBoxContainer/HBoxContainer2/InfoMenu/HFlowContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_styles/normal = ExtResource("6_3oeah")
+theme_override_styles/hover = ExtResource("6_3oeah")
+theme_override_styles/disabled = ExtResource("2_v3yla")
+theme_override_styles/focus = ExtResource("6_3oeah")
+text = "Speed:"
+icon = ExtResource("9_gw7fc")
+autowrap_mode = 3
+
+[node name="SpATKButton" type="Button" parent="VBoxContainer/HBoxContainer2/InfoMenu/HFlowContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_styles/normal = ExtResource("6_3oeah")
+theme_override_styles/hover = ExtResource("6_3oeah")
+theme_override_styles/disabled = ExtResource("2_v3yla")
+theme_override_styles/focus = ExtResource("6_3oeah")
+text = "Sp. Atk:"
+icon = ExtResource("10_vl266")
+autowrap_mode = 3
+
+[node name="SpDEFButton" type="Button" parent="VBoxContainer/HBoxContainer2/InfoMenu/HFlowContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_styles/normal = ExtResource("6_3oeah")
+theme_override_styles/hover = ExtResource("6_3oeah")
+theme_override_styles/disabled = ExtResource("2_v3yla")
+theme_override_styles/focus = ExtResource("6_3oeah")
+text = "Sp. Def:"
+icon = ExtResource("11_4beih")
+autowrap_mode = 3
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
 texture_filter = 1
