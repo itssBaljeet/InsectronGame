@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dabfhob2re65y"]
 
-[ext_resource type="Texture2D" uid="uid://bjdjj0pq5v6wd" path="res://addons/Noah UI/bar_under.png" id="1_4if4n"]
-[ext_resource type="Texture2D" uid="uid://cjt35uficgu74" path="res://addons/Noah UI/bar_over.png" id="2_dnk68"]
-[ext_resource type="Texture2D" uid="uid://dh8ncbt4ajwgl" path="res://addons/Noah UI/bar_fill.png" id="3_52s55"]
-[ext_resource type="Texture2D" uid="uid://dp15ksxmpwnkf" path="res://addons/Noah UI/bar_under_transparent.png" id="3_dnk68"]
+[ext_resource type="Texture2D" uid="uid://bjdjj0pq5v6wd" path="res://Assets/Noah UI/bar_under.png" id="1_4if4n"]
+[ext_resource type="Texture2D" uid="uid://cjt35uficgu74" path="res://Assets/Noah UI/bar_over.png" id="2_dnk68"]
+[ext_resource type="Texture2D" uid="uid://dh8ncbt4ajwgl" path="res://Assets/Noah UI/bar_fill.png" id="3_52s55"]
+[ext_resource type="Texture2D" uid="uid://dp15ksxmpwnkf" path="res://Assets/Noah UI/bar_under_transparent.png" id="3_dnk68"]
 
 [node name="Control" type="Control"]
 layout_mode = 3

@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="AttackResource" load_steps=3 format=3 uid="uid://dw6qokxkhekx"]
 
 [ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="2_b25pp"]
-[ext_resource type="PackedScene" uid="uid://36bi6h03os4j" path="res://Assets/PolyBlocks/EffectBlocks/assets/attacks/attack_fire.tscn" id="3_6j52s"]
+[ext_resource type="PackedScene" uid="uid://36bi6h03os4j" path="res://Assets/VFX/PolyBlocks/EffectBlocks/assets/attacks/attack_fire.tscn" id="3_6j52s"]
 
 [resource]
 script = ExtResource("2_b25pp")

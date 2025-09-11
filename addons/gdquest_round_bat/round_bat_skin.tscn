@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://tyjgdu65yj3m"]
+[gd_scene load_steps=13 format=3 uid="uid://tyjgdu65yj3m"]
 
 [ext_resource type="PackedScene" uid="uid://h2we7rb772hy" path="res://addons/gdquest_round_bat/model/bat.glb" id="1_tt0gg"]
 [ext_resource type="Script" uid="uid://cmp13fxd1d7ro" path="res://addons/gdquest_round_bat/round_bat_skin.gd" id="1_vbemd"]
 [ext_resource type="AnimationLibrary" uid="uid://c1irgai81674w" path="res://addons/gdquest_round_bat/model/custom/custom_lib.res" id="2_er7fn"]
+[ext_resource type="Material" uid="uid://cgyu54b0rm2tk" path="res://addons/gdquest_round_bat/model/bat_mat.tres" id="3_vy5g6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u0xry"]
 render_priority = 1
@@ -167,22 +168,23 @@ script = ExtResource("1_vbemd")
 [node name="RoundBat" parent="." instance=ExtResource("1_tt0gg")]
 
 [node name="Skeleton3D" parent="RoundBat/Armature" index="0"]
-bones/0/position = Vector3(0, -0.020480817, 0)
-bones/1/rotation = Quaternion(-0.06037061, 0.2139343, -0.6643032, 0.7136447)
-bones/2/rotation = Quaternion(-0.1551844, -0.04157541, 0.25529382, 0.9534224)
-bones/3/rotation = Quaternion(-0.08293414, 0.028561644, 0.22605133, 0.9701583)
-bones/4/rotation = Quaternion(-0.06037061, -0.2139343, 0.6643032, 0.7136447)
-bones/5/rotation = Quaternion(-0.1551844, 0.04157541, -0.25529382, 0.9534224)
-bones/6/rotation = Quaternion(-0.08293414, -0.028561644, -0.22605133, 0.9701583)
+bones/0/position = Vector3(0, 0.0236, 0)
+bones/1/rotation = Quaternion(0.20299986, -0.018875575, -0.6252171, 0.7533514)
+bones/2/rotation = Quaternion(0.17290853, 0.07810075, 0.40434042, 0.8947132)
+bones/3/rotation = Quaternion(0.11189137, 0.09435178, 0.36295196, 0.92024124)
+bones/4/rotation = Quaternion(0.20299986, 0.018875575, 0.6252171, 0.7533514)
+bones/5/rotation = Quaternion(0.17290853, -0.07810075, -0.40434042, 0.8947132)
+bones/6/rotation = Quaternion(0.11189137, -0.09435178, -0.36295196, 0.92024124)
 bones/7/position = Vector3(0.130992, -0.227392, -0.087851495)
 bones/7/rotation = Quaternion(0.26196814, 0.08345515, 0.26575115, 0.92400455)
-bones/8/rotation = Quaternion(3.9688857e-08, 0.64637107, 0.7630234, 2.5019277e-08)
+bones/8/rotation = Quaternion(3.4241168e-08, 0.63716835, 0.7707247, 2.5681102e-08)
 bones/10/position = Vector3(-0.130992, -0.227392, -0.087851495)
 bones/10/rotation = Quaternion(0.26196814, -0.08345515, -0.26575115, 0.92400455)
-bones/11/rotation = Quaternion(2.603565e-08, 0.64637107, 0.7630234, 3.3689314e-08)
+bones/11/rotation = Quaternion(2.6804626e-08, 0.63716835, 0.7707247, 3.1991128e-08)
 
 [node name="Bat" parent="RoundBat/Armature/Skeleton3D" index="0"]
 material_overlay = SubResource("StandardMaterial3D_u0xry")
+surface_material_override/0 = ExtResource("3_vy5g6")
 
 [node name="AnimationPlayer" parent="RoundBat" index="1"]
 libraries = {

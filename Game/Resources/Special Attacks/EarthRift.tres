@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="1_dkclb"]
 [ext_resource type="Resource" uid="uid://fvfgnsklluo8" path="res://Game/Resources/patterns/ferz3.tres" id="1_q2o0l"]
-[ext_resource type="PackedScene" uid="uid://bwwyl3lo03yqc" path="res://Assets/PolyBlocks/EffectBlocks/assets/attacks/attack_earth.tscn" id="2_dkclb"]
+[ext_resource type="PackedScene" uid="uid://bwwyl3lo03yqc" path="res://Assets/VFX/PolyBlocks/EffectBlocks/assets/attacks/attack_earth.tscn" id="2_dkclb"]
 
 [resource]
 script = ExtResource("1_dkclb")

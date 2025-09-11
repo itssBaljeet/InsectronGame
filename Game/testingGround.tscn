@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://dun38r0k022n1"]
+[gd_scene load_steps=38 format=3 uid="uid://dun38r0k022n1"]
 
 [ext_resource type="PackedScene" uid="uid://bq82t3qc1mxmb" path="res://Game/BattleBoard.tscn" id="2_5jdkk"]
 [ext_resource type="Environment" uid="uid://176jft2dorry" path="res://Game/testingGroundWorld.tres" id="2_315n7"]
@@ -12,15 +12,16 @@
 [ext_resource type="PackedScene" uid="uid://bxnoigyvc8jf6" path="res://addons/models/brownchar.tscn" id="10_ydwu5"]
 [ext_resource type="AnimationLibrary" uid="uid://dg88y2d55fhuf" path="res://addons/Kenney Assets/Animations/idle.fbx" id="11_gjnab"]
 [ext_resource type="PackedScene" uid="uid://dhymc5sl3j0vy" path="res://addons/models/whitechar.tscn" id="12_tub48"]
-[ext_resource type="PackedScene" uid="uid://k5ck0qfbuxlw" path="res://addons/UI Pack Kenney/Furniture/Models/GLTF format/rugRectangle.glb" id="14_ydwu5"]
+[ext_resource type="PackedScene" uid="uid://k5ck0qfbuxlw" path="res://Assets/UI Pack Kenney/Furniture/Models/GLTF format/rugRectangle.glb" id="14_ydwu5"]
 [ext_resource type="PackedScene" uid="uid://c3ychrc1inccx" path="res://addons/models/38edb92dd60f40228e04d151a975750c.glb" id="15_8ppd4"]
-[ext_resource type="PackedScene" uid="uid://5d8h2qehb7tk" path="res://addons/UI Pack Kenney/Furniture/Models/GLTF format/speakerSmall.glb" id="15_gjnab"]
+[ext_resource type="PackedScene" uid="uid://5d8h2qehb7tk" path="res://Assets/UI Pack Kenney/Furniture/Models/GLTF format/speakerSmall.glb" id="15_gjnab"]
 [ext_resource type="Script" uid="uid://eybwm5enm74a" path="res://Game/TvCameraController.gd" id="16_82lh0"]
-[ext_resource type="PackedScene" uid="uid://8d6gbpri4riq" path="res://addons/UI Pack Kenney/Furniture/Models/GLTF format/doorwayFront.glb" id="16_gjnab"]
-[ext_resource type="PackedScene" uid="uid://dvajdiv0g42hk" path="res://addons/UI Pack Kenney/Furniture/Models/GLTF format/bookcaseClosedDoors.glb" id="17_tub48"]
-[ext_resource type="PackedScene" uid="uid://cqafnhc2xg8y0" path="res://addons/UI Pack Kenney/Furniture/Models/GLTF format/pottedPlant.glb" id="18_8ppd4"]
+[ext_resource type="PackedScene" uid="uid://8d6gbpri4riq" path="res://Assets/UI Pack Kenney/Furniture/Models/GLTF format/doorwayFront.glb" id="16_gjnab"]
+[ext_resource type="PackedScene" uid="uid://dvajdiv0g42hk" path="res://Assets/UI Pack Kenney/Furniture/Models/GLTF format/bookcaseClosedDoors.glb" id="17_tub48"]
+[ext_resource type="PackedScene" uid="uid://cqafnhc2xg8y0" path="res://Assets/UI Pack Kenney/Furniture/Models/GLTF format/pottedPlant.glb" id="18_8ppd4"]
 [ext_resource type="Material" uid="uid://cxsdw41qqhghd" path="res://Game/Resources/Materials/wood.tres" id="20_ce242"]
-[ext_resource type="PackedScene" uid="uid://ba6pjbml0igrx" path="res://Assets/PolyBlocks/EffectBlocks/assets/other/dust.tscn" id="20_ugfpa"]
+[ext_resource type="PackedScene" uid="uid://ba6pjbml0igrx" path="res://Assets/VFX/PolyBlocks/EffectBlocks/assets/other/dust.tscn" id="20_ugfpa"]
+[ext_resource type="PackedScene" uid="uid://bigvnijl8i61q" path="res://Assets/Noah UI/diamond.tscn" id="23_l7ylh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ugfpa"]
 albedo_texture = ExtResource("7_3bp17")
@@ -663,7 +664,7 @@ transform = Transform3D(-8.999999, 1.9345808e-07, 7.599952e-07, 0, 8.258665, -2.
 msaa_3d = 1
 
 [node name="TVCameraController" type="Node3D" parent="Blockout/Deco/SubViewport"]
-transform = Transform3D(0.4057707, 1.3166656e-15, -0.7534678, 0, 1, 0, 0.7534678, -7.5964366e-16, 0.4057707, 2.456693, 0.29999924, 3.4999995)
+transform = Transform3D(0.44478396, 1.1011983e-15, -0.6335866, 0, 1, 0, 0.6335866, -8.216805e-16, 0.44478396, 2.456693, 0.29999924, 3.4999995)
 script = ExtResource("16_82lh0")
 
 [node name="Camera3D" type="Camera3D" parent="Blockout/Deco/SubViewport/TVCameraController"]
@@ -674,13 +675,13 @@ fov = 85.0
 transform = Transform3D(29.239374, 0, 0, 0, 20.095423, 0, 0, 0, 21.265, -10, -4.4, -62.6)
 
 [node name="doorwayFront3" parent="Blockout" instance=ExtResource("16_gjnab")]
-transform = Transform3D(29.239374, 0, 0, 0, 20.095423, 0, 0, 0, 21.265, -10, -4, 66.4)
+transform = Transform3D(29.239374, 0, 0, 0, 20.095423, 0, 0, 0, 21.265, -11, -4.2, 66.4)
 
 [node name="doorwayFront2" parent="Blockout" instance=ExtResource("16_gjnab")]
 transform = Transform3D(-29.239374, 0, -1.8590453e-06, 0, 20.09542, 0, 2.5561872e-06, 0, -21.264997, 17, -4.4, -64.5)
 
 [node name="doorwayFront4" parent="Blockout" instance=ExtResource("16_gjnab")]
-transform = Transform3D(-29.239374, 0, -1.8590453e-06, 0, 20.09542, 0, 2.5561872e-06, 0, -21.264997, 17, -4, 64.5)
+transform = Transform3D(-29.239374, 0, -1.8590453e-06, 0, 20.09542, 0, 2.5561872e-06, 0, -21.264997, 17, -4.2000003, 64.5)
 
 [node name="bookcaseClosedDoors" parent="Blockout" instance=ExtResource("17_tub48")]
 transform = Transform3D(-33, 0, -1.3113416e-06, 0, 14.999999, 0, 2.8849513e-06, 0, -15.000001, 32, -4.5, 60)
@@ -766,6 +767,9 @@ material = ExtResource("20_ce242")
 transform = Transform3D(170.17, 0, 0, 0, 1, 0, 0, 0, 4.446, 0, 47.05818, -17)
 visible = false
 
-[node name="Dust" parent="." instance=ExtResource("20_ugfpa")]
+[node name="Dust" parent="Blockout" instance=ExtResource("20_ugfpa")]
 transform = Transform3D(16, 0, 0, 0, 16, 0, 0, 0, 16, 2.5, 0, 3.4)
 amount = 128
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("23_l7ylh")]
+transform = Transform3D(0.615541, 0, 0.79745185, 0, 1, 0, -0.79745185, 0, 0.615541, -1, 4, -1)

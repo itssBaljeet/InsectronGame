@@ -1,0 +1,32 @@
+[gd_scene load_steps=8 format=3 uid="uid://cf2kda7oubp0n"]
+
+[ext_resource type="PackedScene" uid="uid://b3fo2mu81tcgi" path="res://addons/BUG(1).glb" id="1_h5g7n"]
+[ext_resource type="Material" uid="uid://ddt60lktdgm85" path="res://addons/Material.tres" id="2_618kk"]
+[ext_resource type="Material" uid="uid://frvsnq0bqt3q" path="res://addons/Material.001.tres" id="3_txv7u"]
+[ext_resource type="Material" uid="uid://b233mi8r4ioy4" path="res://addons/Material.005.tres" id="4_bg1c8"]
+[ext_resource type="Material" uid="uid://b1cddttlcp6v1" path="res://addons/Material.007.tres" id="5_sudpb"]
+[ext_resource type="Material" uid="uid://cwgl86tuyxram" path="res://addons/Material.004.tres" id="6_5131r"]
+[ext_resource type="Material" uid="uid://bmuafayrjvj45" path="res://addons/Material.008.tres" id="7_nts0a"]
+
+[node name="BUG(1)" instance=ExtResource("1_h5g7n")]
+
+[node name="Base" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_618kk")
+
+[node name="Eyes" parent="." index="1"]
+surface_material_override/0 = ExtResource("3_txv7u")
+
+[node name="Nose" parent="." index="2"]
+surface_material_override/0 = ExtResource("4_bg1c8")
+
+[node name="wings" parent="." index="3"]
+surface_material_override/0 = ExtResource("5_sudpb")
+
+[node name="feet_001" parent="." index="6"]
+surface_material_override/0 = ExtResource("6_5131r")
+
+[node name="feet_002" parent="." index="7"]
+surface_material_override/0 = ExtResource("6_5131r")
+
+[node name="tail" parent="." index="8"]
+surface_material_override/0 = ExtResource("7_nts0a")

@@ -2,7 +2,7 @@
 
 [ext_resource type="Resource" uid="uid://dv35cy0cd23g7" path="res://Game/Resources/patterns/wazir3.tres" id="1_ydlxl"]
 [ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="2_m6xqa"]
-[ext_resource type="PackedScene" uid="uid://dsdew01c6b137" path="res://Assets/PolyBlocks/EffectBlocks/assets/attacks/attack_crystal.tscn" id="3_ydlxl"]
+[ext_resource type="PackedScene" uid="uid://dsdew01c6b137" path="res://Assets/VFX/PolyBlocks/EffectBlocks/assets/attacks/attack_crystal.tscn" id="3_ydlxl"]
 
 [resource]
 script = ExtResource("2_m6xqa")

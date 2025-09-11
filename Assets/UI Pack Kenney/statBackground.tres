@@ -1,0 +1,6 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://b26o85325eklb"]
+
+[ext_resource type="Texture2D" uid="uid://c7he88ws6npin" path="res://Assets/Anna UI/pressed_button_gray.png" id="1_e4ylv"]
+
+[resource]
+texture = ExtResource("1_e4ylv")

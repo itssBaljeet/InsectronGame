@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://b0drgnga35cot"
+path="res://.godot/imported/floorCornerRound.obj-f21623a15644d888d86b33bb9f14524d.mesh"
+
+[deps]
+
+files=["res://.godot/imported/floorCornerRound.obj-f21623a15644d888d86b33bb9f14524d.mesh"]
+
+source_file="res://Assets/UI Pack Kenney/Furniture/Models/OBJ format/floorCornerRound.obj"
+dest_files=["res://.godot/imported/floorCornerRound.obj-f21623a15644d888d86b33bb9f14524d.mesh", "res://.godot/imported/floorCornerRound.obj-f21623a15644d888d86b33bb9f14524d.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

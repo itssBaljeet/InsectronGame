@@ -1,10 +1,18 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://djwlg825rl37r"]
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://djwlg825rl37r"]
 
 [ext_resource type="Texture2D" uid="uid://scj3oy6sbx6e" path="res://addons/volcanoturtle/volcanobeast_0.png" id="1_8jlc1"]
 [ext_resource type="Texture2D" uid="uid://lk3b4ei21xyq" path="res://addons/volcanoturtle/volcanobeast_1.png" id="2_evyfq"]
+[ext_resource type="Shader" uid="uid://bhmdr3a272ofq" path="res://addons/sobel.gdshader" id="3_evyfq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_afcvy"]
+render_priority = 0
+shader = ExtResource("3_evyfq")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_threshold = 3.014999999999418
 
 [resource]
 resource_name = "Volcanobeast_Mat"
+next_pass = SubResource("ShaderMaterial_afcvy")
 cull_mode = 2
 diffuse_mode = 3
 specular_mode = 1

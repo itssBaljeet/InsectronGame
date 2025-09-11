@@ -536,11 +536,6 @@ func _genericAttackAnimation() -> void:
 	tw.tween_property(skin, "global_position", start_pos, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	await tw.finished
 
-
-
-
-
-
 func _genericWalkAnimation() -> void:
 	# Simple bob animation
 	var tw := create_tween()

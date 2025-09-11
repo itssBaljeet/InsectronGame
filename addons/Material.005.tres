@@ -1,9 +1,17 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b233mi8r4ioy4"]
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://b233mi8r4ioy4"]
 
 [ext_resource type="Texture2D" uid="uid://dl44v3x4gxnp1" path="res://addons/BUG(1)_Nose base.png" id="1_eewk5"]
+[ext_resource type="Shader" uid="uid://bhmdr3a272ofq" path="res://addons/sobel.gdshader" id="2_l3nmi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hdcqi"]
+render_priority = 0
+shader = ExtResource("2_l3nmi")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_threshold = 1.8650000000052387
 
 [resource]
 resource_name = "Material.005"
+next_pass = SubResource("ShaderMaterial_hdcqi")
 cull_mode = 2
 diffuse_mode = 3
 specular_mode = 1

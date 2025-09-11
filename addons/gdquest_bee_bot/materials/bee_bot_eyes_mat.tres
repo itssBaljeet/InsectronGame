@@ -1,10 +1,18 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dx8xfrepk0a68"]
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://dx8xfrepk0a68"]
 
+[ext_resource type="Shader" uid="uid://bhmdr3a272ofq" path="res://addons/sobel.gdshader" id="1_4gsso"]
 [ext_resource type="Shader" uid="uid://bvxr8n30jkr1h" path="res://addons/gdquest_models_shared/shaders/screen_shader.gdshader" id="1_itpnc"]
 [ext_resource type="Texture2D" uid="uid://bvxkh2pa1nqdq" path="res://addons/gdquest_models_shared/textures/eye_mask.png" id="2_acs8v"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dl3xj"]
+render_priority = 0
+shader = ExtResource("1_4gsso")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_threshold = 0.2
+
 [resource]
 render_priority = 0
+next_pass = SubResource("ShaderMaterial_dl3xj")
 shader = ExtResource("1_itpnc")
 shader_parameter/face_texture = ExtResource("2_acs8v")
 shader_parameter/intensity = 2.0

@@ -1,10 +1,18 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cruyb7vmbaabx"]
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://cruyb7vmbaabx"]
 
 [ext_resource type="Shader" uid="uid://dfpgewg80pkgq" path="res://addons/gdquest_bee_bot/shader/bee_wings_shader.gdshader" id="1_b2ohr"]
+[ext_resource type="Shader" uid="uid://bhmdr3a272ofq" path="res://addons/sobel.gdshader" id="1_l4b8m"]
 [ext_resource type="Texture2D" uid="uid://blaqa1tkmd0xx" path="res://addons/gdquest_bee_bot/textures/wing_pattern.png" id="2_wfea8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cjmj2"]
+render_priority = 0
+shader = ExtResource("1_l4b8m")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_threshold = 0.2
 
 [resource]
 render_priority = 0
+next_pass = SubResource("ShaderMaterial_cjmj2")
 shader = ExtResource("1_b2ohr")
 shader_parameter/wing_pattern_sampler = ExtResource("2_wfea8")
 shader_parameter/emission_color = Color(1, 0.584314, 0, 1)

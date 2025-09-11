@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bnrjlfwojckt6"]
+
+[ext_resource type="PackedScene" uid="uid://s75elyj5u1wx" path="res://addons/volcanoturtle/volcanobeast.glb" id="1_who3e"]
+[ext_resource type="Material" uid="uid://djwlg825rl37r" path="res://addons/volcanoturtle/Volcanobeast_Mat.tres" id="2_pqcpw"]
+
+[node name="Sketchfab_Scene" instance=ExtResource("1_who3e")]
+
+[node name="Object_2" parent="Sketchfab_model/d36efa7c3475455ab32cc4b4a1a9aed3_obj_cleaner_materialmerger_gles" index="0"]
+surface_material_override/0 = ExtResource("2_pqcpw")

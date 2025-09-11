@@ -1,6 +1,6 @@
 [gd_resource type="Environment" load_steps=4 format=3 uid="uid://176jft2dorry"]
 
-[ext_resource type="Texture2D" uid="uid://bdvehs4i71uqf" path="res://addons/Noah UI/noon_grass_4k.exr" id="1_rp2xw"]
+[ext_resource type="Texture2D" uid="uid://bdvehs4i71uqf" path="res://Assets/Noah UI/noon_grass_4k.exr" id="1_rp2xw"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_j5y2j"]
 panorama = ExtResource("1_rp2xw")

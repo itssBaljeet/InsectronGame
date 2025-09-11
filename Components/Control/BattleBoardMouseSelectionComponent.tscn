@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://wqm4tsu7jdj6"]
+
+[ext_resource type="Script" uid="uid://cim0r02xt4ut3" path="res://Components/Control/BattleBoardMouseSelectionComponent.gd" id="1_5q585"]
+
+[node name="BattleBoardMouseSelectionComponent" type="Node3D"]
+script = ExtResource("1_5q585")

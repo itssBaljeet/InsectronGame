@@ -98,3 +98,29 @@ func setEnabled(enabled: bool) -> void:
 	disabled = not enabled
 	if mesh:
 		mesh.visible = enabled
+
+
+#region Mouse Selection Support
+
+## Updates the selector position from external sources (like mouse selection)
+## This bypasses normal movement validation since the mouse component handles that
+func setPositionFromMouse(cell: Vector3i) -> void:
+	if not boardPositionComponent:
+		return
+	
+	# Update position without triggering movement input processing
+	boardPositionComponent.snapEntityPositionToTile(cell)
+	currentCell = cell
+	
+	# Update visual position immediately if needed
+	if mesh:
+		var worldPos := boardPositionComponent.adjustToTile(
+			board.getGlobalCellPosition(cell)
+		)
+		parentEntity.global_position = worldPos
+
+## Temporarily disable keyboard input (useful during mouse operations)
+func setKeyboardInputEnabled(enabled: bool) -> void:
+	set_process_unhandled_input(enabled)
+
+#endregion

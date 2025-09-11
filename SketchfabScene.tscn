@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://biyir51wqj27g"]
+
+[ext_resource type="PackedScene" uid="uid://shk8mquw7s3i" path="res://addons/occlusk/occlusk.glb" id="1_47uee"]
+[ext_resource type="Material" uid="uid://cfqgky7jh6ct7" path="res://addons/occlusk/Material.tres" id="2_2ihyo"]
+
+[node name="Sketchfab_Scene" instance=ExtResource("1_47uee")]
+
+[node name="Cube_002_0" parent="Sketchfab_model/Root/Cube_002" index="0"]
+surface_material_override/0 = ExtResource("2_2ihyo")
