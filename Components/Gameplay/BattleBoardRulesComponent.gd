@@ -17,24 +17,20 @@ var pathfinding: BattleBoardPathfindingComponent:
 #region Movement Rules
 ## Validates if a unit can move from one cell to another
 func isValidMove(posComp: BattleBoardPositionComponent, fromCell: Vector3i, toCell: Vector3i) -> bool:
-	if not posComp:
-		print("No bitches?!?!")
-		return false
+       if not posComp:
+	       return false
 
-	# Check bounds
-	if not isInBounds(toCell):
-		print("Not in bounds")
-		return false
-	
-	# Check if destination is vacant and if we should occupy
-	if not isCellVacant(toCell):
-		print("Cell not vacant")
-		return false
-	
-	# Check movement range
-	if not isInRange(fromCell, toCell, posComp.moveRange):
-		print("not in range")
-		return false
+       # Check bounds
+       if not isInBounds(toCell):
+	       return false
+
+       # Check if destination is vacant and if we should occupy
+       if not isCellVacant(toCell):
+	       return false
+
+       # Check movement range
+       if not isInRange(fromCell, toCell, posComp.moveRange):
+	       return false
 	
 	# Check if path exists
 	var path := pathfinding.findPath(fromCell, toCell, posComp)
@@ -47,10 +43,8 @@ func isInBounds(cell: Vector3i) -> bool:
 
 ## Checks if a cell is unoccupied
 func isCellVacant(cell: Vector3i) -> bool:
-	var data := board.vBoardState.get(cell) as BattleBoardCellData
-	if data != null:
-		print(board.vBoardState.get(cell).isOccupied)
-	return data == null or not data.isOccupied
+       var data := board.vBoardState.get(cell) as BattleBoardCellData
+       return data == null or not data.isOccupied
 
 ## Checks if target cell is within range pattern
 func isInRange(origin: Vector3i, target: Vector3i, rangePattern: BoardPattern) -> bool:
@@ -114,66 +108,70 @@ func getValidAttackTargets(attacker: BattleBoardUnitEntity) -> Array[Vector3i]:
 
 ## Unified target query for all attack types defined by AttackResource.
 ## - targetCell == null (Variant NIL): returns PRIMARY selectable target cells.
-## - targetCell is Vector3i         : returns AOE-affected cells for that selection.
+## - targetCell is Vector3i	    : returns AOE-affected cells for that selection.
 func getAttackTargets(
-		attacker: BattleBoardUnitEntity,
-		attackResource: AttackResource = null,
-		targetCell: Variant = null
-	) -> Array[Vector3i]:
-	var origin := attacker.boardPositionComponent.currentCellCoordinates
-	var rangeOffsets := _resolveRangeOffsets(attacker, attackResource)
-	
-	# Determine mode + cast target
-	var has_target := targetCell != null
-	var target_vec := Vector3i.ZERO
-	if has_target:
-		if targetCell is Vector3i:
-			target_vec = targetCell as Vector3i
-		else:
-			push_error("getAttackTargets: targetCell must be null or Vector3i.")
-			return []
-	
-	# PRIMARY
-	if not has_target:
-		var primary: Array[Vector3i] = []
-		for off in rangeOffsets:
-			var cell := origin + off
-			print("Cell: ", cell)
-			if _isValidPrimaryTarget(attacker, attackResource, cell):
-				primary.append(cell)
-		return primary
-	
-	# AOE (affected cells for chosen target)
-	var affected: Array[Vector3i] = []
-	_appendUniqueBounded(affected, target_vec)
-	
-	# Optional AOE pattern
-	if attackResource and attackResource.aoePattern:
-		for off in attackResource.aoePattern.offsets:
-			_appendUniqueBounded(affected, target_vec + off)
-	
-	if attackResource:
-		match attackResource.aoeType:
-			AttackResource.AOEType.POINT, AttackResource.AOEType.AREA:
-				pass
-			AttackResource.AOEType.LINE:
-				affected.append_array(_getLineCells(origin, target_vec))
-			AttackResource.AOEType.PIERCING:
-				affected.append_array(_getPiercingCells(origin, target_vec))
-			AttackResource.AOEType.CONE:
-				affected.append_array(_getConeCells(origin, target_vec))
-			AttackResource.AOEType.CHAIN:
-				pass
-	
-	return affected
+	       attacker: BattleBoardUnitEntity,
+	       attackResource: AttackResource = null,
+	       targetCell: Variant = null
+       ) -> Array[Vector3i]:
+       var origin := attacker.boardPositionComponent.currentCellCoordinates
+       var rangeOffsets := _resolveRangeOffsets(attacker, attackResource)
+
+       if targetCell == null:
+	       var primary: Array[Vector3i] = []
+	       for off in rangeOffsets:
+		       var cell := origin + off
+		       if _isValidPrimaryTarget(attacker, attackResource, cell):
+			       primary.append(cell)
+	       return primary
+
+       if not (targetCell is Vector3i):
+	       push_error("getAttackTargets: targetCell must be null or Vector3i.")
+	       return []
+       var target_vec: Vector3i = targetCell
+
+       var affected: Array[Vector3i] = []
+
+       if attackResource:
+	       match attackResource.aoeType:
+		       AttackResource.AOEType.POINT:
+			       _appendUniqueBounded(affected, target_vec)
+		       AttackResource.AOEType.AREA:
+			       _appendUniqueBounded(affected, target_vec)
+			       if attackResource.aoePattern:
+				       for off in attackResource.aoePattern.offsets:
+					       _appendUniqueBounded(affected, target_vec + off)
+		       AttackResource.AOEType.LINE:
+			       var direction := (target_vec - origin).sign()
+			       var current := origin + direction
+			       while current != target_vec + direction and isInBounds(current):
+				       if board.getOccupant(current):
+					       affected.append(current)
+					       break
+				       current += direction
+		       AttackResource.AOEType.PIERCING:
+			       affected.append_array(_getPiercingCells(origin, target_vec))
+		       AttackResource.AOEType.CONE:
+			       affected.append_array(_getConeCells(origin, target_vec))
+		       AttackResource.AOEType.CHAIN:
+			       _appendUniqueBounded(affected, target_vec)
+			       var chainTargets := getChainTargets(target_vec, attackResource.chainRange)
+			       chainTargets.shuffle()
+			       for i in range(min(attackResource.chainCount, chainTargets.size())):
+				       _appendUniqueBounded(affected, chainTargets[i])
+		       _:
+			       _appendUniqueBounded(affected, target_vec)
+       else:
+	       _appendUniqueBounded(affected, target_vec)
+
+       return affected
 	
 
 ## Resolve range offsets from resource, falling back to unit data.
 func _resolveRangeOffsets(attacker: BattleBoardUnitEntity, attackResource: AttackResource) -> Array[Vector3i]:
-	if attackResource:
-		var res := attackResource.getRangePattern()
-		print("not breaking here")
-		return res if res else [Vector3i.ZERO]
+       if attackResource:
+	       var res := attackResource.getRangePattern()
+	       return res if res else [Vector3i.ZERO]
 	
 	if attacker.attackComponent:
 		if attacker.attackComponent.basicAttack:
@@ -275,29 +273,17 @@ func isValidSpecialAttack(attacker: BattleBoardUnitEntity, targetCell: Vector3i,
 	return true
 
 
-func _getLineCells(from: Vector3i, to: Vector3i) -> Array[Vector3i]:
-	var cells: Array[Vector3i] = []
-	var delta := to - from
-	if delta == Vector3i.ZERO:
-		return cells
-	var direction := delta.sign()
-	var current := from + direction
-	while current != to and isInBounds(current):
-		cells.append(current)
-		current += direction
-	return cells
-
 func _getPiercingCells(from: Vector3i, through: Vector3i) -> Array[Vector3i]:
-	var cells: Array[Vector3i] = []
-	var delta := through - from
-	if delta == Vector3i.ZERO:
-		return cells
-	var direction := delta.sign()
-	var current := from + direction
-	while isInBounds(current):
-		cells.append(current)
-		current += direction
-	return cells
+       var cells: Array[Vector3i] = []
+       var delta := through - from
+       if delta == Vector3i.ZERO:
+	       return cells
+       var direction := delta.sign()
+       var current := from + direction
+       while current != through + direction and isInBounds(current):
+	       cells.append(current)
+	       current += direction
+       return cells
 
 func _getConeCells(origin: Vector3i, target: Vector3i, coneWidth: int = 3) -> Array[Vector3i]:
 	var cells: Array[Vector3i] = []
