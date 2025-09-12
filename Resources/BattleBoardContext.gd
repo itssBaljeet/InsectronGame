@@ -9,6 +9,7 @@ var pathfinding: BattleBoardPathfindingComponent
 var highlighter: BattleBoardHighlightComponent
 var selector: BattleBoardSelectorComponent3D
 var factory: BattleBoardCommandFactory
+var damageResolver: BattleDamageResolver
 var policies: Dictionary = {} # StringName -> Policy Resource
 
 signal domainEvent(eventName: StringName, data: Dictionary)

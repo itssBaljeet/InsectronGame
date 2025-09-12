@@ -63,6 +63,7 @@ func _ready() -> void:
 	context.highlighter = highlighter
 	context.selector = selector
 	context.factory = factory
+	context.damageResolver = BattleDamageResolver.new()
 	print(selector)
 	print("COMMAND QUEUE READY!!!!!")
 	

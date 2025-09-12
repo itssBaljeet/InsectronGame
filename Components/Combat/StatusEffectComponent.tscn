@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dy4v75iqhqqo4"]
+
+[ext_resource type="Script" uid="uid://5lcguwwforqt" path="res://Components/Combat/StatusEffectComponent.gd" id="1_t7mce"]
+
+[node name="StatusEffectComponent" type="Node3D"]
+script = ExtResource("1_t7mce")

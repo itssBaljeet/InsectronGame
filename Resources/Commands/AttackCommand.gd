@@ -88,7 +88,7 @@ func execute(context: BattleBoardContext) -> void:
 	if targetHealth and targetHealth.isAlive() and targetStats and attackerStats:
 		var attackerDefense := attackerStats.getMeteormyteStat(MeteormyteStat.StatType.DEFENSE)
 		var attackerDefenseValue := attackerDefense.getCurrentValue() if attackerDefense else 0
-		counterDamage = targetStats.calculateDamage(attackerDefenseValue, 40, false)  # 30 = counter attack power (weaker)
+		counterDamage = targetStats.calculateDamage(attackerDefenseValue, 40, false)
 		
 		# Play counter animation
 		await target.animComponent.playAttackSequence(target, attacker, counterDamage)

@@ -69,7 +69,7 @@ func intentSpecialAttack(attacker: BattleBoardUnitEntity, targetCell: Vector3i) 
 	var command := SpecialAttackCommand.new()
 	command.attacker = attacker
 	command.targetCell = targetCell
-	command.attack = UIComp.attackSelectionState.selectedAttack
+	command.attackResource = UIComp.attackSelectionState.selectedAttack
 	
 	commandCreated.emit(command)
 	

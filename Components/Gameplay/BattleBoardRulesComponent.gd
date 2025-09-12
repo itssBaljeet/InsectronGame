@@ -75,33 +75,18 @@ func getValidMoveTargets(unit: BattleBoardUnitEntity) -> Array[Vector3i]:
 #endregion
 
 #region Attack Rules  
-## Validates if a unit can attack a target
-func isValidAttack(attacker: BattleBoardUnitEntity, targetCell: Vector3i) -> bool:
+## Validates if an attack is allowed against targetCell.
+func isValidAttack(attacker: BattleBoardUnitEntity, targetCell: Vector3i, attackResource: AttackResource = null) -> bool:
 	if not attacker:
 		return false
-	
-	# Check if attacker can act
 	var state := attacker.components.get(&"UnitTurnStateComponent") as UnitTurnStateComponent
 	if not state or not state.canAct():
 		return false
-	
-	# Check bounds
 	if not isInBounds(targetCell):
 		return false
-	
-	# Check attack range
-	var attackRange := attacker.attackComponent.attackRange
-	var origin := attacker.boardPositionComponent.currentCellCoordinates
-	if not isInRange(origin, targetCell, attackRange):
-		return false
-	
-	# Check if there's a valid target
-	var target := board.getOccupant(targetCell)
-	if not target:
-		return false
-	
-	# Check faction hostility
-	return isHostile(attacker, target)
+	# Ask for PRIMARY targets (no targetCell arg)
+	var primaryTargets := getAttackTargets(attacker, attackResource)
+	return targetCell in primaryTargets if attackResource.requiresTarget else true
 
 ## Checks if two entities are hostile to each other
 func isHostile(entity1: Entity, entity2: Entity) -> bool:
@@ -126,6 +111,113 @@ func getValidAttackTargets(attacker: BattleBoardUnitEntity) -> Array[Vector3i]:
 			validTargets.append(targetCell)
 	
 	return validTargets
+
+## Unified target query for all attack types defined by AttackResource.
+## - targetCell == null (Variant NIL): returns PRIMARY selectable target cells.
+## - targetCell is Vector3i         : returns AOE-affected cells for that selection.
+func getAttackTargets(
+		attacker: BattleBoardUnitEntity,
+		attackResource: AttackResource = null,
+		targetCell: Variant = null
+	) -> Array[Vector3i]:
+	var origin := attacker.boardPositionComponent.currentCellCoordinates
+	var rangeOffsets := _resolveRangeOffsets(attacker, attackResource)
+	
+	# Determine mode + cast target
+	var has_target := targetCell != null
+	var target_vec := Vector3i.ZERO
+	if has_target:
+		if targetCell is Vector3i:
+			target_vec = targetCell as Vector3i
+		else:
+			push_error("getAttackTargets: targetCell must be null or Vector3i.")
+			return []
+	
+	# PRIMARY
+	if not has_target:
+		var primary: Array[Vector3i] = []
+		for off in rangeOffsets:
+			var cell := origin + off
+			print("Cell: ", cell)
+			if _isValidPrimaryTarget(attacker, attackResource, cell):
+				primary.append(cell)
+		return primary
+	
+	# AOE (affected cells for chosen target)
+	var affected: Array[Vector3i] = []
+	_appendUniqueBounded(affected, target_vec)
+	
+	# Optional AOE pattern
+	if attackResource and attackResource.aoePattern:
+		for off in attackResource.aoePattern.offsets:
+			_appendUniqueBounded(affected, target_vec + off)
+	
+	if attackResource:
+		match attackResource.aoeType:
+			AttackResource.AOEType.POINT, AttackResource.AOEType.AREA:
+				pass
+			AttackResource.AOEType.LINE:
+				affected.append_array(_getLineCells(origin, target_vec))
+			AttackResource.AOEType.PIERCING:
+				affected.append_array(_getPiercingCells(origin, target_vec))
+			AttackResource.AOEType.CONE:
+				affected.append_array(_getConeCells(origin, target_vec))
+			AttackResource.AOEType.CHAIN:
+				pass
+	
+	return affected
+	
+
+## Resolve range offsets from resource, falling back to unit data.
+func _resolveRangeOffsets(attacker: BattleBoardUnitEntity, attackResource: AttackResource) -> Array[Vector3i]:
+	if attackResource:
+		var res := attackResource.getRangePattern()
+		print("not breaking here")
+		return res if res else [Vector3i.ZERO]
+	
+	if attacker.attackComponent:
+		if attacker.attackComponent.basicAttack:
+			var res2 := attacker.attackComponent.basicAttack.getRangePattern()
+			if res2 and not res2.is_empty():
+				return res2
+		if attacker.attackComponent.attackRange:
+			return attacker.attackComponent.attackRange.offsets
+	
+	return [Vector3i.ZERO]
+
+
+## Decide if a cell can be chosen as a primary target according to AttackResource.
+func _isValidPrimaryTarget(attacker: BattleBoardUnitEntity, attackResource: AttackResource, cell: Vector3i) -> bool:
+	if not isInBounds(cell):
+		return false
+	
+	var occupant := board.getOccupant(cell)
+	
+	# With AttackResource, honor requiresTarget and canTargetEmpty.
+	if attackResource:
+		var requiresTarget := attackResource.requiresTarget
+		var canTargetEmpty := attackResource.canTargetEmpty
+		
+		if requiresTarget:
+			# Must have a hostile occupant.
+			return occupant != null and isHostile(attacker, occupant)
+		
+		# Ground-targeted: may allow empty tiles
+		if occupant == null:
+			return canTargetEmpty
+		
+		# If something is there, allow hostile by default; allies only if empty targeting is permitted.
+		return isHostile(attacker, occupant) or canTargetEmpty
+	
+	# Legacy default (no resource): require hostile occupant.
+	return occupant != null and isHostile(attacker, occupant)
+
+
+## Unique append with bounds guard.
+func _appendUniqueBounded(list: Array[Vector3i], cell: Vector3i) -> void:
+	if isInBounds(cell) and not (cell in list):
+		list.append(cell)
+
 #endregion
 
 #region Turn Rules
@@ -162,4 +254,147 @@ func getActiveUnits(teamFaction: int) -> Array[BattleBoardUnitEntity]:
 			activeUnits.append(unit)
 	
 	return activeUnits
+#endregion
+
+#region Special Attack Rules
+## Validates if a special attack can be executed
+func isValidSpecialAttack(attacker: BattleBoardUnitEntity, targetCell: Vector3i, attackResource: AttackResource) -> bool:
+	# First check basic attack validity
+	if not isValidAttack(attacker, targetCell, attackResource):
+		return false
+	
+	# Check if attack has special requirements
+	if attackResource.requiresTarget:
+		var target := board.getOccupant(targetCell)
+		if not target:
+			return false
+	
+	# Check special resource costs if any
+	# (Add energy/mana checks here if your game has them)
+	
+	return true
+
+
+func _getLineCells(from: Vector3i, to: Vector3i) -> Array[Vector3i]:
+	var cells: Array[Vector3i] = []
+	var delta := to - from
+	if delta == Vector3i.ZERO:
+		return cells
+	var direction := delta.sign()
+	var current := from + direction
+	while current != to and isInBounds(current):
+		cells.append(current)
+		current += direction
+	return cells
+
+func _getPiercingCells(from: Vector3i, through: Vector3i) -> Array[Vector3i]:
+	var cells: Array[Vector3i] = []
+	var delta := through - from
+	if delta == Vector3i.ZERO:
+		return cells
+	var direction := delta.sign()
+	var current := from + direction
+	while isInBounds(current):
+		cells.append(current)
+		current += direction
+	return cells
+
+func _getConeCells(origin: Vector3i, target: Vector3i, coneWidth: int = 3) -> Array[Vector3i]:
+	var cells: Array[Vector3i] = []
+	var delta := target - origin
+	if delta == Vector3i.ZERO:
+		return cells
+	var direction := delta.sign()
+	var distance := delta.length()
+	for d in range(1, int(distance) + 1):
+		var center := origin + direction * d
+		var width := mini(d, coneWidth)
+		var perpendicular := Vector3i(direction.z, 0, -direction.x)
+		for w in range(-width/2, width/2 + 1):
+			var cell := center + perpendicular * w
+			if isInBounds(cell):
+				cells.append(cell)
+	return cells
+#endregion
+
+#region Status Effect Rules
+## Checks if a status effect can be applied
+func canApplyStatusEffect(target: BattleBoardUnitEntity, effect: StatusEffectResource) -> bool:
+	if not target or not effect:
+		return false
+	
+	var statusComp := target.components.get(&"StatusEffectsComponent") as StatusEffectsComponent
+	if not statusComp:
+		return true  # No component means we can add it
+	
+	# Check immunities
+	if effect.effectName in statusComp.immunities:
+		return false
+	
+	# Check if already at max stacks
+	if statusComp.hasStatusEffect(effect.effectName):
+		var currentStacks := statusComp.getEffectStacks(effect.effectName)
+		if currentStacks >= effect.maxStacks:
+			return false
+	
+	# Check faction-based rules (buffs only on allies, debuffs only on enemies)
+	if effect.effectType == StatusEffectResource.EffectType.BUFF:
+		# Buffs should only apply to allies
+		# (Add faction check here based on your game's alliance system)
+		pass
+	
+	return true
+#endregion
+
+#region Hazard Rules
+## Checks if a hazard can be placed at a cell
+func canPlaceHazard(cell: Vector3i, hazardRes: HazardResource) -> bool:
+	if not isInBounds(cell):
+		return false
+	
+	# Check if cell already has a hazard
+	var cellData := board.vBoardState.get(cell) as BattleBoardCellData
+	if cellData and cellData.hazard:
+		var existingHazard := cellData.hazard
+		
+		# Allow stacking same hazard type if stackable
+		if existingHazard.resource.hazardName == hazardRes.hazardName:
+			return hazardRes.stackable and existingHazard.stacks < hazardRes.maxStacks
+		else:
+			return false  # Different hazard already present
+	
+	# Check if cell is blocked or special
+	if cellData and cellData.isBlocked:
+		return false
+	
+	return true
+
+## Check if a move type can clear a hazard
+func canClearHazard(hazard: BattleBoardHazardSystemComponent.ActiveHazard, clearingType: String) -> bool:
+	if not hazard:
+		return false
+	
+	return clearingType in hazard.clearableByTypes
+#endregion
+
+#region Chain Attack Rules
+## Get valid chain targets from a cell
+func getChainTargets(fromCell: Vector3i, chainRange: int) -> Array[Vector3i]:
+	var targets: Array[Vector3i] = []
+	var attacker: BattleBoardUnitEntity = board.getInsectorOccupant(fromCell)
+	# Check all cells within chain range
+	for x in range(-chainRange, chainRange + 1):
+		for z in range(-chainRange, chainRange + 1):
+			if x == 0 and z == 0:
+				continue  # Skip origin
+			
+			var checkCell := fromCell + Vector3i(x, 0, z)
+			if not isInBounds(checkCell):
+				continue
+			
+			var occupant := board.getOccupant(checkCell)
+			if occupant and isHostile(attacker, occupant):
+				targets.append(checkCell)
+	
+	return targets
 #endregion

@@ -63,6 +63,10 @@ var commandQueue: BattleBoardCommandQueueComponent:
 	get:
 		return coComponents.get(&"BattleBoardCommandQueueComponent")
 
+var rules: BattleBoardRulesComponent:
+	get:
+		return coComponents.get(&"BattleBoardRulesComponent")
+
 func getRequiredComponents() -> Array[Script]:
 	return [BattleBoardCommandFactory, BattleBoardCommandQueueComponent, BattleBoardComponent3D, BattleBoardSelectorComponent3D, BattleBoardHighlightComponent]
 #endregion
@@ -254,8 +258,8 @@ func _showAttackSelectionMenu() -> void:
 		var button: Button = Button.new()
 		button.text = "Tackle"
 		button.pressed.connect(_onBasicAttackSelected)
-		button.add_theme_stylebox_override("normal", preload("res://addons/UI Pack Kenney/button.tres"))
-		button.add_theme_stylebox_override("focus", preload("res://addons/UI Pack Kenney/hover_button.tres"))
+		button.add_theme_stylebox_override("normal", preload("res://Assets/UI Pack Kenney/button.tres"))
+		button.add_theme_stylebox_override("focus", preload("res://Assets/UI Pack Kenney/hover_button.tres"))
 		button.custom_minimum_size = Vector2(150, 50)
 		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -267,8 +271,8 @@ func _showAttackSelectionMenu() -> void:
 		var button := Button.new()
 		button.text = attack.attackName
 		button.pressed.connect(_onAttackSelected.bind(attack))
-		button.add_theme_stylebox_override("normal", preload("res://addons/UI Pack Kenney/button.tres"))
-		button.add_theme_stylebox_override("focus", preload("res://addons/UI Pack Kenney/hover_button.tres"))
+		button.add_theme_stylebox_override("normal", preload("res://Assets/UI Pack Kenney/button.tres"))
+		button.add_theme_stylebox_override("focus", preload("res://Assets/UI Pack Kenney/hover_button.tres"))
 		button.custom_minimum_size = Vector2(150, 50)
 		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -306,9 +310,11 @@ func _onAttackSelected(attack: AttackResource) -> void:
 	# Get and highlight valid targets
 	var attackComp := activeUnit.components.get(&"BattleBoardUnitAttackComponent") as BattleBoardUnitAttackComponent
 	var origin := activeUnit.boardPositionComponent.currentCellCoordinates
-	attackSelectionState.validTargets = attackComp.getValidTargetsForAttack(attack, origin)
+	attackSelectionState.validTargets = rules.getAttackTargets(activeUnit, attack)
+	
 	
 	for cell in attack.getRangePattern():
+		print("Breaking here")
 		if factory.rules.isInBounds(origin + cell):
 			board.set_cell_item(origin + cell, board.specialAttackHighlightTileID)
 			highlighter.currentHighlights.append(origin + cell)

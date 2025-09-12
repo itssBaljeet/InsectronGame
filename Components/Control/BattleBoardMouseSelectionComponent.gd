@@ -131,18 +131,14 @@ func _handleMouseHover(screenPos: Vector2) -> void:
 			
 			# Update hover indicator
 			if hoverMeshInstance and showHoverHighlight:
-				print("moving indicator")
 				# Use local position since hover mesh is child of board
 				var localPos :Vector3= board.map_to_local(cell)
-				print("Cell: ", cell, " Local: ", localPos)
 				
 				hoverMeshInstance.position = localPos
-				print("Hover mesh position: ", hoverMeshInstance.position)
 				hoverMeshInstance.visible = true
 	else:
 		# Not hovering over any valid cell
 		if isHovering:
-			print("No valid cell")
 			cellUnhovered.emit(hoveredCell)
 			isHovering = false
 			hoveredCell = Vector3i(-999, -999, -999)

@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://ckj6yryxf4ndu"]
+
+[ext_resource type="Script" uid="uid://clkofpfe4njod" path="res://Components/Combat/BattleBoardHazardSystemComponent.gd" id="1_l5gyj"]
+
+[node name="BattleBoardHazardSystemComponent" type="Node3D"]
+script = ExtResource("1_l5gyj")
+shouldCheckGrandparentsForEntity = null
+allowNonEntityParent = null
+debugMode = null
+debugModeTrace = null

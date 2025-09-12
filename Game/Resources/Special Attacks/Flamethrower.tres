@@ -1,20 +1,32 @@
-[gd_resource type="Resource" script_class="AttackResource" load_steps=3 format=3 uid="uid://btm1udvs2lr5o"]
+[gd_resource type="Resource" script_class="AttackResource" load_steps=5 format=3 uid="uid://btm1udvs2lr5o"]
 
+[ext_resource type="Resource" uid="uid://d2fqg380a5ju7" path="res://Game/Resources/patterns/queen3.tres" id="1_davir"]
 [ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="1_djq1j"]
 [ext_resource type="PackedScene" uid="uid://bw5rix0opmpn2" path="res://Assets/VFX/PolyBlocks/EffectBlocks/assets/muzzle_flash/flamethrower.tscn" id="2_17nyy"]
+[ext_resource type="Script" uid="uid://dfqehgpsk53d0" path="res://Resources/StatusEffectResource.gd" id="2_ttgc4"]
 
 [resource]
 script = ExtResource("1_djq1j")
 attackName = "Flamethrower"
-attackType = 2
-damage = 51
-effectRange = 3
-hitsAllies = true
-duration = 2.0
-pierces = true
-burns = true
+baseDamage = null
+accuracy = null
+damageType = "normal"
+attackType = 1
+interactionType = 1
+rangePattern = ExtResource("1_davir")
+requiresTarget = false
+aoeType = 3
+chainCount = null
+chainRange = null
+superKnockback = null
+knockbackDistance = null
 vfxScene = ExtResource("2_17nyy")
-vfxScale = 0.75
-vfxOrientation = 0
-vfxRotationOffset = Vector3(0, 180, 0)
+vfxScale = null
+vfxHeight = null
+vfxOrientation = null
+vfxRotationOffset = null
+animationName = null
+selfDamagePercent = null
+drainsHealth = null
+ignoresDefense = null
 metadata/_custom_type_script = "uid://b2s3r8l3dbtqw"
