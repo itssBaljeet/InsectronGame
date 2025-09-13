@@ -24,16 +24,23 @@ enum AOEType {
 }
 
 enum VFXOrientation {
-	ALONG_X,  # Effect plays along X axis
-	ALONG_Y,  # Effect plays along Y axis  
-	ALONG_Z,  # Effect plays along Z axis
-	CUSTOM    # Use custom rotation offsets
+ALONG_X,  # Effect plays along X axis
+ALONG_Y,  # Effect plays along Y axis
+ALONG_Z,  # Effect plays along Z axis
+CUSTOM    # Use custom rotation offsets
+}
+
+enum VFXType {
+BEAM,
+PROJECTILE,
+POINT,
+AREA
 }
 
 enum Typing {
-	FIRE,
-	WATER,
-	GRASS,
+FIRE,
+WATER,
+GRASS,
 }
 
 @export_group("Basic Properties")
@@ -71,6 +78,7 @@ enum Typing {
 @export var knockbackDistance: int = 1  # How many tiles to knock back
 
 @export_group("VFX Settings")
+@export var vfxType: VFXType = VFXType.POINT
 @export var vfxScene: PackedScene  # Primary VFX
 @export var secondaryVFX: PackedScene  # Additional effects (for AOE)
 @export var impactVFX: PackedScene  # Hit effect on target
