@@ -1,6 +1,7 @@
-[gd_scene load_steps=28 format=4 uid="uid://bw5rix0opmpn2"]
+[gd_scene load_steps=29 format=4 uid="uid://bw5rix0opmpn2"]
 
 [ext_resource type="Material" uid="uid://cjgoj12p3pb0g" path="res://Assets/VFX/PolyBlocks/EffectBlocks/source_files/materials/fire_billboard.material" id="1_552aa"]
+[ext_resource type="Script" uid="uid://chk5kxai2wwws" path="res://Assets/VFX/PolyBlocks/EffectBlocks/assets/muzzle_flash/Flamethrower.gd" id="1_g35r2"]
 [ext_resource type="Material" uid="uid://ks1kly3dfqvc" path="res://Assets/VFX/PolyBlocks/EffectBlocks/source_files/materials/smoke_billboard.material" id="2_7xpmj"]
 [ext_resource type="Script" uid="uid://d0tvwudpva6qy" path="res://Assets/VFX/PolyBlocks/EffectBlocks/source_files/scripts/light_flicker.gd" id="3_61oi1"]
 
@@ -189,8 +190,10 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_udcdq")
 
 [node name="FlameThrower" type="Node3D"]
+script = ExtResource("1_g35r2")
 
 [node name="Flame" type="GPUParticles3D" parent="."]
+emitting = false
 amount = 256
 fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_qcgk2")
@@ -198,6 +201,7 @@ draw_pass_1 = SubResource("ArrayMesh_83sco")
 
 [node name="Smoke" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.69603, 0, 0)
+emitting = false
 amount = 64
 lifetime = 2.0
 fixed_fps = 60
@@ -206,6 +210,7 @@ draw_pass_1 = SubResource("ArrayMesh_biwkl")
 
 [node name="Sparks" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00946045, 0.00706524, 0.000244141)
+emitting = false
 amount = 128
 lifetime = 2.0
 randomness = 1.0
@@ -215,17 +220,17 @@ process_material = SubResource("ParticleProcessMaterial_5iaqv")
 draw_pass_1 = SubResource("ArrayMesh_cmt5e")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.976079, 0.43472472, -0.01215711)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0042505, 0.4199093, 0.010526432)
 light_color = Color(2, 1.2, 0, 1)
-light_energy = 0.9430149
-omni_range = 1.7614673
+light_energy = 1.2353513
+omni_range = 1.4647876
 script = ExtResource("3_61oi1")
 movement_radius = 0.05
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29726982, 0.20826174, -0.028114822)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19762155, 0.17269424, -0.031735834)
 light_color = Color(2, 1.2, 0, 1)
-light_energy = 1.1888578
+light_energy = 0.890226
 omni_range = 0.5754144
 script = ExtResource("3_61oi1")
 min_size = 0.4
@@ -233,10 +238,10 @@ max_size = 1.0
 movement_radius = 0.05
 
 [node name="OmniLight3D3" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4629191, 0.2873508, -0.00043126428)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4639906, 0.28972527, 0.002745971)
 light_color = Color(2, 1.2, 0, 1)
-light_energy = 1.0709608
-omni_range = 0.96273994
+light_energy = 0.6854149
+omni_range = 0.9521702
 script = ExtResource("3_61oi1")
 min_size = 0.4
 max_size = 1.0

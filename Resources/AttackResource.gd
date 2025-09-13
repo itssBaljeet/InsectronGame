@@ -59,6 +59,7 @@ enum Typing {
 @export var rangePattern: BoardPattern  # Valid target cells
 @export var requiresTarget: bool = true  # false for ground-targeted AOE
 @export var canTargetEmpty: bool = false  # Can target empty cells?
+@export var hitsAllies: bool = false  # Whether attack can damage allies
 
 @export_group("Area of Effect")
 @export var aoeType: AOEType = AOEType.POINT
@@ -87,6 +88,7 @@ enum Typing {
 @export var vfxOrientation: VFXOrientation = VFXOrientation.ALONG_Z
 @export var vfxRotationOffset: Vector3 = Vector3.ZERO  # Additional rotation in degrees
 @export var animationName: String = "attack"  # Animation to play on attacker
+@export var animationTime: float = 1.0
 
 @export_group("Special Properties")
 @export var selfDamagePercent: float = 0.0  # Recoil damage

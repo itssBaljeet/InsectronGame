@@ -14,7 +14,6 @@ ring_segments = 3
 emitting = false
 amount = 1
 lifetime = 0.74
-one_shot = true
 fixed_fps = 60
 process_material = ExtResource("1_hy8iq")
 draw_pass_1 = SubResource("TorusMesh_vvak4")

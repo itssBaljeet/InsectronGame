@@ -74,7 +74,7 @@ func execute(context: BattleBoardContext) -> void:
 		
 		# Show damage number
 		if targetAnim and attackerDamage > 0:
-			targetAnim.showDamageNumber(target, attackerDamage)
+			targetAnim.showDamageNumber(attackerDamage)
 			if attacker.attackComponent.venemous:
 				targetAnim.play_poison_puff(6)
 		
@@ -102,7 +102,7 @@ func execute(context: BattleBoardContext) -> void:
 			
 			# Show damage number
 			if attackerAnim and counterDamage > 0:
-				attackerAnim.showDamageNumber(attacker, counterDamage)
+				attackerAnim.showDamageNumber(counterDamage)
 			
 			# Check if attacker died from counter
 			if not attackerHealth.isAlive():

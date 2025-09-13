@@ -136,11 +136,11 @@ func getAttackTargets(
 		match attackResource.aoeType:
 			AttackResource.AOEType.POINT:
 				_appendUniqueBounded(affected, target_vec)
+			# AOE Around entity position
 			AttackResource.AOEType.AREA:
-				_appendUniqueBounded(affected, target_vec)
 				if attackResource.aoePattern:
 					for off in attackResource.aoePattern.offsets:
-						_appendUniqueBounded(affected, target_vec + off)
+						_appendUniqueBounded(affected, origin + off)
 			AttackResource.AOEType.LINE:
 				var direction := (target_vec - origin).sign()
 				var current := origin + direction

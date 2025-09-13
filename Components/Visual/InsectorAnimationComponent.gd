@@ -222,7 +222,7 @@ func clear_poison_fx() -> void:
 func playMoveSequence(dest: Vector3i) -> void:
 	# Face the first step direction
 	var from: Vector3i = parentEntity.boardPositionComponent.currentCellCoordinates
-	await faceDirection(parentEntity, from, dest)
+	await faceDirection(from, dest)
 	
 	# Play walk animation
 	walkAnimation()
@@ -281,7 +281,7 @@ func faceTargetsHome(unit1: Entity, unit2: Entity) -> void:
 	unit2.animComponent.face_home_orientation()
 
 ## Helper to face from one cell to another
-func faceDirection(_unit: BattleBoardUnitEntity, fromCell: Vector3i, toCell: Vector3i) -> void:
+func faceDirection(fromCell: Vector3i, toCell: Vector3i) -> void:
 	if not board_position_component or not board_position_component.battleBoard:
 		return
 	
@@ -554,14 +554,14 @@ func _genericDeathAnimation() -> void:
 
 #region Visual Effects
 ## Shows floating damage number
-func showDamageNumber(target: Entity, damage: int) -> void:
+func showDamageNumber(damage: int) -> void:
 	# Create a 3D label that floats up and fades
 	var label := Label3D.new()
 	label.text = str(damage)
 	label.font_size = 96
 	label.modulate = Color.RED if damage > 0 else Color.GREEN
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	label.position = target.global_position + Vector3(0, 1, 0)
+	label.position = parentEntity.global_position + Vector3(0, 1, 0)
 	label.font = preload("res://Assets/Fonts/Godot-Fontpack-d244bf6170b399a6d4d26a0d906058ddf2dafdf1/fonts/poco/Poco.ttf")
 	
 	# Add to the scene root instead of target to avoid orphaning

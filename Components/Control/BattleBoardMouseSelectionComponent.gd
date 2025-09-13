@@ -80,7 +80,16 @@ func _setupHoverIndicator() -> void:
 	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	hoverMeshInstance.material_override = mat
+	 #Create the Mesh.
+
+	
+
+	#var arrMesh: ArrayMesh = preload("res://Assets/VFX/PolyBlocks/EffectBlocks/assets/ground_effects/ground_effect_1.tres")
+	#hoverMeshInstance = MeshInstance3D.new()
+	#hoverMeshInstance.mesh = arrMesh
 	hoverMeshInstance.visible = false
+	
+	hoverMeshInstance.scale *= 0.5
 	
 	# Add to the board instead of parentEntity for proper coordinate space
 	board.add_child(hoverMeshInstance)
@@ -135,6 +144,8 @@ func _handleMouseHover(screenPos: Vector2) -> void:
 				var localPos :Vector3= board.map_to_local(cell)
 				
 				hoverMeshInstance.position = localPos
+				hoverMeshInstance.position.y = 0.3
+				print(localPos)
 				hoverMeshInstance.visible = true
 	else:
 		# Not hovering over any valid cell
@@ -298,8 +309,8 @@ func _adjustToTileCenter(position: Vector3) -> Vector3:
 	position.x += board.tile_x / 2.0
 	position.z += board.tile_z / 2.0
 	
-	var cell_h : float= board.cell_size.y
-	var tile_h := board.tile_y
+	#var cell_h : float= board.cell_size.y
+	#var tile_h := board.tile_y
 	
 	# Adjust Y to sit on top of the tile
 	# Using same calculation as BattleBoardPositionComponent but without mesh_height

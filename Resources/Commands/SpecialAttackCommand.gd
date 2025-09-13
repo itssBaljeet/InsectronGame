@@ -96,7 +96,7 @@ func _resolveDamage(context: BattleBoardContext, affectedCells: Array) -> Array[
 			var targetUnit := target as BattleBoardUnitEntity
 			
 			# Check if we should affect this target (faction check)
-			if not context.rules.isHostile(attacker, targetUnit):
+			if not context.rules.isHostile(attacker, targetUnit) and not attackResource.hitsAllies:
 				continue
 			
 			# Delegate damage calculation
