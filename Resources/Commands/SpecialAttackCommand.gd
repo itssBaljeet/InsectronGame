@@ -57,11 +57,15 @@ func execute(context: BattleBoardContext) -> void:
 	
 	# Delegate to hazard system
 	_deployHazards(context, affectedCells)
-	
+
 	# Handle chain attacks if applicable
 	if attackResource.chainCount > 0:
 		_triggerChainAttack(context, targetCell, attackResource.chainCount, damageResults)
-	
+
+	var hitCell: Vector3i = targetCell
+	if not damageResults.is_empty():
+		hitCell = damageResults[0].cell
+
 	# Emit single comprehensive event for VFX/presentation
 	print("Emitting special attack execution on context")
 	context.emitSignal(&"SpecialAttackExecuted", {
@@ -69,11 +73,14 @@ func execute(context: BattleBoardContext) -> void:
 		"attackResource": attackResource,
 		"originCell": originCell,
 		"targetCell": targetCell,
+		"hitCell": hitCell,
 		"affectedCells": affectedCells,
 		"damageResults": damageResults,
-		"vfxScene": attackResource.vfxScene
+		"vfxScene": attackResource.vfxScene,
+		"secondaryVFX": attackResource.secondaryVFX,
+		"vfxType": attackResource.vfxType
 	})
-	
+
 	commandCompleted.emit()
 
 ## Delegate damage calculation to a resolver
