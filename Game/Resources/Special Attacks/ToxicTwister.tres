@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="AttackResource" load_steps=5 format=3 uid="uid://b84ws32tf1am2"]
+
+[ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="1_06lnj"]
+[ext_resource type="Resource" uid="uid://d2fqg380a5ju7" path="res://Game/Resources/patterns/queen3.tres" id="1_n1a15"]
+[ext_resource type="Script" uid="uid://dfqehgpsk53d0" path="res://Resources/StatusEffectResource.gd" id="2_0dy1w"]
+[ext_resource type="PackedScene" uid="uid://h7v4i6s2qry4" path="res://Assets/VFX/Tornados/TornadoPoison.tscn" id="4_lrn6p"]
+
+[resource]
+script = ExtResource("1_06lnj")
+attackName = "Toxic Twister"
+damageType = 2
+attackType = 1
+interactionType = 1
+rangePattern = ExtResource("1_n1a15")
+requiresTarget = false
+canTargetEmpty = true
+hitsAllies = true
+aoeType = 3
+vfxScene = ExtResource("4_lrn6p")
+vfxType = 1
+metadata/_custom_type_script = "uid://b2s3r8l3dbtqw"

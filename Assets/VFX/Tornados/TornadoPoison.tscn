@@ -1,0 +1,202 @@
+[gd_scene load_steps=31 format=3 uid="uid://h7v4i6s2qry4"]
+
+[ext_resource type="Shader" uid="uid://cp4e6hjsb1l2h" path="res://Assets/VFX/Tornados/whiteT.tres" id="1_e0gjq"]
+[ext_resource type="ArrayMesh" uid="uid://kj22nfka6sbl" path="res://Assets/VFX/Tornados/tornado2.obj" id="2_5x8iu"]
+[ext_resource type="Texture2D" uid="uid://fb874y25yai0" path="res://Assets/VFX/Tornados/Noise_17.tga" id="3_3bjui"]
+[ext_resource type="Texture2D" uid="uid://b6l4dwclwg8xe" path="res://Assets/VFX/Tornados/Noise_18.tga" id="4_fxwgb"]
+
+[sub_resource type="Gradient" id="Gradient_gbs8p"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ys2ah"]
+gradient = SubResource("Gradient_gbs8p")
+fill_from = Vector2(1, 0)
+fill_to = Vector2(1, 1)
+repeat = 1
+
+[sub_resource type="Gradient" id="Gradient_gohc1"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.563452)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4yh1x"]
+noise_type = 2
+frequency = 0.0012
+fractal_octaves = 3
+fractal_lacunarity = 2.71
+fractal_gain = 1.03
+fractal_weighted_strength = 0.31
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yspeu"]
+resource_local_to_scene = true
+noise = SubResource("FastNoiseLite_4yh1x")
+color_ramp = SubResource("Gradient_gohc1")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vcg2a"]
+render_priority = 0
+shader = ExtResource("1_e0gjq")
+shader_parameter/speedWobble = 0.5
+shader_parameter/wobble = 0.25
+shader_parameter/intesityColor = 10.0
+shader_parameter/ColorParameter = Color(0.472829, 0.464931, 0.0484824, 1)
+shader_parameter/polarcoord = Vector2(0, 0)
+shader_parameter/scale = Vector2(2, 2)
+shader_parameter/speed = 0.2
+shader_parameter/textureObj = SubResource("NoiseTexture2D_yspeu")
+shader_parameter/gradient = SubResource("GradientTexture2D_ys2ah")
+
+[sub_resource type="Gradient" id="Gradient_8fm1t"]
+offsets = PackedFloat32Array(0, 0.532995, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0ihqv"]
+gradient = SubResource("Gradient_8fm1t")
+fill_from = Vector2(1, 0)
+fill_to = Vector2(1, 1)
+repeat = 1
+
+[sub_resource type="Gradient" id="Gradient_havti"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.817259, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1b8j8"]
+noise_type = 3
+frequency = 0.005
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qvuio"]
+noise = SubResource("FastNoiseLite_1b8j8")
+color_ramp = SubResource("Gradient_havti")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yap6x"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_e0gjq")
+shader_parameter/speedWobble = 1.0
+shader_parameter/wobble = 0.5
+shader_parameter/intesityColor = 5.0
+shader_parameter/ColorParameter = Color(0.929715, 0.929715, 0.929715, 1)
+shader_parameter/polarcoord = Vector2(0.5, 5)
+shader_parameter/scale = Vector2(2, 2)
+shader_parameter/speed = -0.5
+shader_parameter/textureObj = SubResource("NoiseTexture2D_qvuio")
+shader_parameter/gradient = SubResource("GradientTexture2D_0ihqv")
+
+[sub_resource type="Gradient" id="Gradient_1ih5f"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_irk88"]
+gradient = SubResource("Gradient_1ih5f")
+fill_from = Vector2(1, 0)
+fill_to = Vector2(1, 1)
+repeat = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m8lnu"]
+render_priority = 0
+shader = ExtResource("1_e0gjq")
+shader_parameter/speedWobble = 0.5
+shader_parameter/wobble = 0.25
+shader_parameter/intesityColor = 15.0
+shader_parameter/ColorParameter = Color(0.223667, 0.399877, 1.92523e-07, 1)
+shader_parameter/polarcoord = Vector2(0.5, 0.5)
+shader_parameter/scale = Vector2(1, 1)
+shader_parameter/speed = -0.2
+shader_parameter/textureObj = ExtResource("3_3bjui")
+shader_parameter/gradient = SubResource("GradientTexture2D_irk88")
+
+[sub_resource type="Gradient" id="Gradient_l11oh"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dvqaa"]
+gradient = SubResource("Gradient_l11oh")
+fill_from = Vector2(1, 0)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1w2ln"]
+render_priority = 0
+shader = ExtResource("1_e0gjq")
+shader_parameter/speedWobble = 0.0
+shader_parameter/wobble = 0.0
+shader_parameter/intesityColor = 10.0
+shader_parameter/ColorParameter = Color(0.114236, 0.230167, 4.81308e-08, 1)
+shader_parameter/polarcoord = Vector2(0, 0)
+shader_parameter/scale = Vector2(2, 2)
+shader_parameter/speed = -0.2
+shader_parameter/textureObj = ExtResource("3_3bjui")
+shader_parameter/gradient = SubResource("GradientTexture2D_dvqaa")
+
+[sub_resource type="SphereMesh" id="SphereMesh_ykfm2"]
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7m0e1"]
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("4_fxwgb")
+
+[sub_resource type="Gradient" id="Gradient_2irsm"]
+colors = PackedColorArray(0.389812, 0.403641, 0, 1, 0.509073, 0.8135, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jps30"]
+gradient = SubResource("Gradient_2irsm")
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_4vqn2"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.995305, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3e4xu"]
+curve = SubResource("Curve_4vqn2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_l2kk3"]
+particle_flag_align_y = true
+emission_shape = 2
+emission_sphere_radius = 5.0
+direction = Vector3(0, 1, 0)
+spread = 50.0
+initial_velocity_min = 1.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_3e4xu")
+color_ramp = SubResource("GradientTexture1D_jps30")
+
+[sub_resource type="SphereMesh" id="SphereMesh_5limh"]
+radius = 0.125
+height = 0.25
+
+[node name="tornado poison" type="Node3D"]
+transform = Transform3D(0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, 0, 0, 0)
+
+[node name="twhite" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.467656, 0, -1.56776, 0, 1.163, 0, 1.42524, 0, 0.514422, 0, 4, 0)
+material_override = SubResource("ShaderMaterial_vcg2a")
+mesh = ExtResource("2_5x8iu")
+skeleton = NodePath("../..")
+
+[node name="twhite2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.779428, 0, -2.18536, 0, 1.5, 0, 2.37539, 0, 0.717074, 0, 4, 0)
+material_override = SubResource("ShaderMaterial_yap6x")
+mesh = ExtResource("2_5x8iu")
+skeleton = NodePath("../..")
+
+[node name="twhite3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.623542, 0, -1.90031, 0, 1.25, 0, 1.90031, 0, 0.623542, 0, 4, 0)
+material_override = SubResource("ShaderMaterial_m8lnu")
+mesh = ExtResource("2_5x8iu")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(8, 0, 0, 0, 1, 0, 0, 0, 8, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_1w2ln")
+mesh = SubResource("SphereMesh_ykfm2")
+skeleton = NodePath("../..")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+material_override = SubResource("StandardMaterial3D_7m0e1")
+lifetime = 2.43
+speed_scale = 2.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_l2kk3")
+draw_pass_1 = SubResource("SphereMesh_5limh")

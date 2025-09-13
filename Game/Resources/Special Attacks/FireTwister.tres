@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AttackResource" load_steps=5 format=3 uid="uid://cb2r0vo2us5y8"]
+
+[ext_resource type="Resource" uid="uid://d2fqg380a5ju7" path="res://Game/Resources/patterns/queen3.tres" id="1_0ne7g"]
+[ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="1_6bi0p"]
+[ext_resource type="Script" uid="uid://dfqehgpsk53d0" path="res://Resources/StatusEffectResource.gd" id="2_5bujy"]
+[ext_resource type="PackedScene" uid="uid://dccquimy50uli" path="res://Assets/VFX/Tornados/TornadoFire.tscn" id="3_5bujy"]
+
+[resource]
+script = ExtResource("1_6bi0p")
+attackName = "Fire Twister"
+attackType = 1
+interactionType = 1
+rangePattern = ExtResource("1_0ne7g")
+requiresTarget = false
+canTargetEmpty = true
+hitsAllies = true
+aoeType = 3
+vfxScene = ExtResource("3_5bujy")
+vfxType = 1
+metadata/_custom_type_script = "uid://b2s3r8l3dbtqw"

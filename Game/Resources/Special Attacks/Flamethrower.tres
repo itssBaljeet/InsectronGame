@@ -12,6 +12,7 @@ attackType = 1
 interactionType = 1
 rangePattern = ExtResource("1_davir")
 requiresTarget = false
+hitsAllies = true
 aoeType = 3
 vfxScene = ExtResource("2_17nyy")
 vfxType = 0

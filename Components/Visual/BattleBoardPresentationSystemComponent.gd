@@ -60,16 +60,10 @@ func _onSpecialAttack(data: Dictionary) -> void:
 	var origin_cell: Vector3i = data.get("originCell", Vector3i.ZERO)
 	var target_cell: Vector3i = data.get("targetCell", Vector3i.ZERO)
 	var hit_cell: Vector3i = data.get("hitCell", target_cell)
+	
+	#region VFX Playing
 	if attacker and attacker.animComponent:
-		await attacker.animComponent.playAttackSequence(attacker, null, 0)
-	for result in affected:
-		var target_unit: BattleBoardUnitEntity = result.get("target")
-		var dmg: int = result.get("damage", 0)
-		if target_unit:
-			var hv: BattleBoardUnitHealthVisualComponent = target_unit.components.get(&"BattleBoardUnitHealthVisualComponent")
-			if hv:
-				hv.apply_damage(dmg)
-				target_unit.animComponent.showDamageNumber(dmg)
+		await attacker.animComponent.faceDirection(origin_cell, target_cell)
 	if not board or not attack_res:
 		return
 	var origin_pos := board.getGlobalCellPosition(origin_cell)
@@ -116,22 +110,26 @@ func _onSpecialAttack(data: Dictionary) -> void:
 			if attack_res.vfxScene:
 				var proj: Node3D = attack_res.vfxScene.instantiate()
 				board.add_child(proj)
-				proj.global_position = board.map_to_local(origin_pos)
-				proj.look_at(hit_pos)
+				var startPos: Vector3 = board.map_to_local(origin_pos)
+				
+				# End position depends on how attack behaves - piercing or line
+				var endPos: Vector3
+				if attack_res.aoeType == AttackResource.AOEType.PIERCING:
+					endPos  = board.map_to_local(target_cell)
+				elif attack_res.aoeType == AttackResource.AOEType.LINE:
+					endPos = board.map_to_local(hit_pos)
+				
+				proj.position = startPos
+				proj.look_at(endPos)
 				var tw = proj.create_tween()
-				print("TWEENING PROJECTILE TO TARGET")
-				tw.tween_property(proj, "global_position", hit_pos, 1.0)
+				tw.tween_property(proj, "position", endPos, 0.75)
 				await tw.finished
 				proj.queue_free()
-			if attack_res.impactVFX:
-				var impact := attack_res.impactVFX.instantiate()
-				board.add_child(impact)
-				impact.global_position = hit_pos
 		AttackResource.VFXType.POINT:
 			if attack_res.vfxScene:
 				var point := attack_res.vfxScene.instantiate()
 				board.add_child(point)
-				point.global_position = hit_pos
+				point.global_position = board.map_to_local(hit_pos)
 			if attack_res.secondaryVFX:
 				for cell in data.get("affectedCells", []):
 					if cell == hit_cell:
@@ -157,6 +155,20 @@ func _onSpecialAttack(data: Dictionary) -> void:
 					var p2 := board.getGlobalCellPosition(cell)
 					p2.y += attack_res.vfxHeight
 					sec2.global_position = p2
+	
+	await attacker.animComponent.face_home_orientation()
+	#endregion
+	
+	#region Damage and HP Bar
+	for result in affected:
+		var target_unit: BattleBoardUnitEntity = result.get("target")
+		var dmg: int = result.get("damage", 0)
+		if target_unit:
+			var hv: BattleBoardUnitHealthVisualComponent = target_unit.components.get(&"BattleBoardUnitHealthVisualComponent")
+			if hv:
+				hv.apply_damage(dmg)
+				target_unit.animComponent.showDamageNumber(dmg)
+	#endregion
 
 func _onHazardPlaced(data: Dictionary) -> void:
 	var board: BattleBoardComponent3D = coComponents.get(&"BattleBoardComponent3D")
