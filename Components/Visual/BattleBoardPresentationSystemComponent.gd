@@ -116,10 +116,11 @@ func _onSpecialAttack(data: Dictionary) -> void:
 			if attack_res.vfxScene:
 				var proj: Node3D = attack_res.vfxScene.instantiate()
 				board.add_child(proj)
-				proj.global_position = origin_pos
+				proj.global_position = board.map_to_local(origin_pos)
 				proj.look_at(hit_pos)
 				var tw = proj.create_tween()
-				tw.tween_property(proj, "global_position", hit_pos, 0.3)
+				print("TWEENING PROJECTILE TO TARGET")
+				tw.tween_property(proj, "global_position", hit_pos, 1.0)
 				await tw.finished
 				proj.queue_free()
 			if attack_res.impactVFX:

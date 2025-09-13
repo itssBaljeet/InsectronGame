@@ -121,7 +121,7 @@ func _resolveDamage(context: BattleBoardContext, affectedCells: Array) -> Array[
 			# Calculate knockback before applying damage
 			if wants_knockback and knockbackResults.has(targetUnit):
 				var kb_pos := _calculateKnockbackPosition(context, origin, targetUnit)
-				if kb_pos != Vector3i.ZERO:
+				if kb_pos != BattleBoardComponent3D.INVALID_CELL:
 					knockbackResults[targetUnit] = kb_pos
 				else:
 					knockbackResults.erase(targetUnit)
@@ -227,7 +227,7 @@ func _calculateKnockbackPosition(context: BattleBoardContext, attackOrigin: Vect
 		return primaryPos
 
 	if not attackResource.superKnockback:
-		return Vector3i.ZERO
+		return BattleBoardComponent3D.INVALID_CELL
 
 	var slidePositions: Array[Vector3i] = []
 	if knockbackDir.x != 0 and knockbackDir.z != 0:
@@ -244,7 +244,7 @@ func _calculateKnockbackPosition(context: BattleBoardContext, attackOrigin: Vect
 		if _isValidKnockbackPosition(context, slidePos):
 			return slidePos
 
-	return Vector3i.ZERO
+	return BattleBoardComponent3D.INVALID_CELL
 
 
 ## Check if a position is valid for knockback
@@ -254,6 +254,7 @@ func _isValidKnockbackPosition(context: BattleBoardContext, position: Vector3i) 
 
 	var occupant := context.board.getOccupant(position)
 	if occupant:
+		print("Occupant in our way: ", occupant)
 		return occupant in knockbackResults
 
 	return true
@@ -283,8 +284,9 @@ func _applyKnockback(context: BattleBoardContext) -> void:
 		print("Knocking back ", unit.name, " from ", oldPos, " to ", newPos)
 
 		if context.board.getInsectorOccupant(newPos):
+			print("BASTARD TAKING SPACE: ", context.board.getInsectorOccupant(newPos))
 			continue
-
+		print("Actually knocking back")
 		context.board.setCellOccupancy(oldPos, false, null)
 		unit.boardPositionComponent.setDestinationCellCoordinates(newPos, true)
 		context.board.setCellOccupancy(newPos, true, unit)

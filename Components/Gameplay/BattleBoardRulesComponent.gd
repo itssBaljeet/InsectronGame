@@ -259,6 +259,7 @@ func getActiveUnits(teamFaction: int) -> Array[BattleBoardUnitEntity]:
 func isValidSpecialAttack(attacker: BattleBoardUnitEntity, targetCell: Vector3i, attackResource: AttackResource) -> bool:
 	# First check basic attack validity
 	if not isValidAttack(attacker, targetCell, attackResource):
+		print("Invalid attack! From special")
 		return false
 	
 	# Check if attack has special requirements

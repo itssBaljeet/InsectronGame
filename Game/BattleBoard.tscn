@@ -1,4 +1,4 @@
-[gd_scene load_steps=94 format=3 uid="uid://bq82t3qc1mxmb"]
+[gd_scene load_steps=95 format=3 uid="uid://bq82t3qc1mxmb"]
 
 [ext_resource type="Script" uid="uid://bryda6lc1suk7" path="res://Entities/Objects/BattleBoardEntity3d.gd" id="1_pvu71"]
 [ext_resource type="PackedScene" uid="uid://ds773iggimiek" path="res://Components/Control/BattleBoardComponent3D.tscn" id="2_s4deh"]
@@ -40,6 +40,7 @@
 [ext_resource type="Resource" uid="uid://bs853y3vn3abe" path="res://Game/Resources/Special Attacks/Shockwave.tres" id="22_7cmyx"]
 [ext_resource type="PackedScene" uid="uid://dcp27ybg2naqq" path="res://Components/Combat/MeteormyteHealthComponent.tscn" id="22_kfhrd"]
 [ext_resource type="PackedScene" uid="uid://qgpejppspisl" path="res://addons/models/spider_modapplied.glb" id="23_c3fbh"]
+[ext_resource type="Resource" uid="uid://bxc5arr8s6b64" path="res://Game/Resources/Special Attacks/Waterspout.tres" id="24_dr6b8"]
 [ext_resource type="PackedScene" uid="uid://di6hc7mqf33vy" path="res://addons/bassline/bassline.glb" id="24_gd4cs"]
 [ext_resource type="ArrayMesh" uid="uid://071s0swisg4h" path="res://addons/outerTileSlantedCornerlLayer2New_Cube_002.res" id="24_tm5g8"]
 [ext_resource type="PackedScene" uid="uid://i67tqdwogkba" path="res://addons/models/dung_roller_-_sj_day_11.glb" id="29_06tvy"]
@@ -397,7 +398,7 @@ skin = NodePath("../BeebotSkin")
 die_animation_time = 1.0
 
 [node name="InsectorAttackComponent" parent="InsectronEntity3d3" groups=["components"] instance=ExtResource("9_lo71g")]
-specialAttacks = Array[ExtResource("17_s38d0")]([ExtResource("18_bepmc"), ExtResource("22_7cmyx"), ExtResource("20_ylsgn")])
+specialAttacks = Array[ExtResource("17_s38d0")]([ExtResource("18_bepmc"), ExtResource("22_7cmyx"), ExtResource("20_ylsgn"), ExtResource("24_dr6b8")])
 attackRange = ExtResource("6_tm5g8")
 venemous = true
 

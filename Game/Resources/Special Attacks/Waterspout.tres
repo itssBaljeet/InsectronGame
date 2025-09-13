@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AttackResource" load_steps=5 format=3 uid="uid://bxc5arr8s6b64"]
+
+[ext_resource type="Resource" uid="uid://d2fqg380a5ju7" path="res://Game/Resources/patterns/queen3.tres" id="1_7hwh1"]
+[ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="1_f8lhb"]
+[ext_resource type="Script" uid="uid://dfqehgpsk53d0" path="res://Resources/StatusEffectResource.gd" id="2_6xo8k"]
+[ext_resource type="PackedScene" uid="uid://cygsfccxdwu6" path="res://Assets/VFX/Tornados/TornadoBlue.tscn" id="4_fx5jw"]
+
+[resource]
+script = ExtResource("1_f8lhb")
+attackName = "Water Spout"
+description = "Summons a water spout"
+baseDamage = 60
+damageType = 1
+attackType = 1
+interactionType = 1
+rangePattern = ExtResource("1_7hwh1")
+requiresTarget = false
+canTargetEmpty = true
+hitsAllies = true
+aoeType = 3
+vfxScene = ExtResource("4_fx5jw")
+vfxType = 1
+animationTime = 2.0
+metadata/_custom_type_script = "uid://b2s3r8l3dbtqw"
