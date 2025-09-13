@@ -1,18 +1,15 @@
-[gd_resource type="Resource" script_class="AttackResource" load_steps=4 format=3 uid="uid://bublwnqvvfdw8"]
+[gd_resource type="Resource" script_class="AttackResource" load_steps=5 format=3 uid="uid://bublwnqvvfdw8"]
 
+[ext_resource type="Resource" uid="uid://d2fqg380a5ju7" path="res://Game/Resources/patterns/queen3.tres" id="1_1cibj"]
 [ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="1_dkclb"]
-[ext_resource type="Resource" uid="uid://fvfgnsklluo8" path="res://Game/Resources/patterns/ferz3.tres" id="1_q2o0l"]
 [ext_resource type="PackedScene" uid="uid://bwwyl3lo03yqc" path="res://Assets/VFX/PolyBlocks/EffectBlocks/assets/attacks/attack_earth.tscn" id="2_dkclb"]
+[ext_resource type="Script" uid="uid://dfqehgpsk53d0" path="res://Resources/StatusEffectResource.gd" id="3_70t15"]
 
 [resource]
 script = ExtResource("1_dkclb")
 attackName = "Earth Rift"
 attackType = 1
-damage = 50
-effectRange = 3
-attackPattern = ExtResource("1_q2o0l")
-hitsAllies = true
-duration = 0.75
+rangePattern = ExtResource("1_1cibj")
 knockback = true
 vfxScene = ExtResource("2_dkclb")
 vfxScale = 0.75

@@ -63,6 +63,7 @@ func execute(context: BattleBoardContext) -> void:
 		_triggerChainAttack(context, targetCell, attackResource.chainCount, damageResults)
 	
 	# Emit single comprehensive event for VFX/presentation
+	print("Emitting special attack execution on context")
 	context.emitSignal(&"SpecialAttackExecuted", {
 		"attacker": attacker,
 		"attackResource": attackResource,

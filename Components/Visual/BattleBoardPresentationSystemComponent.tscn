@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvnkwgrchnfae"]
+
+[ext_resource type="Script" uid="uid://cvx1kat7fgssh" path="res://Components/Visual/BattleBoardPresentationSystemComponent.gd" id="1_msujv"]
+
+[node name="BattleBoardPresentationSystemComponent" type="Node3D"]
+script = ExtResource("1_msujv")
