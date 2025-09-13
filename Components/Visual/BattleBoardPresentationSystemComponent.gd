@@ -57,6 +57,9 @@ func _onSpecialAttack(data: Dictionary) -> void:
 	var attack_res: AttackResource = data.get("attackResource")
 	var affected: Array = data.get("damageResults", [])
 	var board: BattleBoardComponent3D = coComponents.get(&"BattleBoardComponent3D")
+	var origin_cell: Vector3i = data.get("originCell", Vector3i.ZERO)
+	var target_cell: Vector3i = data.get("targetCell", Vector3i.ZERO)
+	var hit_cell: Vector3i = data.get("hitCell", target_cell)
 	if attacker and attacker.animComponent:
 		await attacker.animComponent.playAttackSequence(attacker, null, 0)
 	for result in affected:
@@ -66,12 +69,72 @@ func _onSpecialAttack(data: Dictionary) -> void:
 			var hv: BattleBoardUnitHealthVisualComponent = target_unit.components.get(&"BattleBoardUnitHealthVisualComponent")
 			if hv:
 				hv.apply_damage(dmg)
-	var vfx_scene: PackedScene = data.get("vfxScene")
-	if vfx_scene and board:
-		var vfx := vfx_scene.instantiate()
-		board.add_child(vfx)
-		var pos := board.getGlobalCellPosition(attacker.boardPositionComponent.currentCellCoordinates)
-		vfx.global_position = pos
+	if not board or not attack_res:
+		return
+	var origin_pos := board.getGlobalCellPosition(origin_cell)
+	var target_pos := board.getGlobalCellPosition(target_cell)
+	var hit_pos := board.getGlobalCellPosition(hit_cell)
+	origin_pos.y += attack_res.vfxHeight
+	target_pos.y += attack_res.vfxHeight
+	hit_pos.y += attack_res.vfxHeight
+	match attack_res.vfxType:
+		AttackResource.VFXType.BEAM:
+			if attack_res.vfxScene:
+				var vfx: Node3D = attack_res.vfxScene.instantiate()
+				board.add_child(vfx)
+				vfx.global_position = origin_pos
+				vfx.look_at(hit_pos)
+				var length := origin_pos.distance_to(hit_pos) * attack_res.vfxScale
+				match attack_res.vfxOrientation:
+					AttackResource.VFXOrientation.ALONG_X:
+						vfx.scale.x = length
+					AttackResource.VFXOrientation.ALONG_Y:
+						vfx.scale.y = length
+					_:
+						vfx.scale.z = length
+				vfx.rotation += Vector3(deg_to_rad(attack_res.vfxRotationOffset.x), deg_to_rad(attack_res.vfxRotationOffset.y), deg_to_rad(attack_res.vfxRotationOffset.z))
+				await get_tree().create_timer(0.3).timeout
+				vfx.queue_free()
+		AttackResource.VFXType.PROJECTILE:
+			if attack_res.vfxScene:
+				var proj: Node3D = attack_res.vfxScene.instantiate()
+				board.add_child(proj)
+				proj.global_position = origin_pos
+				proj.look_at(hit_pos)
+				var tw = proj.create_tween()
+				tw.tween_property(proj, "global_position", hit_pos, 0.3)
+				await tw.finished
+				proj.queue_free()
+			if attack_res.impactVFX:
+				var impact := attack_res.impactVFX.instantiate()
+				board.add_child(impact)
+				impact.global_position = hit_pos
+		AttackResource.VFXType.POINT:
+			if attack_res.vfxScene:
+				var point := attack_res.vfxScene.instantiate()
+				board.add_child(point)
+				point.global_position = hit_pos
+			if attack_res.secondaryVFX:
+				for cell in data.get("affectedCells", []):
+					if cell == hit_cell:
+						continue
+					var sec := attack_res.secondaryVFX.instantiate()
+					board.add_child(sec)
+					var p := board.getGlobalCellPosition(cell)
+					p.y += attack_res.vfxHeight
+					sec.global_position = p
+		AttackResource.VFXType.AREA:
+			if attack_res.vfxScene:
+				var area := attack_res.vfxScene.instantiate()
+				board.add_child(area)
+				area.global_position = origin_pos
+			if attack_res.secondaryVFX:
+				for cell in data.get("affectedCells", []):
+					var sec2 := attack_res.secondaryVFX.instantiate()
+					board.add_child(sec2)
+					var p2 := board.getGlobalCellPosition(cell)
+					p2.y += attack_res.vfxHeight
+					sec2.global_position = p2
 
 func _onHazardPlaced(data: Dictionary) -> void:
 	var board: BattleBoardComponent3D = coComponents.get(&"BattleBoardComponent3D")

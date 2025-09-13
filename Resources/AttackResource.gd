@@ -25,9 +25,16 @@ enum AOEType {
 
 enum VFXOrientation {
 	ALONG_X,  # Effect plays along X axis
-	ALONG_Y,  # Effect plays along Y axis  
+	ALONG_Y,  # Effect plays along Y axis
 	ALONG_Z,  # Effect plays along Z axis
 	CUSTOM    # Use custom rotation offsets
+}
+
+enum VFXType {
+	BEAM,
+	PROJECTILE,
+	POINT,
+	AREA
 }
 
 enum Typing {
@@ -74,6 +81,7 @@ enum Typing {
 @export var vfxScene: PackedScene  # Primary VFX
 @export var secondaryVFX: PackedScene  # Additional effects (for AOE)
 @export var impactVFX: PackedScene  # Hit effect on target
+@export var vfxType: VFXType = VFXType.POINT
 @export var vfxScale: float = 1.0  # Base scale for the VFX
 @export var vfxHeight: float = 0.0  # Y-axis offset for VFX placement
 @export var vfxOrientation: VFXOrientation = VFXOrientation.ALONG_Z
