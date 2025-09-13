@@ -6,6 +6,8 @@ extends Component
 
 #endregion
 
+const INVALID_CELL: Vector3i = Vector3i(-999, -999, -999)
+
 #region Parameters
 
 @export var width: int:
