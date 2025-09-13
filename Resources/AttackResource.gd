@@ -24,23 +24,23 @@ enum AOEType {
 }
 
 enum VFXOrientation {
-ALONG_X,  # Effect plays along X axis
-ALONG_Y,  # Effect plays along Y axis
-ALONG_Z,  # Effect plays along Z axis
-CUSTOM    # Use custom rotation offsets
+	ALONG_X,  # Effect plays along X axis
+	ALONG_Y,  # Effect plays along Y axis
+	ALONG_Z,  # Effect plays along Z axis
+	CUSTOM    # Use custom rotation offsets
 }
 
 enum VFXType {
-BEAM,
-PROJECTILE,
-POINT,
-AREA
+	BEAM,
+	PROJECTILE,
+	POINT,
+	AREA
 }
 
 enum Typing {
-FIRE,
-WATER,
-GRASS,
+	FIRE,
+	WATER,
+	GRASS,
 }
 
 @export_group("Basic Properties")
