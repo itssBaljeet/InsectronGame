@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bplacementui"]
+
+[ext_resource type="Script" uid="uid://bplacementuiscript" path="res://Components/Visual/BattleBoardPlacementUIComponent.gd" id="1"]
+
+[node name="BattleBoardPlacementUIComponent" type="Node" groups=["components"]]
+script = ExtResource("1")
