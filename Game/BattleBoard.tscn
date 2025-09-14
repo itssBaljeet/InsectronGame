@@ -1,4 +1,4 @@
-[gd_scene load_steps=97 format=3 uid="uid://bq82t3qc1mxmb"]
+[gd_scene load_steps=98 format=3 uid="uid://bq82t3qc1mxmb"]
 
 [ext_resource type="Script" uid="uid://bryda6lc1suk7" path="res://Entities/Objects/BattleBoardEntity3d.gd" id="1_pvu71"]
 [ext_resource type="PackedScene" uid="uid://ds773iggimiek" path="res://Components/Control/BattleBoardComponent3D.tscn" id="2_s4deh"]
@@ -59,6 +59,7 @@
 [ext_resource type="PackedScene" uid="uid://dvnkwgrchnfae" path="res://Components/Visual/BattleBoardPresentationSystemComponent.tscn" id="55_dr6b8"]
 [ext_resource type="PackedScene" uid="uid://wqm4tsu7jdj6" path="res://Components/Control/BattleBoardMouseSelectionComponent.tscn" id="55_kfhrd"]
 
+[ext_resource type="PackedScene" uid="uid://bplacementui" path="res://Components/Visual/BattleBoardPlacementUIComponent.tscn" id="56_plcui"]
 [sub_resource type="ViewportTexture" id="ViewportTexture_xrvei"]
 viewport_path = NodePath("SubViewport")
 
@@ -770,6 +771,7 @@ mesh_library = SubResource("MeshLibrary_bl2dq")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="BattleBoardUIComponent" parent="." instance=ExtResource("12_yubh6")]
+[node name="BattleBoardPlacementUIComponent" parent="." instance=ExtResource("56_plcui")]
 
 [node name="FactionComponent" parent="." instance=ExtResource("11_7xmvv")]
 factions = 1
