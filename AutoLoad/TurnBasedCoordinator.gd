@@ -11,6 +11,17 @@
 #class_name TurnBasedCoordinator
 extends Node # + TurnBasedObjectBase
 
+enum GamePhase {
+	placement = 0,
+	coinflip = 1,
+	battle = 2,
+}
+
+@export_storage var currentPhase: GamePhase = GamePhase.placement
+signal phaseChanged(newPhase: GamePhase)
+signal coinflipResolved(firstTeam: int)
+
+
 # PLAN:
 # * Each turn has three "states" or "phases": Begin, Update, End
 # * Every turn must cycle through all 3 states
@@ -571,3 +582,31 @@ func showDebugInfo() -> void:
 	Debug.addCombinedWatchList(&"TurnBasedCoordinator", dict)
 
 #endregion
+
+func startPlacementPhase(party: Array[BattleBoardUnitEntity]) -> void:
+	currentPhase = GamePhase.placement
+	phaseChanged.emit(currentPhase)
+	var boardEntity: BattleBoardEntity3D = null
+	for entity in turnBasedEntities:
+		if entity is BattleBoardEntity3D:
+			boardEntity = entity
+			break
+	if boardEntity:
+		var placementUI: BattleBoardPlacementUIComponent = boardEntity.components.get(&"BattleBoardPlacementUIComponent")
+		if placementUI:
+			placementUI.placementPhaseFinished.connect(_onPlacementFinished)
+			placementUI.beginPlacement(party)
+
+func _onPlacementFinished() -> void:
+	currentPhase = GamePhase.coinflip
+	phaseChanged.emit(currentPhase)
+	_startCoinflip()
+
+func _startCoinflip() -> void:
+	var result := FactionComponent.Factions.players if randi() % 2 == 0 else FactionComponent.Factions.ai
+	coinflipResolved.emit(result)
+	currentTeam = result
+	currentPhase = GamePhase.battle
+	phaseChanged.emit(currentPhase)
+	startTurnProcess()
+
