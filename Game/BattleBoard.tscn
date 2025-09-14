@@ -302,7 +302,6 @@ alwaysVisibleSquareOutline = true
 initialDestinationCoordinates = Vector3i(2, 0, 3)
 moveRange = ExtResource("6_tm5g8")
 speed = 10.0
-shouldOccupyCell = false
 mesh_height = 0.5100000000093132
 
 [node name="InsectronEntity3d" parent="." instance=ExtResource("9_js4j1")]
