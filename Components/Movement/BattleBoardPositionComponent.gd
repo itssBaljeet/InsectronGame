@@ -38,10 +38,6 @@ extends Component
 
 @export var shouldClampToBounds: bool = true ## Keep the entity within the [member tileMap]'s region of "painted" cells?
 
-## Should the Cell be marked as [constant Global.TileMapCustomData.isOccupied] by the parent Entity?
-## Set to `false` to disable occupancy; useful for visual-only entities such as mouse cursors and other UI/effects.
-@export var shouldOccupyCell: bool = true
-
 ## If `true` then [method snapEntityPositionToTile] is called every frame to keep the Entity locked to the [TileMapLayer] grid.
 ## ALERT: PERFORMANCE: Enable only if the Entity or [TileMapLayer] may be moved during runtime by other scripts or effects, to avoid unnecessary processing each frame.
 @export var shouldSnapPositionEveryFrame: bool = false:
@@ -67,11 +63,6 @@ var battleBoard: BattleBoardComponent3D:
 		# The entity [BattleBoardPositionComponent] is a child of should be a child itself of a BattleBoardEntity3D which holds the component we need.
 		if not self.parentEntity.get_parent(): return null
 		return self.parentEntity.get_parent().find_child("BattleBoardComponent3D").get_node(^".") as BattleBoardComponent3D
-
-var rules: BattleBoardRulesComponent:
-	get:
-		if not self.parentEntity.get_parent(): return null
-		return self.parentEntity.get_parent().find_child("BattleBoardRulesComponent").get_node(^".") as BattleBoardRulesComponent
 
 #endregion
 
@@ -136,12 +127,6 @@ func _ready() -> void:
 	applyInitialCoordinates()
 
 	updateIndicator() # Fix the visually-annoying initial snap from the default position
-	self.willRemoveFromEntity.connect(self.onWillRemoveFromEntity)
-
-
-func onWillRemoveFromEntity() -> void:
-	# Set our cell as vacant before this component or entity is removed.
-	vacateCurrentCell()
 
 #endregion
 
@@ -161,20 +146,15 @@ func applyInitialCoordinates() -> void:
 	# because the functions check for a change between coordinates.
 
 	if shouldSnapToInitialDestination:
-		print("Snapping to init dest")
 		snapEntityPositionToTile(initialDestinationCoordinates)
 	else:
 		setDestinationCellCoordinates(initialDestinationCoordinates)
 
 
-## Set the tile coordinates corresponding to the parent Entity's [member Node2D.global_position]
-## and set the cell's occupancy.
+## Set the tile coordinates corresponding to the parent Entity's [member Node2D.global_position].
 func updateCurrentTileCoordinates() -> Vector3i:
-	print(self)
 	self.currentCellCoordinates = battleBoard.local_to_map(battleBoard.to_local(self.parentEntity.global_position))
-	if shouldOccupyCell:
-		battleBoard.setCellOccupancy(self.currentCellCoordinates, shouldOccupyCell, self.parentEntity)
-	
+
 	return currentCellCoordinates
 
 
@@ -206,29 +186,17 @@ func processMovementInput(inputVectorOverride: Vector3i = self.inputVector) -> v
 	setDestinationCellCoordinates(self.currentCellCoordinates + inputVectorOverride)
 
 
-## Returns: `false if the new destination coordinates are not valid within the TileMap bounds.
+## Sets a new destination for movement.
 func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i, knockback: bool = false) -> bool:
 
 	# Is the new destination the same as the current destination? Then there's nothing to change.
 	if newDestinationTileCoordinates == self.destinationCellCoordinates:
-		print("Same coords as last current")
 		return true
 
 	# Is the new destination the same as the current tile? i.e. was the previous move cancelled?
 	if newDestinationTileCoordinates == self.currentCellCoordinates:
-		print("Dest the same as current")
 		cancelDestination()
 		return true # NOTE: Return true because arriving at the specified coordinates should be considered a success, even if already there. :)
-
-	# Validate the new destination?
-
-	if (shouldOccupyCell and not rules.isValidMove(self, currentCellCoordinates, newDestinationTileCoordinates)) and not knockback:
-		print("Invalid move")
-		return false
-	
-	if not shouldOccupyCell and not rules.isInBounds(newDestinationTileCoordinates):
-		print("Whack ass fourth reason")
-		return false
 
 	# Move Your Body ♪
 	previousCellCoordinates = currentCellCoordinates
@@ -236,25 +204,14 @@ func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i, knoc
 	self.destinationCellCoordinates = newDestinationTileCoordinates
 	self.isMovingToNewCell = true
 
-	# Vacate the current (to-be previous) tile
-	# NOTE: Always clear the previous cell even if not `shouldOccupyCell`, in case it was toggled true→false at runtime.
-	if shouldOccupyCell: battleBoard.setCellOccupancy(currentCellCoordinates, false, null)
-
-	# TODO: TBD: Occupy each cell along the way too each frame?
-	if shouldOccupyCell: battleBoard.setCellOccupancy(newDestinationTileCoordinates, true, parentEntity)
-
 	# Should we teleport?
 	if shouldMoveInstantly: snapEntityPositionToTile(self.destinationCellCoordinates)
-	
+
 	return true
 
 
-## Cancels the current move and vacates the previous [member destinationCellCoordinates] if needed.
+## Cancels the current move.
 func cancelDestination(snapToCurrentCell: bool = true) -> void:
-	# First, clear the previous destination's occupancy in case we hogged it
-	# NOTE: Vacate regardless of `shouldOccupyCell`
-	if battleBoard.vBoardState.get(self.destinationCellCoordinates) == parentEntity:
-		battleBoard.setCellOccupancy(self.destinationCellCoordinates, false, null)
 
 	# Were we on the way to a different destination tile?
 	if isMovingToNewCell and snapToCurrentCell:
@@ -263,13 +220,10 @@ func cancelDestination(snapToCurrentCell: bool = true) -> void:
 		self.snapEntityPositionToTile(self.currentCellCoordinates)
 
 	self.destinationCellCoordinates = self.currentCellCoordinates
-	if shouldOccupyCell: battleBoard.setCellOccupancy(self.currentCellCoordinates, true, parentEntity) # Reoccupy the current cell
 	self.isMovingToNewCell = false
 
 
-func vacateCurrentCell() -> void:
-	if battleBoard == null: return
-	battleBoard.setCellOccupancy(currentCellCoordinates, false, null)
+## Note: Previously managed cell occupancy in the board state. This is now handled by commands.
 
 #endregion
 
