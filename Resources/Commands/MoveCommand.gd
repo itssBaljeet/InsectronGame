@@ -39,17 +39,6 @@ func execute(context: BattleBoardContext) -> void:
 	commandStarted.emit()
 	print("Executing move comamnd!")
 	
-	var posComponent: BattleBoardPositionComponent = unit.boardPositionComponent
-	# Face direction and animate movement
-	if path.size() > 0:
-		await unit.animComponent.playMoveSequence(path[0])
-	
-	# Move the unit via position component
-	print("Moving the position component")
-	posComponent.setDestinationCellCoordinates(toCell)
-	await posComponent.didArriveAtNewCell
-	
-	await unit.animComponent.face_home_orientation()
 	# Update board state
 	_previousOccupant = context.board.getOccupant(toCell)
 	context.board.setCellOccupancy(fromCell, false, null)
@@ -62,10 +51,10 @@ func execute(context: BattleBoardContext) -> void:
 	print(state)
 	state.markMoved()
 	
-	# Emit domain event
+	# Emit domain event for presentation layer
 	context.emitSignal(&"UnitMoved", {
 		"unit": unit,
-		"from": fromCell, 
+		"from": fromCell,
 		"to": toCell,
 		"path": path
 	})
@@ -78,29 +67,22 @@ func canUndo() -> bool:
 func undo(context: BattleBoardContext) -> void:
 	print("COMMAND UNDONE")
 	
-	# Face direction and animate movement
-
-	await unit.animComponent.playMoveSequence(fromCell)
-
-	# Move unit and selector back
-	var posComponent: BattleBoardPositionComponent = unit.boardPositionComponent
-	context.selector.boardPositionComponent.setDestinationCellCoordinates(unit.boardPositionComponent.previousCellCoordinates)
-	var currentCell: Vector3i = context.selector.boardPositionComponent.previousCellCoordinates
-	context.selector.cellHovered.emit(currentCell)
-	posComponent.setDestinationCellCoordinates(fromCell)
-	await posComponent.didArriveAtNewCell
-	
-	await unit.animComponent.face_home_orientation()
-	
 	# Restore board state
 	context.board.setCellOccupancy(toCell, false, null)
 	context.board.setCellOccupancy(fromCell, true, unit)
+	
 	# Restore turn state
 	var state := unit.components.get(&"UnitTurnStateComponent") as UnitTurnStateComponent
 	state.undoMove()
 	
-	
-	
-	## Restore previous occupant if any
-	#if _previousOccupant:
-		#context.board.setCellOccupancy(toCell, true, _previousOccupant)
+	# Notify presentation layer
+	context.emitSignal(&"UnitMoved", {
+		"unit": unit,
+		"from": toCell,
+		"to": fromCell,
+		"path": []
+	})
+
+## Restore previous occupant if any
+#if _previousOccupant:
+#context.board.setCellOccupancy(toCell, true, _previousOccupant)

@@ -288,8 +288,13 @@ func _applyKnockback(context: BattleBoardContext) -> void:
 			continue
 		print("Actually knocking back")
 		context.board.setCellOccupancy(oldPos, false, null)
-		unit.boardPositionComponent.setDestinationCellCoordinates(newPos, true)
 		context.board.setCellOccupancy(newPos, true, unit)
+		context.emitSignal(&"UnitMoved", {
+			"unit": unit,
+			"from": oldPos,
+			"to": newPos,
+			"path": []
+		})
 
 	await context.board.get_tree().create_timer(0.3).timeout
 
