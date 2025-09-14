@@ -28,9 +28,12 @@ func _on_domain_event(eventName: StringName, data: Dictionary) -> void:
 
 func _onUnitMoved(data: Dictionary) -> void:
 	var unit: BattleBoardUnitEntity = data.get("unit")
-	var path: Array[Vector3i] = data.get("path", [])
-	if unit and unit.animComponent and not path.is_empty():
-		await unit.animComponent.playMoveSequence(path.back())
+	var fromCell: Vector3i = data.get("from", Vector3i.ZERO)
+	var toCell: Vector3i = data.get("to", Vector3i.ZERO)
+	if unit and unit.animComponent and unit.boardPositionComponent:
+		await unit.animComponent.faceDirection(fromCell, toCell)
+		unit.boardPositionComponent.setDestinationCellCoordinates(toCell)
+		await unit.boardPositionComponent.didArriveAtNewCell
 		await unit.animComponent.face_home_orientation()
 
 func _onUnitAttacked(data: Dictionary) -> void:
