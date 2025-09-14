@@ -28,14 +28,18 @@ func isValidMove(posComp: BattleBoardPositionComponent, fromCell: Vector3i, toCe
         if not isCellVacant(toCell, posComp.parentEntity):
                 return false
 
-	# Check movement range
-	if not isInRange(fromCell, toCell, posComp.moveRange): 
-		return false
-	
-	# Check if path exists
-	var path := pathfinding.findPath(fromCell, toCell, posComp)
+        # Check movement range
+        if not isInRange(fromCell, toCell, posComp.moveRange):
+                return false
 
-	return not path.is_empty()
+        # Allow zero-length moves without pathfinding
+        if fromCell == toCell:
+                return true
+
+        # Check if path exists
+        var path := pathfinding.findPath(fromCell, toCell, posComp)
+
+        return not path.is_empty()
 
 ## Checks if a cell is within board bounds
 func isInBounds(cell: Vector3i) -> bool:
