@@ -27,6 +27,8 @@ signal placementPhaseFinished
 func beginPlacement(partyUnits: Array[BattleBoardUnitEntity]) -> void:
 	party = partyUnits.duplicate()
 	currentIndex = 0
+	if commandQueue and not commandQueue.commandUndone.is_connected(_onCommandUndone):
+		commandQueue.commandUndone.connect(_onCommandUndone)
 	_showCurrent()
 	highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
 
@@ -63,6 +65,13 @@ func placeCurrentUnit(cell: Vector3i) -> bool:
 func undoLastPlacement() -> void:
 	if commandQueue.undoLastCommand():
 		highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
+
+func _onCommandUndone(command: BattleBoardCommand) -> void:
+	if command is PlaceUnitCommand:
+		var placementCommand := command as PlaceUnitCommand
+		party.append(placementCommand.unit)
+		currentIndex = party.size() - 1
+		_showCurrent()
 
 func _showCurrent() -> void:
 	pass

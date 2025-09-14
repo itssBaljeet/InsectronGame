@@ -5,6 +5,7 @@ extends BattleBoardCommand
 
 var unit: BattleBoardUnitEntity
 var cell: Vector3i
+var previousCell: Vector3i
 var _placed: bool = false
 
 func _init() -> void:
@@ -23,6 +24,7 @@ func canExecute(context: BattleBoardContext) -> bool:
 
 func execute(context: BattleBoardContext) -> void:
 	commandStarted.emit()
+	previousCell = unit.boardPositionComponent.currentCellCoordinates
 	context.board.setCellOccupancy(cell, true, unit)
 	unit.boardPositionComponent.snapEntityPositionToTile(cell)
 	_placed = true
@@ -38,6 +40,7 @@ func canUndo() -> bool:
 func undo(context: BattleBoardContext) -> void:
 	context.board.setCellOccupancy(cell, false, null)
 	_placed = false
+	unit.boardPositionComponent.snapEntityPositionToTile(previousCell)
 	context.emitSignal(&"UnitUnplaced", {
 		"unit": unit,
 		"cell": cell
