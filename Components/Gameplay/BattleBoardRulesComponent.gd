@@ -24,9 +24,9 @@ func isValidMove(posComp: BattleBoardPositionComponent, fromCell: Vector3i, toCe
 	if not isInBounds(toCell):
 		return false
 
-	# Check if destination is vacant and if we should occupy
-	if not isCellVacant(toCell):
-		return false
+        # Check if destination is vacant or already claimed by this unit
+        if not isCellVacant(toCell, posComp.parentEntity):
+                return false
 
 	# Check movement range
 	if not isInRange(fromCell, toCell, posComp.moveRange): 
@@ -41,10 +41,10 @@ func isValidMove(posComp: BattleBoardPositionComponent, fromCell: Vector3i, toCe
 func isInBounds(cell: Vector3i) -> bool:
 	return cell in board.cells
 
-## Checks if a cell is unoccupied
-func isCellVacant(cell: Vector3i) -> bool:
-	var data := board.vBoardState.get(cell) as BattleBoardCellData
-	return data == null or not data.isOccupied
+## Checks if a cell is unoccupied or already occupied by the provided entity
+func isCellVacant(cell: Vector3i, claimant: Entity = null) -> bool:
+        var data := board.vBoardState.get(cell) as BattleBoardCellData
+        return data == null or not data.isOccupied or data.occupant == claimant
 
 ## Checks if target cell is within range pattern
 func isInRange(origin: Vector3i, target: Vector3i, rangePattern: BoardPattern) -> bool:
