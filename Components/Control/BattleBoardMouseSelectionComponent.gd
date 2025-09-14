@@ -145,7 +145,6 @@ func _handleMouseHover(screenPos: Vector2) -> void:
 				
 				hoverMeshInstance.position = localPos
 				hoverMeshInstance.position.y = 0.3
-				print(localPos)
 				hoverMeshInstance.visible = true
 	else:
 		# Not hovering over any valid cell
