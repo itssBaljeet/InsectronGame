@@ -7,11 +7,13 @@ signal presentationFinished(eventName: StringName)
 var _connected: bool = false
 
 var _dispatch: Dictionary[StringName, Callable]= {
-	&"UnitMoved": _onUnitMoved,
-	&"UnitAttacked": _onUnitAttacked,
-	&"SpecialAttackExecuted": _onSpecialAttack,
-	&"HazardPlaced": _onHazardPlaced,
-	&"ChainAttackTriggered": _onChainAttack,
+&"UnitMoved": _onUnitMoved,
+&"UnitAttacked": _onUnitAttacked,
+&"SpecialAttackExecuted": _onSpecialAttack,
+&"HazardPlaced": _onHazardPlaced,
+&"ChainAttackTriggered": _onChainAttack,
+&"UnitPlaced": _onUnitPlaced,
+&"UnitUnplaced": _onUnitUnplaced,
 }
 
 func _ready() -> void:
@@ -189,4 +191,24 @@ func _onChainAttack(data: Dictionary) -> void:
 	if attack_res and attack_res.vfxScene and board:
 		var vfx := attack_res.vfxScene.instantiate()
 		board.add_child(vfx)
-		vfx.global_position = board.getGlobalCellPosition(to_cell)
+vfx.global_position = board.getGlobalCellPosition(to_cell)
+
+func _onUnitPlaced(data: Dictionary) -> void:
+	var unit: BattleBoardUnitEntity = data.get("unit")
+	var cell: Vector3i = data.get("cell", Vector3i.ZERO)
+	var root: Node3D = self.parentEntity.get_parent() if self.parentEntity else null
+	if unit and root and not unit.is_inside_tree():
+		root.add_child(unit)
+	if unit and not unit.components.get(&"BattleBoardPositionComponent"):
+		var pos_scene := preload("res://Components/Movement/BattleBoardPositionComponent.tscn")
+		unit.add_child(pos_scene.instantiate())
+	if unit and not unit.components.get(&"BattleBoardUnitHealthVisualComponent"):
+		var hv_scene := preload("res://Components/Visual/BattleBoardUnitHealthVisualComponent.tscn")
+		unit.add_child(hv_scene.instantiate())
+	if unit and unit.boardPositionComponent:
+		unit.boardPositionComponent.snapEntityPositionToTile(cell)
+
+func _onUnitUnplaced(data: Dictionary) -> void:
+	var unit: BattleBoardUnitEntity = data.get("unit")
+	if unit:
+		unit.queue_free()

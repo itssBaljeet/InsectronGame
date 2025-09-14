@@ -390,3 +390,26 @@ func getChainTargets(fromCell: Vector3i, chainRange: int) -> Array[Vector3i]:
 	
 	return targets
 #endregion
+
+#region Placement Rules
+## Returns all valid placement cells for a faction
+func getValidPlacementCells(faction: int) -> Array[Vector3i]:
+	var cells: Array[Vector3i] = []
+	var rows: Array[int] = []
+	if faction == FactionComponent.Factions.players:
+		rows = [0, 1]
+	else:
+		rows = [board.height - 2, board.height - 1]
+	for z in rows:
+		for x in range(board.width):
+			var cell := Vector3i(x, 0, z)
+			if isCellVacant(cell):
+				cells.append(cell)
+	return cells
+
+## Validates if a cell can be used for initial placement
+func isValidPlacement(cell: Vector3i, faction: int) -> bool:
+	if not isInBounds(cell):
+		return false
+	return cell in getValidPlacementCells(faction)
+#endregion

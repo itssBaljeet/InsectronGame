@@ -24,6 +24,10 @@ extends TurnBasedEntity
 	get:
 		if battleBoardUI: return battleBoardUI
 		return self.components.get(&"BattleBoardUIComponent")
+@onready var battleBoardPlacementUI: BattleBoardPlacementUIComponent:
+	get:
+		if battleBoardPlacementUI: return battleBoardPlacementUI
+		return self.components.get(&"BattleBoardPlacementUIComponent")
 
 #endregion
 

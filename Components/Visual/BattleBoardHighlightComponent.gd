@@ -77,3 +77,11 @@ func _onDomainEvent(eventName: StringName, _data: Dictionary) -> void:
 			clearHighlights()
 		&"TeamTurnEnded":
 			clearHighlights()
+
+## Highlights valid placement cells
+func requestPlacementHighlights(faction: int) -> void:
+	clearHighlights()
+	highlightType = board.moveHighlightTileID
+	for cell in rules.getValidPlacementCells(faction):
+		board.set_cell_item(cell, highlightType)
+		currentHighlights.append(cell)
