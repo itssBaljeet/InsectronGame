@@ -22,28 +22,22 @@ func canExecute(context: BattleBoardContext) -> bool:
 	return true
 
 func execute(context: BattleBoardContext) -> void:
-	commandStarted.emit()
-	var place_cell := cell
-	if unit and unit.factionComponent and unit.factionComponent.factions == FactionComponent.Factions.ai:
-		place_cell = Vector3i(cell.x, cell.y, context.board.height - 1 - cell.z)
-	context.board.setCellOccupancy(place_cell, true, unit)
-	_placed = true
-	context.emitSignal(&"UnitPlaced", {
-		"unit": unit,
-		"cell": place_cell
-	})
-	commandCompleted.emit()
+        commandStarted.emit()
+        context.board.setCellOccupancy(cell, true, unit)
+        _placed = true
+        context.emitSignal(&"UnitPlaced", {
+                "unit": unit,
+                "cell": cell
+        })
+        commandCompleted.emit()
 
 func canUndo() -> bool:
 	return _placed
 
 func undo(context: BattleBoardContext) -> void:
-	var place_cell := cell
-	if unit and unit.factionComponent and unit.factionComponent.factions == FactionComponent.Factions.ai:
-		place_cell = Vector3i(cell.x, cell.y, context.board.height - 1 - cell.z)
-	context.board.setCellOccupancy(place_cell, false, null)
-	_placed = false
-	context.emitSignal(&"UnitUnplaced", {
-		"unit": unit,
-		"cell": place_cell
-	})
+        context.board.setCellOccupancy(cell, false, null)
+        _placed = false
+        context.emitSignal(&"UnitUnplaced", {
+                "unit": unit,
+                "cell": cell
+        })

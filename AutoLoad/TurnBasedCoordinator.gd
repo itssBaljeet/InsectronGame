@@ -607,16 +607,18 @@ func startPlacementPhase(party: Array[BattleBoardUnitEntity], againstAI: bool = 
 			_autoPlaceEnemy(boardEntity)
 
 func _autoPlaceEnemy(boardEntity: BattleBoardEntity3D) -> void:
-	var factory: BattleBoardCommandFactory = boardEntity.components.get(&"BattleBoardCommandFactory")
-	var width := boardEntity.board.width
-	var enemies := enemyInsectors
-	for i in range(enemies.size()):
-		var x := i % width
-		var z := i / width
-		var cell := Vector3i(x, 0, boardEntity.board.height - 1 - z)
-		factory.intentPlaceUnit(enemies[i], cell)
-	_opponentPlacementDone = true
-	_checkPlacementComplete()
+        var factory: BattleBoardCommandFactory = boardEntity.components.get(&"BattleBoardCommandFactory")
+        var board: BattleBoardComponent3D = boardEntity.battleBoardGenerator
+        var width := board.width
+        var height := board.height
+        var enemies := enemyInsectors
+        for i in range(enemies.size()):
+                var x := i % width
+                var z := i / width
+                var cell := Vector3i(x, 0, height - 1 - z)
+                factory.intentPlaceUnit(enemies[i], cell)
+        _opponentPlacementDone = true
+        _checkPlacementComplete()
 
 func remotePlacementFinished() -> void:
 	_opponentPlacementDone = true
