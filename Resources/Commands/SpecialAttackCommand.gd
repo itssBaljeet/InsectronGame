@@ -80,7 +80,7 @@ func execute(context: BattleBoardContext) -> void:
 
 	# Apply knockback after all damage is dealt
 	if wants_knockback and not knockbackResults.is_empty():
-		await _applyKnockback(context)
+		_applyKnockback(context)
 
 	# Emit single comprehensive event for VFX/presentation
 	print("Emitting special attack execution on context")
@@ -295,8 +295,6 @@ func _applyKnockback(context: BattleBoardContext) -> void:
 			"to": newPos,
 			"path": []
 		})
-
-	await context.board.get_tree().create_timer(0.3).timeout
 
 
 ## Trigger chain attack events
