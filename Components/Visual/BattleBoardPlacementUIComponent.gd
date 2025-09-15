@@ -45,6 +45,8 @@ var shouldIgnoreNextSelectorEvent: bool = false
 
 signal placementCommitted(unit: Meteormyte, cell: Vector3i)
 signal placementPhaseFinished
+signal placementCellSelected(cell: Vector3i)
+signal currentUnitChanged(unit: Meteormyte)
 
 @onready var startPlacementButton: Button = %StartPlacementButton
 @onready var partyPlacementPanel: Panel = %PartyPlacementPanel
@@ -129,8 +131,7 @@ func undoLastPlacement() -> void:
 func _showCurrent() -> void:
 	if party.is_empty():
 		_setCurrentButton(null)
-		if highlighter:
-			highlighter.clearHighlights()
+		currentUnitChanged.emit(null)
 		return
 
 	var unit := currentUnit()
@@ -139,6 +140,7 @@ func _showCurrent() -> void:
 
 	var button : Button = unitButtons.get(unit)
 	_setCurrentButton(button)
+	currentUnitChanged.emit(unit)
 
 func _createPartyButtons() -> void:
 	for unit in party:
@@ -222,7 +224,7 @@ func _onMouseCellClicked(cell: Vector3i) -> void:
 
 
 func _handlePlacementForCell(cell: Vector3i) -> void:
-	placeCurrentUnit(cell)
+	placementCellSelected.emit(cell)
 
 
 func _canHandlePlacement() -> bool:

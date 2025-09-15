@@ -3,30 +3,130 @@ class_name BattleBoardPresentationSystemComponent
 extends Component
 
 signal presentationFinished(eventName: StringName)
+signal stateChanged(newState: PresentationState, oldState: PresentationState)
+
+enum PresentationState {
+	idle = 0,
+	placement = 1,
+	presenting = 2,
+}
+
+var state: PresentationState = PresentationState.idle:
+	set(newState):
+		if state == newState:
+			return
+
+		var oldState := state
+		prevState = oldState
+		state = newState
+		stateChanged.emit(newState, oldState)
+
+var prevState: PresentationState = PresentationState.idle
 
 var _connected: bool = false
+var _placementSignalsConnected: bool = false
+
+var placementUI: BattleBoardPlacementUIComponent:
+	get:
+		return coComponents.get(&"BattleBoardPlacementUIComponent")
+
+var highlighter: BattleBoardHighlightComponent:
+	get:
+		return coComponents.get(&"BattleBoardHighlightComponent")
+
+var commandQueue: BattleBoardCommandQueueComponent:
+	get:
+		return coComponents.get(&"BattleBoardCommandQueueComponent")
+
+func getRequiredComponents() -> Array[Script]:
+	return [
+		BattleBoardCommandQueueComponent,
+		BattleBoardHighlightComponent,
+		BattleBoardPlacementUIComponent,
+	]
 
 var _dispatch: Dictionary[StringName, Callable]= {
-&"UnitMoved": _onUnitMoved,
-&"UnitAttacked": _onUnitAttacked,
-&"SpecialAttackExecuted": _onSpecialAttack,
-&"HazardPlaced": _onHazardPlaced,
-&"ChainAttackTriggered": _onChainAttack,
-&"UnitPlaced": _onUnitPlaced,
-&"UnitUnplaced": _onUnitUnplaced,
+	&"UnitMoved": _onUnitMoved,
+	&"UnitAttacked": _onUnitAttacked,
+	&"SpecialAttackExecuted": _onSpecialAttack,
+	&"HazardPlaced": _onHazardPlaced,
+	&"ChainAttackTriggered": _onChainAttack,
+	&"UnitPlaced": _onUnitPlaced,
+	&"UnitUnplaced": _onUnitUnplaced,
 }
 
 func _ready() -> void:
-	var queue: BattleBoardCommandQueueComponent = coComponents.get(&"BattleBoardCommandQueueComponent")
+	var queue := commandQueue
 	if queue and queue.context and not _connected:
 		queue.context.domainEvent.connect(_on_domain_event)
 		_connected = true
+
+	_connectPlacementFlow()
+	if not _placementSignalsConnected:
+		call_deferred("_connectPlacementFlow")
+
+func _connectPlacementFlow() -> void:
+	if _placementSignalsConnected:
+		return
+	if not placementUI:
+		return
+
+	placementUI.placementCellSelected.connect(_onPlacementCellSelected)
+	placementUI.currentUnitChanged.connect(_onPlacementUnitChanged)
+	placementUI.placementPhaseFinished.connect(_onPlacementPhaseFinished)
+	_placementSignalsConnected = true
+
+	if placementUI.isPlacementActive:
+		_onPlacementUnitChanged(placementUI.currentUnit())
 
 func _on_domain_event(eventName: StringName, data: Dictionary) -> void:
 	var handler: Callable = _dispatch.get(eventName)
 	if handler:
 		await handler.call(data)
 		presentationFinished.emit(eventName)
+
+func _onPlacementUnitChanged(unit: Meteormyte) -> void:
+	if not placementUI or not placementUI.isPlacementActive or unit == null:
+		_exitPlacementState()
+		return
+
+	_enterPlacementState()
+
+func _onPlacementCellSelected(cell: Vector3i) -> void:
+	if state != PresentationState.placement:
+		return
+	if not placementUI or not placementUI.isPlacementActive:
+		return
+	if not placementUI.currentUnit():
+		return
+
+	var placed := placementUI.placeCurrentUnit(cell)
+	if not placed:
+		return
+
+	# Highlight state will refresh when placement UI selects the next unit
+	pass
+
+func _onPlacementPhaseFinished() -> void:
+	_exitPlacementState()
+
+func _enterPlacementState() -> void:
+	state = PresentationState.placement
+	_highlightPlacementCells()
+
+func _exitPlacementState() -> void:
+	_clearPlacementHighlights()
+	state = PresentationState.idle
+
+func _highlightPlacementCells() -> void:
+	if not highlighter:
+		return
+	highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
+
+func _clearPlacementHighlights() -> void:
+	if not highlighter:
+		return
+	highlighter.clearHighlights()
 
 func _onUnitMoved(data: Dictionary) -> void:
 	var unit: BattleBoardUnitClientEntity = data.get("unit")
