@@ -20,8 +20,9 @@ var positionComponent: BattleBoardPositionComponent:
 ## Initializes a client-side battle board unit with the given [Meteormyte] data.
 func _init(meteormyte: Meteormyte, cell: Vector3i, board: BattleBoardComponent3D) -> void:
 
-		var healthVis := BattleBoardUnitHealthVisualComponent.new()
+		var healthVis := preload("res://Components/Visual/BattleBoardUnitHealthVisualComponent.tscn").instantiate()
 		self.add_child(healthVis)
+		healthVis.position.y += 1
 
 		var anim := InsectorAnimationComponent.new()
 		if meteormyte and meteormyte.species_data and meteormyte.species_data.model:
