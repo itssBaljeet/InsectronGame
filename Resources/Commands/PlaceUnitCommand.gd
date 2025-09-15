@@ -26,12 +26,14 @@ func execute(context: BattleBoardContext) -> void:
 	commandStarted.emit()
 	
 	print("Creating new server unit entity")
-	var boardUnit: BattleBoardUnitServerEntity = BattleBoardUnitServerEntity.new(unit, context.board)
-	context.board.parentEntity.add_child(boardUnit)
-	
+	var boardUnit: BattleBoardUnitServerEntity = BattleBoardUnitServerEntity.new(unit, context.boardState)
+	context.boardState.parentEntity.add_child(boardUnit)
+
 	print(boardUnit)
-	
-	context.board.setCellOccupancy(cell, true, boardUnit)
+
+	if boardUnit.boardPositionComponent:
+		boardUnit.boardPositionComponent.setCurrentCell(cell)
+	context.boardState.setCellOccupancy(cell, true, boardUnit)
 	_placed = true
 	context.emitSignal(&"UnitPlaced", {
 		"unit": unit,
@@ -43,7 +45,7 @@ func canUndo() -> bool:
 	return _placed
 
 func undo(context: BattleBoardContext) -> void:
-	context.board.setCellOccupancy(cell, false, null)
+	context.boardState.setCellOccupancy(cell, false, null)
 	_placed = false
 	context.emitSignal(&"UnitUnplaced", {
 		"unit": unit,

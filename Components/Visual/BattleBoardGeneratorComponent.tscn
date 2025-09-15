@@ -1,6 +1,6 @@
 [gd_scene load_steps=39 format=3 uid="uid://ds773iggimiek"]
 
-[ext_resource type="Script" uid="uid://duijfq7qwovp2" path="res://Components/Control/BattleBoardComponent3d.gd" id="1_afhce"]
+[ext_resource type="Script" uid="uid://duijfq7qwovp2" path="res://Components/Visual/BattleBoardGeneratorComponent.gd" id="1_afhce"]
 [ext_resource type="ArrayMesh" uid="uid://ci4187cl4aub5" path="res://addons/edgeTile_Cube_001.res" id="1_majve"]
 [ext_resource type="ArrayMesh" uid="uid://i4ab0ga60ki6" path="res://addons/edgeTileCorner_Cube_001.res" id="2_rbu2t"]
 [ext_resource type="Material" uid="uid://dq8o3ujayflov" path="res://Game/Resources/Materials/even_tile.tres" id="2_ybxe4"]
@@ -198,7 +198,7 @@ item/11/shapes = [SubResource("BoxShape3D_7f4xo"), Transform3D(1, 0, 0, 0, 1, 0,
 item/11/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/11/navigation_layers = 1
 
-[node name="BattleBoardComponent3D" type="GridMap" groups=["components"]]
+[node name="BattleBoardGeneratorComponent" type="GridMap" groups=["components"]]
 mesh_library = SubResource("MeshLibrary_qu5wa")
 cell_size = Vector3(1, 1, 1)
 data = {

@@ -4,9 +4,9 @@ class_name BattleBoardPathfindingComponent
 extends Component
 
 #region Dependencies
-var board: BattleBoardComponent3D:
+var board: BattleBoardServerStateComponent:
 	get:
-		return coComponents.get(&"BattleBoardComponent3D")
+		return coComponents.get(&"BattleBoardServerStateComponent")
 #endregion
 
 ## Finds shortest path between two cells within movement range

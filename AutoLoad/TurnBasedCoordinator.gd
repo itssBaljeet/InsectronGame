@@ -606,11 +606,10 @@ func startPlacementPhase(party: Party, againstAI: bool = false, enemyParty: Part
 		if _againstAI and enemyParty:
 			_autoPlaceEnemy(boardEntity, enemyParty)
 
-
 func _autoPlaceEnemy(boardEntity: BattleBoardEntity3D, enemies: Party) -> void:
 	var factory: BattleBoardCommandFactory = boardEntity.components.get(&"BattleBoardCommandFactory")
-	var board: BattleBoardComponent3D = boardEntity.battleBoardGenerator
-	var width := board.width
+	var boardState: BattleBoardServerStateComponent = boardEntity.serverBoardState
+	var width := boardState.width if boardState else boardEntity.width
 	for i in range(enemies.meteormytes.size()):
 		var x := i % width
 		var z := i / width

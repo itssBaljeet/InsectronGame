@@ -40,7 +40,7 @@
 [ext_resource type="PackedScene" uid="uid://c4n51rfslsp27" path="res://addons/misc/pokemon_fanart_-_anchorage_ikari.glb" id="38_2rls5"]
 [ext_resource type="Resource" uid="uid://cvors1av6bt3b" path="res://Game/Resources/Special Attacks/SelfDestruct.tres" id="39_ccrju"]
 [ext_resource type="PackedScene" uid="uid://bxwj3ul32o42m" path="res://addons/misc/botan_ssrb.glb" id="40_io6jp"]
-[ext_resource type="PackedScene" uid="uid://ds773iggimiek" path="res://Components/Control/BattleBoardComponent3D.tscn" id="41_mgw61"]
+[ext_resource type="PackedScene" uid="uid://ds773iggimiek" path="res://Components/Visual/BattleBoardGeneratorComponent.tscn" id="41_mgw61"]
 [ext_resource type="ArrayMesh" uid="uid://ci4187cl4aub5" path="res://addons/edgeTile_Cube_001.res" id="42_o31lr"]
 [ext_resource type="ArrayMesh" uid="uid://i4ab0ga60ki6" path="res://addons/edgeTileCorner_Cube_001.res" id="43_ppn3g"]
 [ext_resource type="ArrayMesh" uid="uid://dxyrffyyvh6kt" path="res://addons/edgeTileOuter_Cube_002.res" id="44_rv0c6"]

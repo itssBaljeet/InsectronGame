@@ -57,7 +57,7 @@ func execute(context: BattleBoardContext) -> void:
 	var wants_knockback := attackResource.superKnockback or attackResource.knockback
 	if wants_knockback:
 				for cell in affectedCells:
-						var potential := context.board.getOccupant(cell)
+						var potential := context.boardState.getOccupant(cell)
 						if potential and potential is BattleBoardUnitClientEntity:
 								knockbackResults[potential] = Vector3i.ZERO
 
@@ -109,7 +109,7 @@ func _resolveDamage(context: BattleBoardContext, affectedCells: Array) -> Array[
 	var wants_knockback := attackResource.superKnockback or attackResource.knockback
 
 	for cell in affectedCells:
-		var target := context.board.getInsectorOccupant(cell)
+		var target := context.boardState.getInsectorOccupant(cell)
 
 		if target:
 			var targetUnit := target as BattleBoardUnitServerEntity
@@ -121,7 +121,7 @@ func _resolveDamage(context: BattleBoardContext, affectedCells: Array) -> Array[
 			# Calculate knockback before applying damage
 			if wants_knockback and knockbackResults.has(targetUnit):
 				var kb_pos := _calculateKnockbackPosition(context, origin, targetUnit)
-				if kb_pos != BattleBoardComponent3D.INVALID_CELL:
+				if kb_pos != BattleBoardStateComponent.INVALID_CELL:
 					knockbackResults[targetUnit] = kb_pos
 				else:
 					knockbackResults.erase(targetUnit)
@@ -195,7 +195,7 @@ func _placeHazardDirect(context: BattleBoardContext, cell: Vector3i, hazardRes: 
 	hazardData.stacks = 1
 	
 	# Store in cell data
-	var cellData := context.board.vBoardState.get(cell) as BattleBoardCellData
+	var cellData := context.boardState.vBoardState.get(cell) as BattleBoardCellData
 	if cellData:
 		cellData.hazard = hazardData
 	
@@ -227,7 +227,7 @@ func _calculateKnockbackPosition(context: BattleBoardContext, attackOrigin: Vect
 		return primaryPos
 
 	if not attackResource.superKnockback:
-		return BattleBoardComponent3D.INVALID_CELL
+		return BattleBoardStateComponent.INVALID_CELL
 
 	var slidePositions: Array[Vector3i] = []
 	if knockbackDir.x != 0 and knockbackDir.z != 0:
@@ -244,7 +244,7 @@ func _calculateKnockbackPosition(context: BattleBoardContext, attackOrigin: Vect
 		if _isValidKnockbackPosition(context, slidePos):
 			return slidePos
 
-	return BattleBoardComponent3D.INVALID_CELL
+	return BattleBoardStateComponent.INVALID_CELL
 
 
 ## Check if a position is valid for knockback
@@ -252,7 +252,7 @@ func _isValidKnockbackPosition(context: BattleBoardContext, position: Vector3i) 
 	if not context.rules.isInBounds(position):
 		return false
 
-	var occupant := context.board.getOccupant(position)
+	var occupant := context.boardState.getOccupant(position)
 	if occupant:
 		print("Occupant in our way: ", occupant)
 		return occupant in knockbackResults
@@ -283,12 +283,12 @@ func _applyKnockback(context: BattleBoardContext) -> void:
 
 		print("Knocking back ", unit.name, " from ", oldPos, " to ", newPos)
 
-		if context.board.getInsectorOccupant(newPos):
-			print("BASTARD TAKING SPACE: ", context.board.getInsectorOccupant(newPos))
+		if context.boardState.getInsectorOccupant(newPos):
+			print("BASTARD TAKING SPACE: ", context.boardState.getInsectorOccupant(newPos))
 			continue
 		print("Actually knocking back")
-		context.board.setCellOccupancy(oldPos, false, null)
-		context.board.setCellOccupancy(newPos, true, unit)
+		context.boardState.setCellOccupancy(oldPos, false, null)
+		context.boardState.setCellOccupancy(newPos, true, unit)
 		context.emitSignal(&"UnitMoved", {
 			"unit": unit,
 			"from": oldPos,

@@ -23,9 +23,9 @@ var battleBoardCamera: BattleBoardCameraComponent:
 	get:
 		return parentEntity.get_parent().components.get(&"BattleBoardCameraComponent")
 
-var board: BattleBoardComponent3D:
+var board: BattleBoardGeneratorComponent:
 	get:
-		return parentEntity.get_parent().components.get(&"BattleBoardComponent3D")
+		return parentEntity.get_parent().components.get(&"BattleBoardGeneratorComponent")
 #endregion
 
 #region Signals

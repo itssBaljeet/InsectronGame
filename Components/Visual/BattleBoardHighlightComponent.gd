@@ -4,10 +4,10 @@ class_name BattleBoardHighlightComponent
 extends Component
 
 #region Dependencies
-var board: BattleBoardComponent3D:
+var board: BattleBoardGeneratorComponent:
 	get:
 		if board: return board
-		return coComponents.get(&"BattleBoardComponent3D")
+		return coComponents.get(&"BattleBoardGeneratorComponent")
 
 var rules: BattleBoardRulesComponent:
 	get:

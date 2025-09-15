@@ -3,14 +3,16 @@
 class_name BattleBoardContext
 extends Resource
 
-var board: BattleBoardComponent3D
+var generator: BattleBoardGeneratorComponent
+var boardState: BattleBoardServerStateComponent
+var clientState: BattleBoardClientStateComponent
 var rules: BattleBoardRulesComponent
 var pathfinding: BattleBoardPathfindingComponent
 var highlighter: BattleBoardHighlightComponent
 var selector: BattleBoardSelectorComponent3D
 var factory: BattleBoardCommandFactory
 var damageResolver: BattleDamageResolver
-var policies: Dictionary = {} # StringName -> Policy Resource
+var policies: Dictionary = {}
 
 signal domainEvent(eventName: StringName, data: Dictionary)
 

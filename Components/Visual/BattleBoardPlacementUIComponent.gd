@@ -5,9 +5,9 @@ extends Component
 const buttonStyle := preload("res://Assets/UI Pack Kenney/button.tres")
 const hoverButtonStyle := preload("res://Assets/UI Pack Kenney/hover_button.tres")
 
-var board: BattleBoardComponent3D:
+var board: BattleBoardGeneratorComponent:
 	get:
-		return coComponents.get(&"BattleBoardComponent3D")
+		return coComponents.get(&"BattleBoardGeneratorComponent")
 var rules: BattleBoardRulesComponent:
 	get:
 		return coComponents.get(&"BattleBoardRulesComponent")
