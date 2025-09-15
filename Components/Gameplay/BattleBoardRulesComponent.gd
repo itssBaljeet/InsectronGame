@@ -59,7 +59,7 @@ func isInRange(origin: Vector3i, target: Vector3i, rangePattern: BoardPattern) -
 	return offset in rangePattern.offsets
 
 ## Gets all valid move destinations for a unit
-func getValidMoveTargets(unit: BattleBoardUnitEntity) -> Array[Vector3i]:
+func getValidMoveTargets(unit: BattleBoardUnitServerEntity) -> Array[Vector3i]:
 	var validCells: Array[Vector3i] = []
 	var origin := unit.boardPositionComponent.currentCellCoordinates
 	var moveRange := unit.boardPositionComponent.moveRange
@@ -74,7 +74,7 @@ func getValidMoveTargets(unit: BattleBoardUnitEntity) -> Array[Vector3i]:
 
 #region Attack Rules  
 ## Validates if an attack is allowed against targetCell.
-func isValidAttack(attacker: BattleBoardUnitEntity, targetCell: Vector3i, attackResource: AttackResource = null) -> bool:
+func isValidAttack(attacker: BattleBoardUnitServerEntity, targetCell: Vector3i, attackResource: AttackResource = null) -> bool:
 	if not attacker:
 		return false
 	var state := attacker.components.get(&"UnitTurnStateComponent") as UnitTurnStateComponent
@@ -98,7 +98,7 @@ func isHostile(entity1: Entity, entity2: Entity) -> bool:
 	return faction.checkOpposition(faction2.factions)
 
 ## Gets all valid attack targets for a unit
-func getValidAttackTargets(attacker: BattleBoardUnitEntity) -> Array[Vector3i]:
+func getValidAttackTargets(attacker: BattleBoardUnitServerEntity) -> Array[Vector3i]:
 	var validTargets: Array[Vector3i] = []
 	var origin := attacker.boardPositionComponent.currentCellCoordinates
 	var attackRange := attacker.attackComponent.attackRange
@@ -114,9 +114,9 @@ func getValidAttackTargets(attacker: BattleBoardUnitEntity) -> Array[Vector3i]:
 ## - targetCell == null (Variant NIL): returns PRIMARY selectable target cells.
 ## - targetCell is Vector3i	    : returns AOE-affected cells for that selection.
 func getAttackTargets(
-			attacker: BattleBoardUnitEntity,
-			attackResource: AttackResource = null,
-			targetCell: Variant = null
+       attacker: BattleBoardUnitServerEntity,
+		   attackResource: AttackResource = null,
+		   targetCell: Variant = null
 		) -> Array[Vector3i]:
 	var origin := attacker.boardPositionComponent.currentCellCoordinates
 	var rangeOffsets := _resolveRangeOffsets(attacker, attackResource)
@@ -172,7 +172,7 @@ func getAttackTargets(
 	
 
 ## Resolve range offsets from resource, falling back to unit data.
-func _resolveRangeOffsets(attacker: BattleBoardUnitEntity, attackResource: AttackResource) -> Array[Vector3i]:
+func _resolveRangeOffsets(attacker: BattleBoardUnitServerEntity, attackResource: AttackResource) -> Array[Vector3i]:
 	if attackResource:
 		var res := attackResource.getRangePattern()
 		return res if res else [Vector3i.ZERO]
@@ -189,7 +189,7 @@ func _resolveRangeOffsets(attacker: BattleBoardUnitEntity, attackResource: Attac
 
 
 ## Decide if a cell can be chosen as a primary target according to AttackResource.
-func _isValidPrimaryTarget(attacker: BattleBoardUnitEntity, attackResource: AttackResource, cell: Vector3i) -> bool:
+func _isValidPrimaryTarget(attacker: BattleBoardUnitServerEntity, attackResource: AttackResource, cell: Vector3i) -> bool:
 	if not isInBounds(cell):
 		return false
 	
@@ -226,10 +226,10 @@ func _appendUniqueBounded(list: Array[Vector3i], cell: Vector3i) -> void:
 ## Checks if a team has exhausted all units
 func isTeamExhausted(teamFaction: int) -> bool:
 	for entity in TurnBasedCoordinator.turnBasedEntities:
-		if not entity is BattleBoardUnitEntity:
+                if not entity is BattleBoardUnitServerEntity:
 			continue
 		
-		var unit := entity as BattleBoardUnitEntity
+                var unit := entity as BattleBoardUnitServerEntity
 		if unit.factionComponent.factions != teamFaction:
 			continue
 		
@@ -240,14 +240,14 @@ func isTeamExhausted(teamFaction: int) -> bool:
 	return true
 
 ## Gets units that can still act this turn
-func getActiveUnits(teamFaction: int) -> Array[BattleBoardUnitEntity]:
-	var activeUnits: Array[BattleBoardUnitEntity] = []
+func getActiveUnits(teamFaction: int) -> Array[BattleBoardUnitServerEntity]:
+    var activeUnits: Array[BattleBoardUnitServerEntity] = []
 	
 	for entity in TurnBasedCoordinator.turnBasedEntities:
-		if not entity is BattleBoardUnitEntity:
+            if not entity is BattleBoardUnitServerEntity:
 			continue
 		
-		var unit := entity as BattleBoardUnitEntity 
+            var unit := entity as BattleBoardUnitServerEntity
 		if unit.factionComponent.factions != teamFaction:
 			continue
 		
@@ -260,7 +260,7 @@ func getActiveUnits(teamFaction: int) -> Array[BattleBoardUnitEntity]:
 
 #region Special Attack Rules
 ## Validates if a special attack can be executed
-func isValidSpecialAttack(attacker: BattleBoardUnitEntity, targetCell: Vector3i, attackResource: AttackResource) -> bool:
+func isValidSpecialAttack(attacker: BattleBoardUnitServerEntity, targetCell: Vector3i, attackResource: AttackResource) -> bool:
 	# First check basic attack validity
 	if not isValidAttack(attacker, targetCell, attackResource):
 		print("Invalid attack! From special")
@@ -311,7 +311,7 @@ func _getConeCells(origin: Vector3i, target: Vector3i, coneWidth: int = 3) -> Ar
 
 #region Status Effect Rules
 ## Checks if a status effect can be applied
-func canApplyStatusEffect(target: BattleBoardUnitEntity, effect: StatusEffectResource) -> bool:
+func canApplyStatusEffect(target: BattleBoardUnitServerEntity, effect: StatusEffectResource) -> bool:
 	if not target or not effect:
 		return false
 	
@@ -373,7 +373,7 @@ func canClearHazard(hazard: BattleBoardHazardSystemComponent.ActiveHazard, clear
 ## Get valid chain targets from a cell
 func getChainTargets(fromCell: Vector3i, chainRange: int) -> Array[Vector3i]:
 	var targets: Array[Vector3i] = []
-	var attacker: BattleBoardUnitEntity = board.getInsectorOccupant(fromCell)
+    var attacker: BattleBoardUnitServerEntity = board.getInsectorOccupant(fromCell)
 	# Check all cells within chain range
 	for x in range(-chainRange, chainRange + 1):
 		for z in range(-chainRange, chainRange + 1):

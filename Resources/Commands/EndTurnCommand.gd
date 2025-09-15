@@ -17,10 +17,10 @@ func execute(context: BattleBoardContext) -> void:
 	commandStarted.emit()
 	
 	# Mark all remaining units as exhausted
-	for entity in TurnBasedCoordinator.turnBasedEntities:
-		if not entity is BattleBoardUnitEntity:
-			continue
-		var unit := entity as BattleBoardUnitEntity
+        for entity in TurnBasedCoordinator.turnBasedEntities:
+                if not entity is BattleBoardUnitClientEntity:
+                        continue
+                var unit := entity as BattleBoardUnitClientEntity
 		
 		if unit.factionComponent.factions == team:
 			var state := unit.components.get(&"UnitTurnStateComponent") as UnitTurnStateComponent

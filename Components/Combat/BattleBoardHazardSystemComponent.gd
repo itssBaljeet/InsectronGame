@@ -89,7 +89,7 @@ func getHazardAt(cell: Vector3i) -> ActiveHazard:
 	return activeHazards.get(cell)
 
 ## Process hazards when a unit enters a cell
-func onUnitEntersCell(unit: BattleBoardUnitEntity, cell: Vector3i) -> void:
+func onUnitEntersCell(unit: BattleBoardUnitServerEntity, cell: Vector3i) -> void:
 	var hazard := getHazardAt(cell)
 	if not hazard:
 		return
@@ -116,7 +116,7 @@ func onUnitEntersCell(unit: BattleBoardUnitEntity, cell: Vector3i) -> void:
 	hazardTriggered.emit(unit, hazardRes)
 
 ## Process hazards when a unit ends turn on a cell
-func onUnitEndsTurnAt(unit: BattleBoardUnitEntity, cell: Vector3i) -> void:
+func onUnitEndsTurnAt(unit: BattleBoardUnitServerEntity, cell: Vector3i) -> void:
 	var hazard := getHazardAt(cell)
 	if not hazard:
 		return

@@ -44,7 +44,7 @@ func decideNextAction() -> void:
 	if thinkingDelay > 0:
 		await parentEntity.get_tree().create_timer(thinkingDelay).timeout
 	
-	var unit := parentEntity as BattleBoardUnitEntity
+        var unit := parentEntity as BattleBoardUnitServerEntity
 	var state := unit.components.get(&"UnitTurnStateComponent") as UnitTurnStateComponent
 	
 	if not state or state.isExhausted():
@@ -66,7 +66,7 @@ func decideNextAction() -> void:
 	thinkingCompleted.emit()
 
 ## Aggressive AI - attack if possible, then move closer, then attack again
-func _executeAggressiveTurn(unit: BattleBoardUnitEntity) -> void:
+func _executeAggressiveTurn(unit: BattleBoardUnitServerEntity) -> void:
 	var state := unit.stateComponent
 	if not state:
 		return
@@ -115,7 +115,7 @@ func _executeAggressiveTurn(unit: BattleBoardUnitEntity) -> void:
 		await _waitForCommandCompletion()
 
 ## Defensive AI - move away from threats, attack if cornered
-func _executeDefensiveTurn(unit: BattleBoardUnitEntity) -> void:
+func _executeDefensiveTurn(unit: BattleBoardUnitServerEntity) -> void:
 	var state := unit.stateComponent
 	if not state:
 		return
@@ -143,13 +143,13 @@ func _executeDefensiveTurn(unit: BattleBoardUnitEntity) -> void:
 		await _waitForCommandCompletion()
 
 ## Mission-focused AI
-func _executeObjectiveTurn(unit: BattleBoardUnitEntity) -> void:
+func _executeObjectiveTurn(unit: BattleBoardUnitServerEntity) -> void:
 	# This would check mission-specific goals
 	# For now, default to aggressive
 	await _executeAggressiveTurn(unit)
 
 ## Support AI - help allies
-func _executeSupportTurn(unit: BattleBoardUnitEntity) -> void:
+func _executeSupportTurn(unit: BattleBoardUnitServerEntity) -> void:
 	# Move towards injured allies or provide buffs
 	# For now, default to defensive
 	await _executeDefensiveTurn(unit)
@@ -160,7 +160,7 @@ func _waitForCommandCompletion() -> void:
 		await commandQueue.queueCompleted
 
 #region Helper Methods
-func _selectBestTarget(unit: BattleBoardUnitEntity, targets: Array[Vector3i]) -> Vector3i:
+func _selectBestTarget(unit: BattleBoardUnitServerEntity, targets: Array[Vector3i]) -> Vector3i:
 	if targets.is_empty():
 		return Vector3i.ZERO
 	
@@ -177,7 +177,7 @@ func _selectBestTarget(unit: BattleBoardUnitEntity, targets: Array[Vector3i]) ->
 	
 	return bestTarget
 
-func _findMoveTowardsEnemy(unit: BattleBoardUnitEntity) -> Vector3i:
+func _findMoveTowardsEnemy(unit: BattleBoardUnitServerEntity) -> Vector3i:
 	var validMoves := rules.getValidMoveTargets(unit)
 	if validMoves.is_empty():
 		return Vector3i.ZERO
@@ -201,7 +201,7 @@ func _findMoveTowardsEnemy(unit: BattleBoardUnitEntity) -> Vector3i:
 	print("Best Move: ", bestMove)
 	return bestMove
 
-func _findSafestCell(unit: BattleBoardUnitEntity) -> Vector3i:
+func _findSafestCell(unit: BattleBoardUnitServerEntity) -> Vector3i:
 	var validMoves := rules.getValidMoveTargets(unit)
 	if validMoves.is_empty():
 		return Vector3i.ZERO
@@ -227,7 +227,7 @@ func _findSafestCell(unit: BattleBoardUnitEntity) -> Vector3i:
 	
 	return safestCell
 
-func _findNearestEnemy(unit: BattleBoardUnitEntity) -> BattleBoardUnitEntity:
+func _findNearestEnemy(unit: BattleBoardUnitServerEntity) -> BattleBoardUnitServerEntity:
 	var enemies := _getAllEnemies(unit)
 	if enemies.is_empty():
 		return null
@@ -244,14 +244,14 @@ func _findNearestEnemy(unit: BattleBoardUnitEntity) -> BattleBoardUnitEntity:
 	
 	return nearest
 
-func _getAllEnemies(unit: BattleBoardUnitEntity) -> Array[BattleBoardUnitEntity]:
-	var enemies: Array[BattleBoardUnitEntity] = []
+func _getAllEnemies(unit: BattleBoardUnitServerEntity) -> Array[BattleBoardUnitServerEntity]:
+        var enemies: Array[BattleBoardUnitServerEntity] = []
 	var myFaction := unit.factionComponent.factions
 	
 	for entity in TurnBasedCoordinator.turnBasedEntities:
-		if not entity is BattleBoardUnitEntity:
+                if not entity is BattleBoardUnitServerEntity:
 			continue
-		var other := entity as BattleBoardUnitEntity
+                var other := entity as BattleBoardUnitServerEntity
 		if other == unit:
 			continue
 		if other.factionComponent.checkOpposition(myFaction):
@@ -259,15 +259,15 @@ func _getAllEnemies(unit: BattleBoardUnitEntity) -> Array[BattleBoardUnitEntity]
 	
 	return enemies
 
-func _createMoveCommand(unit: BattleBoardUnitEntity, toCell: Vector3i) -> bool:
+func _createMoveCommand(unit: BattleBoardUnitServerEntity, toCell: Vector3i) -> bool:
 	print("MAKING MOVE COMMAND")
 	return commandFactory.intentMove(unit, toCell)
 
-func _createAttackCommand(unit: BattleBoardUnitEntity, targetCell: Vector3i) -> bool:
+func _createAttackCommand(unit: BattleBoardUnitServerEntity, targetCell: Vector3i) -> bool:
 	print("MAKING ATTACK COMMAND")
 	return commandFactory.intentAttack(unit, targetCell)
 
-func _createWaitCommand(unit: BattleBoardUnitEntity) -> bool:
+func _createWaitCommand(unit: BattleBoardUnitServerEntity) -> bool:
 	print("MAKING WAIT COMMAND")
 	return commandFactory.intentWait(unit)
 #endregion

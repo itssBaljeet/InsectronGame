@@ -20,14 +20,15 @@ var commandQueue: BattleBoardCommandQueueComponent:
 
 var party: Array[Meteormyte] = []
 var lastPlaced: Meteormyte
+
 var currentIndex: int = 0
 
-signal placementCommitted(unit: BattleBoardUnitEntity, cell: Vector3i)
+signal placementCommitted(unit: Meteormyte, cell: Vector3i)
 signal placementPhaseFinished
 
 @onready var startPlacementButton: Button = %StartPlacementButton
 
-func beginPlacement(partyUnits: Array[BattleBoardUnitEntity]) -> void:
+func beginPlacement(partyUnits: Array[Meteormyte]) -> void:
 	party = partyUnits.duplicate()
 	currentIndex = 0
 	_showCurrent()

@@ -233,7 +233,7 @@ func playMoveSequence(dest: Vector3i) -> void:
 	#     await animateStepToCell(unit, cell)
 
 ## Main entry point for attack animations from commands
-func playAttackSequence(attacker: BattleBoardUnitEntity, target: Entity, damage: int) -> void:
+func playAttackSequence(attacker: BattleBoardUnitClientEntity, target: Entity, damage: int) -> void:
 	if not attacker or not target:
 		return
 	
@@ -255,7 +255,7 @@ func playAttackSequence(attacker: BattleBoardUnitEntity, target: Entity, damage:
 	idleAnimation()
 
 ## Makes two units face each other
-func faceTargets(unit1: BattleBoardUnitEntity, unit2: Entity) -> void:
+func faceTargets(unit1: BattleBoardUnitClientEntity, unit2: Entity) -> void:
 	if not unit1 or not unit2:
 		return
 	
@@ -274,7 +274,7 @@ func faceTargets(unit1: BattleBoardUnitEntity, unit2: Entity) -> void:
 		await anim2.face_move_direction(dir2)
 
 func faceTargetsHome(unit1: Entity, unit2: Entity) -> void:
-	if (not unit1 or unit2) and not (unit1 is BattleBoardUnitEntity and unit2 is BattleBoardUnitEntity):
+        if (not unit1 or unit2) and not (unit1 is BattleBoardUnitClientEntity and unit2 is BattleBoardUnitClientEntity):
 		return
 	
 	unit1.animComponent.face_home_orientation()

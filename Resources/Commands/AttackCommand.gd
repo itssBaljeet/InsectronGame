@@ -3,7 +3,7 @@
 class_name AttackCommand
 extends BattleBoardCommand
 
-var attacker: BattleBoardUnitEntity
+var attacker: BattleBoardUnitClientEntity
 var targetCell: Vector3i
 var target: Entity
 var damageDealt: int = 0
@@ -47,8 +47,8 @@ func execute(context: BattleBoardContext) -> void:
 	context.highlighter.clearHighlights()
 	
 	# Get stats components
-	var attackerStats := attacker.components.get(&"MeteormyteStatsComponent") as MeteormyteStatsComponent
-	var targetUnit := target as BattleBoardUnitEntity
+        var attackerStats := attacker.components.get(&"MeteormyteStatsComponent") as MeteormyteStatsComponent
+        var targetUnit := target as BattleBoardUnitClientEntity
 	var targetStats := targetUnit.components.get(&"MeteormyteStatsComponent") as MeteormyteStatsComponent if targetUnit else null
 	
 	# Track death states
@@ -75,8 +75,8 @@ func execute(context: BattleBoardContext) -> void:
 		# Show damage number
 		if targetAnim and attackerDamage > 0:
 			targetAnim.showDamageNumber(attackerDamage)
-			if attacker.attackComponent.venemous:
-				targetAnim.play_poison_puff(6)
+                        if attacker.attackComponent and attacker.attackComponent.venemous:
+                                targetAnim.play_poison_puff(6)
 		
 		# Check if target died
 		if not targetHealth.isAlive():
@@ -91,7 +91,7 @@ func execute(context: BattleBoardContext) -> void:
 		counterDamage = targetStats.calculateDamage(attackerDefenseValue, 40, false)
 		
 		# Play counter animation
-		await target.animComponent.playAttackSequence(target, attacker, counterDamage)
+                await targetUnit.animComponent.playAttackSequence(targetUnit, attacker, counterDamage)
 		
 		# Apply counter damage
 		var attackerHealth := attacker.components.get(&"MeteormyteHealthComponent") as MeteormyteHealthComponent
@@ -101,8 +101,8 @@ func execute(context: BattleBoardContext) -> void:
 			attackerHealth.takeDamage(counterDamage)
 			
 			# Show damage number
-			if attackerAnim and counterDamage > 0:
-				attackerAnim.showDamageNumber(counterDamage)
+                        if attackerAnim and counterDamage > 0:
+                                attackerAnim.showDamageNumber(counterDamage)
 			
 			# Check if attacker died from counter
 			if not attackerHealth.isAlive():
@@ -112,8 +112,8 @@ func execute(context: BattleBoardContext) -> void:
 	# Face home orientation (only for survivors)
 	if not attackerDied:
 		attacker.animComponent.face_home_orientation()
-	if not targetDied and is_instance_valid(target):
-		await target.animComponent.face_home_orientation()
+        if not targetDied and is_instance_valid(targetUnit):
+                await targetUnit.animComponent.face_home_orientation()
 	
 	# Store total damage dealt for the event
 	damageDealt = attackerDamage
@@ -131,7 +131,7 @@ func execute(context: BattleBoardContext) -> void:
 	commandCompleted.emit()
 
 ## Handle a single unit death
-func _handleTargetDeath(context: BattleBoardContext, unit: BattleBoardUnitEntity, anim: InsectorAnimationComponent) -> void:
+func _handleTargetDeath(context: BattleBoardContext, unit: BattleBoardUnitClientEntity, anim: InsectorAnimationComponent) -> void:
 	# Play death animation if available
 	if anim and anim.skin:
 		var tw := anim.create_tween()

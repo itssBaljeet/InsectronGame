@@ -3,7 +3,8 @@
 class_name PlaceUnitCommand
 extends BattleBoardCommand
 
-var unit: Meteormyte
+var unit: BattleBoardUnitClientEntity
+
 var cell: Vector3i
 var faction: FactionComponent.Factions
 var _placed: bool = false

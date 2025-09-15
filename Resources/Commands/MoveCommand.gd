@@ -3,7 +3,7 @@
 class_name MoveCommand  
 extends BattleBoardCommand
 
-var unit: BattleBoardUnitEntity
+var unit: BattleBoardUnitClientEntity
 var fromCell: Vector3i
 var toCell: Vector3i
 var path: Array[Vector3i] = []
