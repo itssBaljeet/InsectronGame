@@ -56,10 +56,10 @@ func execute(context: BattleBoardContext) -> void:
 	knockbackResults.clear()
 	var wants_knockback := attackResource.superKnockback or attackResource.knockback
 	if wants_knockback:
-                for cell in affectedCells:
-                        var potential := context.board.getOccupant(cell)
-                        if potential and potential is BattleBoardUnitClientEntity:
-                                knockbackResults[potential] = Vector3i.ZERO
+				for cell in affectedCells:
+						var potential := context.board.getOccupant(cell)
+						if potential and potential is BattleBoardUnitClientEntity:
+								knockbackResults[potential] = Vector3i.ZERO
 
 	# Delegate to damage resolver
 	var damageResults := _resolveDamage(context, affectedCells)
@@ -111,8 +111,8 @@ func _resolveDamage(context: BattleBoardContext, affectedCells: Array) -> Array[
 	for cell in affectedCells:
 		var target := context.board.getOccupant(cell)
 
-                if target and target is BattleBoardUnitClientEntity:
-                        var targetUnit := target as BattleBoardUnitClientEntity
+		if target and target is BattleBoardUnitClientEntity:
+			var targetUnit := target as BattleBoardUnitClientEntity
 
 			# Check if we should affect this target (faction check)
 			if not context.rules.isHostile(attacker, targetUnit) and not attackResource.hitsAllies:
@@ -150,7 +150,7 @@ func _applyStatusEffects(context: BattleBoardContext, damageResults: Array[Dicti
 		return
 	
 	for result in damageResults:
-                var target := result.target as BattleBoardUnitClientEntity
+		var target := result.target as BattleBoardUnitClientEntity
 		if not target:
 			continue
 		
@@ -265,7 +265,7 @@ func _applyKnockback(context: BattleBoardContext) -> void:
 	print("Applying knockback to ", knockbackResults.size(), " targets")
 
 	var sortedTargets: Array = knockbackResults.keys()
-        sortedTargets.sort_custom(func(a: BattleBoardUnitClientEntity, b: BattleBoardUnitClientEntity) -> bool:
+	sortedTargets.sort_custom(func(a: BattleBoardUnitClientEntity, b: BattleBoardUnitClientEntity) -> bool:
 		var distA: int = attacker.boardPositionComponent.currentCellCoordinates.distance_squared_to(
 			a.boardPositionComponent.currentCellCoordinates)
 		var distB: int = attacker.boardPositionComponent.currentCellCoordinates.distance_squared_to(
@@ -274,10 +274,10 @@ func _applyKnockback(context: BattleBoardContext) -> void:
 	)
 
 	for target in sortedTargets:
-                if not target is BattleBoardUnitClientEntity:
+		if not target is BattleBoardUnitClientEntity:
 			continue
 
-                var unit := target as BattleBoardUnitClientEntity
+		var unit := target as BattleBoardUnitClientEntity
 		var newPos := knockbackResults[target] as Vector3i
 		var oldPos := unit.boardPositionComponent.currentCellCoordinates
 

@@ -44,7 +44,7 @@ func decideNextAction() -> void:
 	if thinkingDelay > 0:
 		await parentEntity.get_tree().create_timer(thinkingDelay).timeout
 	
-        var unit := parentEntity as BattleBoardUnitServerEntity
+		var unit := parentEntity as BattleBoardUnitServerEntity
 	var state := unit.components.get(&"UnitTurnStateComponent") as UnitTurnStateComponent
 	
 	if not state or state.isExhausted():
@@ -245,13 +245,13 @@ func _findNearestEnemy(unit: BattleBoardUnitServerEntity) -> BattleBoardUnitServ
 	return nearest
 
 func _getAllEnemies(unit: BattleBoardUnitServerEntity) -> Array[BattleBoardUnitServerEntity]:
-        var enemies: Array[BattleBoardUnitServerEntity] = []
+	var enemies: Array[BattleBoardUnitServerEntity] = []
 	var myFaction := unit.factionComponent.factions
 	
 	for entity in TurnBasedCoordinator.turnBasedEntities:
-                if not entity is BattleBoardUnitServerEntity:
+		if not entity is BattleBoardUnitServerEntity:
 			continue
-                var other := entity as BattleBoardUnitServerEntity
+		var other := entity as BattleBoardUnitServerEntity
 		if other == unit:
 			continue
 		if other.factionComponent.checkOpposition(myFaction):

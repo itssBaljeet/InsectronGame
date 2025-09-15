@@ -160,7 +160,7 @@ var battleBoardSelector: BattleBoardSelectorComponent3D:
 	get:
 		playerInsectors.clear()
 		for insector in turnBasedEntities:
-                    if insector is BattleBoardUnitServerEntity and insector.factionComponent.factions == pow(2, FactionComponent.Factions.players-1):
+			if insector is BattleBoardUnitServerEntity and insector.factionComponent.factions == pow(2, FactionComponent.Factions.players-1):
 				playerInsectors.append(insector)
 		return playerInsectors
 
@@ -168,7 +168,7 @@ var battleBoardSelector: BattleBoardSelectorComponent3D:
 	get:
 		enemyInsectors.clear()
 		for insector in turnBasedEntities:
-                    if insector is BattleBoardUnitServerEntity and insector.factionComponent.factions == pow(2, FactionComponent.Factions.ai-1):
+			if insector is BattleBoardUnitServerEntity and insector.factionComponent.factions == pow(2, FactionComponent.Factions.ai-1):
 				enemyInsectors.append(insector)
 		return enemyInsectors
 
@@ -301,7 +301,7 @@ func setAllUnitTurnFlagsFalse() -> void:
 
 ## Check if all units of a team (defaults to current team) have finished their moves and actions.
 func isTeamExhausted(team: int = currentTeam) -> bool:
-    var party: Array[BattleBoardUnitServerEntity] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
+	var party: Array[BattleBoardUnitServerEntity] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
 	for unit in party:
 		if not unit.stateComponent.isExhausted():
 			return false
@@ -311,7 +311,7 @@ func isTeamExhausted(team: int = currentTeam) -> bool:
 ## Get a list of units in a team that still have actions available (not both flags set).
 func getAvailableUnits(team: int = currentTeam) -> Array[TurnBasedEntity]:
 	var available: Array[TurnBasedEntity] = []
-    var party: Array[BattleBoardUnitServerEntity] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
+	var party: Array[BattleBoardUnitServerEntity] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
 	for unit in party:
 		if not unit.stateComponent.isExhausted():
 			available.append(unit)
@@ -600,25 +600,25 @@ func startPlacementPhase(party: Array[Meteormyte], againstAI: bool = false, enem
 			break
 	if boardEntity:
 		var placementUI: BattleBoardPlacementUIComponent = boardEntity.components.get(&"BattleBoardPlacementUIComponent")
-                if placementUI:
-                        placementUI.placementPhaseFinished.connect(_onPlacementFinished)
-                        placementUI.beginPlacement(party)
-                if _againstAI:
-                        _autoPlaceEnemy(boardEntity, enemyParty)
+		if placementUI:
+			placementUI.placementPhaseFinished.connect(_onPlacementFinished)
+			placementUI.beginPlacement(party)
+		if _againstAI:
+			_autoPlaceEnemy(boardEntity, enemyParty)
 
 
 func _autoPlaceEnemy(boardEntity: BattleBoardEntity3D, enemies: Array[Meteormyte]) -> void:
-        var factory: BattleBoardCommandFactory = boardEntity.components.get(&"BattleBoardCommandFactory")
-        var board: BattleBoardComponent3D = boardEntity.battleBoardGenerator
-        var width := board.width
-        var height := board.height
-        for i in range(enemies.size()):
-                var x := i % width
-                var z := i / width
-                var cell := Vector3i(x, 0, height - 1 - z)
-                factory.intentPlaceUnit(enemies[i], cell)
-        _opponentPlacementDone = true
-        _checkPlacementComplete()
+	var factory: BattleBoardCommandFactory = boardEntity.components.get(&"BattleBoardCommandFactory")
+	var board: BattleBoardComponent3D = boardEntity.battleBoardGenerator
+	var width := board.width
+	var height := board.height
+	for i in range(enemies.size()):
+		var x := i % width
+		var z := i / width
+		var cell := Vector3i(x, 0, height - 1 - z)
+		factory.intentPlaceUnit(enemies[i], cell)
+	_opponentPlacementDone = true
+	_checkPlacementComplete()
 
 
 func remotePlacementFinished() -> void:

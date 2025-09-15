@@ -354,8 +354,8 @@ func getOccupant(cell: Vector3i) -> Entity:
 	return data.occupant if data != null else null
 
 func getInsectorOccupant(cell: Vector3i) -> BattleBoardUnitServerEntity:
-        var data: BattleBoardCellData = self.vBoardState.get(cell)
-        return data.occupant if data != null and data.occupant is BattleBoardUnitServerEntity else null
+		var data: BattleBoardCellData = self.vBoardState.get(cell)
+		return data.occupant if data != null and data.occupant is BattleBoardUnitServerEntity else null
 
 #endregion
 

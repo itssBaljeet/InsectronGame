@@ -4,8 +4,23 @@
 
 [node name="TurnBasedCoordinator" type="Node2D" groups=["turnBased"]]
 script = ExtResource("1_5qbkx")
+currentPhase = null
 delayBetweenEntities = 0.5
+delayBetweenStates = null
 debugMode = true
+currentTeam = null
+currentTurn = null
+currentTurnState = null
+turnsProcessed = null
+turnBasedEntities = null
+playerInsectors = null
+enemyInsectors = null
+currentTeamParty = null
+isProcessingEntities = null
+currentEntityIndex = null
+recentEntityIndex = null
+functionToCallOnStateTimer = null
+functionToCallOnEntityTimer = null
 metadata/_edit_group_ = true
 
 [node name="StateTimer" type="Timer" parent="."]

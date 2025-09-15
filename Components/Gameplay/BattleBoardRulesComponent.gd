@@ -114,7 +114,7 @@ func getValidAttackTargets(attacker: BattleBoardUnitServerEntity) -> Array[Vecto
 ## - targetCell == null (Variant NIL): returns PRIMARY selectable target cells.
 ## - targetCell is Vector3i	    : returns AOE-affected cells for that selection.
 func getAttackTargets(
-       attacker: BattleBoardUnitServerEntity,
+	   attacker: BattleBoardUnitServerEntity,
 		   attackResource: AttackResource = null,
 		   targetCell: Variant = null
 		) -> Array[Vector3i]:
@@ -226,10 +226,10 @@ func _appendUniqueBounded(list: Array[Vector3i], cell: Vector3i) -> void:
 ## Checks if a team has exhausted all units
 func isTeamExhausted(teamFaction: int) -> bool:
 	for entity in TurnBasedCoordinator.turnBasedEntities:
-                if not entity is BattleBoardUnitServerEntity:
+		if not entity is BattleBoardUnitServerEntity:
 			continue
 		
-                var unit := entity as BattleBoardUnitServerEntity
+		var unit := entity as BattleBoardUnitServerEntity
 		if unit.factionComponent.factions != teamFaction:
 			continue
 		
@@ -241,13 +241,13 @@ func isTeamExhausted(teamFaction: int) -> bool:
 
 ## Gets units that can still act this turn
 func getActiveUnits(teamFaction: int) -> Array[BattleBoardUnitServerEntity]:
-    var activeUnits: Array[BattleBoardUnitServerEntity] = []
+	var activeUnits: Array[BattleBoardUnitServerEntity] = []
 	
 	for entity in TurnBasedCoordinator.turnBasedEntities:
-            if not entity is BattleBoardUnitServerEntity:
+		if not entity is BattleBoardUnitServerEntity:
 			continue
 		
-            var unit := entity as BattleBoardUnitServerEntity
+		var unit := entity as BattleBoardUnitServerEntity
 		if unit.factionComponent.factions != teamFaction:
 			continue
 		
@@ -373,7 +373,7 @@ func canClearHazard(hazard: BattleBoardHazardSystemComponent.ActiveHazard, clear
 ## Get valid chain targets from a cell
 func getChainTargets(fromCell: Vector3i, chainRange: int) -> Array[Vector3i]:
 	var targets: Array[Vector3i] = []
-    var attacker: BattleBoardUnitServerEntity = board.getInsectorOccupant(fromCell)
+	var attacker: BattleBoardUnitServerEntity = board.getInsectorOccupant(fromCell)
 	# Check all cells within chain range
 	for x in range(-chainRange, chainRange + 1):
 		for z in range(-chainRange, chainRange + 1):

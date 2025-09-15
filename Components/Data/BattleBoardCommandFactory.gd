@@ -114,13 +114,13 @@ func intentEndTurn(team: int) -> bool:
 
 ## Creates and enqueues a placement command during setup
 func intentPlaceUnit(meteormyte: Meteormyte, cell: Vector3i) -> bool:
-        if not meteormyte:
-                commandValidationFailed.emit("No unit selected")
-                return false
-        var command := PlaceUnitCommand.new()
-        command.unit = BattleBoardUnitClientEntity.new(meteormyte)
-        command.cell = cell
-        commandCreated.emit(command)
+	if not meteormyte:
+		commandValidationFailed.emit("No unit selected")
+		return false
+	var command := PlaceUnitCommand.new()
+	command.unit = BattleBoardUnitClientEntity.new(meteormyte)
+	command.cell = cell
+	commandCreated.emit(command)
 
 	if commandQueue.enqueue(command):
 		commandEnqueued.emit(command)

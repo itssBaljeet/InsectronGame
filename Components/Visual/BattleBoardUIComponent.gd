@@ -182,12 +182,12 @@ func trySelectUnit(cell: Vector3i) -> bool:
 	var occupant := board.getOccupant(cell)
 	
 	# Empty cell - just show end turn button
-        if not occupant or not occupant is BattleBoardUnitClientEntity:
+	if not occupant or not occupant is BattleBoardUnitClientEntity:
 		activeUnit = null
 		openUnitMenu(null, UIState.unitMenu)
 		return true
 	
-        var unit := occupant as BattleBoardUnitClientEntity
+		var unit := occupant as BattleBoardUnitClientEntity
 	activeUnit = unit
 	
 	# Always open menu regardless of unit faction or state

@@ -61,7 +61,7 @@ extends Component
 var battleBoard: BattleBoardComponent3D:
 	get:
 		# The entity [BattleBoardPositionComponent] is a child of should be a child itself of a BattleBoardEntity3D which holds the component we need.
-		if not self.parentEntity.get_parent(): return null
+		if not self.parentEntity or self.parentEntity.get_parent(): return null
 		return self.parentEntity.get_parent().find_child("BattleBoardComponent3D").get_node(^".") as BattleBoardComponent3D
 
 #endregion
@@ -163,7 +163,7 @@ func updateCurrentTileCoordinates() -> Vector3i:
 ## TIP: May be useful for UI elements like cursors etc.
 ## If [param destinationOverride] is omitted then [member currentCellCoordinates] is used.
 func snapEntityPositionToTile(tileCoordinates: Vector3i = self.currentCellCoordinates) -> void:
-	if not isEnabled: return
+	if not isEnabled or not battleBoard: return
 	
 	var tileGlobalPos: Vector3 = adjustToTile(battleBoard.getGlobalCellPosition(tileCoordinates))
 	

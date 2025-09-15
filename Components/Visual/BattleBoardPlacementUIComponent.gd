@@ -28,6 +28,16 @@ signal placementPhaseFinished
 
 @onready var startPlacementButton: Button = %StartPlacementButton
 
+func _ready() -> void:
+	startPlacementButton.button_up.connect(_onStartPlacementButtonPressed)
+
+## This is a test for singleplayer right now emulating a server architecture
+## For now we pass in a premade player party (Whenever we make the party resource)
+## This call simulates both users connecting (one is ai) so when the player "connects" we start
+func _onStartPlacementButtonPressed() -> void:
+	startPlacementButton.disabled = true
+	#TurnBasedCoordinator.startPlacementPhase()
+
 func beginPlacement(partyUnits: Array[Meteormyte]) -> void:
 	party = partyUnits.duplicate()
 	currentIndex = 0

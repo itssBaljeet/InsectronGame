@@ -274,7 +274,7 @@ func faceTargets(unit1: BattleBoardUnitClientEntity, unit2: Entity) -> void:
 		await anim2.face_move_direction(dir2)
 
 func faceTargetsHome(unit1: Entity, unit2: Entity) -> void:
-        if (not unit1 or unit2) and not (unit1 is BattleBoardUnitClientEntity and unit2 is BattleBoardUnitClientEntity):
+	if (not unit1 or unit2) and not (unit1 is BattleBoardUnitClientEntity and unit2 is BattleBoardUnitClientEntity):
 		return
 	
 	unit1.animComponent.face_home_orientation()
