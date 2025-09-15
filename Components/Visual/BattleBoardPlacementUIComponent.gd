@@ -74,16 +74,16 @@ func placeCurrentUnit(cell: Vector3i) -> bool:
 	var unit := currentUnit()
 	if not unit:
 		return false
-	if factory.intentPlaceUnit(unit, cell):
-		placementCommitted.emit(unit, cell)
-		party.remove_at(currentIndex)
-		if party.is_empty():
-			placementPhaseFinished.emit()
-		else:
-			currentIndex = currentIndex % party.size()
-		highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
-		return true
-	return false
+       if factory.intentPlaceUnit(unit, cell, FactionComponent.Factions.players):
+               placementCommitted.emit(unit, cell)
+               party.remove_at(currentIndex)
+               if party.is_empty():
+                       placementPhaseFinished.emit()
+               else:
+                       currentIndex = currentIndex % party.size()
+               highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
+               return true
+       return false
 
 func undoLastPlacement() -> void:
 	if commandQueue.undoLastCommand():
