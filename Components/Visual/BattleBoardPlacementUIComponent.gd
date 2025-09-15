@@ -32,14 +32,14 @@ func _ready() -> void:
 	startPlacementButton.button_up.connect(_onStartPlacementButtonPressed)
 
 ## This is a test for singleplayer right now emulating a server architecture
-## For now we pass in a premade player party (Whenever we make the party resource)
+## For now we pass in a premade player party resource
 ## This call simulates both users connecting (one is ai) so when the player "connects" we start
 func _onStartPlacementButtonPressed() -> void:
 	startPlacementButton.disabled = true
 	#TurnBasedCoordinator.startPlacementPhase()
 
-func beginPlacement(partyUnits: Array[Meteormyte]) -> void:
-	party = partyUnits.duplicate()
+func beginPlacement(partyResource: Party) -> void:
+	party = partyResource.meteormytes.duplicate()
 	currentIndex = 0
 	_showCurrent()
 	highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
