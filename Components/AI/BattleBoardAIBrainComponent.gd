@@ -74,7 +74,7 @@ func _executeAggressiveTurn(unit: BattleBoardUnitServerEntity) -> void:
 	# Try to attack first if we can
 	if state.canAct():
 		print("ATTACK ATTEMPT (pre-move)")
-		var targets := rules.getValidAttackTargets(unit)
+		var targets := rules.getValidAttackTargets(unit.boardPositionComponent.currentCellCoordinates)
 		if not targets.is_empty():
 			var bestTarget := _selectBestTarget(unit, targets)
 			if _createAttackCommand(unit, bestTarget):
@@ -101,7 +101,7 @@ func _executeAggressiveTurn(unit: BattleBoardUnitServerEntity) -> void:
 					await parentEntity.get_tree().create_timer(0.1).timeout
 					
 					# Get new valid targets from new position
-					var postMoveTargets := rules.getValidAttackTargets(unit)
+					var postMoveTargets := rules.getValidAttackTargets(unit.boardPositionComponent.currentCellCoordinates)
 					if not postMoveTargets.is_empty():
 						var bestTarget := _selectBestTarget(unit, postMoveTargets)
 						if _createAttackCommand(unit, bestTarget):
@@ -131,7 +131,7 @@ func _executeDefensiveTurn(unit: BattleBoardUnitServerEntity) -> void:
 	
 	# Attack if we can (either couldn't move to safety or after moving)
 	if state.canAct():
-		var targets := rules.getValidAttackTargets(unit)
+		var targets := rules.getValidAttackTargets(unit.boardPositionComponent.currentCellCoordinates)
 		if not targets.is_empty():
 			if _createAttackCommand(unit, targets[0]):
 				await _waitForCommandCompletion()
@@ -178,7 +178,7 @@ func _selectBestTarget(unit: BattleBoardUnitServerEntity, targets: Array[Vector3
 	return bestTarget
 
 func _findMoveTowardsEnemy(unit: BattleBoardUnitServerEntity) -> Vector3i:
-	var validMoves := rules.getValidMoveTargets(unit)
+	var validMoves := rules.getValidMoveTargets(unit.boardPositionComponent.currentCellCoordinates, unit.boardPositionComponent.moveRange)
 	if validMoves.is_empty():
 		return Vector3i.ZERO
 	
@@ -202,7 +202,7 @@ func _findMoveTowardsEnemy(unit: BattleBoardUnitServerEntity) -> Vector3i:
 	return bestMove
 
 func _findSafestCell(unit: BattleBoardUnitServerEntity) -> Vector3i:
-	var validMoves := rules.getValidMoveTargets(unit)
+	var validMoves := rules.getValidMoveTargets(unit.boardPositionComponent.currentCellCoordinates, unit.boardPositionComponent.moveRange)
 	if validMoves.is_empty():
 		return Vector3i.ZERO
 	
@@ -261,13 +261,13 @@ func _getAllEnemies(unit: BattleBoardUnitServerEntity) -> Array[BattleBoardUnitS
 
 func _createMoveCommand(unit: BattleBoardUnitServerEntity, toCell: Vector3i) -> bool:
 	print("MAKING MOVE COMMAND")
-	return commandFactory.intentMove(unit, toCell)
+	return commandFactory.intentMove(unit.boardPositionComponent.currentCellCoordinates, toCell)
 
 func _createAttackCommand(unit: BattleBoardUnitServerEntity, targetCell: Vector3i) -> bool:
 	print("MAKING ATTACK COMMAND")
-	return commandFactory.intentAttack(unit, targetCell)
+	return commandFactory.intentAttack(unit.boardPositionComponent.currentCellCoordinates, targetCell)
 
 func _createWaitCommand(unit: BattleBoardUnitServerEntity) -> bool:
 	print("MAKING WAIT COMMAND")
-	return commandFactory.intentWait(unit)
+	return commandFactory.intentWait(unit.boardPositionComponent.currentCellCoordinates)
 #endregion

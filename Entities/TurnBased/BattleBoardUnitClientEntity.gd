@@ -1,6 +1,6 @@
 @tool
 class_name BattleBoardUnitClientEntity
-extends BattleBoardUnitServerEntity
+extends TurnBasedEntity
 
 
 #region Dependencies
@@ -18,8 +18,7 @@ var positionComponent: BattleBoardPositionComponent:
 #endregion
 
 ## Initializes a client-side battle board unit with the given [Meteormyte] data.
-func _init(meteormyte: Meteormyte, cell: Vector3i) -> void:
-		super._init(meteormyte)
+func _init(meteormyte: Meteormyte, cell: Vector3i, board: BattleBoardComponent3D) -> void:
 
 		var healthVis := BattleBoardUnitHealthVisualComponent.new()
 		self.add_child(healthVis)
@@ -31,6 +30,7 @@ func _init(meteormyte: Meteormyte, cell: Vector3i) -> void:
 				anim.skin = model_instance
 		self.add_child(anim)
 		
-		var pos := BattleBoardPositionComponent.new()
+		print("Making a new pos comp")
+		var pos := BattleBoardPositionComponent.new(board)
 		self.add_child(pos)
 		pos.snapEntityPositionToTile(cell)

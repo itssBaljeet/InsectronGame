@@ -24,8 +24,12 @@ func canExecute(context: BattleBoardContext) -> bool:
 
 func execute(context: BattleBoardContext) -> void:
 	commandStarted.emit()
-
-	var boardUnit: BattleBoardUnitServerEntity = BattleBoardUnitServerEntity.new(unit)
+	
+	print("Creating new server unit entity")
+	var boardUnit: BattleBoardUnitServerEntity = BattleBoardUnitServerEntity.new(unit, context.board)
+	context.board.parentEntity.add_child(boardUnit)
+	
+	print(boardUnit)
 	
 	context.board.setCellOccupancy(cell, true, boardUnit)
 	_placed = true

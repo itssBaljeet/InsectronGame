@@ -5,7 +5,7 @@
 class_name SpecialAttackCommand
 extends BattleBoardCommand
 
-var attacker: BattleBoardUnitClientEntity
+var attacker: BattleBoardUnitServerEntity
 var targetCell: Vector3i
 var attackResource: AttackResource
 var knockbackResults: Dictionary = {}
@@ -30,7 +30,7 @@ func canExecute(context: BattleBoardContext) -> bool:
 		return false
 	
 	# Validate through rules (single source of truth!)
-	if not context.rules.isValidSpecialAttack(attacker, targetCell, attackResource):
+	if not context.rules.isValidSpecialAttack(attacker.boardPositionComponent.currentCellCoordinates, targetCell, attackResource):
 		print("Bad special")
 		commandFailed.emit("Invalid special attack")
 		return false
@@ -50,7 +50,7 @@ func execute(context: BattleBoardContext) -> void:
 	
 	# Get all affected cells from rules
 	var originCell := attacker.boardPositionComponent.currentCellCoordinates
-	var affectedCells := context.rules.getAttackTargets(attacker, attackResource, targetCell)
+	var affectedCells := context.rules.getAttackTargets(attacker.boardPositionComponent.currentCellCoordinates, attackResource, targetCell)
 
 	# Pre-calculate knockback targets
 	knockbackResults.clear()
@@ -109,10 +109,10 @@ func _resolveDamage(context: BattleBoardContext, affectedCells: Array) -> Array[
 	var wants_knockback := attackResource.superKnockback or attackResource.knockback
 
 	for cell in affectedCells:
-		var target := context.board.getOccupant(cell)
+		var target := context.board.getInsectorOccupant(cell)
 
-		if target and target is BattleBoardUnitClientEntity:
-			var targetUnit := target as BattleBoardUnitClientEntity
+		if target:
+			var targetUnit := target as BattleBoardUnitServerEntity
 
 			# Check if we should affect this target (faction check)
 			if not context.rules.isHostile(attacker, targetUnit) and not attackResource.hitsAllies:
@@ -150,7 +150,7 @@ func _applyStatusEffects(context: BattleBoardContext, damageResults: Array[Dicti
 		return
 	
 	for result in damageResults:
-		var target := result.target as BattleBoardUnitClientEntity
+		var target := result.target as BattleBoardUnitServerEntity
 		if not target:
 			continue
 		
@@ -208,7 +208,7 @@ func _placeHazardDirect(context: BattleBoardContext, cell: Vector3i, hazardRes: 
 
 ## Calculate knockback position for a target
 ## superKnockback allows sliding along walls
-func _calculateKnockbackPosition(context: BattleBoardContext, attackOrigin: Vector3i, target: BattleBoardUnitClientEntity) -> Vector3i:
+func _calculateKnockbackPosition(context: BattleBoardContext, attackOrigin: Vector3i, target: BattleBoardUnitServerEntity) -> Vector3i:
 	var targetPos := target.boardPositionComponent.currentCellCoordinates
 
 	# Direction away from attacker
@@ -279,7 +279,7 @@ func _applyKnockback(context: BattleBoardContext) -> void:
 
 		var unit := target as BattleBoardUnitClientEntity
 		var newPos := knockbackResults[target] as Vector3i
-		var oldPos := unit.boardPositionComponent.currentCellCoordinates
+		var oldPos: Vector3i = unit.boardPositionComponent.currentCellCoordinates
 
 		print("Knocking back ", unit.name, " from ", oldPos, " to ", newPos)
 

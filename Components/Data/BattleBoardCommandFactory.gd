@@ -16,6 +16,10 @@ var rules: BattleBoardRulesComponent:
 var UIComp: BattleBoardUIComponent:
 	get:
 		return coComponents.get(&"BattleBoardUIComponent")
+
+var board: BattleBoardComponent3D:
+	get:
+		return coComponents.get(&"BattleBoardComponent3D")
 #endregion
 
 #region Signals - UI listens to these
@@ -25,7 +29,9 @@ signal commandValidationFailed(reason: String)
 #endregion
 
 ## Creates and enqueues a move command from UI intent
-func intentMove(unit: BattleBoardUnitServerEntity, toCell: Vector3i) -> bool:
+func intentMove(fromCell: Vector3i, toCell: Vector3i) -> bool:
+	var unit = board.getInsectorOccupant(fromCell)
+	
 	if not unit:
 		commandValidationFailed.emit("No unit selected")
 		return false
@@ -44,7 +50,9 @@ func intentMove(unit: BattleBoardUnitServerEntity, toCell: Vector3i) -> bool:
 		return false
 
 ## Creates and enqueues an attack command from UI intent
-func intentAttack(attacker: BattleBoardUnitServerEntity, targetCell: Vector3i) -> bool:
+func intentAttack(fromCell: Vector3i, targetCell: Vector3i) -> bool:
+	var attacker := board.getInsectorOccupant(fromCell)
+	
 	if not attacker:
 		commandValidationFailed.emit("No attacker selected")
 		return false
@@ -61,7 +69,9 @@ func intentAttack(attacker: BattleBoardUnitServerEntity, targetCell: Vector3i) -
 	else:
 		return false
 
-func intentSpecialAttack(attacker: BattleBoardUnitServerEntity, targetCell: Vector3i) -> bool:
+func intentSpecialAttack(fromCell: Vector3i, targetCell: Vector3i) -> bool:
+	var attacker := board.getInsectorOccupant(fromCell)
+	
 	if not attacker:
 		commandValidationFailed.emit("No attacker selected")
 		return false
@@ -82,8 +92,8 @@ func intentSpecialAttack(attacker: BattleBoardUnitServerEntity, targetCell: Vect
 		return false
 
 ## Creates and enqueues a wait command
-func intentWait(unit: BattleBoardUnitServerEntity) -> bool:
-	print("Intent wait unit: ", unit)
+func intentWait(cell: Vector3i) -> bool:
+	var unit := board.getInsectorOccupant(cell)
 	if not unit:
 		commandValidationFailed.emit("No unit selected")
 		return false

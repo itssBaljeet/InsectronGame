@@ -35,10 +35,10 @@ func clearHighlights() -> void:
 	highlightType = -1
 
 ## Highlights valid move destinations
-func requestMoveHighlights(unit: BattleBoardUnitClientEntity) -> void:
+func requestMoveHighlights(origin: Vector3i, moveRange: BoardPattern) -> void:
 	clearHighlights()
 	
-	var validMoves := rules.getValidMoveTargets(unit)
+	var validMoves := rules.getValidMoveTargets(origin, moveRange)
 	highlightType = board.moveHighlightTileID
 	
 	for cell in validMoves:
@@ -51,7 +51,7 @@ func requestAttackHighlights(unit: BattleBoardUnitClientEntity, onlyLightAvailab
 	highlightType = board.attackHighlightTileID
 	
 	if onlyLightAvailable:
-		var validTargets := rules.getValidAttackTargets(unit)
+		var validTargets := rules.getValidAttackTargets(unit.positionComponent.currentCellCoordinates)
 		
 		for cell in validTargets:
 			board.set_cell_item(cell, highlightType)

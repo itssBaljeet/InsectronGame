@@ -195,19 +195,14 @@ func _onChainAttack(data: Dictionary) -> void:
 
 func _onUnitPlaced(data: Dictionary) -> void:
 	var meteormyte: Meteormyte = data.get("unit")
-	var unit = BattleBoardUnitClientEntity.new(meteormyte, data.get(&"cell"))
+	print(parentEntity.components.BattleBoardComponent3D)
+	var unit := BattleBoardUnitClientEntity.new(meteormyte, data.get("cell"), parentEntity.components.BattleBoardComponent3D)
 	var cell: Vector3i = data.get("cell", Vector3i.ZERO)
-	var root: Node3D = self.parentEntity.get_parent() if self.parentEntity else null
+	var root = self.parentEntity if self.parentEntity else null
 	if unit and root and not unit.is_inside_tree():
 		root.add_child(unit)
-	if unit and not unit.components.get(&"BattleBoardPositionComponent"):
-		var pos_scene := preload("res://Components/Movement/BattleBoardPositionComponent.tscn")
-		unit.add_child(pos_scene.instantiate())
-	if unit and not unit.components.get(&"BattleBoardUnitHealthVisualComponent"):
-		var hv_scene := preload("res://Components/Visual/BattleBoardUnitHealthVisualComponent.tscn")
-		unit.add_child(hv_scene.instantiate())
-	if unit and unit.boardPositionComponent:
-		unit.boardPositionComponent.snapEntityPositionToTile(cell)
+	if unit and unit.positionComponent:
+		unit.positionComponent.snapEntityPositionToTile(cell)
 
 func _onUnitUnplaced(data: Dictionary) -> void:
 	var unit: BattleBoardUnitClientEntity = data.get("unit")

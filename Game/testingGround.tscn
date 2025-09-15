@@ -664,11 +664,11 @@ transform = Transform3D(-8.999999, 1.9345808e-07, 7.599952e-07, 0, 8.258665, -2.
 msaa_3d = 1
 
 [node name="TVCameraController" type="Node3D" parent="Blockout/Deco/SubViewport"]
-transform = Transform3D(0.48592293, -8.786397e-16, 0.48111725, 0, 1, 0, -0.48111725, -8.3754004e-16, 0.48592293, 2.456693, 0.29999924, 3.4999995)
+transform = Transform3D(0.25741953, 1.0851242e-15, -0.6189944, 0, 1, 0, 0.6189944, -4.884747e-16, 0.25741953, 2.456693, 0.29999924, 3.4999995)
 script = ExtResource("16_82lh0")
 
 [node name="Camera3D" type="Camera3D" parent="Blockout/Deco/SubViewport/TVCameraController"]
-transform = Transform3D(0.029342202, 0.49976337, -0.86561555, 0, 0.8660254, 0.5, 0.99952674, -0.014671101, 0.025411092, -9.50597, 7.7, -0.077772856)
+transform = Transform3D(0.029664932, 0.706788, -0.7067729, 0, 0.7070992, 0.7070841, 0.9995172, -0.020976946, 0.020976499, -9.50597, 7.7, -0.077772856)
 fov = 85.0
 
 [node name="doorwayFront" parent="Blockout" instance=ExtResource("16_gjnab")]
@@ -772,4 +772,4 @@ transform = Transform3D(16, 0, 0, 0, 16, 0, 0, 0, 16, 2.5, 0, 3.4)
 amount = 128
 
 [node name="Sketchfab_Scene" parent="." instance=ExtResource("23_l7ylh")]
-transform = Transform3D(-0.27632958, 0, -1.0469744, 0, 1, 0, 1.0469744, 0, -0.27632958, -1, 4, -1)
+transform = Transform3D(-0.09782839, 0, -1.0882388, 0, 1, 0, 1.0882388, 0, -0.09782839, -1, 4, -1)

@@ -3,7 +3,7 @@
 class_name AttackCommand
 extends BattleBoardCommand
 
-var attacker: BattleBoardUnitClientEntity
+var attacker: BattleBoardUnitServerEntity
 var targetCell: Vector3i
 var target: Entity
 var damageDealt: int = 0
@@ -32,7 +32,7 @@ func canExecute(context: BattleBoardContext) -> bool:
 		#commandFailed.emit("Invalid target")
 		#return false
 	
-	if not context.rules.isValidAttack(attacker, targetCell):
+	if not context.rules.isValidAttack(attacker.boardPositionComponent.currentCellCoordinates, targetCell):
 		commandFailed.emit("Invalid Attack Target")
 		return false
 	
@@ -103,11 +103,6 @@ func execute(context: BattleBoardContext) -> void:
 			# Show damage number
 			if attackerAnim and counterDamage > 0:
 				attackerAnim.showDamageNumber(counterDamage)
-			
-			# Check if attacker died from counter
-			if not attackerHealth.isAlive():
-				attackerDied = true
-				await _handleTargetDeath(context, attacker, attackerAnim)
 	
 	# Face home orientation (only for survivors)
 	if not attackerDied:
@@ -138,10 +133,6 @@ func _handleTargetDeath(context: BattleBoardContext, unit: BattleBoardUnitClient
 		tw.tween_property(anim.skin, "rotation:z", deg_to_rad(90), anim.die_animation_time)
 		tw.parallel().tween_property(anim.skin, "modulate:a", 0.0, anim.die_animation_time)
 		await tw.finished
-	
-	# Clear board occupancy
-	var pos := unit.boardPositionComponent.currentCellCoordinates
-	context.board.setCellOccupancy(pos, false, null)
 	
 	# Remove the unit
 	if is_instance_valid(unit):

@@ -16,8 +16,8 @@ var pathfinding: BattleBoardPathfindingComponent:
 
 #region Movement Rules
 ## Validates if a unit can move from one cell to another
-func isValidMove(posComp: BattleBoardPositionComponent, fromCell: Vector3i, toCell: Vector3i) -> bool:
-	if not posComp:
+func isValidMove(moveRange: BoardPattern, fromCell: Vector3i, toCell: Vector3i) -> bool:
+	if not moveRange:
 		return false
 
 	# Check bounds
@@ -25,11 +25,11 @@ func isValidMove(posComp: BattleBoardPositionComponent, fromCell: Vector3i, toCe
 		return false
 
 		# Check if destination is vacant or already claimed by this unit
-	if not isCellVacant(toCell, posComp.parentEntity):
+	if not isCellVacant(toCell):
 		return false
 
 	# Check movement range
-	if not isInRange(fromCell, toCell, posComp.moveRange):
+	if not isInRange(fromCell, toCell, moveRange):
 		return false
 
 	# Allow zero-length moves without pathfinding
@@ -37,7 +37,7 @@ func isValidMove(posComp: BattleBoardPositionComponent, fromCell: Vector3i, toCe
 		return true
 
 	# Check if path exists
-	var path := pathfinding.findPath(fromCell, toCell, posComp)
+	var path := pathfinding.findPath(fromCell, toCell, moveRange)
 
 	return not path.is_empty()
 
@@ -59,14 +59,12 @@ func isInRange(origin: Vector3i, target: Vector3i, rangePattern: BoardPattern) -
 	return offset in rangePattern.offsets
 
 ## Gets all valid move destinations for a unit
-func getValidMoveTargets(unit: BattleBoardUnitServerEntity) -> Array[Vector3i]:
+func getValidMoveTargets(origin: Vector3i, moveRange: BoardPattern) -> Array[Vector3i]:
 	var validCells: Array[Vector3i] = []
-	var origin := unit.boardPositionComponent.currentCellCoordinates
-	var moveRange := unit.boardPositionComponent.moveRange
 	
 	for offset in moveRange.offsets:
 		var targetCell := origin + offset
-		if isValidMove(unit.boardPositionComponent, origin, targetCell):
+		if isValidMove(moveRange, origin, targetCell):
 			validCells.append(targetCell)
 	
 	return validCells
@@ -74,7 +72,8 @@ func getValidMoveTargets(unit: BattleBoardUnitServerEntity) -> Array[Vector3i]:
 
 #region Attack Rules  
 ## Validates if an attack is allowed against targetCell.
-func isValidAttack(attacker: BattleBoardUnitServerEntity, targetCell: Vector3i, attackResource: AttackResource = null) -> bool:
+func isValidAttack(origin: Vector3i, targetCell: Vector3i, attackResource: AttackResource = null) -> bool:
+	var attacker := board.getInsectorOccupant(origin)
 	if not attacker:
 		return false
 	var state := attacker.components.get(&"UnitTurnStateComponent") as UnitTurnStateComponent
@@ -83,7 +82,7 @@ func isValidAttack(attacker: BattleBoardUnitServerEntity, targetCell: Vector3i, 
 	if not isInBounds(targetCell):
 		return false
 	# Ask for PRIMARY targets (no targetCell arg)
-	var primaryTargets := getAttackTargets(attacker, attackResource)
+	var primaryTargets := getAttackTargets(origin, attackResource, targetCell)
 	return targetCell in primaryTargets if attackResource.requiresTarget else true
 
 ## Checks if two entities are hostile to each other
@@ -98,14 +97,16 @@ func isHostile(entity1: Entity, entity2: Entity) -> bool:
 	return faction.checkOpposition(faction2.factions)
 
 ## Gets all valid attack targets for a unit
-func getValidAttackTargets(attacker: BattleBoardUnitServerEntity) -> Array[Vector3i]:
+func getValidAttackTargets(cell: Vector3i) -> Array[Vector3i]:
+	var attacker := board.getInsectorOccupant(cell)
+	
 	var validTargets: Array[Vector3i] = []
 	var origin := attacker.boardPositionComponent.currentCellCoordinates
 	var attackRange := attacker.attackComponent.attackRange
 	
 	for offset in attackRange.offsets:
 		var targetCell := origin + offset
-		if isValidAttack(attacker, targetCell):
+		if isValidAttack(origin, targetCell):
 			validTargets.append(targetCell)
 	
 	return validTargets
@@ -114,11 +115,11 @@ func getValidAttackTargets(attacker: BattleBoardUnitServerEntity) -> Array[Vecto
 ## - targetCell == null (Variant NIL): returns PRIMARY selectable target cells.
 ## - targetCell is Vector3i	    : returns AOE-affected cells for that selection.
 func getAttackTargets(
-	   attacker: BattleBoardUnitServerEntity,
-		   attackResource: AttackResource = null,
-		   targetCell: Variant = null
+		origin: Vector3i,
+		attackResource: AttackResource = null,
+		targetCell: Variant = null
 		) -> Array[Vector3i]:
-	var origin := attacker.boardPositionComponent.currentCellCoordinates
+	var attacker := board.getInsectorOccupant(origin)
 	var rangeOffsets := _resolveRangeOffsets(attacker, attackResource)
 
 	if targetCell == null:
@@ -260,9 +261,9 @@ func getActiveUnits(teamFaction: int) -> Array[BattleBoardUnitServerEntity]:
 
 #region Special Attack Rules
 ## Validates if a special attack can be executed
-func isValidSpecialAttack(attacker: BattleBoardUnitServerEntity, targetCell: Vector3i, attackResource: AttackResource) -> bool:
+func isValidSpecialAttack(origin: Vector3i, targetCell: Vector3i, attackResource: AttackResource) -> bool:
 	# First check basic attack validity
-	if not isValidAttack(attacker, targetCell, attackResource):
+	if not isValidAttack(origin, targetCell, attackResource):
 		print("Invalid attack! From special")
 		return false
 	

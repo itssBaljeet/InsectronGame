@@ -200,7 +200,7 @@ func onMoveButtonPressed() -> void:
 	panel.hide()
 	state = UIState.moveSelect
 	selector.setEnabled(true)
-	highlighter.requestMoveHighlights(activeUnit)
+	highlighter.requestMoveHighlights(activeUnit.positionComponent.currentCellCoordinates, activeUnit.positionComponent.moveRange)
 
 func onAttackButtonPressed() -> void:
 	if not activeUnit:
@@ -225,7 +225,7 @@ func onWaitButtonPressed() -> void:
 	if not activeUnit:
 		return
 	# Replace with command
-	factory.intentWait(activeUnit)
+	factory.intentWait(activeUnit.positionComponent.currentCellCoordinates)
 	closeUnitMenu()
 	
 
@@ -289,7 +289,7 @@ func _onBasicAttackSelected() -> void:
 	
 	# Get and highlight valid targets
 	var attackComp := activeUnit.components.get(&"BattleBoardUnitAttackComponent") as BattleBoardUnitAttackComponent
-	var origin := activeUnit.boardPositionComponent.currentCellCoordinates
+	var origin := activeUnit.positionComponent.currentCellCoordinates
 	
 	for cell in attackComp.attackRange.offsets:
 		if factory.rules.isInBounds(origin + cell):
@@ -309,9 +309,8 @@ func _onAttackSelected(attack: AttackResource) -> void:
 	
 	# Get and highlight valid targets
 	var attackComp := activeUnit.components.get(&"BattleBoardUnitAttackComponent") as BattleBoardUnitAttackComponent
-	var origin := activeUnit.boardPositionComponent.currentCellCoordinates
-	attackSelectionState.validTargets = rules.getAttackTargets(activeUnit, attack)
-	
+	var origin := activeUnit.positionComponent.currentCellCoordinates
+	attackSelectionState.validTargets = rules.getAttackTargets(origin, attack)
 	
 	for cell in attack.getRangePattern():
 		print("Breaking here")
@@ -397,15 +396,13 @@ func _onCellSelected(cell: Vector3i) -> void:
 			trySelectUnit(cell)
 		UIState.moveSelect:
 			print("Moving")
-			#confirmMoveTarget(cell)
-			factory.intentMove(activeUnit, cell)
+			factory.intentMove(activeUnit.positionComponent.currentCellCoordinates, cell)
 		UIState.basicAttackTargetSelect:
 			print("basic Attack Target")
-			factory.intentAttack(activeUnit, cell)
+			factory.intentAttack(activeUnit.positionComponent.currentCellCoordinates, cell)
 		UIState.attackTargetSelect:
 			print("Attack target")
-			#confirmAttackTarget(cell)
-			factory.intentSpecialAttack(activeUnit, cell)
+			factory.intentSpecialAttack(activeUnit.positionComponent.currentCellCoordinates, cell)
 		
 
 func _onCommandEnqueued(command: BattleBoardCommand) -> void:
@@ -540,7 +537,7 @@ func _updateButtonsVisibility(unit: BattleBoardUnitClientEntity) -> void:
 		return
 	
 	# Check if it's an enemy unit
-	var isPlayerUnit := unit.factionComponent.factions == pow(2, FactionComponent.Factions.players - 1)
+	var isPlayerUnit := board.getInsectorOccupant(unit.positionComponent.currentCellCoordinates).factionComponent.factions == pow(2, FactionComponent.Factions.players - 1)
 	
 	if not isPlayerUnit:
 		# Enemy unit - show info and end turn only
@@ -548,7 +545,7 @@ func _updateButtonsVisibility(unit: BattleBoardUnitClientEntity) -> void:
 		return
 	
 	# Player's unit - check state
-	var stateComp := unit.stateComponent
+	var stateComp := board.getInsectorOccupant(unit.positionComponent.currentCellCoordinates).stateComponent
 	if not stateComp:
 		return
 	

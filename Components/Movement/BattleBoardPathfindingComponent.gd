@@ -10,8 +10,8 @@ var board: BattleBoardComponent3D:
 #endregion
 
 ## Finds shortest path between two cells within movement range
-func findPath(fromCell: Vector3i, toCell: Vector3i, positionComponent: BattleBoardPositionComponent) -> Array[Vector3i]:
-	if not positionComponent or fromCell == toCell:
+func findPath(fromCell: Vector3i, toCell: Vector3i, moveRange: BoardPattern) -> Array[Vector3i]:
+	if not moveRange or fromCell == toCell:
 		return []
 	
 	# BFS pathfinding
@@ -30,7 +30,7 @@ func findPath(fromCell: Vector3i, toCell: Vector3i, positionComponent: BattleBoa
 			return _reconstructPath(parent, fromCell, toCell)
 		
 		# Check neighbors
-		for offset in positionComponent.moveRange.offsets:
+		for offset in moveRange.offsets:
 			var neighbor := current + offset
 			
 			# Skip if already visited or invalid
