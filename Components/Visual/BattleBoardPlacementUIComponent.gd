@@ -31,6 +31,8 @@ signal placementCommitted(unit: Meteormyte, cell: Vector3i)
 signal placementPhaseFinished
 
 @onready var startPlacementButton: Button = %StartPlacementButton
+@onready var partyPlacementPanel: Panel = %PartyPlacementPanel
+@onready var partyList: VBoxContainer = %PartyList
 
 func _ready() -> void:
 	boardUI.visible = false
