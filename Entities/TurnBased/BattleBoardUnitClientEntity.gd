@@ -30,7 +30,5 @@ func _init(meteormyte: Meteormyte, cell: Vector3i, board: BattleBoardComponent3D
 				anim.skin = model_instance
 		self.add_child(anim)
 		
-		print("Making a new pos comp")
 		var pos := BattleBoardPositionComponent.new(board)
 		self.add_child(pos)
-		pos.snapEntityPositionToTile(cell)
