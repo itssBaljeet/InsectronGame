@@ -58,7 +58,7 @@ var _over_crit_color: Color
 		for child in self.get_children():
 			if child is SubViewport:
 				for bar in child.get_children():
-					if bar is TextureProgressBar and bar.name == "OverBar":
+					if bar is TextureProgressBar and bar != _lag:
 						return bar
 		return null
 
@@ -67,7 +67,7 @@ var _over_crit_color: Color
 		for child in self.get_children():
 			if child is SubViewport:
 				for bar in child.get_children():
-					if bar is TextureProgressBar and bar.name == "UnderBar":
+					if bar is TextureProgressBar and bar != _fill:
 						return bar
 		return null
 
@@ -78,9 +78,19 @@ var healthComponent: MeteormyteHealthComponent:
 #endregion
 
 func _ready() -> void:
+	print("READY FUNCTION")
 	if not _fill or not _lag:
 		push_warning("HealthVisual: OverBar/UnderBar not found under a SubViewport.")
+		print("NO FILL OR LAG")
 		return
+	
+	_fill.texture_under = preload("res://Assets/Noah UI/bar_under_transparent.png")
+	_fill.texture_over = preload("res://Assets/Noah UI/bar_fill_white.png")
+	_fill.texture_progress = preload("res://Assets/Noah UI/bar_fill_white.png")
+	
+	_lag.texture_over = preload("res://Assets/Noah UI/bar_fill_white.png")
+	_lag.texture_under = preload("res://Assets/Noah UI/bar_under_transparent.png")
+	_lag.texture_progress = preload("res://Assets/Noah UI/bar_fill_white.png")
 
 	_fill.min_value = 0
 	_lag.min_value = 0

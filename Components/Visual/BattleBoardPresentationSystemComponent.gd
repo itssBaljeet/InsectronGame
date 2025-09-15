@@ -196,7 +196,9 @@ func _onChainAttack(data: Dictionary) -> void:
 func _onUnitPlaced(data: Dictionary) -> void:
 	var meteormyte: Meteormyte = data.get("unit")
 	print(parentEntity.components.BattleBoardComponent3D)
+	
 	var unit := BattleBoardUnitClientEntity.new(meteormyte, data.get("cell"), parentEntity.components.BattleBoardComponent3D)
+	
 	var cell: Vector3i = data.get("cell", Vector3i.ZERO)
 	var root = self.parentEntity if self.parentEntity else null
 	if unit and root and not unit.is_inside_tree():
