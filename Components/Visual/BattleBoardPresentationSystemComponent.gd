@@ -111,14 +111,20 @@ func _onPlacementCellSelected(cell: Vector3i) -> void:
 	pass
 
 func _onPlacementPhaseFinished() -> void:
-	_exitPlacementState()
+	if TurnBasedCoordinator._playerPlacementDone and TurnBasedCoordinator._opponentPlacementDone:
+		print("PLAYER DONE HEHE WHEN UR NOT")
+		_exitPlacementState()
 
 func _enterPlacementState() -> void:
 	state = PresentationState.placement
+	print("SHOWING THE DAMN PANEL")
+	placementUI.partyPlacementPanel.show()
 	_highlightPlacementCells()
 
 func _exitPlacementState() -> void:
 	_clearPlacementHighlights()
+	print("HEHE HIDING IT")
+	placementUI.partyPlacementPanel.hide()
 	state = PresentationState.idle
 
 func _highlightPlacementCells() -> void:

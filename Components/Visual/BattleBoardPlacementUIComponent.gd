@@ -78,7 +78,6 @@ func _onStartPlacementButtonPressed() -> void:
 func beginPlacement(partyResource: Party) -> void:
 	party = partyResource.meteormytes.duplicate()
 	currentIndex = 0
-	isPlacementActive = true
 	self.visible = true
 	partyPlacementPanel.show()
 	_clearPartyButtons()
