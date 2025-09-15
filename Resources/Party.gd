@@ -1,4 +1,5 @@
 @tool
+@icon("res://Assets/UI Pack Kenney/PNG/Yellow/Default/PNG/Default (64px)/pawns.png")
 class_name Party
 extends Resource
 

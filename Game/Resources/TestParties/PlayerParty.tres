@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Party" load_steps=4 format=3 uid="uid://bmb4kpnr1p3r"]
+
+[ext_resource type="Script" uid="uid://na5fp0bm8si6" path="res://Resources/Meteormyte.gd" id="1_trd0m"]
+[ext_resource type="Resource" uid="uid://d28ttjph55qji" path="res://Game/Resources/Meteormytes/BeeBot.tres" id="2_in3go"]
+[ext_resource type="Script" uid="uid://bkoiqn80q0fbd" path="res://Resources/Party.gd" id="2_qd0fe"]
+
+[resource]
+script = ExtResource("2_qd0fe")
+meteormytes = Array[ExtResource("1_trd0m")]([ExtResource("2_in3go")])
+metadata/_custom_type_script = "uid://bkoiqn80q0fbd"

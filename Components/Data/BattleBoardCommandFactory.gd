@@ -118,7 +118,7 @@ func intentPlaceUnit(meteormyte: Meteormyte, cell: Vector3i) -> bool:
 		commandValidationFailed.emit("No unit selected")
 		return false
 	var command := PlaceUnitCommand.new()
-	command.unit = BattleBoardUnitClientEntity.new(meteormyte)
+	command.unit = meteormyte
 	command.cell = cell
 	commandCreated.emit(command)
 

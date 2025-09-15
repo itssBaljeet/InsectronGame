@@ -1,55 +1,21 @@
-[gd_scene load_steps=98 format=3 uid="uid://bq82t3qc1mxmb"]
+[gd_scene load_steps=51 format=3 uid="uid://bq82t3qc1mxmb"]
 
 [ext_resource type="Script" uid="uid://bryda6lc1suk7" path="res://Entities/Objects/BattleBoardEntity3d.gd" id="1_pvu71"]
 [ext_resource type="PackedScene" uid="uid://ds773iggimiek" path="res://Components/Control/BattleBoardComponent3D.tscn" id="2_s4deh"]
 [ext_resource type="Resource" uid="uid://ct3ya4dfo83pe" path="res://Game/Resources/patterns/mannguard.tres" id="6_tm5g8"]
-[ext_resource type="PackedScene" uid="uid://bqemhqwmhfxvr" path="res://Components/AI/BattleBoardAIBrainComponent.tscn" id="7_2gfsc"]
-[ext_resource type="PackedScene" uid="uid://bpjqcswabdtyb" path="res://addons/gdquest_beetle_bot/beetlebot_skin.tscn" id="7_53p5e"]
 [ext_resource type="PackedScene" uid="uid://b1c4gfp8xpktc" path="res://Components/Control/BattleBoardSelectorComponent.tscn" id="7_bckac"]
-[ext_resource type="PackedScene" uid="uid://b3fo2mu81tcgi" path="res://addons/BUG(1).glb" id="8_q8n1u"]
 [ext_resource type="PackedScene" uid="uid://ob3s2kpnk833" path="res://Components/Movement/BattleBoardPositionComponent.tscn" id="8_ucsr6"]
-[ext_resource type="PackedScene" uid="uid://bsnrllt3wjgkg" path="res://Entities/TurnBased/BattleBoardUnitEntity.tscn" id="9_js4j1"]
-[ext_resource type="PackedScene" uid="uid://darr88we23ou4" path="res://Components/Combat/BattleBoardUnitAttackComponent.tscn" id="9_lo71g"]
-[ext_resource type="PackedScene" uid="uid://wn3431a5qyxj" path="res://Components/TurnBased/UnitTurnStateComponent.tscn" id="10_lo71g"]
-[ext_resource type="PackedScene" uid="uid://tyjgdu65yj3m" path="res://addons/gdquest_round_bat/round_bat_skin.tscn" id="10_mbctc"]
-[ext_resource type="PackedScene" uid="uid://bwewnvs5kt1o3" path="res://Components/Visual/InsectorAnimationComponent.tscn" id="11_0qtex"]
 [ext_resource type="PackedScene" uid="uid://5tvqunkoa4l7" path="res://Components/Combat/FactionComponent.tscn" id="11_7xmvv"]
-[ext_resource type="PackedScene" uid="uid://ctig1j7pw0kwy" path="res://addons/bazoo(1).glb" id="11_tglbh"]
-[ext_resource type="Resource" uid="uid://fvfgnsklluo8" path="res://Game/Resources/patterns/ferz3.tres" id="12_bbq4c"]
 [ext_resource type="PackedScene" uid="uid://bpxceafnntnlu" path="res://Components/Visual/BattleBoardUIComponent.tscn" id="12_yubh6"]
 [ext_resource type="PackedScene" uid="uid://7jcht5vta2uh" path="res://Entities/TurnBased/BattleBoardSelectorEntity.tscn" id="14_53p5e"]
 [ext_resource type="PackedScene" uid="uid://dc30psrpymtkr" path="res://Components/TurnBased/TurnBasedStateUIComponent.tscn" id="14_vfhsu"]
-[ext_resource type="PackedScene" uid="uid://482rxnrhe64v" path="res://addons/gdquest_bee_bot/bee_bot_skin.tscn" id="15_53p5e"]
-[ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="17_s38d0"]
-[ext_resource type="Resource" uid="uid://btm1udvs2lr5o" path="res://Game/Resources/Special Attacks/Flamethrower.tres" id="18_bepmc"]
-[ext_resource type="PackedScene" uid="uid://cmgqp7rfco4ga" path="res://Components/Visual/BattleBoardUnitHealthVisualComponent.tscn" id="18_dr6b8"]
 [ext_resource type="ArrayMesh" uid="uid://ci4187cl4aub5" path="res://addons/edgeTile_Cube_001.res" id="18_jhjrj"]
 [ext_resource type="PackedScene" uid="uid://s0og8g1dnuh5" path="res://Components/Visual/BattleBoardCameraComponent.tscn" id="18_tglbh"]
-[ext_resource type="PackedScene" uid="uid://est6gfbiyko4" path="res://Components/Data/MeteormyteStatsComponent.tscn" id="19_7afif"]
 [ext_resource type="ArrayMesh" uid="uid://i4ab0ga60ki6" path="res://addons/edgeTileCorner_Cube_001.res" id="19_fakjh"]
-[ext_resource type="PackedScene" uid="uid://b4j7s4cobsej3" path="res://addons/herculese(1).glb" id="19_jkgq8"]
-[ext_resource type="Resource" uid="uid://bublwnqvvfdw8" path="res://Game/Resources/Special Attacks/EarthRift.tres" id="19_vepu4"]
-[ext_resource type="Resource" uid="uid://dv35cy0cd23g7" path="res://Game/Resources/patterns/wazir3.tres" id="20_82am4"]
-[ext_resource type="PackedScene" uid="uid://otyoeci30blv" path="res://addons/leafhopper.glb" id="20_ara6e"]
 [ext_resource type="ArrayMesh" uid="uid://dxyrffyyvh6kt" path="res://addons/edgeTileOuter_Cube_002.res" id="20_gw2tf"]
-[ext_resource type="Resource" uid="uid://5i5k7aqubtml" path="res://Game/Resources/Special Attacks/IceRift.tres" id="20_ylsgn"]
-[ext_resource type="Resource" uid="uid://dw6qokxkhekx" path="res://Game/Resources/Special Attacks/FireRift.tres" id="21_7cmyx"]
 [ext_resource type="ArrayMesh" uid="uid://bk88dq18miudx" path="res://addons/edgeTileOuterCorner_Cube.res" id="21_lvoms"]
 [ext_resource type="ArrayMesh" uid="uid://cfhtoriqvgamd" path="res://addons/edgeTileOuterSlantDownLayer2_Cube_003.res" id="21_qca53"]
-[ext_resource type="PackedScene" uid="uid://shk8mquw7s3i" path="res://addons/occlusk/occlusk.glb" id="21_sukre"]
-[ext_resource type="Resource" uid="uid://bs853y3vn3abe" path="res://Game/Resources/Special Attacks/Shockwave.tres" id="22_7cmyx"]
-[ext_resource type="PackedScene" uid="uid://dcp27ybg2naqq" path="res://Components/Combat/MeteormyteHealthComponent.tscn" id="22_kfhrd"]
-[ext_resource type="PackedScene" uid="uid://qgpejppspisl" path="res://addons/models/spider_modapplied.glb" id="23_c3fbh"]
-[ext_resource type="Resource" uid="uid://bxc5arr8s6b64" path="res://Game/Resources/Special Attacks/WaterSpout.tres" id="24_dr6b8"]
-[ext_resource type="PackedScene" uid="uid://di6hc7mqf33vy" path="res://addons/bassline/bassline.glb" id="24_gd4cs"]
 [ext_resource type="ArrayMesh" uid="uid://071s0swisg4h" path="res://addons/outerTileSlantedCornerlLayer2New_Cube_002.res" id="24_tm5g8"]
-[ext_resource type="Resource" uid="uid://cb2r0vo2us5y8" path="res://Game/Resources/Special Attacks/FireTwister.tres" id="25_xrvei"]
-[ext_resource type="Resource" uid="uid://b84ws32tf1am2" path="res://Game/Resources/Special Attacks/ToxicTwister.tres" id="26_vpkb1"]
-[ext_resource type="PackedScene" uid="uid://i67tqdwogkba" path="res://addons/models/dung_roller_-_sj_day_11.glb" id="29_06tvy"]
-[ext_resource type="PackedScene" uid="uid://c4n51rfslsp27" path="res://addons/misc/pokemon_fanart_-_anchorage_ikari.glb" id="30_bepmc"]
-[ext_resource type="PackedScene" uid="uid://bxwj3ul32o42m" path="res://addons/misc/botan_ssrb.glb" id="31_xavqw"]
-[ext_resource type="Resource" uid="uid://cvors1av6bt3b" path="res://Game/Resources/Special Attacks/SelfDestruct.tres" id="35_2y7ne"]
-[ext_resource type="PackedScene" uid="uid://s75elyj5u1wx" path="res://addons/volcanoturtle/volcanobeast.glb" id="37_gd4cs"]
 [ext_resource type="PackedScene" uid="uid://c4sf8l6brughk" path="res://Components/Gameplay/BattleBoardRulesComponent.tscn" id="38_82am4"]
 [ext_resource type="PackedScene" uid="uid://d2bq2o7sskowf" path="res://Components/Movement/BattleBoardPathfindingComponent.tscn" id="39_c3fbh"]
 [ext_resource type="PackedScene" uid="uid://ce7rtgsbhab7m" path="res://Components/Data/BattleBoardCommandFactory.tscn" id="40_j60e1"]
@@ -60,46 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://wqm4tsu7jdj6" path="res://Components/Control/BattleBoardMouseSelectionComponent.tscn" id="55_kfhrd"]
 [ext_resource type="PackedScene" uid="uid://bplacementui" path="res://Components/Visual/BattleBoardPlacementUIComponent.tscn" id="56_plcui"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_xrvei"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_7afif"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_kfhrd"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_dr6b8"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_vpkb1"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_gj1pg"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_r4ftu"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_ds3g8"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_76qmm"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_t5txe"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_5wk62"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_dluop"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_j7x4g"]
-viewport_path = NodePath("SubViewport")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gj1pg"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fakjh"]
 resource_local_to_scene = true
 diffuse_mode = 3
 specular_mode = 1
@@ -107,179 +34,179 @@ albedo_color = Color(0.99999946, 0.99888694, 0.8531521, 1)
 stencil_flags = 2
 stencil_outline_thickness = 0.048
 
-[sub_resource type="BoxMesh" id="BoxMesh_r4ftu"]
-material = SubResource("StandardMaterial3D_gj1pg")
+[sub_resource type="BoxMesh" id="BoxMesh_gw2tf"]
+material = SubResource("StandardMaterial3D_fakjh")
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ds3g8"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_qca53"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_76qmm"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ykuvn"]
 resource_local_to_scene = true
 diffuse_mode = 3
 specular_mode = 1
 albedo_color = Color(0.6509804, 0.39215687, 0.17254902, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_t5txe"]
-material = SubResource("StandardMaterial3D_76qmm")
+[sub_resource type="BoxMesh" id="BoxMesh_a20kw"]
+material = SubResource("StandardMaterial3D_ykuvn")
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_5wk62"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_lvoms"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dluop"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_io2sp"]
 resource_local_to_scene = true
 diffuse_mode = 3
 specular_mode = 1
 albedo_color = Color(0.9999972, 0.21721905, 0.26189446, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_j7x4g"]
-material = SubResource("StandardMaterial3D_dluop")
+[sub_resource type="BoxMesh" id="BoxMesh_tm5g8"]
+material = SubResource("StandardMaterial3D_io2sp")
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_vv22t"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_06tvy"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vdgat"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bbq4c"]
 resource_local_to_scene = true
 diffuse_mode = 3
 specular_mode = 1
 albedo_color = Color(0, 0.6030365, 0.16892394, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_2ibqi"]
-material = SubResource("StandardMaterial3D_vdgat")
+[sub_resource type="BoxMesh" id="BoxMesh_0qtex"]
+material = SubResource("StandardMaterial3D_bbq4c")
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_4uef8"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_lo71g"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xokt3"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sukre"]
 resource_local_to_scene = true
 diffuse_mode = 3
 specular_mode = 1
 albedo_color = Color(0, 0.5411765, 0.79607844, 1)
 texture_filter = 0
 
-[sub_resource type="BoxMesh" id="BoxMesh_78pl8"]
-material = SubResource("StandardMaterial3D_xokt3")
+[sub_resource type="BoxMesh" id="BoxMesh_gd4cs"]
+material = SubResource("StandardMaterial3D_sukre")
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_vj85m"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_82am4"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_waw7q"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_c3fbh"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_rfrnl"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_j60e1"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_tnqou"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_x54pr"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_u17nb"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_2gfsc"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ric08"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_txsxw"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1lqqp"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s38d0"]
 resource_local_to_scene = true
 diffuse_mode = 3
 specular_mode = 1
 albedo_color = Color(0.06469653, 0.06469653, 0.06469653, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_0wy17"]
-material = SubResource("StandardMaterial3D_1lqqp")
+[sub_resource type="BoxMesh" id="BoxMesh_bepmc"]
+material = SubResource("StandardMaterial3D_s38d0")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_gwv0i"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_xavqw"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_bl2dq"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_vepu4"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="MeshLibrary" id="MeshLibrary_y4iip"]
+[sub_resource type="MeshLibrary" id="MeshLibrary_qpwfo"]
 item/0/name = "EvenTile"
-item/0/mesh = SubResource("BoxMesh_r4ftu")
+item/0/mesh = SubResource("BoxMesh_gw2tf")
 item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/0/mesh_cast_shadow = 1
-item/0/shapes = [SubResource("BoxShape3D_ds3g8"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/0/shapes = [SubResource("BoxShape3D_qca53"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/0/navigation_layers = 1
 item/1/name = "OddTile"
-item/1/mesh = SubResource("BoxMesh_t5txe")
+item/1/mesh = SubResource("BoxMesh_a20kw")
 item/1/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/1/mesh_cast_shadow = 1
-item/1/shapes = [SubResource("BoxShape3D_5wk62"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/1/shapes = [SubResource("BoxShape3D_lvoms"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/1/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/1/navigation_layers = 1
 item/2/name = "HighlightedTile"
-item/2/mesh = SubResource("BoxMesh_78pl8")
+item/2/mesh = SubResource("BoxMesh_gd4cs")
 item/2/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/2/mesh_cast_shadow = 1
-item/2/shapes = [SubResource("BoxShape3D_vj85m"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/2/shapes = [SubResource("BoxShape3D_82am4"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/2/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/2/navigation_layers = 1
 item/3/name = "Edge"
 item/3/mesh = ExtResource("18_jhjrj")
 item/3/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/3/mesh_cast_shadow = 1
-item/3/shapes = [SubResource("BoxShape3D_waw7q"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/3/shapes = [SubResource("BoxShape3D_c3fbh"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/3/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/3/navigation_layers = 1
 item/4/name = "Corner"
 item/4/mesh = ExtResource("19_fakjh")
 item/4/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/4/mesh_cast_shadow = 1
-item/4/shapes = [SubResource("BoxShape3D_rfrnl"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/4/shapes = [SubResource("BoxShape3D_j60e1"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/4/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/4/navigation_layers = 1
 item/5/name = "OuterEdge"
 item/5/mesh = ExtResource("20_gw2tf")
 item/5/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/5/mesh_cast_shadow = 1
-item/5/shapes = [SubResource("BoxShape3D_tnqou"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/5/shapes = [SubResource("BoxShape3D_x54pr"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/5/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/5/navigation_layers = 1
 item/6/name = "OuterCorner"
 item/6/mesh = ExtResource("21_lvoms")
 item/6/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/6/mesh_cast_shadow = 1
-item/6/shapes = [SubResource("BoxShape3D_u17nb"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/6/shapes = [SubResource("BoxShape3D_2gfsc"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/6/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/6/navigation_layers = 1
 item/7/name = "SlopeDown"
 item/7/mesh = ExtResource("21_qca53")
 item/7/mesh_transform = Transform3D(1, 8.742278e-08, -8.742278e-08, 8.742278e-08, -1, 0, -8.742278e-08, -7.642742e-15, -1, 0, 0, 0)
 item/7/mesh_cast_shadow = 1
-item/7/shapes = [SubResource("BoxShape3D_ric08"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/7/shapes = [SubResource("BoxShape3D_txsxw"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/7/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/7/navigation_layers = 1
 item/8/name = "BorderBox"
-item/8/mesh = SubResource("BoxMesh_0wy17")
+item/8/mesh = SubResource("BoxMesh_bepmc")
 item/8/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/8/mesh_cast_shadow = 1
-item/8/shapes = [SubResource("BoxShape3D_gwv0i"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/8/shapes = [SubResource("BoxShape3D_xavqw"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/8/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/8/navigation_layers = 1
 item/9/name = "SlopeDownCorner"
 item/9/mesh = ExtResource("24_tm5g8")
 item/9/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/9/mesh_cast_shadow = 1
-item/9/shapes = [SubResource("BoxShape3D_bl2dq"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/9/shapes = [SubResource("BoxShape3D_vepu4"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/9/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/9/navigation_layers = 1
 item/10/name = "AttackHighlightTile"
-item/10/mesh = SubResource("BoxMesh_j7x4g")
+item/10/mesh = SubResource("BoxMesh_tm5g8")
 item/10/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/10/mesh_cast_shadow = 1
-item/10/shapes = [SubResource("BoxShape3D_vv22t"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/10/shapes = [SubResource("BoxShape3D_06tvy"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/10/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/10/navigation_layers = 1
 item/11/name = "SpecialAttackHighlightTile"
-item/11/mesh = SubResource("BoxMesh_2ibqi")
+item/11/mesh = SubResource("BoxMesh_0qtex")
 item/11/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/11/mesh_cast_shadow = 1
-item/11/shapes = [SubResource("BoxShape3D_4uef8"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/11/shapes = [SubResource("BoxShape3D_lo71g"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/11/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/11/navigation_layers = 1
 
@@ -292,7 +219,7 @@ isLoggingEnabled = false
 metadata/_custom_type_script = "uid://bryda6lc1suk7"
 
 [node name="BattleBoardSelectorEntity" parent="." groups=["entities", "turnBased"] instance=ExtResource("14_53p5e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.31, 3.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.31, 0.5)
 
 [node name="BattleBoardSelectorComponent" parent="BattleBoardSelectorEntity" instance=ExtResource("7_bckac")]
 bob_amplitude = 0.1
@@ -300,479 +227,20 @@ bob_mid_height = 1.88
 
 [node name="BattleBoardPositionComponent" parent="BattleBoardSelectorEntity" instance=ExtResource("8_ucsr6")]
 alwaysVisibleSquareOutline = true
+setInitialCoordinatesFromEntityPosition = false
 initialDestinationCoordinates = Vector3i(2, 0, 3)
 moveRange = ExtResource("6_tm5g8")
 speed = 10.0
 mesh_height = 0.5100000000093132
 
-[node name="InsectronEntity3d" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.35, 1.5)
-isLoggingEnabled = false
-debugMode = true
-
-[node name="BattleBoardPositionComponent" parent="InsectronEntity3d" instance=ExtResource("8_ucsr6")]
-initialDestinationCoordinates = Vector3i(2, 0, 1)
-moveRange = ExtResource("6_tm5g8")
-speed = 10.0
-debugMode = true
-
-[node name="BattleBoardAIBrainComponent" parent="InsectronEntity3d" groups=["components"] instance=ExtResource("7_2gfsc")]
-debugMode = true
-
-[node name="FactionComponent" parent="InsectronEntity3d" instance=ExtResource("11_7xmvv")]
-factions = 32
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../BeetlebotSkin")
-die_animation_time = 1.0
-debugMode = true
-
-[node name="InsectorAttackComponent" parent="InsectronEntity3d" groups=["components"] instance=ExtResource("9_lo71g")]
-attackRange = ExtResource("6_tm5g8")
-debugMode = true
-
-[node name="UnitTurnStateComponent" parent="InsectronEntity3d" instance=ExtResource("10_lo71g")]
-
-[node name="BeetlebotSkin" parent="InsectronEntity3d" instance=ExtResource("7_53p5e")]
-transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
-
-[node name="MeteormyteHealthComponent" parent="InsectronEntity3d" instance=ExtResource("22_kfhrd")]
-
-[node name="MeteormyteStatsComponent" parent="InsectronEntity3d" instance=ExtResource("19_7afif")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="InsectronEntity3d" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.9, 0)
-texture = SubResource("ViewportTexture_xrvei")
-team = 1
-critical_start_ratio = 0.4
-debugMode = true
-
-[node name="InsectronEntity3d2" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.3, 5.5)
-isLoggingEnabled = false
-debugMode = true
-
-[node name="BattleBoardPositionComponent" parent="InsectronEntity3d2" instance=ExtResource("8_ucsr6")]
-initialDestinationCoordinates = Vector3i(2, 0, 5)
-moveRange = ExtResource("6_tm5g8")
-speed = 10.0
-mesh_height = 0.5
-debugMode = true
-
-[node name="FactionComponent" parent="InsectronEntity3d2" instance=ExtResource("11_7xmvv")]
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d2" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../BUG(1)")
-die_animation_time = 1.0
-debugMode = true
-
-[node name="InsectorAttackComponent" parent="InsectronEntity3d2" groups=["components"] instance=ExtResource("9_lo71g")]
-specialAttacks = Array[ExtResource("17_s38d0")]([ExtResource("19_vepu4"), ExtResource("21_7cmyx")])
-attackRange = ExtResource("6_tm5g8")
-debugMode = true
-
-[node name="UnitTurnStateComponent" parent="InsectronEntity3d2" instance=ExtResource("10_lo71g")]
-
-[node name="BUG(1)" parent="InsectronEntity3d2" instance=ExtResource("8_q8n1u")]
-transform = Transform3D(-1.3113417e-08, 0, -0.3, 0, 0.3, 0, 0.3, 0, -1.3113417e-08, 0, 0, 0)
-
-[node name="MeteormyteStatsComponent" parent="InsectronEntity3d2" instance=ExtResource("19_7afif")]
-
-[node name="MeteormyteHealthComponent" parent="InsectronEntity3d2" instance=ExtResource("22_kfhrd")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="InsectronEntity3d2" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.7, 0)
-texture = SubResource("ViewportTexture_7afif")
-debugMode = true
-
-[node name="InsectronEntity3d3" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.35, 5.5)
-
-[node name="BattleBoardPositionComponent" parent="InsectronEntity3d3" instance=ExtResource("8_ucsr6")]
-initialDestinationCoordinates = Vector3i(1, 0, 5)
-moveRange = ExtResource("12_bbq4c")
-speed = 10.0
-
-[node name="FactionComponent" parent="InsectronEntity3d3" instance=ExtResource("11_7xmvv")]
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d3" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../BeebotSkin")
-die_animation_time = 1.0
-
-[node name="InsectorAttackComponent" parent="InsectronEntity3d3" groups=["components"] instance=ExtResource("9_lo71g")]
-specialAttacks = Array[ExtResource("17_s38d0")]([ExtResource("18_bepmc"), ExtResource("22_7cmyx"), ExtResource("20_ylsgn"), ExtResource("24_dr6b8"), ExtResource("25_xrvei"), ExtResource("26_vpkb1")])
-attackRange = ExtResource("6_tm5g8")
-venemous = true
-
-[node name="UnitTurnStateComponent" parent="InsectronEntity3d3" instance=ExtResource("10_lo71g")]
-
-[node name="BeebotSkin" parent="InsectronEntity3d3" instance=ExtResource("15_53p5e")]
-transform = Transform3D(-0.65, 0, 9.814727e-08, 0, 0.65, 0, -9.814727e-08, 0, -0.65, 0, 0.39999995, 0)
-
-[node name="MeteormyteHealthComponent" parent="InsectronEntity3d3" instance=ExtResource("22_kfhrd")]
-
-[node name="MeteormyteStatsComponent" parent="InsectronEntity3d3" instance=ExtResource("19_7afif")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="InsectronEntity3d3" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 1.3, 0)
-texture = SubResource("ViewportTexture_kfhrd")
-
-[node name="InsectronEntity3d4" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.8, 0.5)
-
-[node name="BattleBoardPositionComponent" parent="InsectronEntity3d4" instance=ExtResource("8_ucsr6")]
-moveRange = ExtResource("12_bbq4c")
-speed = 10.0
-mesh_height = 1.0
-
-[node name="FactionComponent" parent="InsectronEntity3d4" instance=ExtResource("11_7xmvv")]
-factions = 32
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d4" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../RoundBatSkin")
-die_animation_time = 1.0
-
-[node name="InsectorAttackComponent" parent="InsectronEntity3d4" groups=["components"] instance=ExtResource("9_lo71g")]
-attackRange = ExtResource("6_tm5g8")
-
-[node name="UnitTurnStateComponent" parent="InsectronEntity3d4" instance=ExtResource("10_lo71g")]
-
-[node name="RoundBatSkin" parent="InsectronEntity3d4" instance=ExtResource("10_mbctc")]
-
-[node name="BattleBoardAIBrainComponent" parent="InsectronEntity3d4" groups=["components"] instance=ExtResource("7_2gfsc")]
-
-[node name="MeteormyteStatsComponent" parent="InsectronEntity3d4" instance=ExtResource("19_7afif")]
-
-[node name="MeteormyteHealthComponent" parent="InsectronEntity3d4" instance=ExtResource("22_kfhrd")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="InsectronEntity3d4" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.6000001, 0)
-texture = SubResource("ViewportTexture_dr6b8")
-team = 1
-critical_start_ratio = 0.4
-
-[node name="InsectronEntity3d5" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.3, 5.5)
-
-[node name="BattleBoardPositionComponent" parent="InsectronEntity3d5" instance=ExtResource("8_ucsr6")]
-initialDestinationCoordinates = Vector3i(3, 0, 5)
-moveRange = ExtResource("6_tm5g8")
-speed = 10.0
-mesh_height = 0.5
-
-[node name="FactionComponent" parent="InsectronEntity3d5" instance=ExtResource("11_7xmvv")]
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d5" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../bazoo(1)")
-die_animation_time = 1.0
-
-[node name="InsectorAttackComponent" parent="InsectronEntity3d5" groups=["components"] instance=ExtResource("9_lo71g")]
-specialAttacks = Array[ExtResource("17_s38d0")]([ExtResource("19_vepu4"), ExtResource("22_7cmyx")])
-attackRange = ExtResource("6_tm5g8")
-
-[node name="UnitTurnStateComponent" parent="InsectronEntity3d5" instance=ExtResource("10_lo71g")]
-
-[node name="bazoo(1)" parent="InsectronEntity3d5" instance=ExtResource("11_tglbh")]
-transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0, 0, 0)
-
-[node name="MeteormyteStatsComponent" parent="InsectronEntity3d5" instance=ExtResource("19_7afif")]
-
-[node name="MeteormyteHealthComponent" parent="InsectronEntity3d5" instance=ExtResource("22_kfhrd")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="InsectronEntity3d5" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.8, 0)
-texture = SubResource("ViewportTexture_vpkb1")
-
-[node name="InsectronEntity3d6" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.3, 1.5)
-
-[node name="BattleBoardPositionComponent" parent="InsectronEntity3d6" instance=ExtResource("8_ucsr6")]
-setInitialCoordinatesFromEntityPosition = false
-initialDestinationCoordinates = Vector3i(4, 0, 1)
-moveRange = ExtResource("6_tm5g8")
-speed = 10.0
-mesh_height = 0.5
-
-[node name="FactionComponent" parent="InsectronEntity3d6" instance=ExtResource("11_7xmvv")]
-factions = 32
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d6" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../herculese(1)")
-die_animation_time = 1.0
-
-[node name="InsectorAttackComponent" parent="InsectronEntity3d6" groups=["components"] instance=ExtResource("9_lo71g")]
-attackRange = ExtResource("6_tm5g8")
-
-[node name="UnitTurnStateComponent" parent="InsectronEntity3d6" instance=ExtResource("10_lo71g")]
-
-[node name="herculese(1)" parent="InsectronEntity3d6" instance=ExtResource("19_jkgq8")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0.100000024)
-
-[node name="BattleBoardAIBrainComponent" parent="InsectronEntity3d6" groups=["components"] instance=ExtResource("7_2gfsc")]
-
-[node name="MeteormyteHealthComponent" parent="InsectronEntity3d6" instance=ExtResource("22_kfhrd")]
-
-[node name="MeteormyteStatsComponent" parent="InsectronEntity3d6" instance=ExtResource("19_7afif")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="InsectronEntity3d6" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.7, 0)
-texture = SubResource("ViewportTexture_gj1pg")
-team = 1
-critical_start_ratio = 0.4
-
-[node name="InsectronEntity3d7" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.3, 6.5)
-
-[node name="BattleBoardPositionComponent" parent="InsectronEntity3d7" instance=ExtResource("8_ucsr6")]
-setInitialCoordinatesFromEntityPosition = false
-initialDestinationCoordinates = Vector3i(2, 0, 6)
-moveRange = ExtResource("6_tm5g8")
-speed = 10.0
-mesh_height = 0.5
-
-[node name="FactionComponent" parent="InsectronEntity3d7" instance=ExtResource("11_7xmvv")]
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d7" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../Sketchfab_Scene")
-die_animation_time = 1.0
-
-[node name="InsectorAttackComponent" parent="InsectronEntity3d7" groups=["components"] instance=ExtResource("9_lo71g")]
-specialAttacks = Array[ExtResource("17_s38d0")]([ExtResource("19_vepu4")])
-attackRange = ExtResource("6_tm5g8")
-
-[node name="leafhopper2" parent="InsectronEntity3d7" instance=ExtResource("20_ara6e")]
-visible = false
-
-[node name="UnitTurnStateComponent" parent="InsectronEntity3d7" instance=ExtResource("10_lo71g")]
-
-[node name="Sketchfab_Scene" parent="InsectronEntity3d7" instance=ExtResource("21_sukre")]
-transform = Transform3D(-0.06, 0, -9.059748e-09, 0, 0.06, 0, 9.059748e-09, 0, -0.06, -0.03, 0.1, 0)
-
-[node name="MeteormyteHealthComponent" parent="InsectronEntity3d7" instance=ExtResource("22_kfhrd")]
-
-[node name="MeteormyteStatsComponent" parent="InsectronEntity3d7" instance=ExtResource("19_7afif")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="InsectronEntity3d7" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 1, 0)
-texture = SubResource("ViewportTexture_r4ftu")
-
-[node name="InsectronEntity3d8" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.3, 6.5)
-
-[node name="BattleBoardPositionComponent" parent="InsectronEntity3d8" instance=ExtResource("8_ucsr6")]
-setInitialCoordinatesFromEntityPosition = false
-initialDestinationCoordinates = Vector3i(3, 0, 6)
-moveRange = ExtResource("20_82am4")
-speed = 10.0
-mesh_height = 0.5
-
-[node name="FactionComponent" parent="InsectronEntity3d8" instance=ExtResource("11_7xmvv")]
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d8" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../Sketchfab_Scene")
-die_animation_time = 1.0
-
-[node name="InsectorAttackComponent" parent="InsectronEntity3d8" groups=["components"] instance=ExtResource("9_lo71g")]
-specialAttacks = Array[ExtResource("17_s38d0")]([ExtResource("19_vepu4"), ExtResource("22_7cmyx")])
-attackRange = ExtResource("6_tm5g8")
-
-[node name="UnitTurnStateComponent" parent="InsectronEntity3d8" instance=ExtResource("10_lo71g")]
-
-[node name="Sketchfab_Scene" parent="InsectronEntity3d8" instance=ExtResource("29_06tvy")]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.18, 0, 0, 0.119999886)
-
-[node name="MeteormyteHealthComponent" parent="InsectronEntity3d8" instance=ExtResource("22_kfhrd")]
-
-[node name="MeteormyteStatsComponent" parent="InsectronEntity3d8" instance=ExtResource("19_7afif")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="InsectronEntity3d8" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.7999999, 0)
-texture = SubResource("ViewportTexture_ds3g8")
-
-[node name="InsectronEntity3d9" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.3, 1.5)
-
-[node name="BattleBoardPositionComponent" parent="InsectronEntity3d9" instance=ExtResource("8_ucsr6")]
-setInitialCoordinatesFromEntityPosition = false
-initialDestinationCoordinates = Vector3i(3, 0, 1)
-moveRange = ExtResource("12_bbq4c")
-speed = 10.0
-mesh_height = 0.5
-
-[node name="FactionComponent" parent="InsectronEntity3d9" instance=ExtResource("11_7xmvv")]
-factions = 32
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d9" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../Sketchfab_Scene")
-die_animation_time = 1.0
-
-[node name="InsectorAttackComponent" parent="InsectronEntity3d9" groups=["components"] instance=ExtResource("9_lo71g")]
-attackRange = ExtResource("6_tm5g8")
-
-[node name="UnitTurnStateComponent" parent="InsectronEntity3d9" instance=ExtResource("10_lo71g")]
-
-[node name="Sketchfab_Scene" parent="InsectronEntity3d9" instance=ExtResource("24_gd4cs")]
-transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 10, 0, 0.8, 0.39999998)
-
-[node name="BattleBoardAIBrainComponent" parent="InsectronEntity3d9" groups=["components"] instance=ExtResource("7_2gfsc")]
-
-[node name="MeteormyteStatsComponent" parent="InsectronEntity3d9" instance=ExtResource("19_7afif")]
-
-[node name="MeteormyteHealthComponent" parent="InsectronEntity3d9" instance=ExtResource("22_kfhrd")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="InsectronEntity3d9" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.90000004, 0)
-texture = SubResource("ViewportTexture_76qmm")
-team = 1
-critical_start_ratio = 0.4
-
-[node name="InsectronEntity3d10" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.3, 1.5)
-
-[node name="BattleBoardPositionComponent" parent="InsectronEntity3d10" instance=ExtResource("8_ucsr6")]
-initialDestinationCoordinates = Vector3i(1, 0, 1)
-moveRange = ExtResource("20_82am4")
-speed = 10.0
-mesh_height = 0.5
-
-[node name="FactionComponent" parent="InsectronEntity3d10" instance=ExtResource("11_7xmvv")]
-factions = 32
-
-[node name="InsectorAttackComponent" parent="InsectronEntity3d10" groups=["components"] instance=ExtResource("9_lo71g")]
-attackRange = ExtResource("6_tm5g8")
-venemous = true
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d10" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../spider_modapplied")
-die_animation_time = 1.0
-
-[node name="UnitTurnStateComponent" parent="InsectronEntity3d10" instance=ExtResource("10_lo71g")]
-
-[node name="spider_modapplied" parent="InsectronEntity3d10" instance=ExtResource("23_c3fbh")]
-transform = Transform3D(-1.5298985e-08, 0, -0.35, 0, 0.35, 0, 0.35, 0, -1.5298985e-08, 0, 0, 0.100000024)
-
-[node name="BattleBoardAIBrainComponent" parent="InsectronEntity3d10" groups=["components"] instance=ExtResource("7_2gfsc")]
-
-[node name="MeteormyteStatsComponent" parent="InsectronEntity3d10" instance=ExtResource("19_7afif")]
-
-[node name="MeteormyteHealthComponent" parent="InsectronEntity3d10" instance=ExtResource("22_kfhrd")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="InsectronEntity3d10" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.90000004, 0)
-texture = SubResource("ViewportTexture_t5txe")
-team = 1
-critical_start_ratio = 0.4
-
-[node name="InsectronEntity3d11" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.3, 6.5)
-
-[node name="BattleBoardPositionComponent" parent="InsectronEntity3d11" instance=ExtResource("8_ucsr6")]
-setInitialCoordinatesFromEntityPosition = false
-initialDestinationCoordinates = Vector3i(1, 0, 6)
-moveRange = ExtResource("20_82am4")
-speed = 10.0
-shouldSnapPositionEveryFrame = true
-mesh_height = 0.5
-
-[node name="FactionComponent" parent="InsectronEntity3d11" instance=ExtResource("11_7xmvv")]
-
-[node name="InsectorAnimationComponent" parent="InsectronEntity3d11" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../Sketchfab_Scene")
-die_animation_time = 1.0
-
-[node name="InsectorAttackComponent" parent="InsectronEntity3d11" groups=["components"] instance=ExtResource("9_lo71g")]
-specialAttacks = Array[ExtResource("17_s38d0")]([ExtResource("19_vepu4"), ExtResource("21_7cmyx"), ExtResource("18_bepmc")])
-attackRange = ExtResource("6_tm5g8")
-
-[node name="UnitTurnStateComponent" parent="InsectronEntity3d11" instance=ExtResource("10_lo71g")]
-
-[node name="Sketchfab_Scene" parent="InsectronEntity3d11" instance=ExtResource("37_gd4cs")]
-transform = Transform3D(-0.2, 0, -1.7484556e-08, 0, 0.2, 0, 1.7484556e-08, 0, -0.2, 0, 0.19999999, -0.3000002)
-
-[node name="MeteormyteStatsComponent" parent="InsectronEntity3d11" instance=ExtResource("19_7afif")]
-
-[node name="MeteormyteHealthComponent" parent="InsectronEntity3d11" instance=ExtResource("22_kfhrd")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="InsectronEntity3d11" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.8, 0)
-texture = SubResource("ViewportTexture_5wk62")
-
-[node name="BattleBoardUnitEntity" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.3, 0.5)
-
-[node name="BattleBoardPositionComponent" parent="BattleBoardUnitEntity" instance=ExtResource("8_ucsr6")]
-setInitialCoordinatesFromEntityPosition = false
-initialDestinationCoordinates = Vector3i(2, 0, 0)
-moveRange = ExtResource("12_bbq4c")
-speed = 10.0
-mesh_height = 0.5
-
-[node name="FactionComponent" parent="BattleBoardUnitEntity" instance=ExtResource("11_7xmvv")]
-factions = 32
-
-[node name="InsectorAnimationComponent" parent="BattleBoardUnitEntity" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../Sketchfab_Scene")
-die_animation_time = 1.0
-
-[node name="InsectorAttackComponent" parent="BattleBoardUnitEntity" groups=["components"] instance=ExtResource("9_lo71g")]
-attackRange = ExtResource("6_tm5g8")
-
-[node name="UnitTurnStateComponent" parent="BattleBoardUnitEntity" instance=ExtResource("10_lo71g")]
-
-[node name="BattleBoardAIBrainComponent" parent="BattleBoardUnitEntity" groups=["components"] instance=ExtResource("7_2gfsc")]
-
-[node name="MeteormyteStatsComponent" parent="BattleBoardUnitEntity" instance=ExtResource("19_7afif")]
-
-[node name="MeteormyteHealthComponent" parent="BattleBoardUnitEntity" instance=ExtResource("22_kfhrd")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="BattleBoardUnitEntity" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 1.3000002, 0)
-texture = SubResource("ViewportTexture_dluop")
-team = 1
-critical_start_ratio = 0.4
-
-[node name="Sketchfab_Scene" parent="BattleBoardUnitEntity" instance=ExtResource("30_bepmc")]
-transform = Transform3D(0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, 0, 0, 0)
-
-[node name="BattleBoardUnitEntity2" parent="." instance=ExtResource("9_js4j1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.35, 5.5)
-
-[node name="MeteormyteStatsComponent" parent="BattleBoardUnitEntity2" instance=ExtResource("19_7afif")]
-
-[node name="UnitTurnStateComponent" parent="BattleBoardUnitEntity2" instance=ExtResource("10_lo71g")]
-
-[node name="BattleBoardPositionComponent" parent="BattleBoardUnitEntity2" instance=ExtResource("8_ucsr6")]
-setInitialCoordinatesFromEntityPosition = false
-initialDestinationCoordinates = Vector3i(0, 0, 5)
-moveRange = ExtResource("12_bbq4c")
-speed = 10.0
-
-[node name="InsectorAttackComponent" parent="BattleBoardUnitEntity2" groups=["components"] instance=ExtResource("9_lo71g")]
-specialAttacks = Array[ExtResource("17_s38d0")]([ExtResource("18_bepmc"), ExtResource("21_7cmyx"), ExtResource("22_7cmyx"), ExtResource("35_2y7ne")])
-attackRange = ExtResource("6_tm5g8")
-
-[node name="FactionComponent" parent="BattleBoardUnitEntity2" instance=ExtResource("11_7xmvv")]
-
-[node name="InsectorAnimationComponent" parent="BattleBoardUnitEntity2" node_paths=PackedStringArray("skin") groups=["components"] instance=ExtResource("11_0qtex")]
-skin = NodePath("../Sketchfab_Scene")
-die_animation_time = 1.0
-
-[node name="Sketchfab_Scene" parent="BattleBoardUnitEntity2" instance=ExtResource("31_xavqw")]
-transform = Transform3D(-1.7484556e-08, 0, 0.4, 0, 0.4, 0, -0.4, 0, -1.7484556e-08, 0, 0.29999998, 0)
-
-[node name="MeteormyteHealthComponent" parent="BattleBoardUnitEntity2" instance=ExtResource("22_kfhrd")]
-
-[node name="BattleBoardUnitHealthVisualComponent" parent="BattleBoardUnitEntity2" instance=ExtResource("18_dr6b8")]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 1.1, 0)
-texture = SubResource("ViewportTexture_j7x4g")
-
 [node name="BattleBoardComponent3D" parent="." instance=ExtResource("2_s4deh")]
-mesh_library = SubResource("MeshLibrary_y4iip")
+mesh_library = SubResource("MeshLibrary_qpwfo")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="BattleBoardUIComponent" parent="." instance=ExtResource("12_yubh6")]
 
 [node name="BattleBoardPlacementUIComponent" parent="." instance=ExtResource("56_plcui")]
+layer = 2
 
 [node name="FactionComponent" parent="." instance=ExtResource("11_7xmvv")]
 factions = 1

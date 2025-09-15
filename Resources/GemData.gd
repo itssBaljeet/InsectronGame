@@ -1,5 +1,6 @@
 ## GemData.gd
 ## Resource that defines gem properties and modifiers
+@icon("res://Assets/UI Pack Kenney/PNG/Yellow/Default/PNG/Default (64px)/d10.png")
 class_name GemData
 extends Resource
 

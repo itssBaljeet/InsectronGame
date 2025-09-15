@@ -29,7 +29,7 @@ func _on_domain_event(eventName: StringName, data: Dictionary) -> void:
 		presentationFinished.emit(eventName)
 
 func _onUnitMoved(data: Dictionary) -> void:
-		var unit: BattleBoardUnitClientEntity = data.get("unit")
+	var unit: BattleBoardUnitClientEntity = data.get("unit")
 	var fromCell: Vector3i = data.get("from", Vector3i.ZERO)
 	var toCell: Vector3i = data.get("to", Vector3i.ZERO)
 	if unit and unit.animComponent and unit.boardPositionComponent:
@@ -39,8 +39,8 @@ func _onUnitMoved(data: Dictionary) -> void:
 		await unit.animComponent.face_home_orientation()
 
 func _onUnitAttacked(data: Dictionary) -> void:
-		var attacker: BattleBoardUnitClientEntity = data.get("attacker")
-		var target: BattleBoardUnitClientEntity = data.get("target")
+	var attacker: BattleBoardUnitClientEntity = data.get("attacker")
+	var target: BattleBoardUnitClientEntity = data.get("target")
 	var damage: int = data.get("damage", 0)
 	var counter_damage: int = data.get("counterDamage", 0)
 	if attacker and attacker.animComponent and target:
@@ -58,7 +58,7 @@ func _onUnitAttacked(data: Dictionary) -> void:
 
 func _onSpecialAttack(data: Dictionary) -> void:
 	print("SPECIAL VFX!!!")
-		var attacker: BattleBoardUnitClientEntity = data.get("attacker")
+	var attacker: BattleBoardUnitClientEntity = data.get("attacker")
 	var attack_res: AttackResource = data.get("attackResource")
 	var affected: Array = data.get("damageResults", [])
 	var board: BattleBoardComponent3D = coComponents.get(&"BattleBoardComponent3D")
@@ -166,7 +166,7 @@ func _onSpecialAttack(data: Dictionary) -> void:
 	
 	#region Damage and HP Bar
 	for result in affected:
-				var target_unit: BattleBoardUnitClientEntity = result.get("target")
+		var target_unit: BattleBoardUnitClientEntity = result.get("target")
 		var dmg: int = result.get("damage", 0)
 		if target_unit:
 			var hv: BattleBoardUnitHealthVisualComponent = target_unit.components.get(&"BattleBoardUnitHealthVisualComponent")
@@ -194,7 +194,8 @@ func _onChainAttack(data: Dictionary) -> void:
 		vfx.global_position = board.getGlobalCellPosition(to_cell)
 
 func _onUnitPlaced(data: Dictionary) -> void:
-		var unit: BattleBoardUnitClientEntity = data.get("unit")
+	var meteormyte: Meteormyte = data.get("unit")
+	var unit = BattleBoardUnitClientEntity.new(meteormyte, data.get(&"cell"))
 	var cell: Vector3i = data.get("cell", Vector3i.ZERO)
 	var root: Node3D = self.parentEntity.get_parent() if self.parentEntity else null
 	if unit and root and not unit.is_inside_tree():
@@ -209,6 +210,6 @@ func _onUnitPlaced(data: Dictionary) -> void:
 		unit.boardPositionComponent.snapEntityPositionToTile(cell)
 
 func _onUnitUnplaced(data: Dictionary) -> void:
-		var unit: BattleBoardUnitClientEntity = data.get("unit")
+	var unit: BattleBoardUnitClientEntity = data.get("unit")
 	if unit:
 		unit.queue_free()

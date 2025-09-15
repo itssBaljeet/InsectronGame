@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="Meteormyte" load_steps=9 format=3 uid="uid://b33wa4hmaams1"]
+
+[ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="1_0k6ro"]
+[ext_resource type="Resource" uid="uid://cb2r0vo2us5y8" path="res://Game/Resources/Special Attacks/FireTwister.tres" id="2_em3ey"]
+[ext_resource type="Script" uid="uid://na5fp0bm8si6" path="res://Resources/Meteormyte.gd" id="2_mi6t1"]
+[ext_resource type="Script" uid="uid://8ybkhvwpcfkq" path="res://Resources/MeteormyteStat.gd" id="3_1e3t8"]
+[ext_resource type="Resource" uid="uid://bs853y3vn3abe" path="res://Game/Resources/Special Attacks/Shockwave.tres" id="3_monnn"]
+[ext_resource type="Resource" uid="uid://b84ws32tf1am2" path="res://Game/Resources/Special Attacks/ToxicTwister.tres" id="4_m7gxo"]
+[ext_resource type="Resource" uid="uid://31nf35k2aap6" path="res://Game/Resources/Gems/TestGem.tres" id="5_8muwi"]
+[ext_resource type="Resource" uid="uid://baffscggncb5d" path="res://Game/Resources/Species/BeetleBot.tres" id="7_ax0jx"]
+
+[resource]
+script = ExtResource("2_mi6t1")
+species_data = ExtResource("7_ax0jx")
+gem_data = ExtResource("5_8muwi")
+nickname = "Itto"
+unique_id = 2277043892
+available_attacks = Array[ExtResource("1_0k6ro")]([ExtResource("2_em3ey"), ExtResource("3_monnn"), ExtResource("4_m7gxo")])
+metadata/_custom_type_script = "uid://na5fp0bm8si6"

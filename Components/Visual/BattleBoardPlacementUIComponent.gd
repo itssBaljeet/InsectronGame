@@ -18,6 +18,10 @@ var commandQueue: BattleBoardCommandQueueComponent:
 	get:
 		return coComponents.get(&"BattleBoardCommandQueueComponent")
 
+var boardUI: BattleBoardUIComponent:
+	get:
+		return coComponents.get(&"BattleBoardUIComponent")
+
 var party: Array[Meteormyte] = []
 var lastPlaced: Meteormyte
 
@@ -29,14 +33,21 @@ signal placementPhaseFinished
 @onready var startPlacementButton: Button = %StartPlacementButton
 
 func _ready() -> void:
+	boardUI.visible = false
 	startPlacementButton.button_up.connect(_onStartPlacementButtonPressed)
 
 ## This is a test for singleplayer right now emulating a server architecture
 ## For now we pass in a premade player party resource
 ## This call simulates both users connecting (one is ai) so when the player "connects" we start
 func _onStartPlacementButtonPressed() -> void:
+	self.visible = false
+	boardUI.visible = true
 	startPlacementButton.disabled = true
-	#TurnBasedCoordinator.startPlacementPhase()
+	
+	var playerTeam: Party = preload("res://Game/Resources/TestParties/PlayerParty.tres")
+	var enemyTeam: Party = preload("res://Game/Resources/TestParties/EnemyParty.tres")
+	
+	TurnBasedCoordinator.startPlacementPhase(playerTeam, true, enemyTeam)
 
 func beginPlacement(partyResource: Party) -> void:
 	party = partyResource.meteormytes.duplicate()

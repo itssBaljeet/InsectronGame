@@ -3,7 +3,7 @@
 class_name PlaceUnitCommand
 extends BattleBoardCommand
 
-var unit: BattleBoardUnitClientEntity
+var unit: Meteormyte
 
 var cell: Vector3i
 var faction: FactionComponent.Factions
@@ -24,19 +24,8 @@ func canExecute(context: BattleBoardContext) -> bool:
 
 func execute(context: BattleBoardContext) -> void:
 	commandStarted.emit()
-	var boardUnit: BattleBoardUnitEntity = BattleBoardUnitEntity.new()
-	
-	# Create Server representation of BattleBoardUnitEntity. No Visuals
-	unit.factionComponent = FactionComponent.new()
-	unit.factionComponent.factions = faction
-	
-	unit.stateComponent = UnitTurnStateComponent.new()
-	
-	if TurnBasedCoordinator._againstAI:
-		unit.AIComponent = BattleBoardAIBrainComponent.new()
-	
-	
-	
+
+	var boardUnit: BattleBoardUnitServerEntity = BattleBoardUnitServerEntity.new(unit)
 	
 	context.board.setCellOccupancy(cell, true, boardUnit)
 	_placed = true

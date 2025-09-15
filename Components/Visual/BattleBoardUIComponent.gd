@@ -187,7 +187,7 @@ func trySelectUnit(cell: Vector3i) -> bool:
 		openUnitMenu(null, UIState.unitMenu)
 		return true
 	
-		var unit := occupant as BattleBoardUnitClientEntity
+	var unit := occupant as BattleBoardUnitClientEntity
 	activeUnit = unit
 	
 	# Always open menu regardless of unit faction or state

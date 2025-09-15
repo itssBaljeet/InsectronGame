@@ -44,7 +44,7 @@ func decideNextAction() -> void:
 	if thinkingDelay > 0:
 		await parentEntity.get_tree().create_timer(thinkingDelay).timeout
 	
-		var unit := parentEntity as BattleBoardUnitServerEntity
+	var unit := parentEntity as BattleBoardUnitServerEntity
 	var state := unit.components.get(&"UnitTurnStateComponent") as UnitTurnStateComponent
 	
 	if not state or state.isExhausted():
