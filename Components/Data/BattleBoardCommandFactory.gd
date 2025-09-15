@@ -121,6 +121,7 @@ func intentPlaceUnit(meteormyte: Meteormyte, cell: Vector3i) -> bool:
         command.unit = BattleBoardUnitClientEntity.new(meteormyte)
         command.cell = cell
         commandCreated.emit(command)
+
 	if commandQueue.enqueue(command):
 		commandEnqueued.emit(command)
 		return true

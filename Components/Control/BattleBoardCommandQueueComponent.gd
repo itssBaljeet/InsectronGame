@@ -137,8 +137,7 @@ func undoLastCommand() -> bool:
 		commandHistory.append(lastCommand)
 		return false
 	
-	@warning_ignore("redundant_await")
-	await lastCommand.undo(context)
+	lastCommand.undo(context)
 	commandUndone.emit(lastCommand)
 	return true
 

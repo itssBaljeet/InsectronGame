@@ -58,8 +58,8 @@
 [ext_resource type="PackedScene" uid="uid://ckj6yryxf4ndu" path="res://Components/Combat/BattleBoardHazardSystemComponent.tscn" id="54_7afif"]
 [ext_resource type="PackedScene" uid="uid://dvnkwgrchnfae" path="res://Components/Visual/BattleBoardPresentationSystemComponent.tscn" id="55_dr6b8"]
 [ext_resource type="PackedScene" uid="uid://wqm4tsu7jdj6" path="res://Components/Control/BattleBoardMouseSelectionComponent.tscn" id="55_kfhrd"]
-
 [ext_resource type="PackedScene" uid="uid://bplacementui" path="res://Components/Visual/BattleBoardPlacementUIComponent.tscn" id="56_plcui"]
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_xrvei"]
 viewport_path = NodePath("SubViewport")
 
@@ -99,7 +99,7 @@ viewport_path = NodePath("SubViewport")
 [sub_resource type="ViewportTexture" id="ViewportTexture_j7x4g"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vpkb1"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gj1pg"]
 resource_local_to_scene = true
 diffuse_mode = 3
 specular_mode = 1
@@ -107,64 +107,61 @@ albedo_color = Color(0.99999946, 0.99888694, 0.8531521, 1)
 stencil_flags = 2
 stencil_outline_thickness = 0.048
 
-[sub_resource type="BoxMesh" id="BoxMesh_gj1pg"]
-material = SubResource("StandardMaterial3D_vpkb1")
+[sub_resource type="BoxMesh" id="BoxMesh_r4ftu"]
+material = SubResource("StandardMaterial3D_gj1pg")
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_r4ftu"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_ds3g8"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ds3g8"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_76qmm"]
 resource_local_to_scene = true
 diffuse_mode = 3
 specular_mode = 1
 albedo_color = Color(0.6509804, 0.39215687, 0.17254902, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_76qmm"]
-material = SubResource("StandardMaterial3D_ds3g8")
+[sub_resource type="BoxMesh" id="BoxMesh_t5txe"]
+material = SubResource("StandardMaterial3D_76qmm")
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_t5txe"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_5wk62"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5wk62"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dluop"]
 resource_local_to_scene = true
 diffuse_mode = 3
 specular_mode = 1
 albedo_color = Color(0.9999972, 0.21721905, 0.26189446, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_dluop"]
-material = SubResource("StandardMaterial3D_5wk62")
+[sub_resource type="BoxMesh" id="BoxMesh_j7x4g"]
+material = SubResource("StandardMaterial3D_dluop")
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_j7x4g"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_vv22t"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vv22t"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vdgat"]
 resource_local_to_scene = true
 diffuse_mode = 3
 specular_mode = 1
 albedo_color = Color(0, 0.6030365, 0.16892394, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_vdgat"]
-material = SubResource("StandardMaterial3D_vv22t")
+[sub_resource type="BoxMesh" id="BoxMesh_2ibqi"]
+material = SubResource("StandardMaterial3D_vdgat")
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_2ibqi"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_4uef8"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4uef8"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xokt3"]
 resource_local_to_scene = true
 diffuse_mode = 3
 specular_mode = 1
 albedo_color = Color(0, 0.5411765, 0.79607844, 1)
 texture_filter = 0
 
-[sub_resource type="BoxMesh" id="BoxMesh_xokt3"]
-material = SubResource("StandardMaterial3D_4uef8")
-size = Vector3(1, 0.3, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_78pl8"]
+[sub_resource type="BoxMesh" id="BoxMesh_78pl8"]
+material = SubResource("StandardMaterial3D_xokt3")
 size = Vector3(1, 0.3, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vj85m"]
@@ -182,104 +179,107 @@ size = Vector3(1, 0.3, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_u17nb"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ric08"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_ric08"]
+size = Vector3(1, 0.3, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1lqqp"]
 resource_local_to_scene = true
 diffuse_mode = 3
 specular_mode = 1
 albedo_color = Color(0.06469653, 0.06469653, 0.06469653, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_1lqqp"]
-material = SubResource("StandardMaterial3D_ric08")
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_0wy17"]
-size = Vector3(1, 0.3, 1)
+[sub_resource type="BoxMesh" id="BoxMesh_0wy17"]
+material = SubResource("StandardMaterial3D_1lqqp")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gwv0i"]
 size = Vector3(1, 0.3, 1)
 
-[sub_resource type="MeshLibrary" id="MeshLibrary_bl2dq"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_bl2dq"]
+size = Vector3(1, 0.3, 1)
+
+[sub_resource type="MeshLibrary" id="MeshLibrary_y4iip"]
 item/0/name = "EvenTile"
-item/0/mesh = SubResource("BoxMesh_gj1pg")
+item/0/mesh = SubResource("BoxMesh_r4ftu")
 item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/0/mesh_cast_shadow = 1
-item/0/shapes = [SubResource("BoxShape3D_r4ftu"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/0/shapes = [SubResource("BoxShape3D_ds3g8"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/0/navigation_layers = 1
 item/1/name = "OddTile"
-item/1/mesh = SubResource("BoxMesh_76qmm")
+item/1/mesh = SubResource("BoxMesh_t5txe")
 item/1/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/1/mesh_cast_shadow = 1
-item/1/shapes = [SubResource("BoxShape3D_t5txe"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/1/shapes = [SubResource("BoxShape3D_5wk62"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/1/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/1/navigation_layers = 1
 item/2/name = "HighlightedTile"
-item/2/mesh = SubResource("BoxMesh_xokt3")
+item/2/mesh = SubResource("BoxMesh_78pl8")
 item/2/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/2/mesh_cast_shadow = 1
-item/2/shapes = [SubResource("BoxShape3D_78pl8"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/2/shapes = [SubResource("BoxShape3D_vj85m"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/2/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/2/navigation_layers = 1
 item/3/name = "Edge"
 item/3/mesh = ExtResource("18_jhjrj")
 item/3/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/3/mesh_cast_shadow = 1
-item/3/shapes = [SubResource("BoxShape3D_vj85m"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/3/shapes = [SubResource("BoxShape3D_waw7q"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/3/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/3/navigation_layers = 1
 item/4/name = "Corner"
 item/4/mesh = ExtResource("19_fakjh")
 item/4/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/4/mesh_cast_shadow = 1
-item/4/shapes = [SubResource("BoxShape3D_waw7q"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/4/shapes = [SubResource("BoxShape3D_rfrnl"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/4/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/4/navigation_layers = 1
 item/5/name = "OuterEdge"
 item/5/mesh = ExtResource("20_gw2tf")
 item/5/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/5/mesh_cast_shadow = 1
-item/5/shapes = [SubResource("BoxShape3D_rfrnl"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/5/shapes = [SubResource("BoxShape3D_tnqou"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/5/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/5/navigation_layers = 1
 item/6/name = "OuterCorner"
 item/6/mesh = ExtResource("21_lvoms")
 item/6/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/6/mesh_cast_shadow = 1
-item/6/shapes = [SubResource("BoxShape3D_tnqou"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/6/shapes = [SubResource("BoxShape3D_u17nb"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/6/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/6/navigation_layers = 1
 item/7/name = "SlopeDown"
 item/7/mesh = ExtResource("21_qca53")
 item/7/mesh_transform = Transform3D(1, 8.742278e-08, -8.742278e-08, 8.742278e-08, -1, 0, -8.742278e-08, -7.642742e-15, -1, 0, 0, 0)
 item/7/mesh_cast_shadow = 1
-item/7/shapes = [SubResource("BoxShape3D_u17nb"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/7/shapes = [SubResource("BoxShape3D_ric08"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/7/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/7/navigation_layers = 1
 item/8/name = "BorderBox"
-item/8/mesh = SubResource("BoxMesh_1lqqp")
+item/8/mesh = SubResource("BoxMesh_0wy17")
 item/8/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/8/mesh_cast_shadow = 1
-item/8/shapes = [SubResource("BoxShape3D_0wy17"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/8/shapes = [SubResource("BoxShape3D_gwv0i"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/8/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/8/navigation_layers = 1
 item/9/name = "SlopeDownCorner"
 item/9/mesh = ExtResource("24_tm5g8")
 item/9/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/9/mesh_cast_shadow = 1
-item/9/shapes = [SubResource("BoxShape3D_gwv0i"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/9/shapes = [SubResource("BoxShape3D_bl2dq"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/9/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/9/navigation_layers = 1
 item/10/name = "AttackHighlightTile"
-item/10/mesh = SubResource("BoxMesh_dluop")
+item/10/mesh = SubResource("BoxMesh_j7x4g")
 item/10/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/10/mesh_cast_shadow = 1
-item/10/shapes = [SubResource("BoxShape3D_j7x4g"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/10/shapes = [SubResource("BoxShape3D_vv22t"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/10/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/10/navigation_layers = 1
 item/11/name = "SpecialAttackHighlightTile"
-item/11/mesh = SubResource("BoxMesh_vdgat")
+item/11/mesh = SubResource("BoxMesh_2ibqi")
 item/11/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0)
 item/11/mesh_cast_shadow = 1
-item/11/shapes = [SubResource("BoxShape3D_2ibqi"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/11/shapes = [SubResource("BoxShape3D_4uef8"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
 item/11/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/11/navigation_layers = 1
 
@@ -767,10 +767,11 @@ transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 1.1, 0)
 texture = SubResource("ViewportTexture_j7x4g")
 
 [node name="BattleBoardComponent3D" parent="." instance=ExtResource("2_s4deh")]
-mesh_library = SubResource("MeshLibrary_bl2dq")
+mesh_library = SubResource("MeshLibrary_y4iip")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="BattleBoardUIComponent" parent="." instance=ExtResource("12_yubh6")]
+
 [node name="BattleBoardPlacementUIComponent" parent="." instance=ExtResource("56_plcui")]
 
 [node name="FactionComponent" parent="." instance=ExtResource("11_7xmvv")]

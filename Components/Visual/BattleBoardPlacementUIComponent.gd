@@ -19,10 +19,14 @@ var commandQueue: BattleBoardCommandQueueComponent:
 		return coComponents.get(&"BattleBoardCommandQueueComponent")
 
 var party: Array[Meteormyte] = []
+var lastPlaced: Meteormyte
+
 var currentIndex: int = 0
 
 signal placementCommitted(unit: Meteormyte, cell: Vector3i)
 signal placementPhaseFinished
+
+@onready var startPlacementButton: Button = %StartPlacementButton
 
 func beginPlacement(partyUnits: Array[Meteormyte]) -> void:
 	party = partyUnits.duplicate()
