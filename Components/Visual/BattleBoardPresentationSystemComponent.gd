@@ -11,14 +11,17 @@ enum PresentationState {
 	presenting = 2,
 }
 
-var state: PresentationState = PresentationState.idle:
+var _state: PresentationState = PresentationState.idle
+var state: PresentationState:
+	get:
+		return _state
 	set(newState):
-		if state == newState:
+		if _state == newState:
 			return
 
-		var oldState := state
+		var oldState := _state
 		prevState = oldState
-		state = newState
+		_state = newState
 		stateChanged.emit(newState, oldState)
 
 var prevState: PresentationState = PresentationState.idle
