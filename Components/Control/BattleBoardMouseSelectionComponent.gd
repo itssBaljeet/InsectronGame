@@ -11,9 +11,16 @@ extends Component
 #endregion
 
 #region Dependencies
-var board: BattleBoardComponent3D:
+var board: BattleBoardGeneratorComponent:
 	get:
-		return coComponents.get(&"BattleBoardComponent3D")
+		return coComponents.get(&"BattleBoardGeneratorComponent")
+
+var boardState: BattleBoardStateComponent:
+	get:
+		var client := coComponents.get(&"BattleBoardClientStateComponent") as BattleBoardStateComponent
+		if client:
+			return client
+		return coComponents.get(&"BattleBoardServerStateComponent") as BattleBoardStateComponent
 
 var selector: BattleBoardSelectorComponent3D:
 	get:
@@ -222,7 +229,7 @@ func _raycastToBoard(screenPos: Vector2) -> Dictionary:
 	return {}
 
 func _isValidCell(cell: Vector3i) -> bool:
-	return cell in board.cells
+	return boardState != null and boardState.isCellInBounds(cell)
 #endregion
 
 #region Selection Integration

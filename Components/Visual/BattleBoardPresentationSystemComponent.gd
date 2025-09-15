@@ -172,7 +172,7 @@ func _onSpecialAttack(data: Dictionary) -> void:
 	var attacker: BattleBoardUnitClientEntity = data.get("attacker")
 	var attack_res: AttackResource = data.get("attackResource")
 	var affected: Array = data.get("damageResults", [])
-	var board: BattleBoardComponent3D = coComponents.get(&"BattleBoardComponent3D")
+	var board: BattleBoardGeneratorComponent = coComponents.get(&"BattleBoardGeneratorComponent")
 	var origin_cell: Vector3i = data.get("originCell", Vector3i.ZERO)
 	var target_cell: Vector3i = data.get("targetCell", Vector3i.ZERO)
 	var hit_cell: Vector3i = data.get("hitCell", target_cell)
@@ -287,7 +287,7 @@ func _onSpecialAttack(data: Dictionary) -> void:
 	#endregion
 
 func _onHazardPlaced(data: Dictionary) -> void:
-	var board: BattleBoardComponent3D = coComponents.get(&"BattleBoardComponent3D")
+	var board: BattleBoardGeneratorComponent = coComponents.get(&"BattleBoardGeneratorComponent")
 	var hazard_res = data.get("hazard")
 	var cell: Vector3i = data.get("cell", Vector3i.ZERO)
 	if hazard_res and hazard_res.vfxScene and board:
@@ -296,7 +296,7 @@ func _onHazardPlaced(data: Dictionary) -> void:
 		vfx.global_position = board.getGlobalCellPosition(cell)
 
 func _onChainAttack(data: Dictionary) -> void:
-	var board: BattleBoardComponent3D = coComponents.get(&"BattleBoardComponent3D")
+	var board: BattleBoardGeneratorComponent = coComponents.get(&"BattleBoardGeneratorComponent")
 	var attack_res: AttackResource = data.get("attackResource")
 	var to_cell: Vector3i = data.get("toCell", Vector3i.ZERO)
 	if attack_res and attack_res.vfxScene and board:
@@ -307,7 +307,7 @@ func _onChainAttack(data: Dictionary) -> void:
 func _onUnitPlaced(data: Dictionary) -> void:
 	var meteormyte: Meteormyte = data.get("unit")
 	
-	var unit := BattleBoardUnitClientEntity.new(meteormyte, data.get("cell"), parentEntity.components.BattleBoardComponent3D)
+	var unit := BattleBoardUnitClientEntity.new(meteormyte, data.get("cell"), parentEntity.components.BattleBoardGeneratorComponent)
 	
 	var cell: Vector3i = data.get("cell", Vector3i.ZERO)
 	var root := self.parentEntity if self.parentEntity else null

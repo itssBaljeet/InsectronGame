@@ -40,9 +40,9 @@ func execute(context: BattleBoardContext) -> void:
 	print("Executing move comamnd!")
 	
 	# Update board state
-	_previousOccupant = context.board.getOccupant(toCell)
-	context.board.setCellOccupancy(fromCell, false, null)
-	context.board.setCellOccupancy(toCell, true, unit)
+	_previousOccupant = context.boardState.getOccupant(toCell)
+	context.boardState.setCellOccupancy(fromCell, false, null)
+	context.boardState.setCellOccupancy(toCell, true, unit)
 	
 	context.highlighter.clearHighlights()
 	
@@ -68,8 +68,8 @@ func undo(context: BattleBoardContext) -> void:
 	print("COMMAND UNDONE")
 	
 	# Restore board state
-	context.board.setCellOccupancy(toCell, false, null)
-	context.board.setCellOccupancy(fromCell, true, unit)
+	context.boardState.setCellOccupancy(toCell, false, null)
+	context.boardState.setCellOccupancy(fromCell, true, unit)
 	
 	# Restore turn state
 	var state := unit.components.get(&"UnitTurnStateComponent") as UnitTurnStateComponent
@@ -85,4 +85,4 @@ func undo(context: BattleBoardContext) -> void:
 
 ## Restore previous occupant if any
 #if _previousOccupant:
-#context.board.setCellOccupancy(toCell, true, _previousOccupant)
+#context.boardState.setCellOccupancy(toCell, true, _previousOccupant)

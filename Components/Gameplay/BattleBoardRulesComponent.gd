@@ -5,9 +5,9 @@ class_name BattleBoardRulesComponent
 extends Component
 
 #region Dependencies
-var board: BattleBoardComponent3D:
+var board: BattleBoardServerStateComponent:
 	get:
-		return coComponents.get(&"BattleBoardComponent3D")
+		return coComponents.get(&"BattleBoardServerStateComponent")
 
 var pathfinding: BattleBoardPathfindingComponent:
 	get:

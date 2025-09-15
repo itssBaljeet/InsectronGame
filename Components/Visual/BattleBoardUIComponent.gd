@@ -55,9 +55,9 @@ var selector: BattleBoardSelectorComponent3D:
 		var selectorEntity := parentEntity.findFirstChildOfType(BattleBoardSelectorEntity)
 		return selectorEntity.components.get(&"BattleBoardSelectorComponent3D") if selectorEntity else null
 
-var board: BattleBoardComponent3D:
+var board: BattleBoardServerStateComponent:
 	get:
-		return coComponents.get(&"BattleBoardComponent3D")
+		return coComponents.get(&"BattleBoardServerStateComponent")
 
 var commandQueue: BattleBoardCommandQueueComponent:
 	get:
@@ -68,7 +68,7 @@ var rules: BattleBoardRulesComponent:
 		return coComponents.get(&"BattleBoardRulesComponent")
 
 func getRequiredComponents() -> Array[Script]:
-	return [BattleBoardCommandFactory, BattleBoardCommandQueueComponent, BattleBoardComponent3D, BattleBoardSelectorComponent3D, BattleBoardHighlightComponent]
+	return [BattleBoardCommandFactory, BattleBoardCommandQueueComponent, BattleBoardServerStateComponent, BattleBoardSelectorComponent3D, BattleBoardHighlightComponent]
 #endregion
 
 #region State

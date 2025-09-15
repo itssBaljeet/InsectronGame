@@ -15,19 +15,40 @@ extends TurnBasedEntity
 
 #region Dependencies
 
-@onready var battleBoardGenerator: BattleBoardComponent3D:
+var _battleBoardGenerator: BattleBoardGeneratorComponent
+var battleBoardGenerator: BattleBoardGeneratorComponent:
 	get:
-		if battleBoardGenerator: return battleBoardGenerator
-		return self.components.get(&"BattleBoardComponent3D")
+		if not is_instance_valid(_battleBoardGenerator):
+		_battleBoardGenerator = self.components.get(&"BattleBoardGeneratorComponent")
+		return _battleBoardGenerator
 
-@onready var battleBoardUI: BattleBoardUIComponent:
+var _clientBoardState: BattleBoardClientStateComponent
+var clientBoardState: BattleBoardClientStateComponent:
 	get:
-		if battleBoardUI: return battleBoardUI
-		return self.components.get(&"BattleBoardUIComponent")
-@onready var battleBoardPlacementUI: BattleBoardPlacementUIComponent:
+		if not is_instance_valid(_clientBoardState):
+		_clientBoardState = self.components.get(&"BattleBoardClientStateComponent")
+		return _clientBoardState
+
+var _serverBoardState: BattleBoardServerStateComponent
+var serverBoardState: BattleBoardServerStateComponent:
 	get:
-		if battleBoardPlacementUI: return battleBoardPlacementUI
-		return self.components.get(&"BattleBoardPlacementUIComponent")
+		if not is_instance_valid(_serverBoardState):
+		_serverBoardState = self.components.get(&"BattleBoardServerStateComponent")
+		return _serverBoardState
+
+var _battleBoardUI: BattleBoardUIComponent
+var battleBoardUI: BattleBoardUIComponent:
+	get:
+		if not is_instance_valid(_battleBoardUI):
+		_battleBoardUI = self.components.get(&"BattleBoardUIComponent")
+		return _battleBoardUI
+
+var _battleBoardPlacementUI: BattleBoardPlacementUIComponent
+var battleBoardPlacementUI: BattleBoardPlacementUIComponent:
+	get:
+		if not is_instance_valid(_battleBoardPlacementUI):
+		_battleBoardPlacementUI = self.components.get(&"BattleBoardPlacementUIComponent")
+		return _battleBoardPlacementUI
 
 #endregion
 
@@ -35,20 +56,22 @@ extends TurnBasedEntity
 
 func _setGridWidth(x: int) -> void:
 	width = x
-	
-	if battleBoardGenerator:
-		battleBoardGenerator.width = width
-	else:
-		battleBoardGenerator = self.components.get(&"BattleBoardComponent3D")
-		return
-		
+	var generator := battleBoardGenerator
+	if generator:
+		generator.width = width
+	_updateBoardDimensions()
+
 func _setGridHeight(y: int) -> void:
 	height = y
-	
-	if battleBoardGenerator:
-		battleBoardGenerator.height = height
-	else:
-		battleBoardGenerator = self.components.get(&"BattleBoardComponent3D")
-		return
+	var generator := battleBoardGenerator
+	if generator:
+		generator.height = height
+	_updateBoardDimensions()
+
+func _updateBoardDimensions() -> void:
+	if clientBoardState:
+		clientBoardState.setDimensions(width, height)
+	if serverBoardState:
+		serverBoardState.setDimensions(width, height)
 
 #endregion

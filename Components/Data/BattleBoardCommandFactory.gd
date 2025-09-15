@@ -17,9 +17,9 @@ var UIComp: BattleBoardUIComponent:
 	get:
 		return coComponents.get(&"BattleBoardUIComponent")
 
-var board: BattleBoardComponent3D:
+var board: BattleBoardServerStateComponent:
 	get:
-		return coComponents.get(&"BattleBoardComponent3D")
+		return coComponents.get(&"BattleBoardServerStateComponent")
 #endregion
 
 #region Signals - UI listens to these

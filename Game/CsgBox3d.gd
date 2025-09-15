@@ -3,7 +3,7 @@ extends Node
 
 #region Dependencies
 @export var Board: BattleBoardEntity3D
-var BattleBoardComp: BattleBoardComponent3D
+var BattleBoardComp: BattleBoardGeneratorComponent
 @export var iterate: bool = false
 		
 #endregion
@@ -11,7 +11,7 @@ var BattleBoardComp: BattleBoardComponent3D
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	if !BattleBoardComp:
-		BattleBoardComp = Board.components.BattleBoardComponent3D
+		BattleBoardComp = Board.components.BattleBoardGeneratorComponent
 	
 	if iterate:
 		iterate = false

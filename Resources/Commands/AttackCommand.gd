@@ -21,7 +21,7 @@ func canExecute(context: BattleBoardContext) -> bool:
 		return false
 	
 	# Get target at cell
-	target = context.board.getOccupant(targetCell)
+	target = context.boardState.getOccupant(targetCell)
 	if not target:
 		commandFailed.emit("No target at cell")
 		return false

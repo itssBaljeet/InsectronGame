@@ -1,7 +1,7 @@
-[gd_scene load_steps=51 format=3 uid="uid://bq82t3qc1mxmb"]
+[gd_scene load_steps=53 format=3 uid="uid://bq82t3qc1mxmb"]
 
 [ext_resource type="Script" uid="uid://bryda6lc1suk7" path="res://Entities/Objects/BattleBoardEntity3d.gd" id="1_pvu71"]
-[ext_resource type="PackedScene" uid="uid://ds773iggimiek" path="res://Components/Control/BattleBoardComponent3D.tscn" id="2_s4deh"]
+[ext_resource type="PackedScene" uid="uid://ds773iggimiek" path="res://Components/Visual/BattleBoardGeneratorComponent.tscn" id="2_s4deh"]
 [ext_resource type="Resource" uid="uid://ct3ya4dfo83pe" path="res://Game/Resources/patterns/mannguard.tres" id="6_tm5g8"]
 [ext_resource type="PackedScene" uid="uid://b1c4gfp8xpktc" path="res://Components/Control/BattleBoardSelectorComponent.tscn" id="7_bckac"]
 [ext_resource type="PackedScene" uid="uid://ob3s2kpnk833" path="res://Components/Movement/BattleBoardPositionComponent.tscn" id="8_ucsr6"]
@@ -25,6 +25,9 @@
 [ext_resource type="PackedScene" uid="uid://dvnkwgrchnfae" path="res://Components/Visual/BattleBoardPresentationSystemComponent.tscn" id="55_dr6b8"]
 [ext_resource type="PackedScene" uid="uid://wqm4tsu7jdj6" path="res://Components/Control/BattleBoardMouseSelectionComponent.tscn" id="55_kfhrd"]
 [ext_resource type="PackedScene" uid="uid://bplacementui" path="res://Components/Visual/BattleBoardPlacementUIComponent.tscn" id="56_plcui"]
+
+[ext_resource type="Script" path="res://Components/Control/BattleBoardClientStateComponent.gd" id="57_client_state"]
+[ext_resource type="Script" path="res://Components/Control/BattleBoardServerStateComponent.gd" id="58_server_state"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fakjh"]
 resource_local_to_scene = true
@@ -233,9 +236,15 @@ moveRange = ExtResource("6_tm5g8")
 speed = 10.0
 mesh_height = 0.5100000000093132
 
-[node name="BattleBoardComponent3D" parent="." instance=ExtResource("2_s4deh")]
+[node name="BattleBoardGeneratorComponent" parent="." instance=ExtResource("2_s4deh")]
 mesh_library = SubResource("MeshLibrary_qpwfo")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="BattleBoardClientStateComponent" parent="." type="Node" groups=["components"]]
+script = ExtResource("57_client_state")
+
+[node name="BattleBoardServerStateComponent" parent="." type="Node" groups=["components"]]
+script = ExtResource("58_server_state")
 
 [node name="BattleBoardUIComponent" parent="." instance=ExtResource("12_yubh6")]
 

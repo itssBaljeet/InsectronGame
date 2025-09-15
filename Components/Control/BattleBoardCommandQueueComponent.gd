@@ -9,9 +9,17 @@ var rules: BattleBoardRulesComponent:
 	get:
 		return coComponents.get(&"BattleBoardRulesComponent")
 
-var board: BattleBoardComponent3D:
+var boardState: BattleBoardServerStateComponent:
 	get:
-		return coComponents.get(&"BattleBoardComponent3D")
+		return coComponents.get(&"BattleBoardServerStateComponent")
+
+var boardGenerator: BattleBoardGeneratorComponent:
+	get:
+		return coComponents.get(&"BattleBoardGeneratorComponent")
+
+var clientBoardState: BattleBoardClientStateComponent:
+	get:
+		return coComponents.get(&"BattleBoardClientStateComponent")
 
 var pathfinding: BattleBoardPathfindingComponent:
 	get:
@@ -57,7 +65,9 @@ signal commandUndone(command: BattleBoardCommand)
 func _ready() -> void:
 	# Build context once
 	context = BattleBoardContext.new()
-	context.board = board
+	context.generator = boardGenerator
+	context.boardState = boardState
+	context.clientState = clientBoardState
 	context.rules = rules
 	context.pathfinding = pathfinding
 	context.highlighter = highlighter

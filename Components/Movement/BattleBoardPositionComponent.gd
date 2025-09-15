@@ -58,7 +58,7 @@ extends Component
 #region Dependencies
 
 # The battle board component attached to the BattleBoardEntity3D.
-var battleBoard: BattleBoardComponent3D
+var battleBoard: BattleBoardGeneratorComponent
 
 #endregion
 
@@ -113,7 +113,7 @@ signal didArriveAtNewCell(newDestination: Vector3i)
 
 #region Life Cycle
 
-func _init(board: BattleBoardComponent3D = null) -> void:
+func _init(board: BattleBoardGeneratorComponent = null) -> void:
 	battleBoard = board
 
 
@@ -124,9 +124,9 @@ func _ready() -> void:
 		self.didArriveAtNewCell.connect(self.onDidArriveAtNewCell)
 
 	if not battleBoard and self.parentEntity and self.parentEntity.get_parent():
-		var boardNode = self.parentEntity.get_parent().find_child("BattleBoardComponent3D")
+		var boardNode = self.parentEntity.get_parent().find_child("BattleBoardGeneratorComponent")
 		if boardNode:
-			battleBoard = boardNode.get_node(^".") as BattleBoardComponent3D
+			battleBoard = boardNode.get_node(^".") as BattleBoardGeneratorComponent
 
 	# The tileMap may be set later, if this component was loaded dynamically at runtime, or initialized by another script.
 	applyInitialCoordinates()
