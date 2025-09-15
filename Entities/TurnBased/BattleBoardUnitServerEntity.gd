@@ -60,6 +60,10 @@ func _init(meteormyte: Meteormyte) -> void:
 	var attack := BattleBoardUnitAttackComponent.new()
 	if meteormyte and meteormyte.species_data:
 		attack.attackRange = meteormyte.species_data.baseAttackPattern
+		if meteormyte.available_attacks.size() > 0:
+			attack.basicAttack = meteormyte.available_attacks[0]
+			if meteormyte.available_attacks.size() > 1:
+				attack.specialAttacks = meteormyte.available_attacks.slice(1)
 	self.add_child(attack)
 
 	var state := UnitTurnStateComponent.new()
@@ -77,4 +81,6 @@ func _init(meteormyte: Meteormyte) -> void:
 		self.add_child(stats)
 
 		var health := MeteormyteHealthComponent.new()
+		health.startAtMaxHealth = false
+		health.currentHealth = meteormyte.current_hp
 		self.add_child(health)

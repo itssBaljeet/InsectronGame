@@ -9,6 +9,8 @@ extends Resource
 @export var xp: int = 0
 @export var unique_id: int = randi()
 @export var stats: Dictionary[MeteormyteStat.StatType, MeteormyteStat] = {}
+@export var current_hp: int = 0
+@export var available_attacks: Array[AttackResource] = []
 
 func initialize_stats() -> void:
 	stats.clear()
@@ -20,6 +22,9 @@ func initialize_stats() -> void:
 	_stats_create(MeteormyteStat.StatType.SP_ATTACK, species_data.baseSpAttack)
 	_stats_create(MeteormyteStat.StatType.SP_DEFENSE, species_data.baseSpDefense)
 	_stats_create(MeteormyteStat.StatType.SPEED, species_data.baseSpeed)
+
+	var hp_stat := get_stat(MeteormyteStat.StatType.HP)
+	current_hp = hp_stat.getCurrentValue() if hp_stat else 0
 
 func _stats_create(type: MeteormyteStat.StatType, base: int) -> void:
 	var stat := MeteormyteStat.new()

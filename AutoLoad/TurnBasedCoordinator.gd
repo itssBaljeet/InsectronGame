@@ -587,7 +587,7 @@ func showDebugInfo() -> void:
 
 #endregion
 
-func startPlacementPhase(party: Array[Meteormyte], againstAI: bool = false, enemyParty: Array[Meteormyte] = []) -> void:
+func startPlacementPhase(party: Party, againstAI: bool = false, enemyParty: Party = null) -> void:
 	_playerPlacementDone = false
 	_opponentPlacementDone = false
 	_againstAI = againstAI
@@ -603,20 +603,20 @@ func startPlacementPhase(party: Array[Meteormyte], againstAI: bool = false, enem
 		if placementUI:
 			placementUI.placementPhaseFinished.connect(_onPlacementFinished)
 			placementUI.beginPlacement(party)
-		if _againstAI:
+		if _againstAI and enemyParty:
 			_autoPlaceEnemy(boardEntity, enemyParty)
 
 
-func _autoPlaceEnemy(boardEntity: BattleBoardEntity3D, enemies: Array[Meteormyte]) -> void:
+func _autoPlaceEnemy(boardEntity: BattleBoardEntity3D, enemies: Party) -> void:
 	var factory: BattleBoardCommandFactory = boardEntity.components.get(&"BattleBoardCommandFactory")
 	var board: BattleBoardComponent3D = boardEntity.battleBoardGenerator
 	var width := board.width
 	var height := board.height
-	for i in range(enemies.size()):
+	for i in range(enemies.meteormytes.size()):
 		var x := i % width
 		var z := i / width
 		var cell := Vector3i(x, 0, height - 1 - z)
-		factory.intentPlaceUnit(enemies[i], cell)
+		factory.intentPlaceUnit(enemies.meteormytes[i], cell)
 	_opponentPlacementDone = true
 	_checkPlacementComplete()
 
