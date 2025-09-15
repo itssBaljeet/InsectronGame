@@ -82,7 +82,8 @@ func beginPlacement(partyResource: Party) -> void:
 	partyPlacementPanel.show()
 	_clearPartyButtons()
 	_createPartyButtons()
-	_showCurrent()
+	print("SHOWING THE DAMN PANEL")
+	partyPlacementPanel.show()
 
 func nextUnit() -> Meteormyte:
 	if party.is_empty():
@@ -114,8 +115,10 @@ func placeCurrentUnit(cell: Vector3i) -> bool:
 		_removeUnitButton(unit)
 		party.remove_at(currentIndex)
 		if party.is_empty():
+			print("PARTY EMPTY ATTEMPTING END OF PLACEMENT PHASE")
 			isPlacementActive = false
 			_showCurrent()
+			TurnBasedCoordinator._playerPlacementDone = true
 			placementPhaseFinished.emit()
 		else:
 			currentIndex = currentIndex % party.size()
@@ -155,6 +158,7 @@ func _createPartyButton(unit: Meteormyte) -> Button:
 	button.add_theme_stylebox_override("normal", buttonStyle)
 	button.add_theme_stylebox_override("theme_override_styles/focus", hoverButtonStyle)
 	button.button_up.connect(_onPartyUnitButtonPressed.bind(unit))
+	button.size.y = 50
 	return button
 
 

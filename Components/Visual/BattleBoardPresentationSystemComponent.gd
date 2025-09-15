@@ -89,10 +89,12 @@ func _on_domain_event(eventName: StringName, data: Dictionary) -> void:
 		presentationFinished.emit(eventName)
 
 func _onPlacementUnitChanged(unit: Meteormyte) -> void:
-	if not placementUI or not placementUI.isPlacementActive or unit == null:
+	if not placementUI or unit == null:
+		print("Exiting placement state")
 		_exitPlacementState()
 		return
-
+	
+	print("Entering placement state")
 	_enterPlacementState()
 
 func _onPlacementCellSelected(cell: Vector3i) -> void:
@@ -106,25 +108,25 @@ func _onPlacementCellSelected(cell: Vector3i) -> void:
 	var placed := placementUI.placeCurrentUnit(cell)
 	if not placed:
 		return
-
-	# Highlight state will refresh when placement UI selects the next unit
-	pass
+	print("SHOWING THE PANEL")
+	placementUI.partyPlacementPanel.show()
 
 func _onPlacementPhaseFinished() -> void:
+	print("Placement phase finished and checking if both users are done...")
 	if TurnBasedCoordinator._playerPlacementDone and TurnBasedCoordinator._opponentPlacementDone:
-		print("PLAYER DONE HEHE WHEN UR NOT")
+		print("PLAYER AND ENEMY DONE; EXITING PLACEMENT")
 		_exitPlacementState()
 
 func _enterPlacementState() -> void:
+	placementUI.isPlacementActive = true
 	state = PresentationState.placement
-	print("SHOWING THE DAMN PANEL")
-	placementUI.partyPlacementPanel.show()
+	print("HEHE HIDING IT")
+	placementUI.show()
 	_highlightPlacementCells()
 
 func _exitPlacementState() -> void:
 	_clearPlacementHighlights()
-	print("HEHE HIDING IT")
-	placementUI.partyPlacementPanel.hide()
+	placementUI.hide()
 	state = PresentationState.idle
 
 func _highlightPlacementCells() -> void:
@@ -304,12 +306,11 @@ func _onChainAttack(data: Dictionary) -> void:
 
 func _onUnitPlaced(data: Dictionary) -> void:
 	var meteormyte: Meteormyte = data.get("unit")
-	print(parentEntity.components.BattleBoardComponent3D)
 	
 	var unit := BattleBoardUnitClientEntity.new(meteormyte, data.get("cell"), parentEntity.components.BattleBoardComponent3D)
 	
 	var cell: Vector3i = data.get("cell", Vector3i.ZERO)
-	var root = self.parentEntity if self.parentEntity else null
+	var root := self.parentEntity if self.parentEntity else null
 	if unit and root and not unit.is_inside_tree():
 		root.add_child(unit)
 	if unit and unit.positionComponent:

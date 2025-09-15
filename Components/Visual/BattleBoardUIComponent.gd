@@ -539,6 +539,8 @@ func _updateButtonsVisibility(unit: BattleBoardUnitClientEntity) -> void:
 	# Check if it's an enemy unit
 	var isPlayerUnit := board.getInsectorOccupant(unit.positionComponent.currentCellCoordinates).factionComponent.factions == pow(2, FactionComponent.Factions.players - 1)
 	
+	print("asdf", board.getInsectorOccupant(unit.positionComponent.currentCellCoordinates))
+	
 	if not isPlayerUnit:
 		# Enemy unit - show info and end turn only
 		infoButton.visible = true
