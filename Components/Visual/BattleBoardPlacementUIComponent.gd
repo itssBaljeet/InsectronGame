@@ -2,6 +2,8 @@
 class_name BattleBoardPlacementUIComponent
 extends Component
 
+const buttonStyle := preload("res://Assets/UI Pack Kenney/button.tres")
+
 var board: BattleBoardComponent3D:
 	get:
 		return coComponents.get(&"BattleBoardComponent3D")
@@ -19,13 +21,26 @@ var commandQueue: BattleBoardCommandQueueComponent:
 		return coComponents.get(&"BattleBoardCommandQueueComponent")
 
 var boardUI: BattleBoardUIComponent:
-	get:
-		return coComponents.get(&"BattleBoardUIComponent")
+        get:
+                return coComponents.get(&"BattleBoardUIComponent")
+
+var mouseSelection: BattleBoardMouseSelectionComponent:
+        get:
+                return coComponents.get(&"BattleBoardMouseSelectionComponent")
+
+var selector: BattleBoardSelectorComponent3D:
+        get:
+                var selectorEntity := parentEntity.findFirstChildOfType(BattleBoardSelectorEntity)
+                return selectorEntity.components.get(&"BattleBoardSelectorComponent3D") if selectorEntity else null
 
 var party: Array[Meteormyte] = []
 var lastPlaced: Meteormyte
 
 var currentIndex: int = 0
+var isPlacementActive: bool = false
+var unitButtons: Dictionary[Meteormyte, Button] = {}
+var currentButton: Button
+var shouldIgnoreNextSelectorEvent: bool = false
 
 signal placementCommitted(unit: Meteormyte, cell: Vector3i)
 signal placementPhaseFinished
@@ -35,8 +50,14 @@ signal placementPhaseFinished
 @onready var partyList: VBoxContainer = %PartyList
 
 func _ready() -> void:
-	boardUI.visible = false
-	startPlacementButton.button_up.connect(_onStartPlacementButtonPressed)
+        boardUI.visible = false
+        startPlacementButton.button_up.connect(_onStartPlacementButtonPressed)
+
+        if selector:
+                selector.cellSelected.connect(_onSelectorCellSelected)
+
+        if mouseSelection:
+                mouseSelection.cellClicked.connect(_onMouseCellClicked)
 
 ## This is a test for singleplayer right now emulating a server architecture
 ## For now we pass in a premade player party resource
@@ -52,44 +73,158 @@ func _onStartPlacementButtonPressed() -> void:
 	TurnBasedCoordinator.startPlacementPhase(playerTeam, true, enemyTeam)
 
 func beginPlacement(partyResource: Party) -> void:
-	party = partyResource.meteormytes.duplicate()
-	currentIndex = 0
-	_showCurrent()
-	highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
+        party = partyResource.meteormytes.duplicate()
+        currentIndex = 0
+        isPlacementActive = true
+        self.visible = true
+        partyPlacementPanel.show()
+        _clearPartyButtons()
+        _createPartyButtons()
+        _showCurrent()
 
 func nextUnit() -> Meteormyte:
-	if party.is_empty():
-		return null
-	currentIndex = (currentIndex + 1) % party.size()
-	return currentUnit()
+        if party.is_empty():
+                return null
+        currentIndex = (currentIndex + 1) % party.size()
+        _showCurrent()
+        return currentUnit()
 
 func previousUnit() -> Meteormyte:
-	if party.is_empty():
-		return null
-	currentIndex = (currentIndex - 1 + party.size()) % party.size()
-	return currentUnit()
+        if party.is_empty():
+                return null
+        currentIndex = (currentIndex - 1 + party.size()) % party.size()
+        _showCurrent()
+        return currentUnit()
 
 func currentUnit() -> Meteormyte:
 	return party[currentIndex] if currentIndex < party.size() else null
 
 func placeCurrentUnit(cell: Vector3i) -> bool:
-	var unit := currentUnit()
-	if not unit:
-		return false
-	if factory.intentPlaceUnit(unit, cell, FactionComponent.Factions.players):
-		placementCommitted.emit(unit, cell)
-		party.remove_at(currentIndex)
-		if party.is_empty():
-			placementPhaseFinished.emit()
-		else:
-			currentIndex = currentIndex % party.size()
-			highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
-			return true
-	return false
+        if not _canHandlePlacement():
+                return false
+
+        var unit := currentUnit()
+        if not unit:
+                return false
+        if factory.intentPlaceUnit(unit, cell, FactionComponent.Factions.players):
+                placementCommitted.emit(unit, cell)
+                lastPlaced = unit
+                _removeUnitButton(unit)
+                party.remove_at(currentIndex)
+                if party.is_empty():
+                        isPlacementActive = false
+                        _showCurrent()
+                        placementPhaseFinished.emit()
+                else:
+                        currentIndex = currentIndex % party.size()
+                        _showCurrent()
+                return true
+        return false
 
 func undoLastPlacement() -> void:
 	if commandQueue.undoLastCommand():
 		highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
 
 func _showCurrent() -> void:
-	pass
+        if party.is_empty():
+                _setCurrentButton(null)
+                if highlighter:
+                        highlighter.clearHighlights()
+                return
+
+        var unit := currentUnit()
+        if not unit:
+                return
+
+        var button := unitButtons.get(unit)
+        _setCurrentButton(button)
+        if highlighter:
+                highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
+
+
+func _createPartyButtons() -> void:
+        for unit in party:
+                var button := _createPartyButton(unit)
+                unitButtons[unit] = button
+                partyList.add_child(button)
+
+
+func _createPartyButton(unit: Meteormyte) -> Button:
+        var button := Button.new()
+        button.toggle_mode = true
+        button.text = _getUnitDisplayName(unit)
+        button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+        button.add_theme_stylebox_override("normal", buttonStyle)
+        button.button_up.connect(_onPartyUnitButtonPressed.bind(unit))
+        return button
+
+
+func _clearPartyButtons() -> void:
+        for child in partyList.get_children():
+                child.queue_free()
+        unitButtons.clear()
+        currentButton = null
+
+
+func _removeUnitButton(unit: Meteormyte) -> void:
+        if not unitButtons.has(unit):
+                return
+        var button: Button = unitButtons[unit]
+        unitButtons.erase(unit)
+        if button == currentButton:
+                currentButton = null
+        button.queue_free()
+
+
+func _onPartyUnitButtonPressed(unit: Meteormyte) -> void:
+        if party.is_empty():
+                return
+
+        var index := party.find(unit)
+        if index == -1:
+                return
+
+        currentIndex = index
+        isPlacementActive = true
+        _showCurrent()
+
+
+func _getUnitDisplayName(unit: Meteormyte) -> String:
+        if unit.nickname and not unit.nickname.is_empty():
+                return unit.nickname
+        if unit.species_data:
+                return unit.species_data.speciesName
+        return "Unit"
+
+
+func _setCurrentButton(button: Button) -> void:
+        currentButton = button
+        for storedButton in unitButtons.values():
+                storedButton.button_pressed = storedButton == button
+                storedButton.toggle_mode = true
+        if currentButton:
+                currentButton.grab_focus()
+
+
+func _onSelectorCellSelected(cell: Vector3i) -> void:
+        if shouldIgnoreNextSelectorEvent:
+                shouldIgnoreNextSelectorEvent = false
+                return
+        if not _canHandlePlacement():
+                return
+        _handlePlacementForCell(cell)
+
+
+func _onMouseCellClicked(cell: Vector3i) -> void:
+        if not _canHandlePlacement():
+                return
+        shouldIgnoreNextSelectorEvent = true
+        _handlePlacementForCell(cell)
+
+
+func _handlePlacementForCell(cell: Vector3i) -> void:
+        placeCurrentUnit(cell)
+
+
+func _canHandlePlacement() -> bool:
+        return isPlacementActive and not party.is_empty()
