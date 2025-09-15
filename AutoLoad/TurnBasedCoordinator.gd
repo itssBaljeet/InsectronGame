@@ -191,13 +191,13 @@ var activeUnit: TurnBasedEntity = null
 @export_storage var recentEntityIndex: int
 
 var currentEntityProcessing: TurnBasedEntity: ## Returns `null` if there is no ongoing turn process loop.
-get: return turnBasedEntities[currentEntityIndex] if currentEntityIndex >= 0 and currentEntityIndex < turnBasedEntities.size() else null
+	get: return turnBasedEntities[currentEntityIndex] if currentEntityIndex >= 0 and currentEntityIndex < turnBasedEntities.size() else null
 
 var recentEntityProcessed: TurnBasedEntity:
-get: return turnBasedEntities[recentEntityIndex]
+	get: return turnBasedEntities[recentEntityIndex]
 
 var nextEntityIndex: int: ## Returns the next entity in the turn order, or the first entry if the current entity is the last one.
-get: return currentEntityIndex + 1 if (currentEntityIndex + 1) < turnBasedEntities.size() else 0
+	get: return currentEntityIndex + 1 if (currentEntityIndex + 1) < turnBasedEntities.size() else 0
 
 var _playerPlacementDone: bool = false
 var _opponentPlacementDone: bool = false
@@ -607,18 +607,18 @@ func startPlacementPhase(party: Array[BattleBoardUnitEntity], againstAI: bool = 
 			_autoPlaceEnemy(boardEntity)
 
 func _autoPlaceEnemy(boardEntity: BattleBoardEntity3D) -> void:
-        var factory: BattleBoardCommandFactory = boardEntity.components.get(&"BattleBoardCommandFactory")
-        var board: BattleBoardComponent3D = boardEntity.battleBoardGenerator
-        var width := board.width
-        var height := board.height
-        var enemies := enemyInsectors
-        for i in range(enemies.size()):
-                var x := i % width
-                var z := i / width
-                var cell := Vector3i(x, 0, height - 1 - z)
-                factory.intentPlaceUnit(enemies[i], cell)
-        _opponentPlacementDone = true
-        _checkPlacementComplete()
+	var factory: BattleBoardCommandFactory = boardEntity.components.get(&"BattleBoardCommandFactory")
+	var board: BattleBoardComponent3D = boardEntity.battleBoardGenerator
+	var width := board.width
+	var height := board.height
+	var enemies := enemyInsectors
+	for i in range(enemies.size()):
+		var x := i % width
+		var z := i / width
+		var cell := Vector3i(x, 0, height - 1 - z)
+		factory.intentPlaceUnit(enemies[i], cell)
+	_opponentPlacementDone = true
+	_checkPlacementComplete()
 
 func remotePlacementFinished() -> void:
 	_opponentPlacementDone = true
@@ -641,4 +641,3 @@ func _startCoinflip() -> void:
 	currentPhase = GamePhase.battle
 	phaseChanged.emit(currentPhase)
 	startTurnProcess()
-

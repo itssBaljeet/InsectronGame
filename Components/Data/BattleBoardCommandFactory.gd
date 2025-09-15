@@ -113,7 +113,7 @@ func intentEndTurn(team: int) -> bool:
 		return false
 
 ## Creates and enqueues a placement command during setup
-func intentPlaceUnit(unit: BattleBoardUnitEntity, cell: Vector3i) -> bool:
+func intentPlaceUnit(unit: Meteormyte, cell: Vector3i) -> bool:
 	if not unit:
 		commandValidationFailed.emit("No unit selected")
 		return false

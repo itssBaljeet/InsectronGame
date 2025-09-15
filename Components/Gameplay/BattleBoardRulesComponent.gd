@@ -114,9 +114,9 @@ func getValidAttackTargets(attacker: BattleBoardUnitEntity) -> Array[Vector3i]:
 ## - targetCell == null (Variant NIL): returns PRIMARY selectable target cells.
 ## - targetCell is Vector3i	    : returns AOE-affected cells for that selection.
 func getAttackTargets(
-		   attacker: BattleBoardUnitEntity,
-		   attackResource: AttackResource = null,
-		   targetCell: Variant = null
+			attacker: BattleBoardUnitEntity,
+			attackResource: AttackResource = null,
+			targetCell: Variant = null
 		) -> Array[Vector3i]:
 	var origin := attacker.boardPositionComponent.currentCellCoordinates
 	var rangeOffsets := _resolveRangeOffsets(attacker, attackResource)

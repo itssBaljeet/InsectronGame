@@ -18,11 +18,14 @@ var commandQueue: BattleBoardCommandQueueComponent:
 	get:
 		return coComponents.get(&"BattleBoardCommandQueueComponent")
 
-var party: Array[BattleBoardUnitEntity] = []
+var party: Array[Meteormyte] = []
+var lastPlaced: Meteormyte
 var currentIndex: int = 0
 
 signal placementCommitted(unit: BattleBoardUnitEntity, cell: Vector3i)
 signal placementPhaseFinished
+
+@onready var startPlacementButton: Button = %StartPlacementButton
 
 func beginPlacement(partyUnits: Array[BattleBoardUnitEntity]) -> void:
 	party = partyUnits.duplicate()
@@ -30,19 +33,19 @@ func beginPlacement(partyUnits: Array[BattleBoardUnitEntity]) -> void:
 	_showCurrent()
 	highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
 
-func nextUnit() -> BattleBoardUnitEntity:
+func nextUnit() -> Meteormyte:
 	if party.is_empty():
 		return null
 	currentIndex = (currentIndex + 1) % party.size()
 	return currentUnit()
 
-func previousUnit() -> BattleBoardUnitEntity:
+func previousUnit() -> Meteormyte:
 	if party.is_empty():
 		return null
 	currentIndex = (currentIndex - 1 + party.size()) % party.size()
 	return currentUnit()
 
-func currentUnit() -> BattleBoardUnitEntity:
+func currentUnit() -> Meteormyte:
 	return party[currentIndex] if currentIndex < party.size() else null
 
 func placeCurrentUnit(cell: Vector3i) -> bool:

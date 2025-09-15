@@ -191,7 +191,7 @@ func _onChainAttack(data: Dictionary) -> void:
 	if attack_res and attack_res.vfxScene and board:
 		var vfx := attack_res.vfxScene.instantiate()
 		board.add_child(vfx)
-vfx.global_position = board.getGlobalCellPosition(to_cell)
+		vfx.global_position = board.getGlobalCellPosition(to_cell)
 
 func _onUnitPlaced(data: Dictionary) -> void:
 	var unit: BattleBoardUnitEntity = data.get("unit")
