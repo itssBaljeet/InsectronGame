@@ -156,23 +156,23 @@ var battleBoardSelector: BattleBoardSelectorComponent3D:
 				return entity.components.get(&"BattleBoardSelectorComponent3D")
 		return null
 
-@export_storage var playerInsectors: Array[BattleBoardUnitEntity]:
+@export_storage var playerInsectors: Array[BattleBoardUnitServerEntity]:
 	get:
 		playerInsectors.clear()
 		for insector in turnBasedEntities:
-			if insector is BattleBoardUnitEntity and insector.factionComponent.factions == pow(2, FactionComponent.Factions.players-1):
+                    if insector is BattleBoardUnitServerEntity and insector.factionComponent.factions == pow(2, FactionComponent.Factions.players-1):
 				playerInsectors.append(insector)
 		return playerInsectors
 
-@export_storage var enemyInsectors: Array[BattleBoardUnitEntity]:
+@export_storage var enemyInsectors: Array[BattleBoardUnitServerEntity]:
 	get:
 		enemyInsectors.clear()
 		for insector in turnBasedEntities:
-			if insector is BattleBoardUnitEntity and insector.factionComponent.factions == pow(2, FactionComponent.Factions.ai-1):
+                    if insector is BattleBoardUnitServerEntity and insector.factionComponent.factions == pow(2, FactionComponent.Factions.ai-1):
 				enemyInsectors.append(insector)
 		return enemyInsectors
 
-@export_storage var currentTeamParty: Array[BattleBoardUnitEntity]:
+@export_storage var currentTeamParty: Array[BattleBoardUnitServerEntity]:
 	get:
 		return playerInsectors if currentTeam == FactionComponent.Factions.players else enemyInsectors
 
@@ -301,7 +301,7 @@ func setAllUnitTurnFlagsFalse() -> void:
 
 ## Check if all units of a team (defaults to current team) have finished their moves and actions.
 func isTeamExhausted(team: int = currentTeam) -> bool:
-	var party: Array[BattleBoardUnitEntity] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
+    var party: Array[BattleBoardUnitServerEntity] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
 	for unit in party:
 		if not unit.stateComponent.isExhausted():
 			return false
@@ -311,7 +311,7 @@ func isTeamExhausted(team: int = currentTeam) -> bool:
 ## Get a list of units in a team that still have actions available (not both flags set).
 func getAvailableUnits(team: int = currentTeam) -> Array[TurnBasedEntity]:
 	var available: Array[TurnBasedEntity] = []
-	var party: Array[BattleBoardUnitEntity] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
+    var party: Array[BattleBoardUnitServerEntity] = playerInsectors if team == FactionComponent.Factions.players else enemyInsectors
 	for unit in party:
 		if not unit.stateComponent.isExhausted():
 			available.append(unit)
@@ -587,7 +587,7 @@ func showDebugInfo() -> void:
 
 #endregion
 
-func startPlacementPhase(party: Array[BattleBoardUnitEntity], againstAI: bool = false) -> void:
+func startPlacementPhase(party: Array[Meteormyte], againstAI: bool = false, enemyParty: Array[Meteormyte] = []) -> void:
 	_playerPlacementDone = false
 	_opponentPlacementDone = false
 	_againstAI = againstAI
@@ -600,18 +600,17 @@ func startPlacementPhase(party: Array[BattleBoardUnitEntity], againstAI: bool = 
 			break
 	if boardEntity:
 		var placementUI: BattleBoardPlacementUIComponent = boardEntity.components.get(&"BattleBoardPlacementUIComponent")
-		if placementUI:
-			placementUI.placementPhaseFinished.connect(_onPlacementFinished)
-			placementUI.beginPlacement(party)
-		if _againstAI:
-			_autoPlaceEnemy(boardEntity)
+                if placementUI:
+                        placementUI.placementPhaseFinished.connect(_onPlacementFinished)
+                        placementUI.beginPlacement(party)
+                if _againstAI:
+                        _autoPlaceEnemy(boardEntity, enemyParty)
 
-func _autoPlaceEnemy(boardEntity: BattleBoardEntity3D) -> void:
+func _autoPlaceEnemy(boardEntity: BattleBoardEntity3D, enemies: Array[Meteormyte]) -> void:
         var factory: BattleBoardCommandFactory = boardEntity.components.get(&"BattleBoardCommandFactory")
         var board: BattleBoardComponent3D = boardEntity.battleBoardGenerator
         var width := board.width
         var height := board.height
-        var enemies := enemyInsectors
         for i in range(enemies.size()):
                 var x := i % width
                 var z := i / width

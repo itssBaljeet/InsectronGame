@@ -5,7 +5,7 @@ class_name BattleDamageResolver
 extends Resource
 
 ## Calculate damage for an attack
-func calculateDamage(attacker: BattleBoardUnitEntity, target: BattleBoardUnitEntity, attackRes: AttackResource) -> int:
+func calculateDamage(attacker: BattleBoardUnitServerEntity, target: BattleBoardUnitServerEntity, attackRes: AttackResource) -> int:
 	if not attacker or not target or not attackRes:
 		return 0
 	
@@ -87,7 +87,7 @@ func _calculateTrueDamage(attackRes: AttackResource, attackStat: MeteormyteStat)
 	return basePower + (attack / 2)
 
 ## Apply type effectiveness multiplier
-func _applyTypeEffectiveness(damage: int, attackRes: AttackResource, target: BattleBoardUnitEntity) -> int:
+func _applyTypeEffectiveness(damage: int, attackRes: AttackResource, target: BattleBoardUnitServerEntity) -> int:
 	# This is where you'd implement type effectiveness
 	# For now, just return the damage unchanged
 	# Example implementation:
@@ -117,12 +117,12 @@ func _calculateFallbackDamage(attackRes: AttackResource) -> int:
 	return attackRes.baseDamage
 
 ## Calculate damage for DOT effects (simplified)
-func calculateDOTDamage(source: Entity, target: BattleBoardUnitEntity, effectRes: StatusEffectResource, stacks: int) -> int:
+func calculateDOTDamage(source: Entity, target: BattleBoardUnitServerEntity, effectRes: StatusEffectResource, stacks: int) -> int:
 	# DOT damage doesn't use attack/defense stats usually
 	return effectRes.getDamageForStacks(stacks)
 
 ## Calculate healing (negative damage)
-func calculateHealing(healer: BattleBoardUnitEntity, target: BattleBoardUnitEntity, healPower: int) -> int:
+func calculateHealing(healer: BattleBoardUnitServerEntity, target: BattleBoardUnitServerEntity, healPower: int) -> int:
 	if not healer:
 		return healPower
 	

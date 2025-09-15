@@ -6,7 +6,7 @@ extends Resource
 @export var canTargetEmpty: bool = false
 @export var penetratesArmor: bool = false
 
-func isValidTarget(attacker: BattleBoardUnitEntity, target: Entity, _targetCell: Vector3i) -> bool:
+func isValidTarget(attacker: BattleBoardUnitServerEntity, target: Entity, _targetCell: Vector3i) -> bool:
 	if not target and not canTargetEmpty:
 		return false
 	

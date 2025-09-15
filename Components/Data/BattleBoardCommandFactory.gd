@@ -25,7 +25,7 @@ signal commandValidationFailed(reason: String)
 #endregion
 
 ## Creates and enqueues a move command from UI intent
-func intentMove(unit: BattleBoardUnitEntity, toCell: Vector3i) -> bool:
+func intentMove(unit: BattleBoardUnitServerEntity, toCell: Vector3i) -> bool:
 	if not unit:
 		commandValidationFailed.emit("No unit selected")
 		return false
@@ -44,7 +44,7 @@ func intentMove(unit: BattleBoardUnitEntity, toCell: Vector3i) -> bool:
 		return false
 
 ## Creates and enqueues an attack command from UI intent
-func intentAttack(attacker: BattleBoardUnitEntity, targetCell: Vector3i) -> bool:
+func intentAttack(attacker: BattleBoardUnitServerEntity, targetCell: Vector3i) -> bool:
 	if not attacker:
 		commandValidationFailed.emit("No attacker selected")
 		return false
@@ -61,7 +61,7 @@ func intentAttack(attacker: BattleBoardUnitEntity, targetCell: Vector3i) -> bool
 	else:
 		return false
 
-func intentSpecialAttack(attacker: BattleBoardUnitEntity, targetCell: Vector3i) -> bool:
+func intentSpecialAttack(attacker: BattleBoardUnitServerEntity, targetCell: Vector3i) -> bool:
 	if not attacker:
 		commandValidationFailed.emit("No attacker selected")
 		return false
@@ -82,7 +82,7 @@ func intentSpecialAttack(attacker: BattleBoardUnitEntity, targetCell: Vector3i) 
 		return false
 
 ## Creates and enqueues a wait command
-func intentWait(unit: BattleBoardUnitEntity) -> bool:
+func intentWait(unit: BattleBoardUnitServerEntity) -> bool:
 	print("Intent wait unit: ", unit)
 	if not unit:
 		commandValidationFailed.emit("No unit selected")
@@ -113,14 +113,14 @@ func intentEndTurn(team: int) -> bool:
 		return false
 
 ## Creates and enqueues a placement command during setup
-func intentPlaceUnit(unit: BattleBoardUnitEntity, cell: Vector3i) -> bool:
-	if not unit:
-		commandValidationFailed.emit("No unit selected")
-		return false
-	var command := PlaceUnitCommand.new()
-	command.unit = unit
-	command.cell = cell
-	commandCreated.emit(command)
+func intentPlaceUnit(meteormyte: Meteormyte, cell: Vector3i) -> bool:
+        if not meteormyte:
+                commandValidationFailed.emit("No unit selected")
+                return false
+        var command := PlaceUnitCommand.new()
+        command.unit = BattleBoardUnitClientEntity.new(meteormyte)
+        command.cell = cell
+        commandCreated.emit(command)
 	if commandQueue.enqueue(command):
 		commandEnqueued.emit(command)
 		return true

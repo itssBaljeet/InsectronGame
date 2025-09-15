@@ -86,14 +86,14 @@ var state: UIState = UIState.idle:
 			printDebug("State changed: %s -> %s" % [_getStateName(oldState), _getStateName(newState)])
 
 var prevState: UIState = UIState.idle
-var activeUnit: BattleBoardUnitEntity
+var activeUnit: BattleBoardUnitClientEntity
 var _currentButtonIndex := 0
 var _currentAttackButtonIndex := 0  # Track attack menu selection separately
 var attackSelectionState: AttackSelectionState = AttackSelectionState.new()
 #endregion
 
 #region Signals
-signal menuOpened(unit: BattleBoardUnitEntity)
+signal menuOpened(unit: BattleBoardUnitClientEntity)
 signal menuClosed
 signal stateChanged(newState: UIState, oldState: UIState)
 #endregion
@@ -127,7 +127,7 @@ func _ready() -> void:
 
 #region Public Interface
 ## Opens the unit menu for the specified unit (or empty cell if null)
-func openUnitMenu(unit: BattleBoardUnitEntity, newState: UIState = UIState.unitMenu) -> void:
+func openUnitMenu(unit: BattleBoardUnitClientEntity, newState: UIState = UIState.unitMenu) -> void:
 	activeUnit = unit  # Can be null for empty cells
 	state = newState
 	
@@ -182,12 +182,12 @@ func trySelectUnit(cell: Vector3i) -> bool:
 	var occupant := board.getOccupant(cell)
 	
 	# Empty cell - just show end turn button
-	if not occupant or not occupant is BattleBoardUnitEntity:
+        if not occupant or not occupant is BattleBoardUnitClientEntity:
 		activeUnit = null
 		openUnitMenu(null, UIState.unitMenu)
 		return true
 	
-	var unit := occupant as BattleBoardUnitEntity
+        var unit := occupant as BattleBoardUnitClientEntity
 	activeUnit = unit
 	
 	# Always open menu regardless of unit faction or state
@@ -523,7 +523,7 @@ func _getStateName(s: UIState) -> String:
 		UIState.unitMenuPostMove: return "unitMenuPostMove"
 		_: return "Unknown"
 
-func _updateButtonsVisibility(unit: BattleBoardUnitEntity) -> void:
+func _updateButtonsVisibility(unit: BattleBoardUnitClientEntity) -> void:
 	print("Updating button visibility")
 	
 	# Hide all buttons by default

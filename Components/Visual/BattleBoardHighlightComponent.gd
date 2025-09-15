@@ -35,7 +35,7 @@ func clearHighlights() -> void:
 	highlightType = -1
 
 ## Highlights valid move destinations
-func requestMoveHighlights(unit: BattleBoardUnitEntity) -> void:
+func requestMoveHighlights(unit: BattleBoardUnitClientEntity) -> void:
 	clearHighlights()
 	
 	var validMoves := rules.getValidMoveTargets(unit)
@@ -46,7 +46,7 @@ func requestMoveHighlights(unit: BattleBoardUnitEntity) -> void:
 		currentHighlights.append(cell)
 
 ## Highlights valid attack targets
-func requestAttackHighlights(unit: BattleBoardUnitEntity, onlyLightAvailable: bool = false) -> void:
+func requestAttackHighlights(unit: BattleBoardUnitClientEntity, onlyLightAvailable: bool = false) -> void:
 	clearHighlights()
 	highlightType = board.attackHighlightTileID
 	

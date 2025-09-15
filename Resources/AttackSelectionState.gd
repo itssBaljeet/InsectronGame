@@ -12,7 +12,7 @@ enum SelectionMode {
 
 var currentMode: SelectionMode = SelectionMode.NONE
 var selectedAttack: AttackResource
-var selectedUnit: BattleBoardUnitEntity
+var selectedUnit: BattleBoardUnitClientEntity
 var validTargets: Array[Vector3i] = []
 
 func reset() -> void:

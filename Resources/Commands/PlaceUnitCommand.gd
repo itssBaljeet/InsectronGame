@@ -3,7 +3,7 @@
 class_name PlaceUnitCommand
 extends BattleBoardCommand
 
-var unit: BattleBoardUnitEntity
+var unit: BattleBoardUnitClientEntity
 var cell: Vector3i
 var _placed: bool = false
 

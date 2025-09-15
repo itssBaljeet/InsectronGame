@@ -22,7 +22,7 @@ enum UpgradeType {
 ## The actual effect data (varies by type)
 @export var effectData: Dictionary = {}
 
-func applyUpgrade(creature: BattleBoardUnitEntity) -> void:
+func applyUpgrade(creature: BattleBoardUnitServerEntity) -> void:
 	match upgradeType:
 		UpgradeType.STAT_BOOST:
 			_applyStatBoost(creature)
@@ -34,7 +34,7 @@ func applyUpgrade(creature: BattleBoardUnitEntity) -> void:
 			_applyCritModifier(creature)
 		# Add more cases as needed
 
-func _applyStatBoost(creature: BattleBoardUnitEntity) -> void:
+func _applyStatBoost(creature: BattleBoardUnitServerEntity) -> void:
 	var statsComp := creature.components.get(&"MeteormyteStatsComponent") as MeteormyteStatsComponent
 	if not statsComp:
 		return
@@ -45,7 +45,7 @@ func _applyStatBoost(creature: BattleBoardUnitEntity) -> void:
 			stat.flatModifiers += effectData[statType]
 			stat.recalculateStats()
 
-func _applyAttackPattern(creature: BattleBoardUnitEntity) -> void:
+func _applyAttackPattern(creature: BattleBoardUnitServerEntity) -> void:
 	var attackComp := creature.components.get(&"BattleBoardUnitAttackComponent") as BattleBoardUnitAttackComponent
 	if not attackComp or not effectData.has("pattern"):
 		return
@@ -55,7 +55,7 @@ func _applyAttackPattern(creature: BattleBoardUnitEntity) -> void:
 	if newPattern:
 		attackComp.attackRange = newPattern
 
-func _applyMovementBonus(creature: BattleBoardUnitEntity) -> void:
+func _applyMovementBonus(creature: BattleBoardUnitServerEntity) -> void:
 	var posComp := creature.boardPositionComponent
 	if not posComp or not effectData.has("movementBonus"):
 		return
@@ -63,7 +63,7 @@ func _applyMovementBonus(creature: BattleBoardUnitEntity) -> void:
 	# Add to movement range
 	# This would need custom logic to extend the BoardPattern
 
-func _applyCritModifier(creature: BattleBoardUnitEntity) -> void:
+func _applyCritModifier(creature: BattleBoardUnitServerEntity) -> void:
 	var statsComp := creature.components.get(&"MeteormyteStatsComponent") as MeteormyteStatsComponent
 	if not statsComp:
 		return

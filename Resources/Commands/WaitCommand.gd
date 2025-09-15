@@ -3,7 +3,7 @@
 class_name WaitCommand
 extends BattleBoardCommand
 
-var unit: BattleBoardUnitEntity
+var unit: BattleBoardUnitClientEntity
 
 func _init() -> void:
 	commandName = "Wait"
