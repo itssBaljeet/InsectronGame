@@ -62,7 +62,6 @@ func _isWalkable(cell: Vector3i) -> bool:
 		return false
 	
 	var data := board.vBoardState.get(cell) as BattleBoardCellData
-	print("WALKABLE DATA: ", data.isOccupied, " ", data.occupant)
 	return data == null or not data.isOccupied
 
 ## Gets movement cost for a cell (for A* if needed)

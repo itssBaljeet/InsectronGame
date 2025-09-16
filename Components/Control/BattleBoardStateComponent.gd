@@ -22,7 +22,7 @@ func setDimensions(newWidth: int, newHeight: int) -> void:
 
 func setCells(newCells: Array[Vector3i]) -> void:
 	cells = newCells.duplicate()
-	_syncStateWithCells()
+	#_syncStateWithCells()
 
 func _rebuildCells() -> void:
 	var rebuilt: Array[Vector3i] = []
@@ -30,7 +30,7 @@ func _rebuildCells() -> void:
 		for x in range(width):
 			rebuilt.append(Vector3i(x, 0, z))
 	cells = rebuilt
-	_syncStateWithCells()
+	#_syncStateWithCells()
 
 func _syncStateWithCells() -> void:
 	var keys := vBoardState.keys()

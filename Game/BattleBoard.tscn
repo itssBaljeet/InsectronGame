@@ -219,7 +219,7 @@ isLoggingEnabled = false
 metadata/_custom_type_script = "uid://bryda6lc1suk7"
 
 [node name="BattleBoardSelectorEntity" parent="." instance=ExtResource("14_53p5e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.31, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.35, 3.5)
 
 [node name="BattleBoardSelectorComponent" parent="BattleBoardSelectorEntity" instance=ExtResource("7_bckac")]
 bob_amplitude = 0.1

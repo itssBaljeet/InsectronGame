@@ -32,7 +32,7 @@ extends Component
 ## WARNING: If this is slower than the movement of the [member tileMap] then the component will never be able to catch up to the destination tile's position.
 @export var moveRange: BoardPattern
 
-@export_range(10.0, 1000.0, 1.0) var speed: float = 200.0
+@export_range(10.0, 1000.0, 1.0) var speed: float = 10.0
 
 @export var shouldMoveInstantly: bool = false
 

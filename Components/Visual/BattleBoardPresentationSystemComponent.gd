@@ -41,6 +41,10 @@ var commandQueue: BattleBoardCommandQueueComponent:
 	get:
 		return coComponents.get(&"BattleBoardCommandQueueComponent")
 
+var boardState: BattleBoardClientStateComponent:
+	get:
+		return coComponents.get(&"BattleBoardClientStateComponent")
+
 func getRequiredComponents() -> Array[Script]:
 	return [
 		BattleBoardCommandQueueComponent,
@@ -56,6 +60,7 @@ var _dispatch: Dictionary[StringName, Callable]= {
 	&"ChainAttackTriggered": _onChainAttack,
 	&"UnitPlaced": _onUnitPlaced,
 	&"UnitUnplaced": _onUnitUnplaced,
+	&"UnitWaited": _onUnitWaited,
 }
 
 func _ready() -> void:
@@ -82,6 +87,7 @@ func _connectPlacementFlow() -> void:
 		_onPlacementUnitChanged(placementUI.currentUnit())
 
 func _on_domain_event(eventName: StringName, data: Dictionary) -> void:
+	print(eventName)
 	var handler: Callable = _dispatch.get(eventName)
 	if handler:
 		await handler.call(data)
@@ -126,14 +132,25 @@ func _clearPlacementHighlights() -> void:
 	highlighter.clearHighlights()
 
 func _onUnitMoved(data: Dictionary) -> void:
-	var unit: BattleBoardUnitClientEntity = data.get("unit")
 	var fromCell: Vector3i = data.get("from", Vector3i.ZERO)
 	var toCell: Vector3i = data.get("to", Vector3i.ZERO)
-	if unit and unit.animComponent and unit.boardPositionComponent:
+	var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(fromCell)
+	print("FROM: ", fromCell)
+	print("TO: ", toCell)
+	print("FROM CELL: ", boardState.getClientUnit(fromCell))
+	print("TO CELL: ", boardState.getClientUnit(toCell))
+	if unit and unit.animComponent and unit.positionComponent:
+		print("DOING ANIMATION STUFFF")
 		await unit.animComponent.faceDirection(fromCell, toCell)
-		unit.boardPositionComponent.setDestinationCellCoordinates(toCell)
-		await unit.boardPositionComponent.didArriveAtNewCell
+		unit.positionComponent.setDestinationCellCoordinates(toCell)
+		await unit.positionComponent.didArriveAtNewCell
 		await unit.animComponent.face_home_orientation()
+	boardState.setCellOccupancy(fromCell, false, null)
+	boardState.setCellOccupancy(toCell, true, unit)
+
+# Nothing for now; Could do like a Special FX to indicate wait?
+func _onUnitWaited(_data: Dictionary) -> void:
+	pass
 
 func _onUnitAttacked(data: Dictionary) -> void:
 	var attacker: BattleBoardUnitClientEntity = data.get("attacker")
@@ -301,6 +318,9 @@ func _onUnitPlaced(data: Dictionary) -> void:
 		root.add_child(unit)
 	if unit and unit.positionComponent:
 		unit.positionComponent.snapEntityPositionToTile(cell)
+	
+	boardState.clientUnits[cell] = unit
+	boardState.setCellOccupancy(cell, true, unit)
 
 func _onUnitUnplaced(data: Dictionary) -> void:
 	var unit: BattleBoardUnitClientEntity = data.get("unit")

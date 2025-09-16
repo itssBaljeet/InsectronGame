@@ -2,10 +2,10 @@
 class_name BattleBoardClientStateComponent
 extends BattleBoardStateComponent
 
-var clientUnits: Dictionary[Vector3i, Entity] = {}
+var clientUnits: Dictionary[Vector3i, BattleBoardUnitClientEntity] = {}
 
 func _updateUnitReference(cell: Vector3i, occupied: bool, occupant: Entity) -> void:
-	var clientUnit := occupant if occupant is Entity else null
+	var clientUnit := occupant as BattleBoardUnitClientEntity
 	if occupied and clientUnit:
 		clientUnits[cell] = clientUnit
 	else:
@@ -17,5 +17,5 @@ func _pruneUnitsForMissingCells() -> void:
 		if cell not in self.cells:
 			clientUnits.erase(cell)
 
-func getClientUnit(cell: Vector3i) -> Entity:
+func getClientUnit(cell: Vector3i) -> BattleBoardUnitClientEntity:
 	return clientUnits.get(cell)

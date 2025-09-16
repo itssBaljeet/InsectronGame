@@ -3,7 +3,7 @@
 class_name MoveCommand  
 extends BattleBoardCommand
 
-var unit: BattleBoardUnitClientEntity
+var unit: BattleBoardUnitServerEntity
 var fromCell: Vector3i
 var toCell: Vector3i
 var path: Array[Vector3i] = []
@@ -23,12 +23,12 @@ func canExecute(context: BattleBoardContext) -> bool:
 		return false
 	
 	# Validate destination via rules
-	if not context.rules.isValidMove(unit.boardPositionComponent, fromCell, toCell):
+	if not context.rules.isValidMove(unit.boardPositionComponent.moveRange, fromCell, toCell):
 		commandFailed.emit("Invalid destination")
 		return false
 	
 	# Check if path exists
-	path = context.pathfinding.findPath(fromCell, toCell, unit.boardPositionComponent)
+	path = context.pathfinding.findPath(fromCell, toCell, unit.boardPositionComponent.moveRange)
 	if path.is_empty():
 		commandFailed.emit("No valid path")
 		return false
@@ -43,6 +43,8 @@ func execute(context: BattleBoardContext) -> void:
 	_previousOccupant = context.boardState.getOccupant(toCell)
 	context.boardState.setCellOccupancy(fromCell, false, null)
 	context.boardState.setCellOccupancy(toCell, true, unit)
+	
+	unit.boardPositionComponent.setDestinationCellCoordinates(toCell)
 	
 	context.highlighter.clearHighlights()
 	

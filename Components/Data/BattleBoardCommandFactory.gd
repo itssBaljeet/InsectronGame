@@ -30,7 +30,7 @@ signal commandValidationFailed(reason: String)
 
 ## Creates and enqueues a move command from UI intent
 func intentMove(fromCell: Vector3i, toCell: Vector3i) -> bool:
-	var unit = board.getInsectorOccupant(fromCell)
+	var unit: BattleBoardUnitServerEntity = board.getInsectorOccupant(fromCell)
 	
 	if not unit:
 		commandValidationFailed.emit("No unit selected")
@@ -94,6 +94,7 @@ func intentSpecialAttack(fromCell: Vector3i, targetCell: Vector3i) -> bool:
 ## Creates and enqueues a wait command
 func intentWait(cell: Vector3i) -> bool:
 	var unit := board.getInsectorOccupant(cell)
+	print(cell)
 	if not unit:
 		commandValidationFailed.emit("No unit selected")
 		return false

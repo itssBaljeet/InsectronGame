@@ -229,7 +229,8 @@ func onWaitButtonPressed() -> void:
 	if not activeUnit:
 		return
 	# Replace with command
-	factory.intentWait(activeUnit.positionComponent.currentCellCoordinates)
+	print(activeUnit)
+	factory.intentWait(activeUnit.boardPositionComponent.currentCellCoordinates)
 	closeUnitMenu()
 	
 
@@ -541,9 +542,8 @@ func _updateButtonsVisibility(unit: BattleBoardUnitServerEntity) -> void:
 		return
 	
 	# Check if it's an enemy unit
-	var isPlayerUnit := board.getInsectorOccupant(unit.boardPositionComponent.currentCellCoordinates).factionComponent.factions == pow(2, FactionComponent.Factions.players - 1)
-	
-	print("asdf", board.getInsectorOccupant(unit.boardPositionComponent.currentCellCoordinates))
+	print("THIS IS THE BOOOAARRRDD: ", board)
+	var isPlayerUnit := unit.factionComponent.factions == pow(2, FactionComponent.Factions.players - 1)
 	
 	if not isPlayerUnit:
 		# Enemy unit - show info and end turn only
@@ -552,7 +552,7 @@ func _updateButtonsVisibility(unit: BattleBoardUnitServerEntity) -> void:
 		return
 	
 	# Player's unit - check state
-	var stateComp := board.getInsectorOccupant(unit.boardPositionComponent.currentCellCoordinates).stateComponent
+	var stateComp := unit.stateComponent
 	if not stateComp:
 		return
 	
