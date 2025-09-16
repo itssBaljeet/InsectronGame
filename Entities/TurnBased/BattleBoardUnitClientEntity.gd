@@ -18,7 +18,7 @@ var positionComponent: BattleBoardPositionComponent:
 #endregion
 
 ## Initializes a client-side battle board unit with the given [Meteormyte] data.
-func _init(meteormyte: Meteormyte, cell: Vector3i, board: BattleBoardGeneratorComponent) -> void:
+func _init(meteormyte: Meteormyte, cell: Vector3i, board) -> void:
 
 		var healthVis := preload("res://Components/Visual/BattleBoardUnitHealthVisualComponent.tscn").instantiate()
 		self.add_child(healthVis)

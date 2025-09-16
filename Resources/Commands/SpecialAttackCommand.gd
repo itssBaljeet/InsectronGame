@@ -189,7 +189,7 @@ func _deployHazards(context: BattleBoardContext, affectedCells: Array) -> void:
 ## Fallback hazard placement (if no hazard system)
 func _placeHazardDirect(context: BattleBoardContext, cell: Vector3i, hazardRes: HazardResource) -> void:
 	# Create active hazard data
-	var hazardData := BattleBoardHazardSystemComponent.ActiveHazard.new()
+	var hazardData := BattleBoardActiveHazardData.new()
 	hazardData.resource = hazardRes
 	hazardData.turnsRemaining = hazardRes.baseDuration
 	hazardData.stacks = 1
