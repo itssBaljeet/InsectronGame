@@ -202,6 +202,10 @@ func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i, knoc
 	if newDestinationTileCoordinates == self.currentCellCoordinates:
 		cancelDestination()
 		return true # NOTE: Return true because arriving at the specified coordinates should be considered a success, even if already there. :)
+	
+	# Is it in the playable area?
+	if not newDestinationTileCoordinates in battleBoard.generatedCells:
+		return false
 
 	# Move Your Body ♪
 	previousCellCoordinates = currentCellCoordinates

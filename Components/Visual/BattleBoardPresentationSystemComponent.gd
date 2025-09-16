@@ -74,7 +74,6 @@ func _connectPlacementFlow() -> void:
 	if not placementUI:
 		return
 
-	placementUI.placementCellSelected.connect(_onPlacementCellSelected)
 	placementUI.currentUnitChanged.connect(_onPlacementUnitChanged)
 	placementUI.placementPhaseFinished.connect(_onPlacementPhaseFinished)
 	_placementSignalsConnected = true
@@ -97,19 +96,6 @@ func _onPlacementUnitChanged(unit: Meteormyte) -> void:
 	print("Entering placement state")
 	_enterPlacementState()
 
-func _onPlacementCellSelected(cell: Vector3i) -> void:
-	if state != PresentationState.placement:
-		return
-	if not placementUI or not placementUI.isPlacementActive:
-		return
-	if not placementUI.currentUnit():
-		return
-
-	var placed := placementUI.placeCurrentUnit(cell)
-	if not placed:
-		return
-	print("SHOWING THE PANEL")
-	placementUI.partyPlacementPanel.show()
 
 func _onPlacementPhaseFinished() -> void:
 	print("Placement phase finished and checking if both users are done...")

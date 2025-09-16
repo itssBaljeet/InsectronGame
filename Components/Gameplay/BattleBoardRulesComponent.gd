@@ -22,22 +22,27 @@ func isValidMove(moveRange: BoardPattern, fromCell: Vector3i, toCell: Vector3i) 
 
 	# Check bounds
 	if not isInBounds(toCell):
+		print("NOT IN BOUNDS")
 		return false
 
 		# Check if destination is vacant or already claimed by this unit
 	if not isCellVacant(toCell):
+		print("NOT VACANT")
 		return false
 
 	# Check movement range
 	if not isInRange(fromCell, toCell, moveRange):
+		print("NOT IN RANGE")
 		return false
 
 	# Allow zero-length moves without pathfinding
 	if fromCell == toCell:
+		print("ZERO LENGTH MOVE")
 		return true
 
 	# Check if path exists
 	var path := pathfinding.findPath(fromCell, toCell, moveRange)
+	print("PATH FINDING: ", path)
 
 	return not path.is_empty()
 

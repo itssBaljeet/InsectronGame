@@ -76,6 +76,8 @@ var slopeTileID: int
 var borderBoxID: int
 var slopeTileCornerID: int
 
+var generatedCells: Array[Vector3i]
+
 func _ready() -> void:
 	generateMeshLibrary()
 	_rebuildBoard()
@@ -83,7 +85,7 @@ func _ready() -> void:
 func _rebuildBoard() -> void:
 	if not is_inside_tree():
 		return
-	var generatedCells := generateBoard()
+	generatedCells = generateBoard()
 	add_board_frame()
 	addExtraLayers()
 	_notifyStateDimensions()

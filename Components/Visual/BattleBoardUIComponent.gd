@@ -86,7 +86,7 @@ var state: UIState = UIState.idle:
 			printDebug("State changed: %s -> %s" % [_getStateName(oldState), _getStateName(newState)])
 
 var prevState: UIState = UIState.idle
-var activeUnit: BattleBoardUnitClientEntity
+var activeUnit: BattleBoardUnitServerEntity
 var _currentButtonIndex := 0
 var _currentAttackButtonIndex := 0  # Track attack menu selection separately
 var attackSelectionState: AttackSelectionState = AttackSelectionState.new()
@@ -127,7 +127,7 @@ func _ready() -> void:
 
 #region Public Interface
 ## Opens the unit menu for the specified unit (or empty cell if null)
-func openUnitMenu(unit: BattleBoardUnitClientEntity, newState: UIState = UIState.unitMenu) -> void:
+func openUnitMenu(unit: BattleBoardUnitServerEntity, newState: UIState = UIState.unitMenu) -> void:
 	activeUnit = unit  # Can be null for empty cells
 	state = newState
 	
@@ -175,19 +175,22 @@ func openInfoMenu() -> void:
 	
 ## Attempts to select a unit at the given cell
 func trySelectUnit(cell: Vector3i) -> bool:
+	print("TRY SELECT UNIT UI COMP")
 	# Always try to open menu when selecting any cell during player's turn
 	if TurnBasedCoordinator.currentTeam != FactionComponent.Factions.players:
+		print("NOT PLAYER TURN NERD")
 		return false  # Don't open menu if not player's turn
 	
 	var occupant := board.getOccupant(cell)
 	
 	# Empty cell - just show end turn button
-	if not occupant or not occupant is BattleBoardUnitClientEntity:
+	if not occupant or not occupant is BattleBoardUnitServerEntity:
+		print("NO OCCUPANT: ", occupant, " ", )
 		activeUnit = null
 		openUnitMenu(null, UIState.unitMenu)
 		return true
 	
-	var unit := occupant as BattleBoardUnitClientEntity
+	var unit := occupant as BattleBoardUnitServerEntity
 	activeUnit = unit
 	
 	# Always open menu regardless of unit faction or state
@@ -200,7 +203,8 @@ func onMoveButtonPressed() -> void:
 	panel.hide()
 	state = UIState.moveSelect
 	selector.setEnabled(true)
-	highlighter.requestMoveHighlights(activeUnit.positionComponent.currentCellCoordinates, activeUnit.positionComponent.moveRange)
+	print("!!! Move range: ", activeUnit.boardPositionComponent.moveRange.offsets)
+	highlighter.requestMoveHighlights(activeUnit.boardPositionComponent.currentCellCoordinates, activeUnit.boardPositionComponent.moveRange)
 
 func onAttackButtonPressed() -> void:
 	if not activeUnit:
@@ -289,7 +293,7 @@ func _onBasicAttackSelected() -> void:
 	
 	# Get and highlight valid targets
 	var attackComp := activeUnit.components.get(&"BattleBoardUnitAttackComponent") as BattleBoardUnitAttackComponent
-	var origin := activeUnit.positionComponent.currentCellCoordinates
+	var origin := activeUnit.boardPositionComponent.currentCellCoordinates
 	
 	for cell in attackComp.attackRange.offsets:
 		if factory.rules.isInBounds(origin + cell):
@@ -309,7 +313,7 @@ func _onAttackSelected(attack: AttackResource) -> void:
 	
 	# Get and highlight valid targets
 	var attackComp := activeUnit.components.get(&"BattleBoardUnitAttackComponent") as BattleBoardUnitAttackComponent
-	var origin := activeUnit.positionComponent.currentCellCoordinates
+	var origin := activeUnit.boardPositionComponent.currentCellCoordinates
 	attackSelectionState.validTargets = rules.getAttackTargets(origin, attack)
 	
 	for cell in attack.getRangePattern():
@@ -396,13 +400,13 @@ func _onCellSelected(cell: Vector3i) -> void:
 			trySelectUnit(cell)
 		UIState.moveSelect:
 			print("Moving")
-			factory.intentMove(activeUnit.positionComponent.currentCellCoordinates, cell)
+			factory.intentMove(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
 		UIState.basicAttackTargetSelect:
 			print("basic Attack Target")
-			factory.intentAttack(activeUnit.positionComponent.currentCellCoordinates, cell)
+			factory.intentAttack(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
 		UIState.attackTargetSelect:
 			print("Attack target")
-			factory.intentSpecialAttack(activeUnit.positionComponent.currentCellCoordinates, cell)
+			factory.intentSpecialAttack(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
 		
 
 func _onCommandEnqueued(command: BattleBoardCommand) -> void:
@@ -520,7 +524,7 @@ func _getStateName(s: UIState) -> String:
 		UIState.unitMenuPostMove: return "unitMenuPostMove"
 		_: return "Unknown"
 
-func _updateButtonsVisibility(unit: BattleBoardUnitClientEntity) -> void:
+func _updateButtonsVisibility(unit: BattleBoardUnitServerEntity) -> void:
 	print("Updating button visibility")
 	
 	# Hide all buttons by default
@@ -537,17 +541,18 @@ func _updateButtonsVisibility(unit: BattleBoardUnitClientEntity) -> void:
 		return
 	
 	# Check if it's an enemy unit
-	var isPlayerUnit := board.getInsectorOccupant(unit.positionComponent.currentCellCoordinates).factionComponent.factions == pow(2, FactionComponent.Factions.players - 1)
+	var isPlayerUnit := board.getInsectorOccupant(unit.boardPositionComponent.currentCellCoordinates).factionComponent.factions == pow(2, FactionComponent.Factions.players - 1)
 	
-	print("asdf", board.getInsectorOccupant(unit.positionComponent.currentCellCoordinates))
+	print("asdf", board.getInsectorOccupant(unit.boardPositionComponent.currentCellCoordinates))
 	
 	if not isPlayerUnit:
 		# Enemy unit - show info and end turn only
+		print("ENEMY UNIT SELECTED")
 		infoButton.visible = true
 		return
 	
 	# Player's unit - check state
-	var stateComp := board.getInsectorOccupant(unit.positionComponent.currentCellCoordinates).stateComponent
+	var stateComp := board.getInsectorOccupant(unit.boardPositionComponent.currentCellCoordinates).stateComponent
 	if not stateComp:
 		return
 	

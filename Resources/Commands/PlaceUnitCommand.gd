@@ -26,7 +26,7 @@ func execute(context: BattleBoardContext) -> void:
 	commandStarted.emit()
 	
 	print("Creating new server unit entity")
-	var boardUnit: BattleBoardUnitServerEntity = BattleBoardUnitServerEntity.new(unit, context.boardState)
+	var boardUnit: BattleBoardUnitServerEntity = BattleBoardUnitServerEntity.new(unit, context.boardState, faction)
 	context.boardState.parentEntity.add_child(boardUnit)
 
 	print(boardUnit)

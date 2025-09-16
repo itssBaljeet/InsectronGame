@@ -47,10 +47,11 @@ var nickname: String:
 
 
 ## Initializes a server-side battle board unit with the given [Meteormyte] data.
-func _init(meteormyte: Meteormyte, board) -> void:
+func _init(meteormyte: Meteormyte, board, team: FactionComponent.Factions) -> void:
 	nickname = meteormyte.nickname
 
 	var faction := FactionComponent.new()
+	faction.factions = team
 	self.add_child(faction)
 
 	var position := BattleBoardServerPositionComponent.new(board)

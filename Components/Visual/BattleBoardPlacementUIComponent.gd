@@ -129,6 +129,7 @@ func placeCurrentUnit(cell: Vector3i) -> bool:
 func undoLastPlacement() -> void:
 	if commandQueue.undoLastCommand():
 		highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
+		party.append(lastPlaced)
 
 func _showCurrent() -> void:
 	if party.is_empty():
@@ -228,6 +229,9 @@ func _onMouseCellClicked(cell: Vector3i) -> void:
 
 func _handlePlacementForCell(cell: Vector3i) -> void:
 	placementCellSelected.emit(cell)
+	placeCurrentUnit(cell)
+	print("SHOWING THE PANEL")
+	partyPlacementPanel.show()
 
 
 func _canHandlePlacement() -> bool:

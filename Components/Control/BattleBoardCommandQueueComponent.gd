@@ -102,7 +102,6 @@ func enqueue(command: BattleBoardCommand) -> bool:
 	return true
 
 ## Processes all queued commands sequentially
-## This is the ONLY place where we await animations
 func processQueue() -> void:
 	if isProcessing or commandQueue.is_empty():
 		return
@@ -120,7 +119,7 @@ func processQueue() -> void:
 			continue
 		print("executing command")
 		@warning_ignore("redundant_await")
-		await currentCommand.execute(context)
+		currentCommand.execute(context)
 		
 		# Track for potential undo
 		if currentCommand.canUndo():

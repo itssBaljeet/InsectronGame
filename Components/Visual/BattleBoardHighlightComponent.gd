@@ -39,6 +39,7 @@ func requestMoveHighlights(origin: Vector3i, moveRange: BoardPattern) -> void:
 	clearHighlights()
 	
 	var validMoves := rules.getValidMoveTargets(origin, moveRange)
+	print("VALID MOVES: ", validMoves)
 	highlightType = board.moveHighlightTileID
 	
 	for cell in validMoves:
