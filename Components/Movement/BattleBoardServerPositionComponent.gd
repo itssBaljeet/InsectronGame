@@ -29,7 +29,7 @@ func _ready() -> void:
 		return
 	var boardEntity := parentEntity.get_parent()
 	if boardEntity:
-		var state := boardEntity.get("serverBoardState")
+		var state :BattleBoardServerStateComponent= boardEntity.get("serverBoardState")
 		if state is BattleBoardStateComponent:
 			boardState = state
 

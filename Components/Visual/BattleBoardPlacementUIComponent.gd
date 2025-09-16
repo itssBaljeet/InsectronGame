@@ -72,7 +72,6 @@ func _onStartPlacementButtonPressed() -> void:
 	
 	var playerTeam: Party = preload("res://Game/Resources/TestParties/PlayerParty.tres")
 	var enemyTeam: Party = preload("res://Game/Resources/TestParties/EnemyParty.tres")
-	print(typeof(playerTeam))
 	
 	TurnBasedCoordinator.startPlacementPhase(playerTeam, true, enemyTeam)
 

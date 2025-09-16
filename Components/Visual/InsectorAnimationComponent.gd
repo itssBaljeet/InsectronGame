@@ -168,7 +168,7 @@ func _update_poison_anchor() -> void:
 	# Prefer snapping to the battle board tile; fall back to skin if not available.
 	if poison_snap_to_tile and board_position_component and board_position_component.battleBoard:
 		var cell: Vector3i = board_position_component.currentCellCoordinates  # current tile coords 
-		var board := board_position_component.battleBoard
+		var board : BattleBoardGeneratorComponent = board_position_component.battleBoard
 
 		# Base world position of the cell (GridMap-space → global) 
 		var base: Vector3 = board.getGlobalCellPosition(cell)
@@ -285,9 +285,9 @@ func faceDirection(fromCell: Vector3i, toCell: Vector3i) -> void:
 	if not board_position_component or not board_position_component.battleBoard:
 		return
 	
-	var board := board_position_component.battleBoard
-	var from_world := board.getGlobalCellPosition(fromCell)
-	var to_world := board.getGlobalCellPosition(toCell)
+	var board: BattleBoardGeneratorComponent= board_position_component.battleBoard
+	var from_world :Vector3i= board.getGlobalCellPosition(fromCell)
+	var to_world :Vector3i= board.getGlobalCellPosition(toCell)
 	var dir := (to_world - from_world) as Vector3
 	
 	dir = dir.normalized()

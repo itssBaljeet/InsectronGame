@@ -169,4 +169,3 @@ func getHazardCells() -> Array[Vector3i]:
 func isMovementBlocked(cell: Vector3i) -> bool:
 	var hazard := getHazardAt(cell)
 	return hazard and hazard.resource.blockMovement
-

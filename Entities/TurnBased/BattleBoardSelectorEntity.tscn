@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://7jcht5vta2uh"]
+[gd_scene load_steps=3 format=3 uid="uid://7jcht5vta2uh"]
 
 [ext_resource type="Script" uid="uid://b54qt332e38du" path="res://Entities/TurnBased/BattleBoardSelectorEntity.gd" id="1_1mbhb"]
+[ext_resource type="PackedScene" uid="uid://ob3s2kpnk833" path="res://Components/Movement/BattleBoardPositionComponent.tscn" id="2_0l81q"]
 
-[node name="BattleBoardSelectorEntity" type="Node3D"]
+[node name="BattleBoardSelectorEntity" type="Node3D" groups=["entities", "turnBased"]]
 script = ExtResource("1_1mbhb")
+
+[node name="BattleBoardPositionComponent" parent="." instance=ExtResource("2_0l81q")]
+script = null

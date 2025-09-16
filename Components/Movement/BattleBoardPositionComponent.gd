@@ -58,7 +58,7 @@ extends Component
 #region Dependencies
 
 # The battle board component attached to the BattleBoardEntity3D.
-var battleBoard
+var battleBoard: BattleBoardGeneratorComponent
 
 #endregion
 
@@ -113,7 +113,7 @@ signal didArriveAtNewCell(newDestination: Vector3i)
 
 #region Life Cycle
 
-func _init(board = null) -> void:
+func _init(board: BattleBoardGeneratorComponent) -> void:
 	battleBoard = board
 
 
