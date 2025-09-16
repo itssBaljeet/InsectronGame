@@ -90,6 +90,7 @@ var activeUnit: BattleBoardUnitServerEntity
 var _currentButtonIndex := 0
 var _currentAttackButtonIndex := 0  # Track attack menu selection separately
 var attackSelectionState: AttackSelectionState = AttackSelectionState.new()
+var _isActive: bool = true
 #endregion
 
 #region Signals
@@ -119,18 +120,64 @@ func _ready() -> void:
 	# Connect to selector for cell selection
 	if selector:
 		selector.cellSelected.connect(_onCellSelected)
-	
+
 	if commandQueue:
 		commandQueue.commandUndone.connect(_onCommandUndone)
 		commandQueue.commandProcessed.connect(_onCommandProcessed)
+
+	TurnBasedCoordinator.phaseChanged.connect(_onPhaseChanged)
+	_updateActivationForPhase(TurnBasedCoordinator.currentPhase)
+#endregion
+
+#region Activation
+func isActive() -> bool:
+	return _isActive
+
+func setActive(active: bool) -> void:
+	if _isActive == active:
+		return
+
+	_isActive = active
+
+	if _isActive:
+		_activateUI()
+	else:
+		_deactivateUI()
+
+func _activateUI() -> void:
+	panel.hide()
+	attackMenu.hide()
+	infoMenu.hide()
+	activeUnit = null
+	if state == UIState.disabled:
+		state = UIState.idle
+
+func _deactivateUI() -> void:
+	panel.hide()
+	attackMenu.hide()
+	infoMenu.hide()
+	if highlighter:
+		highlighter.clearHighlights()
+	activeUnit = null
+	state = UIState.disabled
+	if selector:
+		selector.setEnabled(true)
+
+func _onPhaseChanged(newPhase: TurnBasedCoordinator.GamePhase) -> void:
+	_updateActivationForPhase(newPhase)
+
+func _updateActivationForPhase(phase: TurnBasedCoordinator.GamePhase) -> void:
+	setActive(phase == TurnBasedCoordinator.GamePhase.battle)
 #endregion
 
 #region Public Interface
 ## Opens the unit menu for the specified unit (or empty cell if null)
 func openUnitMenu(unit: BattleBoardUnitServerEntity, newState: UIState = UIState.unitMenu) -> void:
+	if not _isActive:
+		return
 	activeUnit = unit  # Can be null for empty cells
 	state = newState
-	
+
 	# Disable selector while menu is open
 	selector.setEnabled(false)
 	
@@ -151,7 +198,10 @@ func closeUnitMenu(keepUnitSelected: bool = false) -> void:
 	else:
 		pass
 	
-	state = UIState.idle
+	if _isActive:
+		state = UIState.idle
+	else:
+		state = UIState.disabled
 	
 	# Re-enable selector
 	selector.setEnabled(true)
@@ -175,6 +225,8 @@ func openInfoMenu() -> void:
 	
 ## Attempts to select a unit at the given cell
 func trySelectUnit(cell: Vector3i) -> bool:
+	if not _isActive:
+		return false
 	print("TRY SELECT UNIT UI COMP")
 	# Always try to open menu when selecting any cell during player's turn
 	if TurnBasedCoordinator.currentTeam != FactionComponent.Factions.players:
@@ -339,9 +391,11 @@ func _onTimerTimeout(toFree: Node) -> void:
 
 #region Input Handling
 func _input(event: InputEvent) -> void:
+	if not _isActive:
+		return
 	if event.is_echo():
 		return
-	
+
 	# Menu navigation based on current state
 	match state:
 		UIState.unitMenu, UIState.unitMenuPostMove:
@@ -396,6 +450,8 @@ func _input(event: InputEvent) -> void:
 
 #region Event Handlers
 func _onCellSelected(cell: Vector3i) -> void:
+	if not _isActive:
+		return
 	match state:
 		UIState.idle:
 			trySelectUnit(cell)

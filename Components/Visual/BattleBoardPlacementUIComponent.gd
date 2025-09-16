@@ -54,8 +54,10 @@ signal currentUnitChanged(unit: Meteormyte)
 
 func _ready() -> void:
 	boardUI.visible = false
+	if boardUI:
+		boardUI.setActive(false)
 	startPlacementButton.button_up.connect(_onStartPlacementButtonPressed)
-	
+
 	if selector:
 		selector.cellSelected.connect(_onSelectorCellSelected)
 
@@ -79,6 +81,8 @@ func beginPlacement(partyResource: Party) -> void:
 	party = partyResource.meteormytes.duplicate()
 	currentIndex = 0
 	self.visible = true
+	if boardUI:
+		boardUI.setActive(false)
 	partyPlacementPanel.show()
 	_clearPartyButtons()
 	_createPartyButtons()

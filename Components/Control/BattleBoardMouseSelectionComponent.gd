@@ -248,17 +248,27 @@ func _onCellClickedInternal(cell: Vector3i) -> void:
 		selector.cellHovered.emit(cell)
 		
 		# Check current UI state to determine action
-		match ui.state:
-			BattleBoardUIComponent.UIState.idle:
-				# Try to select unit or open menu
-				selector.cellSelected.emit(cell)
-			BattleBoardUIComponent.UIState.moveSelect:
-				# Confirm move destination
-				selector.cellSelected.emit(cell)
-			BattleBoardUIComponent.UIState.attackTargetSelect, \
-			BattleBoardUIComponent.UIState.basicAttackTargetSelect:
-				# Confirm attack target
-				selector.cellSelected.emit(cell)
+		var shouldEmit := true
+		if ui:
+			match ui.state:
+				BattleBoardUIComponent.UIState.idle:
+					# Try to select unit or open menu
+					pass
+				BattleBoardUIComponent.UIState.moveSelect:
+					# Confirm move destination
+					pass
+				BattleBoardUIComponent.UIState.attackTargetSelect, \
+				BattleBoardUIComponent.UIState.basicAttackTargetSelect:
+					# Confirm attack target
+					pass
+				BattleBoardUIComponent.UIState.disabled:
+					# Allow placement interaction while the board UI is inactive
+					pass
+				_:
+					shouldEmit = false
+
+		if shouldEmit:
+			selector.cellSelected.emit(cell)
 
 func _onCellHoveredInternal(cell: Vector3i) -> void:
 	# Update selector's current cell for preview purposes
