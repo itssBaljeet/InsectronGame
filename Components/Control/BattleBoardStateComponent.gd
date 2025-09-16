@@ -12,8 +12,8 @@ var cells: Array[Vector3i] = []
 var highlights: Array[Vector3i] = []
 
 func setDimensions(newWidth: int, newHeight: int) -> void:
-	var clampedWidth := max(newWidth, 0)
-	var clampedHeight := max(newHeight, 0)
+	var clampedWidth : int = max(newWidth, 0)
+	var clampedHeight : int = max(newHeight, 0)
 	if clampedWidth == width and clampedHeight == height:
 		return
 	width = clampedWidth

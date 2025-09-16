@@ -113,7 +113,7 @@ signal didArriveAtNewCell(newDestination: Vector3i)
 
 #region Life Cycle
 
-func _init(board: BattleBoardGeneratorComponent = null) -> void:
+func _init(board: BattleBoardGeneratorComponent) -> void:
 	battleBoard = board
 
 

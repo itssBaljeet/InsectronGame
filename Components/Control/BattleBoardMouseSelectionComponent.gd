@@ -87,7 +87,7 @@ func _setupHoverIndicator() -> void:
 	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	hoverMeshInstance.material_override = mat
-	 #Create the Mesh.
+	#Create the Mesh.
 
 	
 

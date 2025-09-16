@@ -18,7 +18,7 @@ func _pruneUnitsForMissingCells() -> void:
 			serverUnits.erase(cell)
 
 func getInsectorOccupant(cell: Vector3i) -> BattleBoardUnitServerEntity:
-	var direct := serverUnits.get(cell)
+	var direct: BattleBoardUnitServerEntity = serverUnits.get(cell)
 	if direct:
 		return direct
 	return getOccupant(cell) as BattleBoardUnitServerEntity

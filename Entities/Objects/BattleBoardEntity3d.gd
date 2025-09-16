@@ -19,35 +19,35 @@ var _battleBoardGenerator: BattleBoardGeneratorComponent
 var battleBoardGenerator: BattleBoardGeneratorComponent:
 	get:
 		if not is_instance_valid(_battleBoardGenerator):
-		_battleBoardGenerator = self.components.get(&"BattleBoardGeneratorComponent")
+			_battleBoardGenerator = self.components.get(&"BattleBoardGeneratorComponent")
 		return _battleBoardGenerator
 
 var _clientBoardState: BattleBoardClientStateComponent
 var clientBoardState: BattleBoardClientStateComponent:
 	get:
 		if not is_instance_valid(_clientBoardState):
-		_clientBoardState = self.components.get(&"BattleBoardClientStateComponent")
+			_clientBoardState = self.components.get(&"BattleBoardClientStateComponent")
 		return _clientBoardState
 
 var _serverBoardState: BattleBoardServerStateComponent
 var serverBoardState: BattleBoardServerStateComponent:
 	get:
 		if not is_instance_valid(_serverBoardState):
-		_serverBoardState = self.components.get(&"BattleBoardServerStateComponent")
+			_serverBoardState = self.components.get(&"BattleBoardServerStateComponent")
 		return _serverBoardState
 
 var _battleBoardUI: BattleBoardUIComponent
 var battleBoardUI: BattleBoardUIComponent:
 	get:
 		if not is_instance_valid(_battleBoardUI):
-		_battleBoardUI = self.components.get(&"BattleBoardUIComponent")
+			_battleBoardUI = self.components.get(&"BattleBoardUIComponent")
 		return _battleBoardUI
 
 var _battleBoardPlacementUI: BattleBoardPlacementUIComponent
 var battleBoardPlacementUI: BattleBoardPlacementUIComponent:
 	get:
 		if not is_instance_valid(_battleBoardPlacementUI):
-		_battleBoardPlacementUI = self.components.get(&"BattleBoardPlacementUIComponent")
+			_battleBoardPlacementUI = self.components.get(&"BattleBoardPlacementUIComponent")
 		return _battleBoardPlacementUI
 
 #endregion
