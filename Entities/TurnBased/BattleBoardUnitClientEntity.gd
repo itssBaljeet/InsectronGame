@@ -18,7 +18,7 @@ var positionComponent: BattleBoardPositionComponent:
 #endregion
 
 ## Initializes a client-side battle board unit with the given [Meteormyte] data.
-func _init(meteormyte: Meteormyte, cell: Vector3i, board) -> void:
+func _init(meteormyte: Meteormyte, cell: Vector3i, board, team: FactionComponent.Factions) -> void:
 
 		var healthVis := preload("res://Components/Visual/BattleBoardUnitHealthVisualComponent.tscn").instantiate()
 		self.add_child(healthVis)
@@ -29,6 +29,8 @@ func _init(meteormyte: Meteormyte, cell: Vector3i, board) -> void:
 				var model_instance := meteormyte.species_data.model.instantiate()
 				self.add_child(model_instance)
 				anim.skin = model_instance
+		if team == FactionComponent.Factions.players:
+			anim.skin.rotate_y(PI)
 		self.add_child(anim)
 		
 		var pos := BattleBoardPositionComponent.new(board)

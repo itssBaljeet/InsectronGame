@@ -37,7 +37,8 @@ func execute(context: BattleBoardContext) -> void:
 	_placed = true
 	context.emitSignal(&"UnitPlaced", {
 		"unit": unit,
-		"cell": cell
+		"cell": cell,
+		"team": faction,
 	})
 	commandCompleted.emit()
 

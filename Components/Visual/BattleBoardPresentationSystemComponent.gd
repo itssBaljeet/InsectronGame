@@ -106,13 +106,11 @@ func _onPlacementUnitChanged(unit: Meteormyte) -> void:
 func _onPlacementPhaseFinished() -> void:
 	print("Placement phase finished and checking if both users are done...")
 	if TurnBasedCoordinator._playerPlacementDone and TurnBasedCoordinator._opponentPlacementDone:
-		print("PLAYER AND ENEMY DONE; EXITING PLACEMENT")
 		_exitPlacementState()
 
 func _enterPlacementState() -> void:
 	placementUI.isPlacementActive = true
 	state = PresentationState.placement
-	print("HEHE HIDING IT")
 	placementUI.show()
 	_highlightPlacementCells()
 
@@ -135,12 +133,7 @@ func _onUnitMoved(data: Dictionary) -> void:
 	var fromCell: Vector3i = data.get("from", Vector3i.ZERO)
 	var toCell: Vector3i = data.get("to", Vector3i.ZERO)
 	var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(fromCell)
-	print("FROM: ", fromCell)
-	print("TO: ", toCell)
-	print("FROM CELL: ", boardState.getClientUnit(fromCell))
-	print("TO CELL: ", boardState.getClientUnit(toCell))
 	if unit and unit.animComponent and unit.positionComponent:
-		print("DOING ANIMATION STUFFF")
 		await unit.animComponent.faceDirection(fromCell, toCell)
 		unit.positionComponent.setDestinationCellCoordinates(toCell)
 		await unit.positionComponent.didArriveAtNewCell
@@ -309,8 +302,8 @@ func _onChainAttack(data: Dictionary) -> void:
 
 func _onUnitPlaced(data: Dictionary) -> void:
 	var meteormyte: Meteormyte = data.get("unit")
-	
-	var unit := BattleBoardUnitClientEntity.new(meteormyte, data.get("cell"), parentEntity.components.BattleBoardGeneratorComponent)
+	var team: FactionComponent.Factions = data.get("team")
+	var unit := BattleBoardUnitClientEntity.new(meteormyte, data.get("cell"), parentEntity.components.BattleBoardGeneratorComponent, team)
 	
 	var cell: Vector3i = data.get("cell", Vector3i.ZERO)
 	var root := self.parentEntity if self.parentEntity else null
