@@ -1,11 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://ob3s2kpnk833"]
+[gd_scene load_steps=2 format=3 uid="uid://ob3s2kpnk833"]
 
-[ext_resource type="Script" uid="uid://qbs613nid1mk" path="res://Components/Movement/BattleBoardPositionComponent.gd" id="1_3lq6u"]
 [ext_resource type="PackedScene" uid="uid://dnlvdwjohh5ac" path="res://Game/SelectorMesh.tscn" id="2_hks7w"]
 
-[node name="BattleBoardPositionComponent" type="Node3D" node_paths=PackedStringArray("visualIndicator") groups=["components"]]
-script = ExtResource("1_3lq6u")
-visualIndicator = NodePath("SelectorMesh")
+[node name="BattleBoardPositionComponent" type="Node3D" groups=["components"]]
 
 [node name="SelectorMesh" parent="." instance=ExtResource("2_hks7w")]
-visible = false

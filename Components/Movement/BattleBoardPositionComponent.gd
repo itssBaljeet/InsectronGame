@@ -115,6 +115,9 @@ signal didArriveAtNewCell(newDestination: Vector3i)
 
 func _init(board: BattleBoardGeneratorComponent) -> void:
 	battleBoard = board
+	var indicator: Node3D = preload("res://Game/SelectorMesh.tscn").instantiate()
+	visualIndicator = indicator
+	self.add_child(indicator)
 
 
 func _ready() -> void:
@@ -122,11 +125,6 @@ func _ready() -> void:
 	if debugMode:
 		self.willStartMovingToNewCell.connect(self.onWillStartMovingToNewCell)
 		self.didArriveAtNewCell.connect(self.onDidArriveAtNewCell)
-
-	if not battleBoard and self.parentEntity and self.parentEntity.get_parent():
-		var boardNode = self.parentEntity.get_parent().find_child("BattleBoardGeneratorComponent")
-		if boardNode:
-			battleBoard = boardNode.get_node(^".")
 
 	# The tileMap may be set later, if this component was loaded dynamically at runtime, or initialized by another script.
 	applyInitialCoordinates()
