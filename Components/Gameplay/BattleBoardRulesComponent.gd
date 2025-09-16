@@ -363,11 +363,11 @@ func canPlaceHazard(cell: Vector3i, hazardRes: HazardResource) -> bool:
 	return true
 
 ## Check if a move type can clear a hazard
-func canClearHazard(hazard: BattleBoardHazardSystemComponent.ActiveHazard, clearingType: String) -> bool:
+func canClearHazard(hazard: BattleBoardActiveHazardData, clearingType: String) -> bool:
 	if not hazard:
 		return false
 	
-	return clearingType in hazard.clearableByTypes
+	return hazard.resource and clearingType in hazard.resource.clearableByTypes
 #endregion
 
 #region Chain Attack Rules

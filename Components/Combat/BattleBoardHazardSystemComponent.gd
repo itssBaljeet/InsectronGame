@@ -15,7 +15,7 @@ var rules: BattleBoardRulesComponent:
 #endregion
 
 #region State
-var activeHazards: Dictionary = {}  # Vector3i -> ActiveHazard
+var activeHazards: Dictionary = {}  # Vector3i -> BattleBoardActiveHazardData
 #endregion
 
 #region Signals
@@ -37,7 +37,7 @@ func deployHazard(cell: Vector3i, hazardRes: HazardResource, source: Entity = nu
 	
 	# Check if hazard already exists at this cell
 	if activeHazards.has(cell):
-		var existing := activeHazards[cell] as ActiveHazard
+		var existing := activeHazards[cell] as BattleBoardActiveHazardData
 		
 		# Stack if same type and stackable
 		if existing.resource.hazardName == hazardRes.hazardName and hazardRes.stackable:
@@ -48,7 +48,7 @@ func deployHazard(cell: Vector3i, hazardRes: HazardResource, source: Entity = nu
 			return false  # Can't place different hazard
 	
 	# Create new hazard
-	var hazard := ActiveHazard.new()
+	var hazard := BattleBoardActiveHazardData.new()
 	hazard.resource = hazardRes
 	hazard.turnsRemaining = hazardRes.baseDuration
 	hazard.stacks = 1
@@ -66,7 +66,7 @@ func clearHazard(cell: Vector3i, clearingType: String = "") -> bool:
 	if not activeHazards.has(cell):
 		return false
 	
-	var hazard := activeHazards[cell] as ActiveHazard
+	var hazard := activeHazards[cell] as BattleBoardActiveHazardData
 	
 	# Check if this clearing type can clear this hazard
 	if clearingType != "" and not rules.canClearHazard(hazard, clearingType):
@@ -85,7 +85,7 @@ func clearAllHazards() -> void:
 	activeHazards.clear()
 
 ## Check what hazard is at a cell
-func getHazardAt(cell: Vector3i) -> ActiveHazard:
+func getHazardAt(cell: Vector3i) -> BattleBoardActiveHazardData:
 	return activeHazards.get(cell)
 
 ## Process hazards when a unit enters a cell
@@ -142,7 +142,7 @@ func processTurnEnd() -> void:
 	
 	# Tick down all hazard durations
 	for cell in activeHazards:
-		var hazard := activeHazards[cell] as ActiveHazard
+		var hazard := activeHazards[cell] as BattleBoardActiveHazardData
 		hazard.turnsRemaining -= 1
 		
 		if hazard.turnsRemaining <= 0:
@@ -150,13 +150,13 @@ func processTurnEnd() -> void:
 	
 	# Remove expired hazards
 	for cell in toRemove:
-		var hazard := activeHazards[cell] as ActiveHazard
+		var hazard := activeHazards[cell] as BattleBoardActiveHazardData
 		activeHazards.erase(cell)
 		_updateBoardCell(cell, null)
 		hazardExpired.emit(cell, hazard.resource)
 
 ## Update the board's cell data
-func _updateBoardCell(cell: Vector3i, hazard: ActiveHazard) -> void:
+func _updateBoardCell(cell: Vector3i, hazard: BattleBoardActiveHazardData) -> void:
 	var cellData := board.vBoardState.get(cell) as BattleBoardCellData
 	if cellData:
 		cellData.hazard = hazard
@@ -170,9 +170,3 @@ func isMovementBlocked(cell: Vector3i) -> bool:
 	var hazard := getHazardAt(cell)
 	return hazard and hazard.resource.blockMovement
 
-## Renamed from HazardInstance - represents active hazard on a cell
-class ActiveHazard:
-	var resource: HazardResource
-	var turnsRemaining: int
-	var stacks: int = 1
-	var source: Entity  # Who placed this hazard

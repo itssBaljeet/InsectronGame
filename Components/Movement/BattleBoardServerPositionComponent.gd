@@ -2,7 +2,7 @@
 class_name BattleBoardServerPositionComponent
 extends Component
 
-var boardState: BattleBoardServerStateComponent
+var boardState: BattleBoardStateComponent
 
 var moveRange: BoardPattern
 
@@ -19,7 +19,7 @@ var currentCellCoordinates: Vector3i:
 var previousCellCoordinates: Vector3i = Vector3i.ZERO
 var destinationCellCoordinates: Vector3i = Vector3i.ZERO
 
-func _init(board: BattleBoardServerStateComponent = null) -> void:
+func _init(board: BattleBoardStateComponent = null) -> void:
 	boardState = board
 
 func _ready() -> void:
@@ -27,9 +27,11 @@ func _ready() -> void:
 		return
 	if not parentEntity:
 		return
-	var boardEntity := parentEntity.get_parent() as BattleBoardEntity3D
+	var boardEntity := parentEntity.get_parent()
 	if boardEntity:
-		boardState = boardEntity.serverBoardState
+		var state := boardEntity.get("serverBoardState")
+		if state is BattleBoardStateComponent:
+			boardState = state
 
 func setDestinationCellCoordinates(newCell: Vector3i, knockback: bool = false) -> bool:
 	if boardState and not boardState.isCellInBounds(newCell):
