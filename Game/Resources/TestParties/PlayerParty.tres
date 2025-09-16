@@ -7,5 +7,5 @@
 
 [resource]
 script = ExtResource("2_qd0fe")
-meteormytes = Array[ExtResource("1_trd0m")]([ExtResource("2_in3go"), ExtResource("3_in3go")])
+meteormytes = Array[ExtResource("1_trd0m")]([ExtResource("3_in3go"), ExtResource("2_in3go")])
 metadata/_custom_type_script = "uid://bkoiqn80q0fbd"

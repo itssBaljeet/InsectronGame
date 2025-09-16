@@ -4,8 +4,6 @@ extends Component
 
 const buttonStyle := preload("res://Assets/UI Pack Kenney/button.tres")
 const hoverButtonStyle := preload("res://Assets/UI Pack Kenney/hover_button.tres")
-const PLAYER_PARTY_PATH := "res://Game/Resources/TestParties/PlayerParty.tres"
-const ENEMY_PARTY_PATH := "res://Game/Resources/TestParties/EnemyParty.tres"
 
 var board: BattleBoardGeneratorComponent:
 	get:
@@ -68,32 +66,15 @@ func _ready() -> void:
 ## For now we pass in a premade player party resource
 ## This call simulates both users connecting (one is ai) so when the player "connects" we start
 func _onStartPlacementButtonPressed() -> void:
-        self.visible = false
-        boardUI.visible = true
-        startPlacementButton.disabled = true
-
-        var playerTeam := _load_party_from_path(PLAYER_PARTY_PATH)
-        var enemyTeam := _load_party_from_path(ENEMY_PARTY_PATH)
-
-        if not playerTeam or not enemyTeam:
-                push_error("Unable to start placement: failed to load party resources.")
-                startPlacementButton.disabled = false
-                self.visible = true
-                boardUI.visible = false
-                return
-
-        TurnBasedCoordinator.startPlacementPhase(playerTeam, true, enemyTeam)
-
-func _load_party_from_path(party_path: String) -> Party:
-        var resource := ResourceLoader.load(party_path)
-        if resource == null:
-                return null
-
-        if resource is Party:
-                var duplicated_party := (resource as Party).duplicate(true) as Party
-                return duplicated_party if duplicated_party else resource as Party
-
-        return null
+	self.visible = false
+	boardUI.visible = true
+	startPlacementButton.disabled = true
+	
+	var playerTeam: Party = preload("res://Game/Resources/TestParties/PlayerParty.tres")
+	var enemyTeam: Party = preload("res://Game/Resources/TestParties/EnemyParty.tres")
+	print(typeof(playerTeam))
+	
+	TurnBasedCoordinator.startPlacementPhase(playerTeam, true, enemyTeam)
 
 func beginPlacement(partyResource: Party) -> void:
 	party = partyResource.meteormytes.duplicate()
