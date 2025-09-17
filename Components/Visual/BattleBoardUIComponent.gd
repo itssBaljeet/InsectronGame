@@ -55,9 +55,14 @@ var selector: BattleBoardSelectorComponent3D:
 		var selectorEntity := parentEntity.findFirstChildOfType(BattleBoardSelectorEntity)
 		return selectorEntity.components.get(&"BattleBoardSelectorComponent3D") if selectorEntity else null
 
+# Only here temporarily. To be replaced with server calls in the UI where needed for unit state.
 var board: BattleBoardServerStateComponent:
 	get:
 		return coComponents.get(&"BattleBoardServerStateComponent")
+
+var boardClient: BattleBoardClientStateComponent:
+	get:
+		return coComponents.get(&"BattleBoardClientStateComponent")
 
 var commandQueue: BattleBoardCommandQueueComponent:
 	get:
@@ -380,11 +385,15 @@ func _onAttackSelected(attack: AttackResource) -> void:
 	var origin := activeUnit.boardPositionComponent.currentCellCoordinates
 	attackSelectionState.validTargets = rules.getAttackTargets(origin, attack)
 	
-	for cell in attack.getRangePattern():
-		print("Breaking here")
-		if factory.rules.isInBounds(origin + cell):
-			board.set_cell_item(origin + cell, board.specialAttackHighlightTileID)
-			highlighter.currentHighlights.append(origin + cell)
+	#for cell in attack.getRangePattern():
+		#print("Breaking here")
+		#if factory.rules.isInBounds(origin + cell):
+			#board.set_cell_item(origin + cell, board.specialAttackHighlightTileID)
+			#highlighter.currentHighlights.append(origin + cell)
+	
+	var clientUnit = boardClient.getClientUnit(origin)
+	
+	highlighter.requestAttackHighlights(clientUnit)
 	
 	# Hide attack menu
 	attackMenu.hide()

@@ -47,7 +47,7 @@ func requestMoveHighlights(origin: Vector3i, moveRange: BoardPattern) -> void:
 		currentHighlights.append(cell)
 
 ## Highlights valid attack targets
-func requestAttackHighlights(unit: BattleBoardUnitClientEntity, onlyLightAvailable: bool = false) -> void:
+func requestAttackHighlights(unit: BattleBoardUnitClientEntity, onlyLightAvailable: bool = false, attackResource: AttackResource = null) -> void:
 	clearHighlights()
 	highlightType = board.attackHighlightTileID
 	
@@ -58,11 +58,12 @@ func requestAttackHighlights(unit: BattleBoardUnitClientEntity, onlyLightAvailab
 			board.set_cell_item(cell, highlightType)
 			currentHighlights.append(cell)
 	else:
-		for cell in unit.attackComponent.attackRange.offsets:
-			var pos: Vector3i = unit.boardPositionComponent.currentCellCoordinates + cell
-			if rules.isInBounds(pos):
-				board.set_cell_item(pos, highlightType)
-				currentHighlights.append(pos)
+		if attackResource:
+			for cell in attackResource.rangePattern.offsets:
+				var pos: Vector3i = unit.boardPositionComponent.currentCellCoordinates + cell
+				if rules.isInBounds(pos):
+					board.set_cell_item(pos, highlightType)
+					currentHighlights.append(pos)
 
 ## Restores cell to normal appearance
 func _restoreCellAppearance(cell: Vector3i) -> void:

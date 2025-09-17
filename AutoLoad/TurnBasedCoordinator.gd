@@ -366,9 +366,6 @@ func startTeamTurn() -> void:
 		print("Ai turn")
 		## AI-controlled team: process all their units automatically
 		await _processAITurn()
-		## After AI finishes its units, end the turn automatically
-		await endTeamTurn()  # proceed to turnEnd and then next team’s turn
-		
 
 func endTeamTurn() -> void:
 	print("ATTEMPTING TO END TURN")
@@ -642,6 +639,7 @@ func _checkPlacementComplete() -> void:
 
 func _startCoinflip() -> void:
 	var result := FactionComponent.Factions.players if randi() % 2 == 0 else FactionComponent.Factions.ai
+	print("COINFLIP RESULT: ", result)
 	coinflipResolved.emit(result)
 	currentTeam = result
 	currentPhase = GamePhase.battle

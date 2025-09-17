@@ -47,7 +47,7 @@ func execute(context: BattleBoardContext) -> void:
 
 	# Mark attacker as exhausted and clear highlights
 	attacker.stateComponent.markExhausted()
-  context.highlighter.clearHighlights()
+	context.highlighter.clearHighlights()
 
 	var resolver := _getDamageResolver(context)
 	var attackerUnit := attacker
@@ -68,13 +68,15 @@ func execute(context: BattleBoardContext) -> void:
 		var attackRes := _getBasicAttackResource(attackerUnit)
 		attackerDamage = resolver.calculateDamage(attackerUnit, targetUnit, attackRes)
 		targetHealth.takeDamage(attackerDamage)
-		targetDied = not targetHealth.isAlive()
+		print(targetHealth.currentHealth)
+		#targetDied = not targetHealth.isAlive()
 
 	if targetUnit and targetHealth and targetHealth.isAlive() and attackerHealth:
 		var counterRes := _getBasicAttackResource(targetUnit)
 		counterDamage = resolver.calculateDamage(targetUnit, attackerUnit, counterRes)
 		attackerHealth.takeDamage(counterDamage)
-		attackerDied = not attackerHealth.isAlive()
+		print(attackerHealth)
+		#attackerDied = not attackerHealth.isAlive()
 
 	damageDealt = attackerDamage
 

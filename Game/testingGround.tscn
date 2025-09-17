@@ -665,7 +665,7 @@ transform = Transform3D(-8.999999, 1.9345808e-07, 7.599952e-07, 0, 8.258665, -2.
 msaa_3d = 1
 
 [node name="TVCameraController" type="Node3D" parent="Blockout/Deco/SubViewport"]
-transform = Transform3D(0.089128934, -1.0495477e-15, 0.5889837, 0, 1, 0, -0.5889837, -1.2795088e-16, 0.089128934, 2.456693, 0.29999924, 3.4999995)
+transform = Transform3D(-0.26438528, 9.548998e-16, -0.53059053, 0, 1, 0, 0.53059053, 4.4188245e-16, -0.26438528, 2.456693, 0.29999924, 3.4999995)
 script = ExtResource("16_82lh0")
 
 [node name="Camera3D" type="Camera3D" parent="Blockout/Deco/SubViewport/TVCameraController"]
@@ -773,4 +773,4 @@ transform = Transform3D(16, 0, 0, 0, 16, 0, 0, 0, 16, 2.5, 0, 3.4)
 amount = 128
 
 [node name="Sketchfab_Scene" parent="." instance=ExtResource("23_l7ylh")]
-transform = Transform3D(-0.47380394, 0, -1.0649631, 0, 1, 0, 1.0649631, 0, -0.47380394, -1, 4, -1)
+transform = Transform3D(1.0118998, 0, 0.5844949, 0, 1, 0, -0.5844949, 0, 1.0118998, -1, 4, -1)

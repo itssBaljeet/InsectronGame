@@ -151,14 +151,12 @@ func _onTeamTurnEnded(_data: Dictionary) -> void:
 	pass
 
 func _onUnitAttacked(data: Dictionary) -> void:
-	var attacker: BattleBoardUnitClientEntity = data.get("attacker")
-	var target: BattleBoardUnitClientEntity = data.get("target")
 	var attacker_cell: Vector3i = data.get("attackerCell", Vector3i.ZERO)
 	var target_cell: Vector3i = data.get("targetCell", Vector3i.ZERO)
-	if not attacker and boardState:
-		attacker = boardState.getClientUnit(attacker_cell)
-	if not target and boardState:
-		target = boardState.getClientUnit(target_cell)
+
+	var attacker = boardState.getClientUnit(attacker_cell)
+	var target = boardState.getClientUnit(target_cell)
+	
 	var damage: int = data.get("damage", 0)
 	var counter_damage: int = data.get("counterDamage", 0)
 	var target_died: bool = data.get("targetDied", false)
@@ -167,7 +165,7 @@ func _onUnitAttacked(data: Dictionary) -> void:
 	if attacker and attacker.animComponent and target:
 		await attacker.animComponent.playAttackSequence(attacker, target, damage)
 	if target:
-		var target_anim := target.animComponent
+		var target_anim : InsectorAnimationComponent= target.animComponent
 		if target_anim and damage > 0:
 			target_anim.showDamageNumber(damage)
 		if venomous and target_anim:
@@ -178,7 +176,7 @@ func _onUnitAttacked(data: Dictionary) -> void:
 	if not target_died and target and target.animComponent and attacker and counter_damage > 0:
 		await target.animComponent.playAttackSequence(target, attacker, counter_damage)
 	if counter_damage > 0 and attacker:
-		var atk_anim := attacker.animComponent
+		var atk_anim :InsectorAnimationComponent= attacker.animComponent
 		if atk_anim:
 			atk_anim.showDamageNumber(counter_damage)
 		var atk_health_vis: BattleBoardUnitHealthVisualComponent = attacker.components.get(&"BattleBoardUnitHealthVisualComponent")
