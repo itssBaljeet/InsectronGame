@@ -88,6 +88,10 @@ func isValidAttack(origin: Vector3i, targetCell: Vector3i, attackResource: Attac
 		return false
 	# Ask for PRIMARY targets (no targetCell arg)
 	var primaryTargets := getAttackTargets(origin, attackResource, targetCell)
+	
+	if not attackResource:
+		return targetCell in primaryTargets
+
 	return targetCell in primaryTargets if attackResource.requiresTarget else true
 
 ## Checks if two entities are hostile to each other

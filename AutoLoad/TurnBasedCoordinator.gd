@@ -160,7 +160,7 @@ var battleBoardSelector: BattleBoardSelectorComponent3D:
 	get:
 		playerInsectors.clear()
 		for insector in turnBasedEntities:
-			if insector is BattleBoardUnitServerEntity and insector.factionComponent.factions == pow(2, FactionComponent.Factions.players-1):
+			if insector is BattleBoardUnitServerEntity and insector.factionComponent.factions == FactionComponent.Factions.players:
 				playerInsectors.append(insector)
 		return playerInsectors
 
@@ -168,7 +168,10 @@ var battleBoardSelector: BattleBoardSelectorComponent3D:
 	get:
 		enemyInsectors.clear()
 		for insector in turnBasedEntities:
-			if insector is BattleBoardUnitServerEntity and insector.factionComponent.factions == pow(2, FactionComponent.Factions.ai-1):
+			print("LOOKING FOR ENEMY UNIT...")
+			print(playerInsectors)
+			if insector is BattleBoardUnitServerEntity and insector.factionComponent.factions == FactionComponent.Factions.ai:
+				print(insector.factionComponent.factions)
 				enemyInsectors.append(insector)
 		return enemyInsectors
 
@@ -471,10 +474,14 @@ func findTurnBasedEntities() -> Array[TurnBasedEntity]:
 ## This will eventually be in its own component so that the service can orchestrate it
 ## without us needing to use service level logic in the TurnBasedCoordinator
 func _processAITurn() -> void:
+	print("Processing AI turn...")
+	print(currentTeamParty)
+	print(enemyInsectors)
 	# Iterate through all members of the specified team
 	for insector in currentTeamParty:
 		self.willProcessEntity.emit(insector)
 		
+		print("Processing AI turn")
 		await insector.AIComponent.decideNextAction()
 		
 		await insector.processTurnUpdateSignals()

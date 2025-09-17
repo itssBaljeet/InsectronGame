@@ -61,6 +61,7 @@ var _dispatch: Dictionary[StringName, Callable]= {
 	&"UnitPlaced": _onUnitPlaced,
 	&"UnitUnplaced": _onUnitUnplaced,
 	&"UnitWaited": _onUnitWaited,
+	&"TeamTurnEnded": _onTeamTurnEnded,
 }
 
 func _ready() -> void:
@@ -143,6 +144,10 @@ func _onUnitMoved(data: Dictionary) -> void:
 
 # Nothing for now; Could do like a Special FX to indicate wait?
 func _onUnitWaited(_data: Dictionary) -> void:
+	pass
+
+# Nothing for now; Could do team transition fx like insectron
+func _onTeamTurnEnded(_data: Dictionary) -> void:
 	pass
 
 func _onUnitAttacked(data: Dictionary) -> void:

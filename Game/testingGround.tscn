@@ -87,6 +87,7 @@ environment = ExtResource("2_315n7")
 [node name="BattleBoardEntity3D" parent="." instance=ExtResource("2_5jdkk")]
 
 [node name="Blockout" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="Blockout"]
 transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 2.5, -3.7, 3.5)
@@ -664,7 +665,7 @@ transform = Transform3D(-8.999999, 1.9345808e-07, 7.599952e-07, 0, 8.258665, -2.
 msaa_3d = 1
 
 [node name="TVCameraController" type="Node3D" parent="Blockout/Deco/SubViewport"]
-transform = Transform3D(-0.52445686, 5.5105094e-16, -0.2954828, 0, 1, 0, 0.2954828, 9.152571e-16, -0.52445686, 2.456693, 0.29999924, 3.4999995)
+transform = Transform3D(-0.59544337, -8.937845e-17, 0.06757772, 0, 1, 0, -0.06757772, 1.059796e-15, -0.59544337, 2.456693, 0.29999924, 3.4999995)
 script = ExtResource("16_82lh0")
 
 [node name="Camera3D" type="Camera3D" parent="Blockout/Deco/SubViewport/TVCameraController"]
@@ -772,4 +773,4 @@ transform = Transform3D(16, 0, 0, 0, 16, 0, 0, 0, 16, 2.5, 0, 3.4)
 amount = 128
 
 [node name="Sketchfab_Scene" parent="." instance=ExtResource("23_l7ylh")]
-transform = Transform3D(-0.9234587, 0, 0.7021489, 0, 1, 0, -0.7021489, 0, -0.9234587, -1, 4, -1)
+transform = Transform3D(0.41523713, 0, 1.0856897, 0, 1, 0, -1.0856897, 0, 0.41523713, -1, 4, -1)
