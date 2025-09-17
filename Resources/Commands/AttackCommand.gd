@@ -48,7 +48,7 @@ func execute(context: BattleBoardContext) -> void:
 	
 	# Get stats components
 	var attackerStats := attacker.components.get(&"MeteormyteStatsComponent") as MeteormyteStatsComponent
-	var targetUnit := target as BattleBoardUnitClientEntity
+	var targetUnit := target as BattleBoardUnitServerEntity
 	var targetStats := targetUnit.components.get(&"MeteormyteStatsComponent") as MeteormyteStatsComponent if targetUnit else null
 	
 	# Track death states
@@ -126,7 +126,7 @@ func execute(context: BattleBoardContext) -> void:
 	commandCompleted.emit()
 
 ## Handle a single unit death
-func _handleTargetDeath(context: BattleBoardContext, unit: BattleBoardUnitClientEntity, anim: InsectorAnimationComponent) -> void:
+func _handleTargetDeath(context: BattleBoardContext, unit: BattleBoardUnitServerEntity, anim: InsectorAnimationComponent) -> void:
 	# Play death animation if available
 	if anim and anim.skin:
 		var tw := anim.create_tween()

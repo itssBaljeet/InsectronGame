@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="Meteormyte" load_steps=9 format=3 uid="uid://d28ttjph55qji"]
+[gd_resource type="Resource" script_class="Meteormyte" load_steps=10 format=3 uid="uid://d28ttjph55qji"]
 
 [ext_resource type="Script" uid="uid://b2s3r8l3dbtqw" path="res://Resources/AttackResource.gd" id="1_52jf6"]
+[ext_resource type="Resource" uid="uid://c6g62ech1o3ua" path="res://Game/Resources/Special Attacks/BasicAttack.tres" id="2_0y5i8"]
 [ext_resource type="Resource" uid="uid://btm1udvs2lr5o" path="res://Game/Resources/Special Attacks/Flamethrower.tres" id="2_1iwfx"]
 [ext_resource type="Script" uid="uid://na5fp0bm8si6" path="res://Resources/Meteormyte.gd" id="2_36pur"]
 [ext_resource type="Resource" uid="uid://bxc5arr8s6b64" path="res://Game/Resources/Special Attacks/WaterSpout.tres" id="3_0y5i8"]
@@ -15,5 +16,5 @@ species_data = ExtResource("7_wl13f")
 gem_data = ExtResource("5_du37l")
 nickname = "Big Dick Bee"
 unique_id = 1357216477
-available_attacks = Array[ExtResource("1_52jf6")]([ExtResource("3_0y5i8"), ExtResource("2_1iwfx"), ExtResource("4_j1tqy")])
+available_attacks = Array[ExtResource("1_52jf6")]([ExtResource("2_0y5i8"), ExtResource("3_0y5i8"), ExtResource("2_1iwfx"), ExtResource("4_j1tqy")])
 metadata/_custom_type_script = "uid://na5fp0bm8si6"
