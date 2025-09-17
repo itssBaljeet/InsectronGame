@@ -46,10 +46,8 @@ func execute(context: BattleBoardContext) -> void:
 	commandStarted.emit()
 
 	# Mark attacker as exhausted and clear highlights
-	if attacker.stateComponent:
-		attacker.stateComponent.markExhausted()
-	if context.highlighter:
-		context.highlighter.clearHighlights()
+	attacker.stateComponent.markExhausted()
+  context.highlighter.clearHighlights()
 
 	var resolver := _getDamageResolver(context)
 	var attackerUnit := attacker
@@ -61,6 +59,8 @@ func execute(context: BattleBoardContext) -> void:
 
 	var attackerDamage: int = 0
 	var counterDamage: int = 0
+
+	# Track death states
 	var targetDied: bool = false
 	var attackerDied: bool = false
 
@@ -125,6 +125,7 @@ func _getBasicAttackResource(unit: BattleBoardUnitServerEntity) -> AttackResourc
 		_defaultAttackResource.attackType = AttackResource.AttackType.PHYSICAL
 		_defaultAttackResource.interactionType = AttackResource.InteractionType.MELEE
 	return _defaultAttackResource
+
 
 func canUndo() -> bool:
 	return false
