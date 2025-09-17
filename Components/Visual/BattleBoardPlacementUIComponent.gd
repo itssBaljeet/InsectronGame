@@ -82,7 +82,8 @@ func beginPlacement(partyResource: Party) -> void:
 	currentIndex = 0
 	self.visible = true
 	if boardUI:
-		boardUI.setActive(false)
+		#boardUI.setActive(false)
+		boardUI.setPlacementMode(true)
 	partyPlacementPanel.show()
 	_clearPartyButtons()
 	_createPartyButtons()
@@ -124,6 +125,8 @@ func placeCurrentUnit(cell: Vector3i) -> bool:
 			_showCurrent()
 			TurnBasedCoordinator._playerPlacementDone = true
 			placementPhaseFinished.emit()
+			if boardUI:
+				boardUI.call_deferred("setPlacementMode", false)
 		else:
 			currentIndex = currentIndex % party.size()
 			_showCurrent()

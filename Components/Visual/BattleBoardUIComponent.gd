@@ -91,6 +91,7 @@ var _currentButtonIndex := 0
 var _currentAttackButtonIndex := 0  # Track attack menu selection separately
 var attackSelectionState: AttackSelectionState = AttackSelectionState.new()
 var _isActive: bool = true
+var _inPlacementMode: bool = false
 #endregion
 
 #region Signals
@@ -168,6 +169,16 @@ func _onPhaseChanged(newPhase: TurnBasedCoordinator.GamePhase) -> void:
 
 func _updateActivationForPhase(phase: TurnBasedCoordinator.GamePhase) -> void:
 	setActive(phase == TurnBasedCoordinator.GamePhase.battle)
+
+func setPlacementMode(active: bool) -> void:
+	if _inPlacementMode == active:
+		return
+
+	_inPlacementMode = active
+	closeUnitMenu()
+
+	if _inPlacementMode:
+		setActive(false)
 #endregion
 
 #region Public Interface
@@ -451,6 +462,8 @@ func _input(event: InputEvent) -> void:
 #region Event Handlers
 func _onCellSelected(cell: Vector3i) -> void:
 	if not _isActive:
+		return
+	if _inPlacementMode:
 		return
 	match state:
 		UIState.idle:

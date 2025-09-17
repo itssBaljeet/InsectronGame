@@ -117,7 +117,6 @@ func _init(board: BattleBoardGeneratorComponent) -> void:
 	battleBoard = board
 	var indicator: Node3D = preload("res://Game/SelectorMesh.tscn").instantiate()
 	visualIndicator = indicator
-	self.add_child(indicator)
 
 
 func _ready() -> void:
@@ -130,6 +129,8 @@ func _ready() -> void:
 	applyInitialCoordinates()
 
 	updateIndicator() # Fix the visually-annoying initial snap from the default position
+	self.parentEntity.add_child(visualIndicator)
+	visualIndicator.position.y = -0.045
 
 #endregion
 
