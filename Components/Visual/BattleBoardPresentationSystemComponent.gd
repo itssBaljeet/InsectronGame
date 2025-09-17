@@ -153,20 +153,61 @@ func _onTeamTurnEnded(_data: Dictionary) -> void:
 func _onUnitAttacked(data: Dictionary) -> void:
 	var attacker: BattleBoardUnitClientEntity = data.get("attacker")
 	var target: BattleBoardUnitClientEntity = data.get("target")
+	var attacker_cell: Vector3i = data.get("attackerCell", Vector3i.ZERO)
+	var target_cell: Vector3i = data.get("targetCell", Vector3i.ZERO)
+	if not attacker and boardState:
+		attacker = boardState.getClientUnit(attacker_cell)
+	if not target and boardState:
+		target = boardState.getClientUnit(target_cell)
 	var damage: int = data.get("damage", 0)
 	var counter_damage: int = data.get("counterDamage", 0)
+	var target_died: bool = data.get("targetDied", false)
+	var attacker_died: bool = data.get("attackerDied", false)
+	var venomous: bool = data.get("attackerVenomous", false)
 	if attacker and attacker.animComponent and target:
 		await attacker.animComponent.playAttackSequence(attacker, target, damage)
-	if target and target.animComponent and damage > 0:
-		target.animComponent.showDamageNumber(damage)
+	if target:
+		var target_anim := target.animComponent
+		if target_anim and damage > 0:
+			target_anim.showDamageNumber(damage)
+		if venomous and target_anim:
+			target_anim.play_poison_puff(6)
 		var health_vis: BattleBoardUnitHealthVisualComponent = target.components.get(&"BattleBoardUnitHealthVisualComponent")
 		if health_vis:
 			health_vis.apply_damage(damage)
-	if target and target.animComponent and attacker and counter_damage > 0:
+	if not target_died and target and target.animComponent and attacker and counter_damage > 0:
 		await target.animComponent.playAttackSequence(target, attacker, counter_damage)
+	if counter_damage > 0 and attacker:
+		var atk_anim := attacker.animComponent
+		if atk_anim:
+			atk_anim.showDamageNumber(counter_damage)
 		var atk_health_vis: BattleBoardUnitHealthVisualComponent = attacker.components.get(&"BattleBoardUnitHealthVisualComponent")
 		if atk_health_vis:
 			atk_health_vis.apply_damage(counter_damage)
+	if target_died:
+		await _playDeathAnimation(target, target_cell)
+	if attacker_died:
+		await _playDeathAnimation(attacker, attacker_cell)
+	if not attacker_died and attacker and attacker.animComponent:
+		attacker.animComponent.face_home_orientation()
+	if not target_died and target and target.animComponent:
+		await target.animComponent.face_home_orientation()
+
+func _playDeathAnimation(unit: BattleBoardUnitClientEntity, cell: Vector3i) -> void:
+	if not unit:
+		if boardState:
+			boardState.setCellOccupancy(cell, false, null)
+		return
+	var anim: InsectorAnimationComponent = unit.animComponent
+	if anim and anim.skin:
+		var tw := anim.create_tween()
+		tw.tween_property(anim.skin, "rotation:z", deg_to_rad(90), anim.die_animation_time)
+		tw.parallel().tween_property(anim.skin, "modulate:a", 0.0, anim.die_animation_time)
+		await tw.finished
+	if is_instance_valid(unit):
+		unit.queue_free()
+	if boardState:
+		boardState.setCellOccupancy(cell, false, null)
 
 func _onSpecialAttack(data: Dictionary) -> void:
 	print("SPECIAL VFX!!!")
