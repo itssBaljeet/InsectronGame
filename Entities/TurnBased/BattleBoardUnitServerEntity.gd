@@ -21,9 +21,9 @@ var stateComponent: UnitTurnStateComponent:
 	get:
 		return components.get(&"UnitTurnStateComponent")
 
-var AIComponent: BattleBoardAIBrainComponent:
-	get:
-		return components.get(&"BattleBoardAIBrainComponent")
+#var AIComponent: BattleBoardAIBrainComponent:
+	#get:
+		#return components.get(&"BattleBoardAIBrainComponent")
 
 var statsComponent: MeteormyteStatsComponent:
 	get:
@@ -69,8 +69,8 @@ func _init(meteormyte: Meteormyte, board, team: FactionComponent.Factions) -> vo
 
 	var state := UnitTurnStateComponent.new()
 	self.add_child(state)
-	var ai := BattleBoardAIBrainComponent.new()
-	self.add_child(ai)
+	#var ai := BattleBoardAIBrainComponent.new()
+	#self.add_child(ai)
 	
 	var stats := MeteormyteStatsComponent.new()
 	if meteormyte:

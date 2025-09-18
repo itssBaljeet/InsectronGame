@@ -9,10 +9,15 @@ var board: BattleBoardGeneratorComponent:
 		if board: return board
 		return coComponents.get(&"BattleBoardGeneratorComponent")
 
-var rules: BattleBoardRulesComponent:
+var state: BattleBoardClientStateComponent:
 	get:
-		if rules: return rules
-		return coComponents.get(&"BattleBoardRulesComponent")
+		if state: return state
+		return coComponents.get(&"BattleBoardClientStateComponent")
+
+#var rules: BattleBoardRulesComponent:
+	#get:
+		#if rules: return rules
+		#return coComponents.get(&"BattleBoardRulesComponent")
 #endregion
 
 #region State
@@ -38,7 +43,12 @@ func clearHighlights() -> void:
 func requestMoveHighlights(origin: Vector3i, moveRange: BoardPattern) -> void:
 	clearHighlights()
 	
-	var validMoves := rules.getValidMoveTargets(origin, moveRange)
+	var validMoves: Array
+	
+	for cell in moveRange:
+		if cell + origin in board.generatedCells and state.getClientUnit(cell+origin) == null:
+			validMoves.append(cell+origin)
+
 	print("VALID MOVES: ", validMoves)
 	highlightType = board.moveHighlightTileID
 	
@@ -51,19 +61,19 @@ func requestAttackHighlights(unit: BattleBoardUnitClientEntity, onlyLightAvailab
 	clearHighlights()
 	highlightType = board.attackHighlightTileID
 	
-	if onlyLightAvailable:
-		var validTargets := rules.getValidAttackTargets(unit.positionComponent.currentCellCoordinates)
-		
-		for cell in validTargets:
-			board.set_cell_item(cell, highlightType)
-			currentHighlights.append(cell)
-	else:
-		if attackResource:
-			for cell in attackResource.rangePattern.offsets:
-				var pos: Vector3i = unit.boardPositionComponent.currentCellCoordinates + cell
-				if rules.isInBounds(pos):
-					board.set_cell_item(pos, highlightType)
-					currentHighlights.append(pos)
+	#if onlyLightAvailable:
+		#var validTargets := rules.getValidAttackTargets(unit.positionComponent.currentCellCoordinates)
+		#
+		#for cell in validTargets:
+			#board.set_cell_item(cell, highlightType)
+			#currentHighlights.append(cell)
+	#else:
+	if attackResource:
+		for cell in attackResource.rangePattern.offsets:
+			var pos: Vector3i = unit.boardPositionComponent.currentCellCoordinates + cell
+			if pos in board.generatedCells:
+				board.set_cell_item(pos, highlightType)
+				currentHighlights.append(pos)
 
 ## Restores cell to normal appearance
 func _restoreCellAppearance(cell: Vector3i) -> void:
@@ -84,6 +94,21 @@ func _onDomainEvent(eventName: StringName, _data: Dictionary) -> void:
 func requestPlacementHighlights(faction: int) -> void:
 	clearHighlights()
 	highlightType = board.moveHighlightTileID
-	for cell in rules.getValidPlacementCells(faction):
+	for cell in getValidPlacementCells(faction):
 		board.set_cell_item(cell, highlightType)
 		currentHighlights.append(cell)
+
+### Returns all valid placement cells for a faction
+func getValidPlacementCells(faction: int) -> Array[Vector3i]:
+	var cells: Array[Vector3i] = []
+	var rows: Array[int] = []
+	if faction == FactionComponent.Factions.player1:
+		rows = [board.height - 2, board.height - 1]
+	else:
+		rows = [0, 1]
+	for z in rows:
+		for x in range(board.width):
+			var cell := Vector3i(x, 0, z)
+			if state.getClientUnit(cell) == null:
+				cells.append(cell)
+	return cells

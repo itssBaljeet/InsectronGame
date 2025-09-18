@@ -31,10 +31,10 @@ signal unitReady
 
 #endregion
 
-func _ready() -> void:
-	# Listen for team changes to reset state
-	if TurnBasedCoordinator:
-		TurnBasedCoordinator.willBeginTurn.connect(onTeamTurnStarted)
+#func _ready() -> void:
+	### Listen for team changes to reset state
+	##if TurnBasedCoordinator:
+		##TurnBasedCoordinator.willBeginTurn.connect(onTeamTurnStarted)
 
 ## Called at the start of a new team turn
 func resetForNewTeamTurn() -> void:
@@ -96,9 +96,9 @@ func onTeamTurnStarted() -> void:
 	if not faction:
 		return
 	
-	# Check if it's our team's turn
-	if TurnBasedCoordinator.currentTeam == faction.factions:
-		resetForNewTeamTurn()
+	## Check if it's our team's turn
+	#if TurnBasedCoordinator.currentTeam == faction.factions:
+		#resetForNewTeamTurn()
 
 ## Debug visualization
 func getStateString() -> String:

@@ -42,9 +42,9 @@ enum UIState {
 #endregion
 
 #region Dependencies
-var factory: BattleBoardCommandFactory:
-	get:
-		return coComponents.get(&"BattleBoardCommandFactory")
+#var factory: BattleBoardCommandFactory:
+	#get:
+		#return coComponents.get(&"BattleBoardCommandFactory")
 
 var highlighter: BattleBoardHighlightComponent:
 	get:
@@ -56,7 +56,7 @@ var selector: BattleBoardSelectorComponent3D:
 		return selectorEntity.components.get(&"BattleBoardSelectorComponent3D") if selectorEntity else null
 
 # Only here temporarily. To be replaced with server calls in the UI where needed for unit state.
-var board: BattleBoardServerStateComponent:
+var board: BattleBoardClientStateComponent:
 	get:
 		return coComponents.get(&"BattleBoardServerStateComponent")
 
@@ -64,16 +64,16 @@ var boardClient: BattleBoardClientStateComponent:
 	get:
 		return coComponents.get(&"BattleBoardClientStateComponent")
 
-var commandQueue: BattleBoardCommandQueueComponent:
-	get:
-		return coComponents.get(&"BattleBoardCommandQueueComponent")
-
-var rules: BattleBoardRulesComponent:
-	get:
-		return coComponents.get(&"BattleBoardRulesComponent")
-
-func getRequiredComponents() -> Array[Script]:
-	return [BattleBoardCommandFactory, BattleBoardCommandQueueComponent, BattleBoardServerStateComponent, BattleBoardSelectorComponent3D, BattleBoardHighlightComponent]
+#var commandQueue: BattleBoardCommandQueueComponent:
+	#get:
+		#return coComponents.get(&"BattleBoardCommandQueueComponent")
+#
+#var rules: BattleBoardRulesComponent:
+	#get:
+		#return coComponents.get(&"BattleBoardRulesComponent")
+#
+#func getRequiredComponents() -> Array[Script]:
+	#return [BattleBoardCommandFactory, BattleBoardCommandQueueComponent, BattleBoardServerStateComponent, BattleBoardSelectorComponent3D, BattleBoardHighlightComponent]
 #endregion
 
 #region State
@@ -91,7 +91,7 @@ var state: UIState = UIState.idle:
 			printDebug("State changed: %s -> %s" % [_getStateName(oldState), _getStateName(newState)])
 
 var prevState: UIState = UIState.idle
-var activeUnit: BattleBoardUnitServerEntity
+var activeUnit: BattleBoardUnitClientEntity
 var _currentButtonIndex := 0
 var _currentAttackButtonIndex := 0  # Track attack menu selection separately
 var attackSelectionState: AttackSelectionState = AttackSelectionState.new()
@@ -116,27 +116,23 @@ func _ready() -> void:
 	infoButton.button_up.connect(onInfoButtonPressed)  # NEW CONNECTION
 	
 	# Connect to coordinator signals
-	TurnBasedCoordinator.willBeginPlayerTurn.connect(_onWillBeginPlayerTurn)
+	#TurnBasedCoordinator.willBeginPlayerTurn.connect(_onWillBeginPlayerTurn)
 	
-	# Connect to factory for command feedback
-	if factory:
-		factory.commandEnqueued.connect(_onCommandEnqueued)
-		factory.commandValidationFailed.connect(_onValidationFailed)
+	## Connect to factory for command feedback
+	#if factory:
+		#factory.commandEnqueued.connect(_onCommandEnqueued)
+		#factory.commandValidationFailed.connect(_onValidationFailed)
 	
 	# Connect to selector for cell selection
 	if selector:
 		selector.cellSelected.connect(_onCellSelected)
 
-	if commandQueue:
-		commandQueue.commandUndone.connect(_onCommandUndone)
-		commandQueue.commandProcessed.connect(_onCommandProcessed)
-
-	
+	NetworkPlayerInput.commandUndone.connect(_onCommandUndone)
 	NetworkPlayerInput.commandExecuted.connect(_onCommandProcessed)
 	
 	#TurnBasedCoordinator.phaseChanged.connect(_onPhaseChanged)
 	NetworkBattleBoard.phaseChanged.connect(_onPhaseChanged)
-	_updateActivationForPhase(TurnBasedCoordinator.currentPhase)
+	_updateActivationForPhase(NetworkBattleBoard.currentPhase)
 #endregion
 
 #region Activation
@@ -173,11 +169,11 @@ func _deactivateUI() -> void:
 	if selector:
 		selector.setEnabled(true)
 
-func _onPhaseChanged(newPhase: TurnBasedCoordinator.GamePhase) -> void:
+func _onPhaseChanged(newPhase: NetworkBattleBoard.GamePhase) -> void:
 	_updateActivationForPhase(newPhase)
 
-func _updateActivationForPhase(phase: TurnBasedCoordinator.GamePhase) -> void:
-	setActive(phase == TurnBasedCoordinator.GamePhase.battle)
+func _updateActivationForPhase(phase: NetworkBattleBoard.GamePhase) -> void:
+	setActive(phase == NetworkBattleBoard.GamePhase.BATTLE)
 
 func setPlacementMode(active: bool) -> void:
 	if _inPlacementMode == active:
@@ -192,7 +188,7 @@ func setPlacementMode(active: bool) -> void:
 
 #region Public Interface
 ## Opens the unit menu for the specified unit (or empty cell if null)
-func openUnitMenu(unit: BattleBoardUnitServerEntity, newState: UIState = UIState.unitMenu) -> void:
+func openUnitMenu(unit: BattleBoardUnitClientEntity, newState: UIState = UIState.unitMenu) -> void:
 	if not _isActive:
 		return
 	activeUnit = unit  # Can be null for empty cells
@@ -249,7 +245,14 @@ func trySelectUnit(cell: Vector3i) -> bool:
 		return false
 	print("TRY SELECT UNIT UI COMP")
 	# Always try to open menu when selecting any cell during player's turn
-	if TurnBasedCoordinator.currentTeam != FactionComponent.Factions.players:
+	var faction: FactionComponent.Factions
+	match NetworkServer.playerNumber:
+		1:
+			faction = FactionComponent.Factions.player1
+		2:
+			faction = FactionComponent.Factions.player2
+	
+	if NetworkBattleBoard.currentTeam != faction:
 		print("NOT PLAYER TURN NERD")
 		return false  # Don't open menu if not player's turn
 	
@@ -259,13 +262,13 @@ func trySelectUnit(cell: Vector3i) -> bool:
 	var occupant := board.getOccupant(cell)
 	
 	# Empty cell - just show end turn button
-	if not occupant or not occupant is BattleBoardUnitServerEntity:
+	if not occupant or not occupant is BattleBoardUnitClientEntity:
 		print("NO OCCUPANT: ", occupant, " ", )
 		activeUnit = null
 		openUnitMenu(null, UIState.unitMenu)
 		return true
 	
-	var unit := occupant as BattleBoardUnitServerEntity
+	var unit := occupant as BattleBoardUnitClientEntity
 	activeUnit = unit
 	
 	# Always open menu regardless of unit faction or state
@@ -305,18 +308,18 @@ func onWaitButtonPressed() -> void:
 		return
 	# Replace with command
 	print(activeUnit)
-	factory.intentWait(activeUnit.boardPositionComponent.currentCellCoordinates)
+	#factory.intentWait(activeUnit.boardPositionComponent.currentCellCoordinates)
 	closeUnitMenu()
 	
 
 func onEndTurnButtonPressed() -> void:
 	closeUnitMenu()
 	# Replace with command
-	factory.intentEndTurn(TurnBasedCoordinator.currentTeam)
+	#factory.intentEndTurn(TurnBasedCoordinator.currentTeam)
 
 func _onStartButtonUp() -> void:
-	TurnBasedCoordinator.currentTurnState = TurnBasedCoordinator.TurnBasedState.turnBegin
-	TurnBasedCoordinator.startTurnProcess()
+	#TurnBasedCoordinator.currentTurnState = TurnBasedCoordinator.TurnBasedState.turnBegin
+	#TurnBasedCoordinator.startTurnProcess()
 	startButton.disabled = true
 
 func _onWillBeginPlayerTurn() -> void:
@@ -369,12 +372,12 @@ func _onBasicAttackSelected() -> void:
 	
 	# Get and highlight valid targets
 	var attackComp := activeUnit.components.get(&"BattleBoardUnitAttackComponent") as BattleBoardUnitAttackComponent
-	var origin := activeUnit.boardPositionComponent.currentCellCoordinates
+	var origin := activeUnit.positionComponent.currentCellCoordinates
 	
-	for cell in attackComp.attackRange.offsets:
-		if factory.rules.isInBounds(origin + cell):
-			board.set_cell_item(origin + cell, board.attackHighlightTileID)
-			highlighter.currentHighlights.append(origin + cell)
+	#for cell in attackComp.attackRange.offsets:
+		#if factory.rules.isInBounds(origin + cell):
+			#board.set_cell_item(origin + cell, board.attackHighlightTileID)
+			#highlighter.currentHighlights.append(origin + cell)
 	
 	# Hide attack menu
 	attackMenu.hide()
@@ -389,8 +392,8 @@ func _onAttackSelected(attack: AttackResource) -> void:
 	
 	# Get and highlight valid targets
 	var attackComp := activeUnit.components.get(&"BattleBoardUnitAttackComponent") as BattleBoardUnitAttackComponent
-	var origin := activeUnit.boardPositionComponent.currentCellCoordinates
-	attackSelectionState.validTargets = rules.getAttackTargets(origin, attack)
+	var origin := activeUnit.positionComponent.currentCellCoordinates
+	#attackSelectionState.validTargets = rules.getAttackTargets(origin, attack)
 	
 	#for cell in attack.getRangePattern():
 		#print("Breaking here")
@@ -450,7 +453,7 @@ func _input(event: InputEvent) -> void:
 			UIState.unitMenuPostMove:
 				# Try to undo move
 				closeUnitMenu(true)
-				commandQueue.undoLastCommand()
+				NetworkPlayerInput.undoLast()
 			UIState.attackSelect:
 				# Cancel attack selection - return to appropriate menu
 				print("Canceling attack select menu")
@@ -487,35 +490,26 @@ func _onCellSelected(cell: Vector3i) -> void:
 		UIState.moveSelect:
 			print("Moving")
 			NetworkPlayerInput.intentMove(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
-			factory.intentMove(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
+			#factory.intentMove(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
 		UIState.basicAttackTargetSelect:
 			print("basic Attack Target")
-			factory.intentAttack(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
+			#factory.intentAttack(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
 		UIState.attackTargetSelect:
 			print("Attack target")
-			factory.intentSpecialAttack(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
-		
+			#factory.intentSpecialAttack(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
 
-func _onCommandEnqueued(command: BattleBoardCommand) -> void:
-	match command.commandName:
-		"Move":
-			pass
-		"Attack", "Wait":
-			closeUnitMenu()
-		"EndTurn":
-			closeUnitMenu()
 
-func _onCommandProcessed(command: BattleBoardCommand) -> void:
-	match command.commandName:
-		"Move":
-			if activeUnit and activeUnit.factionComponent.factions == FactionComponent.Factions.players:
+func _onCommandProcessed(command: NetworkPlayerInput.PlayerIntent) -> void:
+	match command:
+		NetworkPlayerInput.PlayerIntent.MOVE:
+			if activeUnit and activeUnit.factionComponent.factions == NetworkServer.faction:
 				openUnitMenu(activeUnit, UIState.unitMenuPostMove)
-		"SpecialAttack":
+		NetworkPlayerInput.PlayerIntent.ATTACK, NetworkPlayerInput.PlayerIntent.WAIT, NetworkPlayerInput.PlayerIntent.END_TURN, NetworkPlayerInput.PlayerIntent.SPECIAL_ATTACK:
 			closeUnitMenu()
 
-func _onCommandUndone(command: BattleBoardCommand) -> void:
-	match command.commandName:
-		"Move":
+func _onCommandUndone(command: NetworkPlayerInput.PlayerIntent) -> void:
+	match command:
+		NetworkPlayerInput.PlayerIntent.MOVE:
 			openUnitMenu(activeUnit, UIState.unitMenu)
 
 func _onValidationFailed(reason: String) -> void:
@@ -611,7 +605,7 @@ func _getStateName(s: UIState) -> String:
 		UIState.unitMenuPostMove: return "unitMenuPostMove"
 		_: return "Unknown"
 
-func _updateButtonsVisibility(unit: BattleBoardUnitServerEntity) -> void:
+func _updateButtonsVisibility(unit: BattleBoardUnitClientEntity) -> void:
 	print("Updating button visibility")
 	
 	# Hide all buttons by default
@@ -628,8 +622,7 @@ func _updateButtonsVisibility(unit: BattleBoardUnitServerEntity) -> void:
 		return
 	
 	# Check if it's an enemy unit
-	print("THIS IS THE BOOOAARRRDD: ", board)
-	var isPlayerUnit := unit.factionComponent.factions == pow(2, FactionComponent.Factions.players - 1)
+	var isPlayerUnit: FactionComponent.Factions = unit.factionComponent.factions == pow(2, NetworkServer.faction - 1)
 	
 	if not isPlayerUnit:
 		# Enemy unit - show info and end turn only
@@ -702,5 +695,5 @@ func _focusAttackButton(index: int) -> void:
 func processTurnLog() -> void:
 	if activeUnit:
 		print("[b] Processed turn for %s." % activeUnit.name)
-		print("[b] Remaining units to process: %d" % len(TurnBasedCoordinator.getAvailableUnits()))
+		#print("[b] Remaining units to process: %d" % len(TurnBasedCoordinator.getAvailableUnits()))
 #endregion

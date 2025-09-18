@@ -10,6 +10,9 @@ enum GamePhase {
 
 #endregion
 
+var currentTeam: FactionComponent.Factions = FactionComponent.Factions.player1
+var currentPhase: GamePhase
+
 signal phaseChanged(newPhase: GamePhase)
 
 ###############################################################################
@@ -17,7 +20,13 @@ signal phaseChanged(newPhase: GamePhase)
 
 @rpc("reliable")
 func c_emitPhaseChanged(newPhase: GamePhase) -> void:
+	currentPhase = newPhase
 	phaseChanged.emit(newPhase)
+
+@rpc("reliable")
+func c_updateCurrentTeam(newTeam: FactionComponent.Factions) -> void:
+	currentTeam = newTeam
+
 
 #endregion
 ###############################################################################

@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://bq82t3qc1mxmb"]
+[gd_scene load_steps=50 format=3 uid="uid://bq82t3qc1mxmb"]
 
 [ext_resource type="Script" uid="uid://bryda6lc1suk7" path="res://Entities/Objects/BattleBoardEntity3d.gd" id="1_pvu71"]
 [ext_resource type="PackedScene" uid="uid://b1c4gfp8xpktc" path="res://Components/Control/BattleBoardSelectorComponent.tscn" id="7_bckac"]
@@ -13,12 +13,17 @@
 [ext_resource type="ArrayMesh" uid="uid://bk88dq18miudx" path="res://addons/edgeTileOuterCorner_Cube.res" id="21_lvoms"]
 [ext_resource type="ArrayMesh" uid="uid://cfhtoriqvgamd" path="res://addons/edgeTileOuterSlantDownLayer2_Cube_003.res" id="21_qca53"]
 [ext_resource type="ArrayMesh" uid="uid://071s0swisg4h" path="res://addons/outerTileSlantedCornerlLayer2New_Cube_002.res" id="24_tm5g8"]
+[ext_resource type="PackedScene" uid="uid://c4sf8l6brughk" path="res://Components/Gameplay/BattleBoardRulesComponent.tscn" id="38_82am4"]
 [ext_resource type="PackedScene" uid="uid://d2bq2o7sskowf" path="res://Components/Movement/BattleBoardPathfindingComponent.tscn" id="39_c3fbh"]
+[ext_resource type="PackedScene" uid="uid://ce7rtgsbhab7m" path="res://Components/Data/BattleBoardCommandFactory.tscn" id="40_j60e1"]
+[ext_resource type="PackedScene" uid="uid://6u2h4ta315dn" path="res://Components/Control/BattleBoardCommandQueueComponent.tscn" id="41_2gfsc"]
 [ext_resource type="PackedScene" uid="uid://bb4joyvy32i0e" path="res://Components/Visual/BattleBoardHighlightComponent.tscn" id="42_txsxw"]
+[ext_resource type="PackedScene" uid="uid://ckj6yryxf4ndu" path="res://Components/Combat/BattleBoardHazardSystemComponent.tscn" id="54_7afif"]
 [ext_resource type="PackedScene" uid="uid://dvnkwgrchnfae" path="res://Components/Visual/BattleBoardPresentationSystemComponent.tscn" id="55_dr6b8"]
 [ext_resource type="PackedScene" uid="uid://wqm4tsu7jdj6" path="res://Components/Control/BattleBoardMouseSelectionComponent.tscn" id="55_kfhrd"]
 [ext_resource type="PackedScene" uid="uid://bplacementui" path="res://Components/Visual/BattleBoardPlacementUIComponent.tscn" id="56_plcui"]
 [ext_resource type="Script" uid="uid://cn6jmmjopywhq" path="res://Components/Control/BattleBoardClientStateComponent.gd" id="57_client_state"]
+[ext_resource type="Script" uid="uid://cs3kk3dircd1y" path="res://Components/Control/BattleBoardServerStateComponent.gd" id="58_server_state"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fakjh"]
 resource_local_to_scene = true
@@ -222,6 +227,9 @@ bob_mid_height = 1.88
 [node name="BattleBoardClientStateComponent" type="Node" parent="." groups=["components"]]
 script = ExtResource("57_client_state")
 
+[node name="BattleBoardServerStateComponent" type="Node" parent="." groups=["components"]]
+script = ExtResource("58_server_state")
+
 [node name="BattleBoardUIComponent" parent="." instance=ExtResource("12_yubh6")]
 visible = false
 
@@ -243,11 +251,19 @@ zoom_step = 0.5
 min_zoom_distance = 3.0
 max_zoom_distance = 11.0
 
+[node name="BattleBoardRulesComponent" parent="." groups=["components"] instance=ExtResource("38_82am4")]
+
 [node name="BattleBoardPathfindingComponent" parent="." groups=["components"] instance=ExtResource("39_c3fbh")]
+
+[node name="BattleBoardCommandFactory" parent="." groups=["components"] instance=ExtResource("40_j60e1")]
+
+[node name="BattleBoardCommandQueueComponent" parent="." groups=["components"] instance=ExtResource("41_2gfsc")]
 
 [node name="BattleBoardHighlightComponent" parent="." groups=["components"] instance=ExtResource("42_txsxw")]
 
 [node name="BattleBoardMouseSelectionComponent" parent="." instance=ExtResource("55_kfhrd")]
+
+[node name="BattleBoardHazardSystemComponent" parent="." instance=ExtResource("54_7afif")]
 
 [node name="BattleBoardPresentationSystemComponent" parent="." groups=["components"] instance=ExtResource("55_dr6b8")]
 

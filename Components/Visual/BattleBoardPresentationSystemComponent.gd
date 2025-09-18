@@ -47,7 +47,6 @@ var boardState: BattleBoardClientStateComponent:
 
 func getRequiredComponents() -> Array[Script]:
 	return [
-		BattleBoardCommandQueueComponent,
 		BattleBoardHighlightComponent,
 		BattleBoardPlacementUIComponent,
 	]
@@ -94,14 +93,26 @@ func _onCommandExecuted(commandType: NetworkPlayerInput.PlayerIntent, data: Dict
 	match commandType:
 		NetworkPlayerInput.PlayerIntent.MOVE:
 			await _onUnitMoved(data)
+			var unit: BattleBoardUnitClientEntity = boardState.get(data.get("to"))
+			if unit:
+				unit.stateComponent.markMoved()
 		NetworkPlayerInput.PlayerIntent.ATTACK:
 			await _onUnitAttacked(data)
+			var unit: BattleBoardUnitClientEntity = boardState.get(data.get("originCell"))
+			if unit:
+				unit.stateComponent.markExhausted()
 		NetworkPlayerInput.PlayerIntent.SPECIAL_ATTACK:
 			await _onSpecialAttack(data)
+			var unit: BattleBoardUnitClientEntity = boardState.get(data.get("originCell"))
+			if unit:
+				unit.stateComponent.markExhausted()
 		NetworkPlayerInput.PlayerIntent.PLACE_UNIT:
 			_onUnitPlaced(data)
 		NetworkPlayerInput.PlayerIntent.WAIT:
 			_onUnitWaited(data)
+			var unit: BattleBoardUnitClientEntity = boardState.get(data.get("cell"))
+			if unit:
+				unit.stateComponent.markExhausted()
 		NetworkPlayerInput.PlayerIntent.END_TURN:
 			_onTeamTurnEnded(data)
 
@@ -123,9 +134,7 @@ func _onPlacementUnitChanged(unit: Meteormyte) -> void:
 
 
 func _onPlacementPhaseFinished() -> void:
-	print("Placement phase finished and checking if both users are done...")
-	if TurnBasedCoordinator._playerPlacementDone and TurnBasedCoordinator._opponentPlacementDone:
-		_exitPlacementState()
+	_exitPlacementState()
 
 func _enterPlacementState() -> void:
 	placementUI.isPlacementActive = true
@@ -141,7 +150,7 @@ func _exitPlacementState() -> void:
 func _highlightPlacementCells() -> void:
 	if not highlighter:
 		return
-	highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
+	highlighter.requestPlacementHighlights(NetworkServer.faction)
 
 func _clearPlacementHighlights() -> void:
 	if not highlighter:

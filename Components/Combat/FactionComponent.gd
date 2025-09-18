@@ -11,11 +11,12 @@ extends Component
 
 enum Factions {
 	neutral = 1, # TBD: Should `neutral` be 0?
-	players = 2,
+	player1 = 2,
 	playerAllies = 3,
 	enemies = 4,
 	hazards = 5,
-	ai = 6
+	ai = 6,
+	player2 = 7,
 	}
 
 const factionStrings: PackedStringArray = [

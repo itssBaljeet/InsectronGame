@@ -16,6 +16,7 @@ enum PlayerIntent {
 #region Signals
 
 signal commandExecuted(commandType: PlayerIntent, results: Dictionary)
+signal commandUndone()
 
 #endregion
 
@@ -40,6 +41,10 @@ func undoLast() -> void:
 @rpc("reliable")
 func c_commandExecuted(commandType: PlayerIntent, results: Dictionary) -> void:
 	commandExecuted.emit(commandType, results)
+
+@rpc("reliable")
+func c_commandUndone() -> void:
+	commandUndone.emit()
 
 #endregion
 ###############################################################################

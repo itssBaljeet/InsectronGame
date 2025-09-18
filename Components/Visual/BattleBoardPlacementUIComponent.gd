@@ -8,19 +8,9 @@ const hoverButtonStyle := preload("res://Assets/UI Pack Kenney/hover_button.tres
 var board: BattleBoardGeneratorComponent:
 	get:
 		return coComponents.get(&"BattleBoardGeneratorComponent")
-var rules: BattleBoardRulesComponent:
-	get:
-		return coComponents.get(&"BattleBoardRulesComponent")
 var highlighter: BattleBoardHighlightComponent:
 	get:
 		return coComponents.get(&"BattleBoardHighlightComponent")
-var factory: BattleBoardCommandFactory:
-	get:
-		return coComponents.get(&"BattleBoardCommandFactory")
-var commandQueue: BattleBoardCommandQueueComponent:
-	get:
-		return coComponents.get(&"BattleBoardCommandQueueComponent")
-
 var boardUI: BattleBoardUIComponent:
 	get:
 		return coComponents.get(&"BattleBoardUIComponent")
@@ -56,26 +46,42 @@ func _ready() -> void:
 	boardUI.visible = false
 	if boardUI:
 		boardUI.setActive(false)
-	startPlacementButton.button_up.connect(_onStartPlacementButtonPressed)
+	#startPlacementButton.button_up.connect(_onStartPlacementButtonPressed)
 
 	if selector:
 		selector.cellSelected.connect(_onSelectorCellSelected)
 
 	if mouseSelection:
 		mouseSelection.cellClicked.connect(_onMouseCellClicked)
+	
+	NetworkBattleBoard.phaseChanged.connect(_onPhaseChanged)
+
+func _onPhaseChanged(newPhase: NetworkBattleBoard.GamePhase) -> void:
+	print("MATCHING NEW PHASE CLIENTS")
+	match newPhase:
+		NetworkBattleBoard.GamePhase.PLACEMENT:
+			print("PLACEMENT MATCHED")
+			match NetworkServer.faction:
+				FactionComponent.Factions.player1:
+					print("Player 1 team: ", NetworkServer.playerTeam.meteormytes)
+					beginPlacement(NetworkServer.playerTeam)
+				FactionComponent.Factions.player2:
+					beginPlacement(NetworkServer.enemyTeam)
+				_:
+					print("MATCHED TO NO FACTION")
 
 ## This is a test for singleplayer right now emulating a server architecture
 ## For now we pass in a premade player party resource
 ## This call simulates both users connecting (one is ai) so when the player "connects" we start
-func _onStartPlacementButtonPressed() -> void:
-	self.visible = false
-	boardUI.visible = true
-	startPlacementButton.disabled = true
-	
-	var playerTeam: Party = preload("res://Game/Resources/TestParties/PlayerParty.tres")
-	var enemyTeam: Party = preload("res://Game/Resources/TestParties/EnemyParty.tres")
-	
-	TurnBasedCoordinator.startPlacementPhase(playerTeam, true, enemyTeam)
+#func _onStartPlacementButtonPressed() -> void:
+	#self.visible = false
+	#boardUI.visible = true
+	#startPlacementButton.disabled = true
+	#
+	#var playerTeam: Party = preload("res://Game/Resources/TestParties/PlayerParty.tres")
+	#var enemyTeam: Party = preload("res://Game/Resources/TestParties/EnemyParty.tres")
+	#
+	#TurnBasedCoordinator.startPlacementPhase(playerTeam, true, enemyTeam)
 
 func beginPlacement(partyResource: Party) -> void:
 	party = partyResource.meteormytes.duplicate()
@@ -141,10 +147,10 @@ func placeCurrentUnit(cell: Vector3i) -> bool:
 	
 	return false
 
-func undoLastPlacement() -> void:
-	if commandQueue.undoLastCommand():
-		highlighter.requestPlacementHighlights(FactionComponent.Factions.players)
-		party.append(lastPlaced)
+#func undoLastPlacement() -> void:
+	#if commandQueue.undoLastCommand():
+		#highlighter.requestPlacementHighlights(NetworkServer.faction)
+		#party.append(lastPlaced)
 
 func _showCurrent() -> void:
 	if party.is_empty():

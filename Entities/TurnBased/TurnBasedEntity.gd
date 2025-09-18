@@ -21,23 +21,23 @@ extends Entity # + TurnBasedObjectBase
 
 
 #region State
+#
+#@export_storage var turnBasedComponents: Array[TurnBasedComponent]
 
-@export_storage var turnBasedComponents: Array[TurnBasedComponent]
-
-## Returns: [TurnBasedCoordinator.currentTurn]
-var currentTurn: int:
-	get: return TurnBasedCoordinator.currentTurn
-	set(newValue): printError("currentTurn should not be set; use TurnBasedCoordinator") # TEMP: To catch bugs
-
-## Returns: [TurnBasedCoordinator.currentTurnState]
-var currentTurnState: TurnBasedCoordinator.TurnBasedState:
-	get: return TurnBasedCoordinator.currentTurnState
-	set(newValue): printError("currentTurnState should not be set; use TurnBasedCoordinator") # TEMP: To catch bugs
-
-## Returns: [TurnBasedCoordinator.turnsProcessed]
-var turnsProcessed: int:
-	get: return TurnBasedCoordinator.turnsProcessed
-	set(newValue): printError("turnsProcessed should not be set; use TurnBasedCoordinator") # TEMP: To catch bugs
+### Returns: [TurnBasedCoordinator.currentTurn]
+#var currentTurn: int:
+	#get: return TurnBasedCoordinator.currentTurn
+	#set(newValue): printError("currentTurn should not be set; use TurnBasedCoordinator") # TEMP: To catch bugs
+#
+### Returns: [TurnBasedCoordinator.currentTurnState]
+#var currentTurnState: TurnBasedCoordinator.TurnBasedState:
+	#get: return TurnBasedCoordinator.currentTurnState
+	#set(newValue): printError("currentTurnState should not be set; use TurnBasedCoordinator") # TEMP: To catch bugs
+#
+### Returns: [TurnBasedCoordinator.turnsProcessed]
+#var turnsProcessed: int:
+	#get: return TurnBasedCoordinator.turnsProcessed
+	#set(newValue): printError("turnsProcessed should not be set; use TurnBasedCoordinator") # TEMP: To catch bugs
 
 #endregion
 
@@ -59,11 +59,11 @@ signal didEndTurn
 func _enter_tree() -> void:
 	super._enter_tree()
 	self.add_to_group(Global.Groups.turnBased, true) # IMPORTANT: Add to turn-based group BEFORE calling `TurnBasedCoordinator.addEntity()` in case the coordinator operates on that group.
-	TurnBasedCoordinator.addEntity(self)
+	#TurnBasedCoordinator.addEntity(self)
 
 
 func _exit_tree() -> void:
-	TurnBasedCoordinator.removeEntity(self)
+	#TurnBasedCoordinator.removeEntity(self)
 	super._exit_tree()
 
 
@@ -76,9 +76,9 @@ func _exit_tree() -> void:
 func processTurnBeginSignals() -> void:
 	print("Processing turn begin for insector: ", self)
 	if not isEnabled: return
-	if debugMode:
-		printLog(str("processTurnBeginSignals() willBeginTurn ", currentTurn))
-		TextBubble.create(str("turnBegin ", currentTurn), self)
+	#if debugMode:
+		#printLog(str("processTurnBeginSignals() willBeginTurn ", currentTurn))
+		#TextBubble.create(str("turnBegin ", currentTurn), self)
 
 	willBeginTurn.emit()
 	await self.processTurnBegin()
@@ -91,9 +91,9 @@ func processTurnBeginSignals() -> void:
 ## WARNING: Do NOT override in subclass.
 func processTurnUpdateSignals() -> void:
 	if not isEnabled: return
-	if debugMode:
-		printLog(str("processTurnUpdateSignals() willUpdateTurn ", currentTurn))
-		TextBubble.create(str("turnUpdate ", currentTurn), self)
+	#if debugMode:
+		#printLog(str("processTurnUpdateSignals() willUpdateTurn ", currentTurn))
+		#TextBubble.create(str("turnUpdate ", currentTurn), self)
 
 	willUpdateTurn.emit()
 	await self.processTurnUpdate()
@@ -106,9 +106,9 @@ func processTurnUpdateSignals() -> void:
 ## WARNING: Do NOT override in subclass.
 func processTurnEndSignals() -> void:
 	if not isEnabled: return
-	if debugMode:
-		printLog(str("processTurnEndSignals() willEndTurn ", currentTurn))
-		TextBubble.create(str("turnEnd ", currentTurn), self)
+	#if debugMode:
+		#printLog(str("processTurnEndSignals() willEndTurn ", currentTurn))
+		#TextBubble.create(str("turnEnd ", currentTurn), self)
 
 	willEndTurn.emit()
 	await self.processTurnEnd()
@@ -147,44 +147,44 @@ func processTurnEnd() -> void:
 #endregion
 
 
-#region Component Management
-
-func registerComponent(newComponent: Component) -> bool:
-	if super.registerComponent(newComponent):
-		# Also register the component in our array if it is turn-based
-		if is_instance_of(newComponent, TurnBasedComponent):
-			self.turnBasedComponents.append(newComponent)
-		return true # Return `true` even if a non-turn-based component was registered by the Entity superclass.
-	else:
-		return false
-
-
-func unregisterComponent(componentToRemove: Component) -> bool:
-	var didUnregister: bool = super.unregisterComponent(componentToRemove)
-	# Also remove the component from our array if it is turn-based
-	if didUnregister and is_instance_of(componentToRemove, TurnBasedComponent):
-		self.turnBasedComponents.erase(componentToRemove)
-		return true
-	else:
-		return didUnregister
-
-
-## Searches all children and returns an array of all nodes that extend [TurnBasedComponent].
-## NOTE: May be slow. Use the [member turnBasedComponents] array instead.
-func findTurnBasedComponents() -> Array[TurnBasedComponent]:
-	return self.findChildrenOfType(TurnBasedComponent)
-
-#endregion
-
-
-func printLog(message: String = "", object: Variant = self.logName) -> void:
-	if not isLoggingEnabled: return
-	# Customize logs for turn-based entities to include the turn+phase, because it's not related to frames.
-	Debug.printLog(message, str(object, " ", TurnBasedCoordinator.logStateIndicator, self.currentTurn), "lightGreen", "green")
+##region Component Management
+#
+#func registerComponent(newComponent: Component) -> bool:
+	#if super.registerComponent(newComponent):
+		## Also register the component in our array if it is turn-based
+		#if is_instance_of(newComponent, TurnBasedComponent):
+			#self.turnBasedComponents.append(newComponent)
+		#return true # Return `true` even if a non-turn-based component was registered by the Entity superclass.
+	#else:
+		#return false
+#
+#
+#func unregisterComponent(componentToRemove: Component) -> bool:
+	#var didUnregister: bool = super.unregisterComponent(componentToRemove)
+	## Also remove the component from our array if it is turn-based
+	#if didUnregister and is_instance_of(componentToRemove, TurnBasedComponent):
+		#self.turnBasedComponents.erase(componentToRemove)
+		#return true
+	#else:
+		#return didUnregister
+#
+#
+### Searches all children and returns an array of all nodes that extend [TurnBasedComponent].
+### NOTE: May be slow. Use the [member turnBasedComponents] array instead.
+#func findTurnBasedComponents() -> Array[TurnBasedComponent]:
+	#return self.findChildrenOfType(TurnBasedComponent)
+#
+##endregion
 
 
-func showDebugInfo() -> void:
-	if not debugMode: return
-	Debug.watchList.turnsProcessed	= turnsProcessed
-	Debug.watchList.currentTurn		= currentTurn
-	Debug.watchList.currentTurnState= currentTurnState
+#func printLog(message: String = "", object: Variant = self.logName) -> void:
+	#if not isLoggingEnabled: return
+	## Customize logs for turn-based entities to include the turn+phase, because it's not related to frames.
+	#Debug.printLog(message, str(object, " ", TurnBasedCoordinator.logStateIndicator, self.currentTurn), "lightGreen", "green")
+#
+#
+#func showDebugInfo() -> void:
+	#if not debugMode: return
+	#Debug.watchList.turnsProcessed	= turnsProcessed
+	#Debug.watchList.currentTurn		= currentTurn
+	#Debug.watchList.currentTurnState= currentTurnState

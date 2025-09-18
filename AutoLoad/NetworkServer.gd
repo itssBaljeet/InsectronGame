@@ -16,8 +16,14 @@ var isConnected: bool:
 ## Updated on peer connected
 var ownId: int = -1
 var playerNumber : int = -1
+var faction: FactionComponent.Factions = FactionComponent.Factions.player1
 
 var network := ENetMultiplayerPeer.new()
+
+# Temporary till I figure out how to send these over network dynamically
+var playerTeam: Party = preload("res://Game/Resources/TestParties/PlayerParty.tres")
+var enemyTeam: Party = preload("res://Game/Resources/TestParties/EnemyParty.tres")
+		
 
 ###########################################################################
 #region LOGIC
@@ -50,6 +56,7 @@ func _peerConnected(_peerId: int) -> void:
 	# Initial ping + clock synchronization
 	NetworkClock.requestPing()
 	NetworkClock.setupPingTimer()
+	NetworkServer.s_requestPlayerNumber.rpc_id(1)
 
 
 func _peerDisconnected(_peerId: int) -> void:
@@ -67,6 +74,11 @@ func _peerDisconnected(_peerId: int) -> void:
 @rpc("reliable")
 func c_updatePlayerNumber(number: int) -> void:
 	playerNumber = number
+	match number:
+		1:
+			faction = FactionComponent.Factions.player1
+		2:
+			faction = FactionComponent.Factions.player2
 
 #endregion
 ###############################################################################
@@ -77,7 +89,7 @@ func c_updatePlayerNumber(number: int) -> void:
 #region RPC PARITY
 
 @rpc("any_peer", "reliable")
-func s_requestPlayerNumber(_playerId: int) -> void: pass
+func s_requestPlayerNumber() -> void: pass
 
 #endregion RPC FUNCTIONS
 ###############################################################################
