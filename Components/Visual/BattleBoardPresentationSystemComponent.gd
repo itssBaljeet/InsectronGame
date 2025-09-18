@@ -37,9 +37,9 @@ var highlighter: BattleBoardHighlightComponent:
 	get:
 		return coComponents.get(&"BattleBoardHighlightComponent")
 
-var commandQueue: BattleBoardCommandQueueComponent:
-	get:
-		return coComponents.get(&"BattleBoardCommandQueueComponent")
+#var commandQueue: BattleBoardCommandQueueComponent:
+	#get:
+		#return coComponents.get(&"BattleBoardCommandQueueComponent")
 
 var boardState: BattleBoardClientStateComponent:
 	get:
@@ -65,11 +65,14 @@ var _dispatch: Dictionary[StringName, Callable]= {
 }
 
 func _ready() -> void:
-	var queue := commandQueue
-	if queue and queue.context and not _connected:
-		queue.context.domainEvent.connect(_on_domain_event)
-		_connected = true
-
+	#var queue := commandQueue
+	#if queue and queue.context and not _connected:
+		#queue.context.domainEvent.connect(_on_domain_event)
+		#_connected = true
+	
+	# Does similar to above
+	NetworkPlayerInput.commandExecuted.connect(_onCommandExecuted)
+	
 	_connectPlacementFlow()
 	if not _placementSignalsConnected:
 		call_deferred("_connectPlacementFlow")
@@ -86,6 +89,21 @@ func _connectPlacementFlow() -> void:
 
 	if placementUI.isPlacementActive:
 		_onPlacementUnitChanged(placementUI.currentUnit())
+
+func _onCommandExecuted(commandType: NetworkPlayerInput.PlayerIntent, data: Dictionary) -> void:
+	match commandType:
+		NetworkPlayerInput.PlayerIntent.MOVE:
+			_onUnitMoved(data)
+		NetworkPlayerInput.PlayerIntent.ATTACK:
+			_onUnitAttacked(data)
+		NetworkPlayerInput.PlayerIntent.SPECIAL_ATTACK:
+			_onSpecialAttack(data)
+		NetworkPlayerInput.PlayerIntent.PLACE_UNIT:
+			_onUnitPlaced(data)
+		NetworkPlayerInput.PlayerIntent.WAIT:
+			_onUnitWaited(data)
+		NetworkPlayerInput.PlayerIntent.END_TURN:
+			_onTeamTurnEnded(data)
 
 func _on_domain_event(eventName: StringName, data: Dictionary) -> void:
 	print(eventName)
@@ -131,8 +149,8 @@ func _clearPlacementHighlights() -> void:
 	highlighter.clearHighlights()
 
 func _onUnitMoved(data: Dictionary) -> void:
-	var fromCell: Vector3i = data.get("from", Vector3i.ZERO)
-	var toCell: Vector3i = data.get("to", Vector3i.ZERO)
+	var fromCell: Vector3i = data.get("fromCell", Vector3i.ZERO)
+	var toCell: Vector3i = data.get("toCell", Vector3i.ZERO)
 	var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(fromCell)
 	if unit and unit.animComponent and unit.positionComponent:
 		await unit.animComponent.faceDirection(fromCell, toCell)

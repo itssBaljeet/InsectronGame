@@ -249,6 +249,9 @@ func trySelectUnit(cell: Vector3i) -> bool:
 		print("NOT PLAYER TURN NERD")
 		return false  # Don't open menu if not player's turn
 	
+	# TODO: Replace this with Networking we need to request the current team
+	# and then get a UnitTurnStateComponent to read or the information inside
+	
 	var occupant := board.getOccupant(cell)
 	
 	# Empty cell - just show end turn button
@@ -479,6 +482,7 @@ func _onCellSelected(cell: Vector3i) -> void:
 			trySelectUnit(cell)
 		UIState.moveSelect:
 			print("Moving")
+			NetworkPlayerInput.intentMove(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
 			factory.intentMove(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
 		UIState.basicAttackTargetSelect:
 			print("basic Attack Target")

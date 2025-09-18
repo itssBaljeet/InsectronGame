@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Insectron Comedot 4.5"
+config/name="Insectron Comedot 4.5 Client"
 config/name_localized={
 "ja_JP": "カムドット",
 "ja_Kana_JP": "カムドット"
@@ -43,6 +43,9 @@ GlobalSonic="*res://AutoLoad/GlobalSonic.tscn"
 TurnBasedCoordinator="*res://AutoLoad/TurnBasedCoordinator.tscn"
 Debug="*res://AutoLoad/Debug.tscn"
 GlobalUI="*res://AutoLoad/GlobalUI.tscn"
+NetworkServer="*res://AutoLoad/NetworkServer.gd"
+NetworkClock="*res://AutoLoad/NetworkClock.gd"
+NetworkPlayerInput="*res://AutoLoad/NetworkPlayerInput.gd"
 
 [debug]
 
