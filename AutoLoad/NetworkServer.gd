@@ -15,6 +15,7 @@ var isConnected: bool:
 
 ## Updated on peer connected
 var ownId: int = -1
+var playerNumber : int = -1
 
 var network := ENetMultiplayerPeer.new()
 
@@ -57,3 +58,26 @@ func _peerDisconnected(_peerId: int) -> void:
 
 #endregion
 ###########################################################################
+
+
+
+###############################################################################
+#region RPCS
+
+@rpc("reliable")
+func c_updatePlayerNumber(number: int) -> void:
+	playerNumber = number
+
+#endregion
+###############################################################################
+
+
+
+###############################################################################
+#region RPC PARITY
+
+@rpc("any_peer", "reliable")
+func s_requestPlayerNumber(_playerId: int) -> void: pass
+
+#endregion RPC FUNCTIONS
+###############################################################################

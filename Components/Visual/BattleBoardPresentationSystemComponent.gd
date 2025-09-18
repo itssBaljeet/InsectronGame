@@ -93,11 +93,11 @@ func _connectPlacementFlow() -> void:
 func _onCommandExecuted(commandType: NetworkPlayerInput.PlayerIntent, data: Dictionary) -> void:
 	match commandType:
 		NetworkPlayerInput.PlayerIntent.MOVE:
-			_onUnitMoved(data)
+			await _onUnitMoved(data)
 		NetworkPlayerInput.PlayerIntent.ATTACK:
-			_onUnitAttacked(data)
+			await _onUnitAttacked(data)
 		NetworkPlayerInput.PlayerIntent.SPECIAL_ATTACK:
-			_onSpecialAttack(data)
+			await _onSpecialAttack(data)
 		NetworkPlayerInput.PlayerIntent.PLACE_UNIT:
 			_onUnitPlaced(data)
 		NetworkPlayerInput.PlayerIntent.WAIT:

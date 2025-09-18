@@ -46,6 +46,7 @@ GlobalUI="*res://AutoLoad/GlobalUI.tscn"
 NetworkServer="*res://AutoLoad/NetworkServer.gd"
 NetworkClock="*res://AutoLoad/NetworkClock.gd"
 NetworkPlayerInput="*res://AutoLoad/NetworkPlayerInput.gd"
+NetworkBattleBoard="*res://AutoLoad/NetworkBattleBoard.gd"
 
 [debug]
 

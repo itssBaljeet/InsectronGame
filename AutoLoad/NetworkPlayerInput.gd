@@ -26,6 +26,8 @@ signal commandExecuted(commandType: PlayerIntent, results: Dictionary)
 func createIntent(intentType: PlayerIntent, intent: Dictionary) -> void:
 	s_submitPlayerIntent.rpc_id(1, intentType, intent)
 
+func undoLast() -> void:
+	s_undoLastCommand.rpc_id(1)
 
 #endregion
 ###############################################################################
@@ -37,7 +39,7 @@ func createIntent(intentType: PlayerIntent, intent: Dictionary) -> void:
 
 @rpc("reliable")
 func c_commandExecuted(commandType: PlayerIntent, results: Dictionary) -> void:
-	commandExecuted.emit()
+	commandExecuted.emit(commandType, results)
 
 #endregion
 ###############################################################################
@@ -49,6 +51,9 @@ func c_commandExecuted(commandType: PlayerIntent, results: Dictionary) -> void:
 
 @rpc("any_peer", "reliable")
 func s_submitPlayerIntent(_intentType: PlayerIntent, _intent: Dictionary) -> void: pass
+
+@rpc("any_peer", "reliable")
+func s_undoLastCommand() -> void: pass
 
 #endregion RPC FUNCTIONS
 ###############################################################################

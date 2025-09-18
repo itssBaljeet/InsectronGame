@@ -131,7 +131,11 @@ func _ready() -> void:
 		commandQueue.commandUndone.connect(_onCommandUndone)
 		commandQueue.commandProcessed.connect(_onCommandProcessed)
 
-	TurnBasedCoordinator.phaseChanged.connect(_onPhaseChanged)
+	
+	NetworkPlayerInput.commandExecuted.connect(_onCommandProcessed)
+	
+	#TurnBasedCoordinator.phaseChanged.connect(_onPhaseChanged)
+	NetworkBattleBoard.phaseChanged.connect(_onPhaseChanged)
 	_updateActivationForPhase(TurnBasedCoordinator.currentPhase)
 #endregion
 

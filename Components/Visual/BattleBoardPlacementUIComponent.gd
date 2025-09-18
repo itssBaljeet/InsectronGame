@@ -111,10 +111,19 @@ func placeCurrentUnit(cell: Vector3i) -> bool:
 	if not _canHandlePlacement():
 		return false
 
-	var unit := currentUnit()
-	if not unit:
+	var meteormyte := currentUnit()
+	if not meteormyte:
 		return false
-	if factory.intentPlaceUnit(unit, cell, FactionComponent.Factions.players):
+	
+	var intent := {
+		"meteormyte": meteormyte,
+		"cell": cell,
+	}
+	
+	NetworkPlayerInput.createIntent(NetworkPlayerInput.PlayerIntent.PLACE_UNIT, intent)
+	
+	NetworkPlayerInput.commandExecuted.connect(func(_playerId: int, _intentType: NetworkPlayerInput.PlayerIntent, data: Dictionary) -> void:
+		var unit: Meteormyte = data.get("unit")
 		placementCommitted.emit(unit, cell)
 		lastPlaced = unit
 		_removeUnitButton(unit)
@@ -123,14 +132,13 @@ func placeCurrentUnit(cell: Vector3i) -> bool:
 			print("PARTY EMPTY ATTEMPTING END OF PLACEMENT PHASE")
 			isPlacementActive = false
 			_showCurrent()
-			TurnBasedCoordinator._playerPlacementDone = true
-			placementPhaseFinished.emit()
 			if boardUI:
 				boardUI.call_deferred("setPlacementMode", false)
 		else:
 			currentIndex = currentIndex % party.size()
 			_showCurrent()
-		return true
+		)
+	
 	return false
 
 func undoLastPlacement() -> void:
