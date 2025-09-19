@@ -10,7 +10,7 @@ enum StatType {
 	SP_ATTACK,
 	SP_DEFENSE,
 	SPEED
-}
+	}
 
 #region Parameters
 @export var statType: StatType = StatType.HP
@@ -29,6 +29,9 @@ enum StatType {
 #region State
 var calculatedValue: int = 0  # The calculated stat value before modifiers
 #endregion
+
+const SERIAL_VERSION := 1
+const RESOURCE_TYPE := "MeteormyteStat"
 
 func _init() -> void:
 	# Set hard limits based on stat type
@@ -106,3 +109,29 @@ func getIVQuality() -> String:
 func setLevel(newLevel: int) -> void:
 	level = newLevel
 	recalculateStats()
+
+func toDict() -> Dictionary:
+
+	return {
+		"version": SERIAL_VERSION,
+		"resource_type": RESOURCE_TYPE,
+		"statType": int(statType),
+		"baseStat": baseStat,
+		"individualValue": individualValue,
+		"effortValue": effortValue,
+		"level": level,
+		"gemCutModifier": gemCutModifier
+	}
+
+static func fromDict(data: Dictionary) -> MeteormyteStat:
+
+	var stat := MeteormyteStat.new()
+	var stat_type_value := data.get("statType", int(stat.statType))
+	stat.statType = StatType(stat_type_value)
+	stat.baseStat = data.get("baseStat", stat.baseStat)
+	stat.individualValue = data.get("individualValue", stat.individualValue)
+	stat.effortValue = data.get("effortValue", stat.effortValue)
+	stat.level = data.get("level", stat.level)
+	stat.gemCutModifier = data.get("gemCutModifier", stat.gemCutModifier)
+	stat.recalculateStats()
+	return stat
