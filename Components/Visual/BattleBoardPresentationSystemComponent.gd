@@ -89,29 +89,29 @@ func _connectPlacementFlow() -> void:
 	if placementUI.isPlacementActive:
 		_onPlacementUnitChanged(placementUI.currentUnit())
 
-func _onCommandExecuted(commandType: NetworkPlayerInput.PlayerIntent, data: Dictionary) -> void:
+func _onCommandExecuted(_playerId: int, commandType: NetworkPlayerInput.PlayerIntent, data: Dictionary) -> void:
 	print("!!!!!!!!!!!!!! COMMAND EXECUTED FROM SEVER HUZZAH !!!!!!!!!!!!!!!!!")
 	match commandType:
 		NetworkPlayerInput.PlayerIntent.MOVE:
 			await _onUnitMoved(data)
-			var unit: BattleBoardUnitClientEntity = boardState.get(data.get("to"))
+			var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(data.get("to"))
 			if unit:
 				unit.stateComponent.markMoved()
 		NetworkPlayerInput.PlayerIntent.ATTACK:
 			await _onUnitAttacked(data)
-			var unit: BattleBoardUnitClientEntity = boardState.get(data.get("originCell"))
+			var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(data.get("originCell"))
 			if unit:
 				unit.stateComponent.markExhausted()
 		NetworkPlayerInput.PlayerIntent.SPECIAL_ATTACK:
 			await _onSpecialAttack(data)
-			var unit: BattleBoardUnitClientEntity = boardState.get(data.get("originCell"))
+			var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(data.get("originCell"))
 			if unit:
 				unit.stateComponent.markExhausted()
 		NetworkPlayerInput.PlayerIntent.PLACE_UNIT:
 			_onUnitPlaced(data)
 		NetworkPlayerInput.PlayerIntent.WAIT:
 			_onUnitWaited(data)
-			var unit: BattleBoardUnitClientEntity = boardState.get(data.get("cell"))
+			var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(data.get("cell"))
 			if unit:
 				unit.stateComponent.markExhausted()
 		NetworkPlayerInput.PlayerIntent.END_TURN:

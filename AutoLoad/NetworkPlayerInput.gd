@@ -39,9 +39,9 @@ func undoLast() -> void:
 #region RPCS
 
 @rpc("reliable")
-func c_commandExecuted(commandType: PlayerIntent, results: Dictionary) -> void:
+func c_commandExecuted(playerId: int, commandType: PlayerIntent, results: Dictionary) -> void:
 	print("COMMAND EXECUTED FROM SEVER; EMITTING SIGNAL FOR IT")
-	commandExecuted.emit(commandType, results)
+	commandExecuted.emit(playerId ,commandType, results)
 
 @rpc("reliable")
 func c_commandUndone() -> void:

@@ -19,6 +19,10 @@ var positionComponent: BattleBoardPositionComponent:
 var stateComponent: UnitTurnStateComponent:
 	get:
 		return components.get(&"UnitTurnStateComponent")
+
+var factionComponent: FactionComponent:
+	get:
+		return components.get(&"FactionComponent")
 #endregion
 
 ## Initializes a client-side battle board unit with the given [Meteormyte] data.
@@ -44,4 +48,5 @@ func _init(meteormyte: Meteormyte, cell: Vector3i, board, team: FactionComponent
 		self.add_child(state)
 		
 		var pos := BattleBoardPositionComponent.new(board)
+		pos.moveRange = meteormyte.species_data.baseMovePattern
 		self.add_child(pos)

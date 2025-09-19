@@ -45,7 +45,7 @@ func requestMoveHighlights(origin: Vector3i, moveRange: BoardPattern) -> void:
 	
 	var validMoves: Array
 	
-	for cell in moveRange:
+	for cell in moveRange.offsets:
 		if cell + origin in board.generatedCells and state.getClientUnit(cell+origin) == null:
 			validMoves.append(cell+origin)
 

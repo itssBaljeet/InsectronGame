@@ -56,7 +56,9 @@ func _ready() -> void:
 
 	NetworkBattleBoard.phaseChanged.connect(_onPhaseChanged)
 	NetworkPlayerInput.commandUndone.connect(_undoLastPlacement)
+	NetworkPlayerInput.commandExecuted.connect(_onCommandExecuted)
 
+# TODO: Fix players being assigned both teams due to checking unready variable
 func _onPhaseChanged(newPhase: NetworkBattleBoard.GamePhase) -> void:
 	print("MATCHING NEW PHASE CLIENTS")
 	match newPhase:
@@ -67,7 +69,7 @@ func _onPhaseChanged(newPhase: NetworkBattleBoard.GamePhase) -> void:
 					print("Player 1 team: ", NetworkServer.playerTeam.meteormytes)
 					beginPlacement(NetworkServer.playerTeam)
 				FactionComponent.Factions.player2:
-					print("Player 2 team: ", NetworkServer.playerTeam.meteormytes)
+					print("Player 2 team: ", NetworkServer.enemyTeam.meteormytes)
 					beginPlacement(NetworkServer.enemyTeam)
 				_:
 					print("MATCHED TO NO FACTION")
@@ -130,24 +132,27 @@ func placeCurrentUnit(cell: Vector3i) -> bool:
 	
 	NetworkPlayerInput.createIntent(NetworkPlayerInput.PlayerIntent.PLACE_UNIT, intent)
 	
-	NetworkPlayerInput.commandExecuted.connect(func(_intentType: NetworkPlayerInput.PlayerIntent, data: Dictionary) -> void:
-		var unit: Meteormyte = Meteormyte.fromDict(data.get("unit"))
-		placementCommitted.emit(unit, cell)
-		lastPlaced = unit
-		_removeUnitButton(unit)
-		party.remove_at(currentIndex)
-		if party.is_empty():
-			print("PARTY EMPTY ATTEMPTING END OF PLACEMENT PHASE")
-			isPlacementActive = false
-			_showCurrent()
-			if boardUI:
-				boardUI.call_deferred("setPlacementMode", false)
-		else:
-			currentIndex = currentIndex % party.size()
-			_showCurrent()
-		)
-	
 	return false
+
+func _onCommandExecuted(playerId: int, intentType: NetworkPlayerInput.PlayerIntent, intent: Dictionary) -> void:
+	if playerId == NetworkServer.ownId:
+		match intentType:
+			NetworkPlayerInput.PlayerIntent.PLACE_UNIT:
+				var unit: Meteormyte = Meteormyte.fromDict(intent.get("unit"))
+				var cell: Vector3i = intent.get("cell")
+				placementCommitted.emit(unit, cell)
+				lastPlaced = unit
+				_removeUnitButton(unit)
+				party.remove_at(currentIndex)
+				if party.is_empty():
+					print("PARTY EMPTY ATTEMPTING END OF PLACEMENT PHASE")
+					isPlacementActive = false
+					_showCurrent()
+					if boardUI:
+						boardUI.call_deferred("setPlacementMode", false)
+				else:
+					currentIndex = currentIndex % party.size()
+					_showCurrent()
 
 func _undoLastPlacement() -> void:
 	highlighter.requestPlacementHighlights(NetworkServer.faction)

@@ -22,7 +22,7 @@ var network := ENetMultiplayerPeer.new()
 
 # Temporary till I figure out how to send these over network dynamically
 var playerTeam: Party = preload("res://Game/Resources/TestParties/PlayerParty.tres")
-var enemyTeam: Party = preload("res://Game/Resources/TestParties/EnemyParty.tres")
+var enemyTeam: Party = preload("res://Game/Resources/TestParties/PlayerParty.tres")
 
 signal playerNumberAssigned(number: int)
 

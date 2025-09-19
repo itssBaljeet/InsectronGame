@@ -56,13 +56,13 @@ var selector: BattleBoardSelectorComponent3D:
 		return selectorEntity.components.get(&"BattleBoardSelectorComponent3D") if selectorEntity else null
 
 # Only here temporarily. To be replaced with server calls in the UI where needed for unit state.
-var board: BattleBoardClientStateComponent:
-	get:
-		return coComponents.get(&"BattleBoardServerStateComponent")
-
 var boardClient: BattleBoardClientStateComponent:
 	get:
 		return coComponents.get(&"BattleBoardClientStateComponent")
+
+var placementUI: BattleBoardPlacementUIComponent:
+	get:
+		return coComponents.get(&"BattleBoardPlacementUIComponent")
 
 #var commandQueue: BattleBoardCommandQueueComponent:
 	#get:
@@ -142,7 +142,7 @@ func isActive() -> bool:
 func setActive(active: bool) -> void:
 	if _isActive == active:
 		return
-
+	print("ACTIVATING BOARD UI!!!!!!")
 	_isActive = active
 
 	if _isActive:
@@ -151,6 +151,8 @@ func setActive(active: bool) -> void:
 		_deactivateUI()
 
 func _activateUI() -> void:
+	self.visible = true
+	placementUI.visible = false
 	panel.hide()
 	attackMenu.hide()
 	infoMenu.hide()
@@ -170,6 +172,13 @@ func _deactivateUI() -> void:
 		selector.setEnabled(true)
 
 func _onPhaseChanged(newPhase: NetworkBattleBoard.GamePhase) -> void:
+	match newPhase:
+		NetworkBattleBoard.GamePhase.PLACEMENT:
+			print("PLACEMENT PHASE!!!")
+		NetworkBattleBoard.GamePhase.COINFLIP:
+			print("COINFLIP PHASE!!!")
+		NetworkBattleBoard.GamePhase.BATTLE:
+			print("BATTLE PHASE!!!")
 	_updateActivationForPhase(newPhase)
 
 func _updateActivationForPhase(phase: NetworkBattleBoard.GamePhase) -> void:
@@ -242,6 +251,7 @@ func openInfoMenu() -> void:
 ## Attempts to select a unit at the given cell
 func trySelectUnit(cell: Vector3i) -> bool:
 	if not _isActive:
+		print("NOT ACTIVE")
 		return false
 	print("TRY SELECT UNIT UI COMP")
 	# Always try to open menu when selecting any cell during player's turn
@@ -259,7 +269,7 @@ func trySelectUnit(cell: Vector3i) -> bool:
 	# TODO: Replace this with Networking we need to request the current team
 	# and then get a UnitTurnStateComponent to read or the information inside
 	
-	var occupant := board.getOccupant(cell)
+	var occupant := boardClient.getOccupant(cell)
 	
 	# Empty cell - just show end turn button
 	if not occupant or not occupant is BattleBoardUnitClientEntity:
@@ -281,8 +291,8 @@ func onMoveButtonPressed() -> void:
 	panel.hide()
 	state = UIState.moveSelect
 	selector.setEnabled(true)
-	print("!!! Move range: ", activeUnit.boardPositionComponent.moveRange.offsets)
-	highlighter.requestMoveHighlights(activeUnit.boardPositionComponent.currentCellCoordinates, activeUnit.boardPositionComponent.moveRange)
+	print("!!! Move range: ", activeUnit.positionComponent.moveRange.offsets)
+	highlighter.requestMoveHighlights(activeUnit.positionComponent.currentCellCoordinates, activeUnit.positionComponent.moveRange)
 
 func onAttackButtonPressed() -> void:
 	if not activeUnit:
@@ -490,7 +500,7 @@ func _onCellSelected(cell: Vector3i) -> void:
 		UIState.moveSelect:
 			print("Moving")
 			var intent := {
-				"fromCell": activeUnit.boardPositionComponent.currentCellCoordinates,
+				"fromCell": activeUnit.positionComponent.currentCellCoordinates,
 				"toCell": cell
 			}
 			NetworkPlayerInput.createIntent(NetworkPlayerInput.PlayerIntent.MOVE, intent)
@@ -503,7 +513,7 @@ func _onCellSelected(cell: Vector3i) -> void:
 			#factory.intentSpecialAttack(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
 
 
-func _onCommandProcessed(command: NetworkPlayerInput.PlayerIntent) -> void:
+func _onCommandProcessed(_playerId: int, command: NetworkPlayerInput.PlayerIntent, _intent: Dictionary) -> void:
 	match command:
 		NetworkPlayerInput.PlayerIntent.MOVE:
 			if activeUnit and activeUnit.factionComponent.factions == NetworkServer.faction:
@@ -626,7 +636,7 @@ func _updateButtonsVisibility(unit: BattleBoardUnitClientEntity) -> void:
 		return
 	
 	# Check if it's an enemy unit
-	var isPlayerUnit: FactionComponent.Factions = unit.factionComponent.factions == pow(2, NetworkServer.faction - 1)
+	var isPlayerUnit: bool = unit.factionComponent.factions == pow(2, NetworkServer.faction - 1)
 	
 	if not isPlayerUnit:
 		# Enemy unit - show info and end turn only
