@@ -10,21 +10,24 @@ enum GemQuality {
 	RARE,       # Blue - Max Level 15
 	EPIC,       # Purple - Max Level 20
 	LEGENDARY   # Gold - Max Level 20 + bonuses
-}
+	}
 
 enum GemCut {
-	UNCUT,
-	BRILLIANT,  # +ATK/SpATK, -DEF/SpDEF
-	STURDY,     # +DEF/SpDEF, -ATK/SpATK
-	SWIFT,      # +Speed, -HP
-	VITAL,      # +HP, -Speed
-	BALANCED,   # +All stats slightly
-	CUSTOM      # Species-specific
-}
+UNCUT,
+BRILLIANT,  # +ATK/SpATK, -DEF/SpDEF
+STURDY,     # +DEF/SpDEF, -ATK/SpATK
+SWIFT,      # +Speed, -HP
+VITAL,      # +HP, -Speed
+BALANCED,   # +All stats slightly
+CUSTOM      # Species-specific
+	}
 
 @export var quality: GemQuality = GemQuality.COMMON
 @export var cut: GemCut = GemCut.UNCUT
 @export var customCutName: String = ""
+
+const SERIAL_VERSION := 1
+const RESOURCE_TYPE := "GemData"
 
 ## Returns the maximum level this gem quality supports
 func getMaxLevel() -> int:
@@ -109,3 +112,21 @@ func getQualityColor() -> Color:
 			return Color.GOLD
 		_:
 			return Color.WHITE
+
+func toDict() -> Dictionary:
+
+	return {
+		"version": SERIAL_VERSION,
+		"resource_type": RESOURCE_TYPE,
+		"quality": int(quality),
+		"cut": int(cut),
+		"customCutName": customCutName
+	}
+
+static func fromDict(data: Dictionary) -> GemData:
+
+	var gem := GemData.new()
+	gem.quality = GemQuality(data.get("quality", int(gem.quality)))
+	gem.cut = GemCut(data.get("cut", int(gem.cut)))
+	gem.customCutName = data.get("customCutName", gem.customCutName)
+	return gem

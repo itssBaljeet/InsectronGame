@@ -12,7 +12,7 @@ enum UpgradeType {
 	CRIT_MODIFIER,
 	STATUS_RESISTANCE,
 	UNIQUE_PASSIVE
-}
+	}
 
 @export var upgradeType: UpgradeType
 @export var upgradeName: String
@@ -21,6 +21,9 @@ enum UpgradeType {
 
 ## The actual effect data (varies by type)
 @export var effectData: Dictionary = {}
+
+const SERIAL_VERSION := 1
+const RESOURCE_TYPE := "MeteormyteLevelUpgrade"
 
 func applyUpgrade(creature: BattleBoardUnitServerEntity) -> void:
 	match upgradeType:
@@ -67,8 +70,47 @@ func _applyCritModifier(creature: BattleBoardUnitServerEntity) -> void:
 	var statsComp := creature.components.get(&"MeteormyteStatsComponent") as MeteormyteStatsComponent
 	if not statsComp:
 		return
-	
+
 	if effectData.has("critChance"):
 		statsComp.critChanceBonus += effectData["critChance"]
 	if effectData.has("critDamage"):
 		statsComp.critDamageMultiplier += effectData["critDamage"]
+
+func toDict() -> Dictionary:
+
+	var data := {
+		"version": SERIAL_VERSION,
+		"resource_type": RESOURCE_TYPE,
+		"upgradeType": int(upgradeType),
+		"upgradeName": upgradeName,
+		"description": description,
+		"icon": _resource_to_path(icon),
+		"effectData": effectData.duplicate(true)
+	}
+
+	return data
+
+static func fromDict(data: Dictionary) -> MeteormyteLevelUpgrade:
+
+	var upgrade := MeteormyteLevelUpgrade.new()
+	upgrade.upgradeType = UpgradeType(data.get("upgradeType", int(upgrade.upgradeType)))
+	upgrade.upgradeName = data.get("upgradeName", upgrade.upgradeName)
+	upgrade.description = data.get("description", upgrade.description)
+	upgrade.icon = _load_resource(data.get("icon", ""))
+	var effect_variant := data.get("effectData", upgrade.effectData)
+	if effect_variant is Dictionary:
+		upgrade.effectData = effect_variant.duplicate(true)
+
+	return upgrade
+
+static func _resource_to_path(resource: Resource) -> String:
+
+	if resource and not resource.resource_path.is_empty():
+		return resource.resource_path
+	return ""
+
+static func _load_resource(path: String) -> Resource:
+
+	if typeof(path) != TYPE_STRING or path.is_empty():
+		return null
+	return ResourceLoader.load(path)
