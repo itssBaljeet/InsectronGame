@@ -70,6 +70,10 @@ func _input(event: InputEvent) -> void:
 			# 2. Middle-mouse → start / stop rotation drag
 			MouseButton.MOUSE_BUTTON_MIDDLE:
 				_is_rotating      = mb.pressed    # true on press, false on release
+				if _is_rotating:
+					# start drag from the actually displayed orientation
+					camera_yaw_deg   = pitchRig.rotation_degrees.y
+					camera_pitch_deg = pitchRig.rotation_degrees.x
 				_mouse_start_pos  = mb.position   # useful if you need drag delta later
 				get_viewport().set_input_as_handled()
 
@@ -127,8 +131,20 @@ func _ready() -> void:
 	#camera.position.x = (_centre_tile_x + 0.5) * tile_size
 	camera.position.y = camera_height
 	camera.position.z = camera_z_offset
-
 	
+	print("CONNECTED TO THE ASSIGNMENT SIGNAL")
+	NetworkServer.playerNumberAssigned.connect(_rotatePlayerTwoCamera)
+
+func _apply_angles_to_rig() -> void:
+	pitchRig.rotation_degrees.y = camera_yaw_deg
+	pitchRig.rotation_degrees.x = camera_pitch_deg
+
+func _rotatePlayerTwoCamera(_playerNumber: int) -> void:
+	print("------- ATTEMPTING CAMERA ROTATION DUE TO PLAYER NUM ASSIGNEMENT -----------")
+	if NetworkServer.faction == FactionComponent.Factions.player2:
+		print("ROTATING CAMERA FOR PLAYER 2")
+		pitchRig.rotation_degrees.y = 180
+
 func _compute_centre() -> void:
 	# Centre is (size–1)/2 so odd sizes have an integer centre tile and
 	# even sizes lie between two tiles.

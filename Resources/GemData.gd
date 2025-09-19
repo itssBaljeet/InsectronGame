@@ -126,7 +126,7 @@ func toDict() -> Dictionary:
 static func fromDict(data: Dictionary) -> GemData:
 
 	var gem := GemData.new()
-	gem.quality = GemQuality(data.get("quality", int(gem.quality)))
-	gem.cut = GemCut(data.get("cut", int(gem.cut)))
+	gem.quality = data.get("quality", int(gem.quality)) as GemQuality
+	gem.cut = data.get("cut", int(gem.cut)) as GemCut
 	gem.customCutName = data.get("customCutName", gem.customCutName)
 	return gem

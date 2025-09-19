@@ -90,6 +90,7 @@ func _connectPlacementFlow() -> void:
 		_onPlacementUnitChanged(placementUI.currentUnit())
 
 func _onCommandExecuted(commandType: NetworkPlayerInput.PlayerIntent, data: Dictionary) -> void:
+	print("!!!!!!!!!!!!!! COMMAND EXECUTED FROM SEVER HUZZAH !!!!!!!!!!!!!!!!!")
 	match commandType:
 		NetworkPlayerInput.PlayerIntent.MOVE:
 			await _onUnitMoved(data)
@@ -372,7 +373,7 @@ func _onChainAttack(data: Dictionary) -> void:
 		vfx.global_position = board.getGlobalCellPosition(to_cell)
 
 func _onUnitPlaced(data: Dictionary) -> void:
-	var meteormyte: Meteormyte = data.get("unit")
+	var meteormyte: Meteormyte = Meteormyte.fromDict(data.get("unit"))
 	var team: FactionComponent.Factions = data.get("team")
 	var unit := BattleBoardUnitClientEntity.new(meteormyte, data.get("cell"), parentEntity.components.BattleBoardGeneratorComponent, team)
 	

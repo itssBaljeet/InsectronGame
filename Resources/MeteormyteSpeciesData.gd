@@ -20,10 +20,10 @@ extends Resource
 
 ## Upgrade choices at each milestone
 @export_group("Level Upgrades")
-@export var level5Upgrades: Array[MeteormyteLevelUpgrade] = []
-@export var level10Upgrades: Array[MeteormyteLevelUpgrade] = []
-@export var level15Upgrades: Array[MeteormyteLevelUpgrade] = []
-@export var level20Upgrades: Array[MeteormyteLevelUpgrade] = []
+@export var level5Upgrades: Array = []
+@export var level10Upgrades: Array = []
+@export var level15Upgrades: Array = []
+@export var level20Upgrades: Array = []
 
 ## Movement and attack patterns
 @export_group("Patterns")
@@ -100,7 +100,7 @@ static func fromDict(data: Dictionary) -> MeteormyteSpeciesData:
 	species.baseAttackPattern = _load_resource(data.get("baseAttackPattern", ""))
 	species.innateAbility = data.get("innateAbility", species.innateAbility)
 	species.hiddenAbility = data.get("hiddenAbility", species.hiddenAbility)
-	var abilities_variant := data.get("learneableAbilities", species.learneableAbilities)
+	var abilities_variant = data.get("learneableAbilities", species.learneableAbilities)
 	if abilities_variant is Array:
 		species.learneableAbilities = abilities_variant.duplicate()
 
@@ -137,5 +137,6 @@ static func _load_resource_array(paths: Array) -> Array:
 		if typeof(path) == TYPE_STRING and not path.is_empty():
 			var resource := _load_resource(path)
 			if resource:
+				print("LOADING RESOURCE: ", resource)
 				result.append(resource)
 	return result

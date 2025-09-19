@@ -332,7 +332,28 @@ func test_meteormyte_round_trip() -> void:
 	original.xp = 250
 	original.unique_id = 424242
 	original.current_hp = 35
-
+	
+	var species := MeteormyteSpeciesData.new()
+	species.speciesName = "Pyron"
+	species.speciesID = 101
+	species.description = "Fiery insectoid"
+	species.baseHP = 70
+	species.baseAttack = 80
+	species.baseDefense = 60
+	species.baseSpAttack = 85
+	species.baseSpDefense = 55
+	species.baseSpeed = 90
+	species.innateAbility = "Blaze Shield"
+	species.hiddenAbility = "Molten Core"
+	species.learneableAbilities = ["Heat Up", "Wing Gust"]
+	original.species_data = species
+	
+	var gem := GemData.new()
+	gem.quality = GemData.GemQuality.EPIC
+	gem.cut = GemData.GemCut.BALANCED
+	gem.customCutName = "Prismatic"
+	original.gem_data = gem
+	
 	var hp_stat := MeteormyteStat.new()
 	hp_stat.statType = MeteormyteStat.StatType.HP
 	hp_stat.baseStat = 70

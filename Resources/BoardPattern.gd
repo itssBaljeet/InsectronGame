@@ -31,7 +31,7 @@ func toDict() -> Dictionary:
 static func fromDict(data: Dictionary) -> BoardPattern:
 
 	var pattern := BoardPattern.new()
-	var offset_data := data.get("offsets", [])
+	var offset_data = data.get("offsets", [])
 	pattern.offsets.clear()
 	if offset_data is Array:
 		for entry in offset_data:

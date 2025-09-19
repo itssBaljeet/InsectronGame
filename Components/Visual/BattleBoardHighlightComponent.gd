@@ -102,6 +102,8 @@ func requestPlacementHighlights(faction: int) -> void:
 func getValidPlacementCells(faction: int) -> Array[Vector3i]:
 	var cells: Array[Vector3i] = []
 	var rows: Array[int] = []
+	print("FACTION FOR PLACEMENT CELLS: ", NetworkServer.faction)
+	print(faction)
 	if faction == FactionComponent.Factions.player1:
 		rows = [board.height - 2, board.height - 1]
 	else:

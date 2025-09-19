@@ -67,6 +67,7 @@ func _onPhaseChanged(newPhase: NetworkBattleBoard.GamePhase) -> void:
 					print("Player 1 team: ", NetworkServer.playerTeam.meteormytes)
 					beginPlacement(NetworkServer.playerTeam)
 				FactionComponent.Factions.player2:
+					print("Player 2 team: ", NetworkServer.playerTeam.meteormytes)
 					beginPlacement(NetworkServer.enemyTeam)
 				_:
 					print("MATCHED TO NO FACTION")
@@ -123,14 +124,14 @@ func placeCurrentUnit(cell: Vector3i) -> bool:
 		return false
 	
 	var intent := {
-		"meteormyte": meteormyte,
+		"meteormyte": meteormyte.toDict(),
 		"cell": cell,
 	}
 	
 	NetworkPlayerInput.createIntent(NetworkPlayerInput.PlayerIntent.PLACE_UNIT, intent)
 	
-	NetworkPlayerInput.commandExecuted.connect(func(_playerId: int, _intentType: NetworkPlayerInput.PlayerIntent, data: Dictionary) -> void:
-		var unit: Meteormyte = data.get("unit")
+	NetworkPlayerInput.commandExecuted.connect(func(_intentType: NetworkPlayerInput.PlayerIntent, data: Dictionary) -> void:
+		var unit: Meteormyte = Meteormyte.fromDict(data.get("unit"))
 		placementCommitted.emit(unit, cell)
 		lastPlaced = unit
 		_removeUnitButton(unit)
@@ -180,7 +181,7 @@ func _createPartyButton(unit: Meteormyte) -> Button:
 	button.add_theme_stylebox_override("normal", buttonStyle)
 	button.add_theme_stylebox_override("theme_override_styles/focus", hoverButtonStyle)
 	button.button_up.connect(_onPartyUnitButtonPressed.bind(unit))
-	button.size.y = 50
+	button.custom_minimum_size.y = 100
 	return button
 
 
@@ -189,7 +190,6 @@ func _clearPartyButtons() -> void:
 		child.queue_free()
 	unitButtons.clear()
 	currentButton = null
-
 
 func _removeUnitButton(unit: Meteormyte) -> void:
 	if not unitButtons.has(unit):

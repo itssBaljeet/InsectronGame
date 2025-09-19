@@ -81,14 +81,14 @@ static func fromDict(data: Dictionary) -> StatusEffectResource:
 
 	var status := StatusEffectResource.new()
 	status.effectName = data.get("effectName", status.effectName)
-	status.effectType = EffectType(data.get("effectType", int(status.effectType)))
+	status.effectType = data.get("effectType", int(status.effectType)) as EffectType
 	status.icon = _load_resource(data.get("icon", ""))
 	status.baseDuration = data.get("baseDuration", status.baseDuration)
 	status.maxStacks = data.get("maxStacks", status.maxStacks)
 	status.stackable = data.get("stackable", status.stackable)
 	status.refreshDurationOnStack = data.get("refreshDurationOnStack", status.refreshDurationOnStack)
 	status.isPersistent = data.get("isPersistent", status.isPersistent)
-	var stat_stages_variant := data.get("statStages", status.statStages)
+	var stat_stages_variant = data.get("statStages", status.statStages)
 	if stat_stages_variant is Dictionary:
 		status.statStages = stat_stages_variant.duplicate(true)
 	status.damagePerTurn = data.get("damagePerTurn", status.damagePerTurn)
@@ -98,7 +98,7 @@ static func fromDict(data: Dictionary) -> StatusEffectResource:
 	status.appliesOnTurnEnd = data.get("appliesOnTurnEnd", status.appliesOnTurnEnd)
 	status.preventsAction = data.get("preventsAction", status.preventsAction)
 	status.preventsMovement = data.get("preventsMovement", status.preventsMovement)
-	var immunities_variant := data.get("immunities", status.immunities)
+	var immunities_variant = data.get("immunities", status.immunities)
 	if immunities_variant is Array:
 		status.immunities = immunities_variant.duplicate()
 	return status

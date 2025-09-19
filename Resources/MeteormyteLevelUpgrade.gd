@@ -93,11 +93,11 @@ func toDict() -> Dictionary:
 static func fromDict(data: Dictionary) -> MeteormyteLevelUpgrade:
 
 	var upgrade := MeteormyteLevelUpgrade.new()
-	upgrade.upgradeType = UpgradeType(data.get("upgradeType", int(upgrade.upgradeType)))
+	upgrade.upgradeType = data.get("upgradeType", int(upgrade.upgradeType)) as UpgradeType
 	upgrade.upgradeName = data.get("upgradeName", upgrade.upgradeName)
 	upgrade.description = data.get("description", upgrade.description)
 	upgrade.icon = _load_resource(data.get("icon", ""))
-	var effect_variant := data.get("effectData", upgrade.effectData)
+	var effect_variant = data.get("effectData", upgrade.effectData) 
 	if effect_variant is Dictionary:
 		upgrade.effectData = effect_variant.duplicate(true)
 

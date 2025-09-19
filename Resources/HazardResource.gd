@@ -66,7 +66,7 @@ static func fromDict(data: Dictionary) -> HazardResource:
 	hazard.damagePerTurn = data.get("damagePerTurn", hazard.damagePerTurn)
 	hazard.statusEffectOnEnter = _load_resource(data.get("statusEffectOnEnter", ""))
 	hazard.statusEffectPerTurn = _load_resource(data.get("statusEffectPerTurn", ""))
-	var clearable_variant := data.get("clearableByTypes", hazard.clearableByTypes)
+	var clearable_variant = data.get("clearableByTypes", hazard.clearableByTypes)
 	if clearable_variant is Array:
 		hazard.clearableByTypes = clearable_variant.duplicate()
 	hazard.clearsOnExit = data.get("clearsOnExit", hazard.clearsOnExit)
@@ -86,4 +86,3 @@ static func _load_resource(path: String) -> Resource:
 	if typeof(path) != TYPE_STRING or path.is_empty():
 		return null
 	return ResourceLoader.load(path)
-

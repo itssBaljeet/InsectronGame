@@ -125,9 +125,8 @@ func toDict() -> Dictionary:
 
 static func fromDict(data: Dictionary) -> MeteormyteStat:
 
-	var stat := MeteormyteStat.new()
-	var stat_type_value := data.get("statType", int(stat.statType))
-	stat.statType = StatType(stat_type_value)
+	var stat := MeteormyteStat.new() 
+	stat.statType = data.get("statType", int(stat.statType)) as StatType
 	stat.baseStat = data.get("baseStat", stat.baseStat)
 	stat.individualValue = data.get("individualValue", stat.individualValue)
 	stat.effortValue = data.get("effortValue", stat.effortValue)

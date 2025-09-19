@@ -51,11 +51,12 @@ func toDict() -> Dictionary:
 	for attack in available_attacks:
 		attack_paths.append(_resource_to_path(attack))
 
+
 	return {
 		"version": SERIAL_VERSION,
 		"resource_type": RESOURCE_TYPE,
-		"species_data": _resource_to_path(species_data),
-		"gem_data": _resource_to_path(gem_data),
+		"species_data": species_data.toDict(),
+		"gem_data": gem_data.toDict(),
 		"nickname": nickname,
 		"level": level,
 		"xp": xp,
@@ -74,8 +75,8 @@ static func fromDict(data: Dictionary) -> Meteormyte:
 	meteormyte.unique_id = data.get("unique_id", meteormyte.unique_id)
 	meteormyte.current_hp = data.get("current_hp", meteormyte.current_hp)
 
-	meteormyte.species_data = _load_resource(data.get("species_data", ""))
-	meteormyte.gem_data = _load_resource(data.get("gem_data", ""))
+	meteormyte.species_data = MeteormyteSpeciesData.fromDict(data.get("species_data", meteormyte.species_data))
+	meteormyte.gem_data = GemData.fromDict(data.get("gem_data", ""))
 
 	meteormyte.stats.clear()
 	for stat_dict in data.get("stats", []):

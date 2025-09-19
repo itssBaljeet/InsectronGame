@@ -36,7 +36,7 @@ func _init(meteormyte: Meteormyte, cell: Vector3i, board, team: FactionComponent
 				var model_instance := meteormyte.species_data.model.instantiate()
 				self.add_child(model_instance)
 				anim.skin = model_instance
-		if team == FactionComponent.Factions.player2:
+		if team == FactionComponent.Factions.player1:
 			anim.skin.rotate_y(PI)
 		self.add_child(anim)
 		

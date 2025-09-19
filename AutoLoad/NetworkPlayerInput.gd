@@ -40,6 +40,7 @@ func undoLast() -> void:
 
 @rpc("reliable")
 func c_commandExecuted(commandType: PlayerIntent, results: Dictionary) -> void:
+	print("COMMAND EXECUTED FROM SEVER; EMITTING SIGNAL FOR IT")
 	commandExecuted.emit(commandType, results)
 
 @rpc("reliable")

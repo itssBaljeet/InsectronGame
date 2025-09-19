@@ -23,7 +23,8 @@ var network := ENetMultiplayerPeer.new()
 # Temporary till I figure out how to send these over network dynamically
 var playerTeam: Party = preload("res://Game/Resources/TestParties/PlayerParty.tres")
 var enemyTeam: Party = preload("res://Game/Resources/TestParties/EnemyParty.tres")
-		
+
+signal playerNumberAssigned(number: int)
 
 ###########################################################################
 #region LOGIC
@@ -73,12 +74,17 @@ func _peerDisconnected(_peerId: int) -> void:
 
 @rpc("reliable")
 func c_updatePlayerNumber(number: int) -> void:
+	print("UPDATING PLAYER NUMBER")
 	playerNumber = number
 	match number:
 		1:
+			print("Player 1 matched")
 			faction = FactionComponent.Factions.player1
 		2:
+			print("Player 2 matched")
 			faction = FactionComponent.Factions.player2
+	print("EMITTING SIGNAL FOR PLAYER ASSIGNMENT")
+	playerNumberAssigned.emit(playerNumber)
 
 #endregion
 ###############################################################################

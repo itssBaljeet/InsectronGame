@@ -95,7 +95,7 @@ func c_pong(
 	_tickOffset = clientBehindTicks - owtInTicks
 	
 	# This is the variable you want to store in a global variable for your debug
-	print("Ping: ", roundTripTime)
+	#print("Ping: ", roundTripTime)
 
 #endregion
 ###############################################################################

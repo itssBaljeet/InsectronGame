@@ -151,7 +151,7 @@ func toDict() -> Dictionary:
 		"vfxScale": vfxScale,
 		"vfxHeight": vfxHeight,
 		"vfxOrientation": int(vfxOrientation),
-		"vfxRotationOffset": _vector3_to_dict(vfxRotationOffset),
+		"vfxRotationOffset": vfxRotationOffset,
 		"animationName": animationName,
 		"animationTime": animationTime,
 		"selfDamagePercent": selfDamagePercent,
@@ -167,14 +167,14 @@ static func fromDict(data: Dictionary) -> AttackResource:
 	attack.icon = _load_resource(data.get("icon", ""))
 	attack.baseDamage = data.get("baseDamage", attack.baseDamage)
 	attack.accuracy = data.get("accuracy", attack.accuracy)
-	attack.damageType = Typing(data.get("damageType", int(attack.damageType)))
-	attack.attackType = AttackType(data.get("attackType", int(attack.attackType)))
-	attack.interactionType = InteractionType(data.get("interactionType", int(attack.interactionType)))
+	attack.damageType = data.get("damageType", int(attack.damageType)) as Typing
+	attack.attackType = data.get("attackType", int(attack.attackType)) as AttackType
+	attack.interactionType = data.get("interactionType", int(attack.interactionType)) as InteractionType
 	attack.rangePattern = _load_resource(data.get("rangePattern", ""))
 	attack.requiresTarget = data.get("requiresTarget", attack.requiresTarget)
 	attack.canTargetEmpty = data.get("canTargetEmpty", attack.canTargetEmpty)
 	attack.hitsAllies = data.get("hitsAllies", attack.hitsAllies)
-	attack.aoeType = AOEType(data.get("aoeType", int(attack.aoeType)))
+	attack.aoeType = data.get("aoeType", int(attack.aoeType)) as AOEType
 	attack.aoePattern = _load_resource(data.get("aoePattern", ""))
 	attack.chainCount = data.get("chainCount", attack.chainCount)
 	attack.chainRange = data.get("chainRange", attack.chainRange)
@@ -195,11 +195,11 @@ static func fromDict(data: Dictionary) -> AttackResource:
 	attack.vfxScene = _load_resource(data.get("vfxScene", ""))
 	attack.secondaryVFX = _load_resource(data.get("secondaryVFX", ""))
 	attack.impactVFX = _load_resource(data.get("impactVFX", ""))
-	attack.vfxType = VFXType(data.get("vfxType", int(attack.vfxType)))
+	attack.vfxType = data.get("vfxType", int(attack.vfxType)) as VFXType
 	attack.vfxScale = data.get("vfxScale", attack.vfxScale)
 	attack.vfxHeight = data.get("vfxHeight", attack.vfxHeight)
-	attack.vfxOrientation = VFXOrientation(data.get("vfxOrientation", int(attack.vfxOrientation)))
-	attack.vfxRotationOffset = _vector3_from_dict(data.get("vfxRotationOffset", {}), attack.vfxRotationOffset)
+	attack.vfxOrientation = data.get("vfxOrientation", int(attack.vfxOrientation)) as VFXOrientation
+	attack.vfxRotationOffset = data.get("vfxRotationOffset", {})
 	attack.animationName = data.get("animationName", attack.animationName)
 	attack.animationTime = data.get("animationTime", attack.animationTime)
 	attack.selfDamagePercent = data.get("selfDamagePercent", attack.selfDamagePercent)
@@ -219,21 +219,3 @@ static func _load_resource(path: String) -> Resource:
 	if typeof(path) != TYPE_STRING or path.is_empty():
 		return null
 	return ResourceLoader.load(path)
-
-static func _vector3_to_dict(value: Vector3) -> Dictionary:
-
-	return {
-		"x": value.x,
-		"y": value.y,
-		"z": value.z
-	}
-
-static func _vector3_from_dict(data: Variant, default_value: Vector3) -> Vector3:
-
-	if data is Dictionary:
-		return Vector3(
-			float(data.get("x", default_value.x)),
-			float(data.get("y", default_value.y)),
-			float(data.get("z", default_value.z))
-		)
-	return default_value

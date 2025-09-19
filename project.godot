@@ -55,10 +55,6 @@ gdscript/warnings/untyped_declaration=1
 
 [display]
 
-window/size/viewport_width=2560
-window/size/viewport_height=1440
-window/size/window_width_override=1920
-window/size/window_height_override=1080
 window/energy_saving/keep_screen_on=false
 window/subwindows/embed_subwindows=false
 
@@ -72,7 +68,7 @@ naming/script_name_casing=1
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
 
 [file_customization]
 
