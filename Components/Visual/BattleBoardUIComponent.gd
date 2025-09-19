@@ -489,7 +489,11 @@ func _onCellSelected(cell: Vector3i) -> void:
 			trySelectUnit(cell)
 		UIState.moveSelect:
 			print("Moving")
-			NetworkPlayerInput.intentMove(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
+			var intent := {
+				"fromCell": activeUnit.boardPositionComponent.currentCellCoordinates,
+				"toCell": cell
+			}
+			NetworkPlayerInput.createIntent(NetworkPlayerInput.PlayerIntent.MOVE, intent)
 			#factory.intentMove(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
 		UIState.basicAttackTargetSelect:
 			print("basic Attack Target")

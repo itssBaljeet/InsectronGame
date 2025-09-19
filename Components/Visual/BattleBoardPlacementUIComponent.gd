@@ -53,8 +53,9 @@ func _ready() -> void:
 
 	if mouseSelection:
 		mouseSelection.cellClicked.connect(_onMouseCellClicked)
-	
+
 	NetworkBattleBoard.phaseChanged.connect(_onPhaseChanged)
+	NetworkPlayerInput.commandUndone.connect(_undoLastPlacement)
 
 func _onPhaseChanged(newPhase: NetworkBattleBoard.GamePhase) -> void:
 	print("MATCHING NEW PHASE CLIENTS")
@@ -147,10 +148,9 @@ func placeCurrentUnit(cell: Vector3i) -> bool:
 	
 	return false
 
-#func undoLastPlacement() -> void:
-	#if commandQueue.undoLastCommand():
-		#highlighter.requestPlacementHighlights(NetworkServer.faction)
-		#party.append(lastPlaced)
+func _undoLastPlacement() -> void:
+	highlighter.requestPlacementHighlights(NetworkServer.faction)
+	party.append(lastPlaced)
 
 func _showCurrent() -> void:
 	if party.is_empty():
