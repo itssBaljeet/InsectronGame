@@ -154,9 +154,10 @@ func _onCommandExecuted(playerId: int, intentType: NetworkPlayerInput.PlayerInte
 					currentIndex = currentIndex % party.size()
 					_showCurrent()
 
-func _undoLastPlacement() -> void:
-	highlighter.requestPlacementHighlights(NetworkServer.faction)
-	party.append(lastPlaced)
+func _undoLastPlacement(_playerId: int, commandType: NetworkPlayerInput.PlayerIntent, _results: Dictionary) -> void:
+	if commandType == NetworkPlayerInput.PlayerIntent.PLACE_UNIT:
+		highlighter.requestPlacementHighlights(NetworkServer.faction)
+		party.append(lastPlaced)
 
 func _showCurrent() -> void:
 	if party.is_empty():

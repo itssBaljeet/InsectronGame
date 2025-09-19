@@ -64,9 +64,9 @@ var placementUI: BattleBoardPlacementUIComponent:
 	get:
 		return coComponents.get(&"BattleBoardPlacementUIComponent")
 
-#var commandQueue: BattleBoardCommandQueueComponent:
-	#get:
-		#return coComponents.get(&"BattleBoardCommandQueueComponent")
+var presentationComponent: BattleBoardPresentationSystemComponent:
+	get:
+		return coComponents.get(&"BattleBoardPresentationSystemComponent")
 #
 #var rules: BattleBoardRulesComponent:
 	#get:
@@ -128,7 +128,10 @@ func _ready() -> void:
 		selector.cellSelected.connect(_onCellSelected)
 
 	NetworkPlayerInput.commandUndone.connect(_onCommandUndone)
-	NetworkPlayerInput.commandExecuted.connect(_onCommandProcessed)
+	#NetworkPlayerInput.commandExecuted.connect(_onCommandProcessed)
+	presentationComponent.serverCommandProcessed.connect(_onCommandProcessed)
+	presentationComponent.serverCommandUndone.connect(_onCommandUndone)
+	
 	
 	#TurnBasedCoordinator.phaseChanged.connect(_onPhaseChanged)
 	NetworkBattleBoard.phaseChanged.connect(_onPhaseChanged)
@@ -517,14 +520,16 @@ func _onCommandProcessed(_playerId: int, command: NetworkPlayerInput.PlayerInten
 	match command:
 		NetworkPlayerInput.PlayerIntent.MOVE:
 			if activeUnit and activeUnit.factionComponent.factions == NetworkServer.faction:
+				highlighter.clearHighlights()
 				openUnitMenu(activeUnit, UIState.unitMenuPostMove)
 		NetworkPlayerInput.PlayerIntent.ATTACK, NetworkPlayerInput.PlayerIntent.WAIT, NetworkPlayerInput.PlayerIntent.END_TURN, NetworkPlayerInput.PlayerIntent.SPECIAL_ATTACK:
 			closeUnitMenu()
 
-func _onCommandUndone(command: NetworkPlayerInput.PlayerIntent) -> void:
-	match command:
-		NetworkPlayerInput.PlayerIntent.MOVE:
-			openUnitMenu(activeUnit, UIState.unitMenu)
+func _onCommandUndone(playerId: int, command: NetworkPlayerInput.PlayerIntent, _data: Dictionary) -> void:
+	if playerId == NetworkServer.ownId:
+		match command:
+			NetworkPlayerInput.PlayerIntent.MOVE:
+				openUnitMenu(activeUnit, UIState.unitMenu)
 
 func _onValidationFailed(reason: String) -> void:
 	# Show error feedback to player

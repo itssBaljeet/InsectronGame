@@ -197,15 +197,18 @@ func setDestinationCellCoordinates(newDestinationTileCoordinates: Vector3i, knoc
 
 	# Is the new destination the same as the current destination? Then there's nothing to change.
 	if newDestinationTileCoordinates == self.destinationCellCoordinates:
+		print("New dest same as current dest")
 		return true
 
 	# Is the new destination the same as the current tile? i.e. was the previous move cancelled?
 	if newDestinationTileCoordinates == self.currentCellCoordinates:
+		print("New dest same as current tile")
 		cancelDestination()
 		return true # NOTE: Return true because arriving at the specified coordinates should be considered a success, even if already there. :)
 	
 	# Is it in the playable area?
 	if not newDestinationTileCoordinates in battleBoard.generatedCells:
+		print("Not in playable area")
 		return false
 
 	# Move Your Body ♪

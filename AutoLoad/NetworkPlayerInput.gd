@@ -16,7 +16,7 @@ enum PlayerIntent {
 #region Signals
 
 signal commandExecuted(commandType: PlayerIntent, results: Dictionary)
-signal commandUndone()
+signal commandUndone(playerId: int, commandType: PlayerIntent, results: Dictionary)
 
 #endregion
 
@@ -44,8 +44,8 @@ func c_commandExecuted(playerId: int, commandType: PlayerIntent, results: Dictio
 	commandExecuted.emit(playerId ,commandType, results)
 
 @rpc("reliable")
-func c_commandUndone() -> void:
-	commandUndone.emit()
+func c_commandUndone(playerId: int, commandType: PlayerIntent, results: Dictionary) -> void:
+	commandUndone.emit(playerId, commandType, results)
 
 #endregion
 ###############################################################################

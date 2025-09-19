@@ -63,6 +63,9 @@ var _dispatch: Dictionary[StringName, Callable]= {
 	&"TeamTurnEnded": _onTeamTurnEnded,
 }
 
+signal serverCommandProcessed(playerId: int, intentType: NetworkPlayerInput.PlayerIntent, intent: Dictionary)
+signal serverCommandUndone(playerId: int, intentType: NetworkPlayerInput.PlayerIntent, intent: Dictionary)
+
 func _ready() -> void:
 	#var queue := commandQueue
 	#if queue and queue.context and not _connected:
@@ -71,6 +74,7 @@ func _ready() -> void:
 	
 	# Does similar to above
 	NetworkPlayerInput.commandExecuted.connect(_onCommandExecuted)
+	NetworkPlayerInput.commandUndone.connect(_onCommandUndone)
 	
 	_connectPlacementFlow()
 	if not _placementSignalsConnected:
@@ -89,14 +93,16 @@ func _connectPlacementFlow() -> void:
 	if placementUI.isPlacementActive:
 		_onPlacementUnitChanged(placementUI.currentUnit())
 
-func _onCommandExecuted(_playerId: int, commandType: NetworkPlayerInput.PlayerIntent, data: Dictionary) -> void:
+func _onCommandExecuted(playerId: int, commandType: NetworkPlayerInput.PlayerIntent, data: Dictionary) -> void:
 	print("!!!!!!!!!!!!!! COMMAND EXECUTED FROM SEVER HUZZAH !!!!!!!!!!!!!!!!!")
 	match commandType:
 		NetworkPlayerInput.PlayerIntent.MOVE:
-			await _onUnitMoved(data)
-			var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(data.get("to"))
+			var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(data.get("fromCell"))
 			if unit:
+				print("MARKING UNIT AS MOVED")
 				unit.stateComponent.markMoved()
+			await _onUnitMoved(data)
+			serverCommandProcessed.emit(playerId, commandType, data)
 		NetworkPlayerInput.PlayerIntent.ATTACK:
 			await _onUnitAttacked(data)
 			var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(data.get("originCell"))
@@ -116,6 +122,16 @@ func _onCommandExecuted(_playerId: int, commandType: NetworkPlayerInput.PlayerIn
 				unit.stateComponent.markExhausted()
 		NetworkPlayerInput.PlayerIntent.END_TURN:
 			_onTeamTurnEnded(data)
+
+func _onCommandUndone(playerId: int, commandType: NetworkPlayerInput.PlayerIntent, data: Dictionary) -> void:
+	match commandType:
+		NetworkPlayerInput.PlayerIntent.MOVE:
+			var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(data.get("fromCell"))
+			if unit:
+				print("MARKING UNIT AS NOT MOVED")
+				unit.stateComponent.undoMove()
+			await _onUnitMoved(data)
+			serverCommandUndone.emit(playerId, commandType, data)
 
 func _on_domain_event(eventName: StringName, data: Dictionary) -> void:
 	print(eventName)
@@ -159,10 +175,16 @@ func _clearPlacementHighlights() -> void:
 	highlighter.clearHighlights()
 
 func _onUnitMoved(data: Dictionary) -> void:
+	print("Moving unit...")
 	var fromCell: Vector3i = data.get("fromCell", Vector3i.ZERO)
 	var toCell: Vector3i = data.get("toCell", Vector3i.ZERO)
+	print(fromCell,toCell)
 	var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(fromCell)
+	print(boardState.getClientUnit(fromCell), boardState.getClientUnit(toCell))
+	print(boardState.vBoardState)
 	if unit and unit.animComponent and unit.positionComponent:
+		print("Components good to go, doing animations...")
+		print(fromCell,toCell)
 		await unit.animComponent.faceDirection(fromCell, toCell)
 		unit.positionComponent.setDestinationCellCoordinates(toCell)
 		await unit.positionComponent.didArriveAtNewCell
