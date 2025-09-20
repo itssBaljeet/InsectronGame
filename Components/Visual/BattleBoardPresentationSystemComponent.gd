@@ -116,10 +116,10 @@ func _onCommandExecuted(playerId: int, commandType: NetworkPlayerInput.PlayerInt
 		NetworkPlayerInput.PlayerIntent.PLACE_UNIT:
 			_onUnitPlaced(data)
 		NetworkPlayerInput.PlayerIntent.WAIT:
-			_onUnitWaited(data)
 			var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(data.get("cell"))
 			if unit:
 				unit.stateComponent.markExhausted()
+			_onUnitWaited(data)
 		NetworkPlayerInput.PlayerIntent.END_TURN:
 			_onTeamTurnEnded(data)
 

@@ -394,7 +394,9 @@ func _is_valid_skin() -> bool:
 func _is_enemy_or_ai() -> bool:
 	if not faction_component:
 		return false
-	return faction_component.factions == 8 or faction_component.factions == 32
+	print("VALUE OF OUR FACTION")
+	print(faction_component.factions)
+	return faction_component.factions != NetworkServer.faction
 
 func _tween_yaw(target_yaw: float, duration: float) -> void:
 	var start := skin.rotation.y
@@ -471,8 +473,9 @@ func face_move_direction(dir_world: Vector3) -> void:
 		dir_local = rot_only.inverse() * dir_world
 	
 	# Handle enemy facing
-	if _is_enemy_or_ai():
-		dir_local = -dir_local
+	#if _is_enemy_or_ai():
+		#print("THIS IS AN ENEMY FOR THIS PLAYER: ", NetworkServer.faction)
+		#dir_local = -dir_local
 	
 	# Snap to 45° increments
 	var yaw_rel := _snapped_yaw_from_local_dir(dir_local)

@@ -41,7 +41,13 @@ func _init(meteormyte: Meteormyte, cell: Vector3i, board, team: FactionComponent
 				self.add_child(model_instance)
 				anim.skin = model_instance
 		if team == FactionComponent.Factions.player1:
+			pass
 			anim.skin.rotate_y(PI)
+			#self.rotate_y(PI)
+		else:
+			pass
+			anim.skin.rotate_y(PI)
+			self.rotate_y(PI)
 		self.add_child(anim)
 		
 		var state := UnitTurnStateComponent.new()
@@ -50,3 +56,8 @@ func _init(meteormyte: Meteormyte, cell: Vector3i, board, team: FactionComponent
 		var pos := BattleBoardPositionComponent.new(board)
 		pos.moveRange = meteormyte.species_data.baseMovePattern
 		self.add_child(pos)
+		
+		var attack := BattleBoardUnitAttackComponent.new()
+		attack.attackRange = meteormyte.species_data.baseAttackPattern
+		attack.specialAttacks = meteormyte.available_attacks
+		self.add_child(attack)

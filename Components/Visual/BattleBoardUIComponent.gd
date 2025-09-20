@@ -67,6 +67,10 @@ var placementUI: BattleBoardPlacementUIComponent:
 var presentationComponent: BattleBoardPresentationSystemComponent:
 	get:
 		return coComponents.get(&"BattleBoardPresentationSystemComponent")
+
+var board: BattleBoardGeneratorComponent:
+	get:
+		return coComponents.get(&"BattleBoardGeneratorComponent")
 #
 #var rules: BattleBoardRulesComponent:
 	#get:
@@ -299,6 +303,7 @@ func onMoveButtonPressed() -> void:
 
 func onAttackButtonPressed() -> void:
 	if not activeUnit:
+		print("NO ACTIVE UNIT")
 		return
 	
 	# Switch to attack selection mode
@@ -322,6 +327,7 @@ func onWaitButtonPressed() -> void:
 	# Replace with command
 	print(activeUnit)
 	#factory.intentWait(activeUnit.boardPositionComponent.currentCellCoordinates)
+	NetworkPlayerInput.createIntent(NetworkPlayerInput.PlayerIntent.WAIT, {"cell": activeUnit.positionComponent.currentCellCoordinates})
 	closeUnitMenu()
 	
 
@@ -346,9 +352,11 @@ func _showAttackSelectionMenu() -> void:
 	
 	var attackComp := activeUnit.components.get(&"BattleBoardUnitAttackComponent") as BattleBoardUnitAttackComponent
 	if not attackComp:
+		print("NO ATTACK COMPONENT")
 		return
 	
 	var attacks := attackComp.getAvailableAttacks()
+	print("ATTACKS FOR UNIT: ", attacks)
 	
 	if not attackComp.basicAttack:
 		var button: Button = Button.new()
@@ -408,11 +416,11 @@ func _onAttackSelected(attack: AttackResource) -> void:
 	var origin := activeUnit.positionComponent.currentCellCoordinates
 	#attackSelectionState.validTargets = rules.getAttackTargets(origin, attack)
 	
-	#for cell in attack.getRangePattern():
-		#print("Breaking here")
-		#if factory.rules.isInBounds(origin + cell):
-			#board.set_cell_item(origin + cell, board.specialAttackHighlightTileID)
-			#highlighter.currentHighlights.append(origin + cell)
+	for cell in attack.getRangePattern():
+		print("Breaking here")
+		if origin + cell in board.generatedCells:
+			board.set_cell_item(origin + cell, board.specialAttackHighlightTileID)
+			highlighter.currentHighlights.append(origin + cell)
 	
 	var clientUnit = boardClient.getClientUnit(origin)
 	
@@ -641,11 +649,15 @@ func _updateButtonsVisibility(unit: BattleBoardUnitClientEntity) -> void:
 		return
 	
 	# Check if it's an enemy unit
-	var isPlayerUnit: bool = unit.factionComponent.factions == pow(2, NetworkServer.faction - 1)
+	var isPlayerUnit: bool = unit.factionComponent.factions == NetworkServer.faction
 	
 	if not isPlayerUnit:
 		# Enemy unit - show info and end turn only
-		print("ENEMY UNIT SELECTED")
+		#print("ENEMY UNIT SELECTED")
+		#print("FACTION OF UNIT: ", unit.factionComponent.factions)
+		#print("FACTION I WAS CHECKING: ", pow(2, NetworkServer.faction - 1))
+		#print("FACTION I'M WAS CHECKING: ", NetworkServer.faction)
+		#print("LOCATION OF UNIT CHECKED: ", unit.positionComponent.currentCellCoordinates)
 		infoButton.visible = true
 		return
 	

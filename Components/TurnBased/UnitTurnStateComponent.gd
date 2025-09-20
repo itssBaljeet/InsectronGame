@@ -38,6 +38,7 @@ signal unitReady
 
 ## Called at the start of a new team turn
 func resetForNewTeamTurn() -> void:
+	print("RESETTING FOR TEAM TURN")
 	_updateState(TurnState.READY)
 	unitReady.emit()
 
