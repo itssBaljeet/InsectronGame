@@ -395,10 +395,10 @@ func _onBasicAttackSelected() -> void:
 	var attackComp := activeUnit.components.get(&"BattleBoardUnitAttackComponent") as BattleBoardUnitAttackComponent
 	var origin := activeUnit.positionComponent.currentCellCoordinates
 	
-	#for cell in attackComp.attackRange.offsets:
-		#if factory.rules.isInBounds(origin + cell):
-			#board.set_cell_item(origin + cell, board.attackHighlightTileID)
-			#highlighter.currentHighlights.append(origin + cell)
+	for cell in attackComp.attackRange.offsets:
+		if origin + cell in board.generatedCells:
+			board.set_cell_item(origin + cell, board.attackHighlightTileID)
+			highlighter.currentHighlights.append(origin + cell)
 	
 	# Hide attack menu
 	attackMenu.hide()
@@ -419,12 +419,14 @@ func _onAttackSelected(attack: AttackResource) -> void:
 	for cell in attack.getRangePattern():
 		print("Breaking here")
 		if origin + cell in board.generatedCells:
+			print("highlighting origin + cell")
+			print(board.specialAttackHighlightTileID)
 			board.set_cell_item(origin + cell, board.specialAttackHighlightTileID)
 			highlighter.currentHighlights.append(origin + cell)
 	
-	var clientUnit = boardClient.getClientUnit(origin)
+	#var clientUnit := boardClient.getClientUnit(origin)
 	
-	highlighter.requestAttackHighlights(clientUnit)
+	#highlighter.requestSAttackHighlights(clientUnit)
 	
 	# Hide attack menu
 	attackMenu.hide()
@@ -519,9 +521,21 @@ func _onCellSelected(cell: Vector3i) -> void:
 		UIState.basicAttackTargetSelect:
 			print("basic Attack Target")
 			#factory.intentAttack(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
+			var intent := {
+				"fromCell": activeUnit.positionComponent.currentCellCoordinates,
+				"toCell": cell
+			}
+			NetworkPlayerInput.createIntent(NetworkPlayerInput.PlayerIntent.ATTACK, intent)
 		UIState.attackTargetSelect:
 			print("Attack target")
 			#factory.intentSpecialAttack(activeUnit.boardPositionComponent.currentCellCoordinates, cell)
+			var intent := {
+				"fromCell": activeUnit.positionComponent.currentCellCoordinates,
+				"toCell": cell,
+				"attackName": attackSelectionState.selectedAttack.attackName
+			}
+			
+			NetworkPlayerInput.createIntent(NetworkPlayerInput.PlayerIntent.SPECIAL_ATTACK, intent)
 
 
 func _onCommandProcessed(_playerId: int, command: NetworkPlayerInput.PlayerIntent, _intent: Dictionary) -> void:

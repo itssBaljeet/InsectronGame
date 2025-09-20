@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cmgqp7rfco4ga"]
+[gd_scene load_steps=6 format=3 uid="uid://cmgqp7rfco4ga"]
 
 [ext_resource type="Script" uid="uid://dy63o0w8s0bt3" path="res://Components/Visual/BattleBoardUnitHealthVisualComponent.gd" id="1_8sksn"]
+[ext_resource type="Texture2D" uid="uid://bjdjj0pq5v6wd" path="res://Assets/Noah UI/bar_under.png" id="2_lky0k"]
 [ext_resource type="Texture2D" uid="uid://c3f5su8n4h8c3" path="res://Assets/Noah UI/bar_fill_white.png" id="3_lky0k"]
 [ext_resource type="Texture2D" uid="uid://dp15ksxmpwnkf" path="res://Assets/Noah UI/bar_under_transparent.png" id="4_0hwjq"]
 
@@ -32,7 +33,7 @@ texture_filter = 1
 offset_right = 128.0
 offset_bottom = 40.0
 value = 100.0
-texture_under = ExtResource("4_0hwjq")
+texture_under = ExtResource("2_lky0k")
 texture_over = ExtResource("3_lky0k")
 texture_progress = ExtResource("3_lky0k")
 tint_over = Color(0.95, 0.16, 0.16, 0)

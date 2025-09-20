@@ -109,10 +109,11 @@ func _onCommandExecuted(playerId: int, commandType: NetworkPlayerInput.PlayerInt
 			if unit:
 				unit.stateComponent.markExhausted()
 		NetworkPlayerInput.PlayerIntent.SPECIAL_ATTACK:
-			await _onSpecialAttack(data)
-			var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(data.get("originCell"))
+			var unit: BattleBoardUnitClientEntity = boardState.getClientUnit(data.get("fromCell"))
 			if unit:
 				unit.stateComponent.markExhausted()
+			await _onSpecialAttack(data)
+			serverCommandProcessed.emit(playerId, commandType, data)
 		NetworkPlayerInput.PlayerIntent.PLACE_UNIT:
 			_onUnitPlaced(data)
 		NetworkPlayerInput.PlayerIntent.WAIT:
@@ -258,14 +259,17 @@ func _playDeathAnimation(unit: BattleBoardUnitClientEntity, cell: Vector3i) -> v
 		boardState.setCellOccupancy(cell, false, null)
 
 func _onSpecialAttack(data: Dictionary) -> void:
+	highlighter.clearHighlights()
 	print("SPECIAL VFX!!!")
-	var attacker: BattleBoardUnitClientEntity = data.get("attacker")
-	var attack_res: AttackResource = data.get("attackResource")
+	var attacker: BattleBoardUnitClientEntity = boardState.getClientUnit(data.get("fromCell"))
+	var attack_res: AttackResource = AttackResource.fromDict(data.get("attackResource"))
 	var affected: Array = data.get("damageResults", [])
 	var board: BattleBoardGeneratorComponent = coComponents.get(&"BattleBoardGeneratorComponent")
-	var origin_cell: Vector3i = data.get("originCell", Vector3i.ZERO)
-	var target_cell: Vector3i = data.get("targetCell", Vector3i.ZERO)
+	var origin_cell: Vector3i = data.get("fromCell", Vector3i.ZERO)
+	var target_cell: Vector3i = data.get("toCell", Vector3i.ZERO)
 	var hit_cell: Vector3i = data.get("hitCell", target_cell)
+	var knockbackResults: Dictionary = data.get("knockbackResults")
+	var sortedResultsKey: Array = data.get("sortedKnockbackResults")
 	
 	#region VFX Playing
 	if attacker and attacker.animComponent:
@@ -285,7 +289,7 @@ func _onSpecialAttack(data: Dictionary) -> void:
 				var vfx: Node3D = attack_res.vfxScene.instantiate()
 				vfx.hide()
 				board.add_child(vfx)
-				vfx.global_position = attacker.boardPositionComponent.adjustToTile(origin_pos)
+				vfx.global_position = attacker.positionComponent.adjustToTile(origin_pos)
 				vfx.look_at(hit_pos)
 				
 				await attacker.animComponent.faceDirection(origin_cell, target_cell)
@@ -362,12 +366,30 @@ func _onSpecialAttack(data: Dictionary) -> void:
 					p2.y += attack_res.vfxHeight
 					sec2.global_position = p2
 	
+	#for target in sortedResultsKey:
+		#if not target:
+			#continue
+#
+		#var unit := boardState.getClientUnit(target)
+		#var newPos := knockbackResults[target] as Vector3i
+		#var oldPos: Vector3i = unit.positionComponent.currentCellCoordinates
+#
+		#print("Knocking back ", unit.name, " from ", oldPos, " to ", newPos)
+#
+		#if boardState.getClientUnit(newPos):
+			#print("BASTARD TAKING SPACE: ", boardState.getClientUnit(newPos))
+			#continue
+		#print("Actually knocking back")
+		#boardState.setCellOccupancy(oldPos, false, null)
+		#boardState.setCellOccupancy(newPos, true, unit)
+		#unit.positionComponent.setDestinationCellCoordinates(newPos)
+
 	await attacker.animComponent.face_home_orientation()
 	#endregion
 	
 	#region Damage and HP Bar
 	for result in affected:
-		var target_unit: BattleBoardUnitClientEntity = result.get("target")
+		var target_unit: BattleBoardUnitClientEntity = boardState.getClientUnit(result.get("cell"))
 		var dmg: int = result.get("damage", 0)
 		if target_unit:
 			var hv: BattleBoardUnitHealthVisualComponent = target_unit.components.get(&"BattleBoardUnitHealthVisualComponent")
